@@ -108,7 +108,7 @@ def list_admin_fee_configs(request: HttpRequest) -> list[AdministrativeFeeConfig
 
     results: list[AdministrativeFeeConfigOut] = []
     for config in configs:
-        cfg = cast(Any, config)
+        cfg = cast("Any", config)
         results.append(
             AdministrativeFeeConfigOut(
                 id=cfg.id,
@@ -155,7 +155,7 @@ def create_admin_fee_config(request: HttpRequest, data: AdministrativeFeeConfigI
         created_by=request.user,
     )
 
-    cfg = cast(Any, config)
+    cfg = cast("Any", config)
     return AdministrativeFeeConfigOut(
         id=cfg.id,
         cycle_type=cfg.cycle_type,
@@ -198,7 +198,7 @@ def update_admin_fee_config(
     config.updated_by = request.user
     config.save()
 
-    cfg = cast(Any, config)
+    cfg = cast("Any", config)
     return AdministrativeFeeConfigOut(
         id=cfg.id,
         cycle_type=cfg.cycle_type,
@@ -229,7 +229,7 @@ def list_document_excess_fees(request: HttpRequest) -> list[DocumentExcessFeeOut
 
     fee_results: list[DocumentExcessFeeOut] = []
     for fee in fees:
-        f = cast(Any, fee)
+        f = cast("Any", fee)
         fee_results.append(
             DocumentExcessFeeOut(
                 id=f.id,
@@ -266,7 +266,7 @@ def create_document_excess_fee(request: HttpRequest, data: DocumentExcessFeeIn) 
         created_by=request.user,
     )
 
-    f = cast(Any, fee)
+    f = cast("Any", fee)
     return DocumentExcessFeeOut(
         id=f.id,
         units_charged=f.units_charged,
@@ -302,7 +302,7 @@ def update_document_excess_fee(request: HttpRequest, fee_id: int, data: Document
     fee.updated_by = request.user
     fee.save()
 
-    f = cast(Any, fee)
+    f = cast("Any", fee)
     return DocumentExcessFeeOut(
         id=f.id,
         units_charged=f.units_charged,
@@ -356,7 +356,7 @@ def list_student_cycle_statuses(request: HttpRequest, is_active: bool | None = N
 
     out: list[StudentCycleStatusOut] = []
     for status in statuses:
-        st = cast(Any, status)
+        st = cast("Any", status)
         out.append(
             StudentCycleStatusOut(
                 id=st.id,
@@ -385,9 +385,10 @@ def detect_and_record_cycle_changes(request: HttpRequest, term_id: int) -> dict[
     term = get_object_or_404(Term, id=term_id)
 
     # Get all enrollments for the term
-    from apps.enrollment.models import ClassHeaderEnrollment
-    from typing import Any, cast
+    from typing import cast
+
     from apps.enrollment import services as enrollment_services
+    from apps.enrollment.models import ClassHeaderEnrollment
 
     enrollments = (
         ClassHeaderEnrollment.objects.filter(class_header__term=term, status__in=["ENROLLED", "COMPLETED"])
@@ -397,7 +398,7 @@ def detect_and_record_cycle_changes(request: HttpRequest, term_id: int) -> dict[
 
     detected = 0
     for enrollment in enrollments:
-        cycle_status = cast(Any, enrollment_services).CycleDetectionService.detect_cycle_change(
+        cycle_status = cast("Any", enrollment_services).CycleDetectionService.detect_cycle_change(
             enrollment.student, enrollment.class_header.course
         )
         if cycle_status:

@@ -70,9 +70,11 @@ class CashierService:
         session.save()
 
         # Log transaction
-        from typing import cast, Any as _Any
+        from typing import Any as _Any
+        from typing import cast
+
         FinancialTransactionService.record_transaction(
-            transaction_type=cast(_Any, FinancialTransaction.TransactionType).CASH_DRAWER_OPEN,
+            transaction_type=cast("_Any", FinancialTransaction.TransactionType).CASH_DRAWER_OPEN,
             student=None,  # No student for drawer operations
             amount=opening_cash,
             currency=Currency.USD,
@@ -121,9 +123,11 @@ class CashierService:
         session.save()
 
         # Log transaction
-        from typing import cast, Any as _Any
+        from typing import Any as _Any
+        from typing import cast
+
         FinancialTransactionService.record_transaction(
-            transaction_type=cast(_Any, FinancialTransaction.TransactionType).CASH_DRAWER_CLOSE,
+            transaction_type=cast("_Any", FinancialTransaction.TransactionType).CASH_DRAWER_CLOSE,
             student=None,
             amount=closing_cash,
             currency=Currency.USD,

@@ -196,7 +196,7 @@ class Command(BaseMigrationCommand):
         enrollments_created = 0
 
         for record in course_records:
-            term_id, course_code, lang_course, grade, credit, year, semester = record
+            term_id, course_code, lang_course, grade, _credit, _year, _semester = record
 
             # Use course_code for academic courses, lang_course for language courses
             effective_course_code = course_code if course_code else lang_course

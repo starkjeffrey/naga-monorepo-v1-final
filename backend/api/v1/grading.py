@@ -93,14 +93,14 @@ def create_grade_entry(request, data: GradeEntrySchema):
         enrollment = get_object_or_404(ClassHeaderEnrollment, id=data.enrollment_id)
 
         # Verify teacher is assigned to this class
-        u = cast(Any, request.user)
+        u = cast("Any", request.user)
         if hasattr(u, "person") and hasattr(u.person, "teacher_profile"):
             teacher = u.person.teacher_profile
-            if cast(Any, class_part).teacher != teacher:
+            if cast("Any", class_part).teacher != teacher:
                 raise HttpError(403, "Not authorized for this class")
 
         # Create grade using service
-        grade = cast(Any, ClassPartGradeService).create_or_update_grade(
+        grade = cast("Any", ClassPartGradeService).create_or_update_grade(
             enrollment=enrollment,
             class_part=class_part,
             numeric_score=data.numeric_score,
@@ -110,9 +110,9 @@ def create_grade_entry(request, data: GradeEntrySchema):
             entered_by=request.user,
         )
 
-        g = cast(Any, grade)
-        enr = cast(Any, enrollment)
-        cp = cast(Any, class_part)
+        g = cast("Any", grade)
+        enr = cast("Any", enrollment)
+        cp = cast("Any", class_part)
 
         return GradeResponseSchema(
             id=g.id,
@@ -150,16 +150,16 @@ def update_grade_entry(request, grade_id: int, data: GradeUpdateSchema):
         # Verify authorization for this specific grade
         if not check_admin_access(request.user):
             # Teachers can only edit grades for their own classes
-            u = cast(Any, request.user)
+            u = cast("Any", request.user)
             if hasattr(u, "person") and hasattr(u.person, "teacher_profile"):
                 teacher = u.person.teacher_profile
-                if cast(Any, grade.class_part).teacher != teacher:
+                if cast("Any", grade.class_part).teacher != teacher:
                     raise HttpError(403, "Not authorized to edit this grade")
             else:
                 raise HttpError(403, "Not authorized to edit grades")
 
         # Update grade using service
-        updated_grade = cast(Any, ClassPartGradeService).create_or_update_grade(
+        updated_grade = cast("Any", ClassPartGradeService).create_or_update_grade(
             grade=grade,
             numeric_score=data.numeric_score,
             letter_grade=data.letter_grade,
@@ -168,7 +168,7 @@ def update_grade_entry(request, grade_id: int, data: GradeUpdateSchema):
             updated_by=request.user,
         )
 
-        ug = cast(Any, updated_grade)
+        ug = cast("Any", updated_grade)
         return GradeResponseSchema(
             id=ug.id,
             enrollment_id=ug.enrollment.id,
@@ -205,10 +205,10 @@ def get_class_grades(request, class_part_id: int):
         # Verify authorization for this class
         if not check_admin_access(request.user):
             # Teachers can only view grades for their own classes
-            u = cast(Any, request.user)
+            u = cast("Any", request.user)
             if hasattr(u, "person") and hasattr(u.person, "teacher_profile"):
                 teacher = u.person.teacher_profile
-                if cast(Any, class_part).teacher != teacher:
+                if cast("Any", class_part).teacher != teacher:
                     raise HttpError(403, "Not authorized to view these grades")
             else:
                 raise HttpError(403, "Not authorized to view grades")
@@ -220,7 +220,7 @@ def get_class_grades(request, class_part_id: int):
 
         results: list[GradeResponseSchema] = []
         for grade in grades:
-            gr = cast(Any, grade)
+            gr = cast("Any", grade)
             results.append(
                 GradeResponseSchema(
                     id=gr.id,

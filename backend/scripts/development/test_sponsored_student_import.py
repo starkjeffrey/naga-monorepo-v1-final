@@ -82,7 +82,7 @@ def test_sponsored_student_import():
             pass
 
         # Test the name parsing directly
-        family, personal, sponsor_code, fees = command._parse_name_and_sponsor(row[1])
+        _family, _personal, sponsor_code, _fees = command._parse_name_and_sponsor(row[1])
 
         if (sponsor_code and sponsor_code in command.sponsor_cache) or sponsor_code:
             pass

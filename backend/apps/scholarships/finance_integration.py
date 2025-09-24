@@ -54,7 +54,8 @@ class ScholarshipFinanceIntegrationService:
             Dictionary with discount information for finance processing
         """
         from apps.scholarships import services as _sch_services
-        discount_info = cast(Any, _sch_services).ScholarshipCalculationService.calculate_tuition_discount(
+
+        discount_info = cast("Any", _sch_services).ScholarshipCalculationService.calculate_tuition_discount(
             student, base_tuition_amount
         )
 
@@ -183,9 +184,10 @@ class ScholarshipFinanceIntegrationService:
     def _student_has_active_scholarship(cls, student: "StudentProfile") -> bool:
         """Quick check if student has any active scholarship."""
         from apps.scholarships import services as _sch_services
-        active_scholarships = cast(Any, _sch_services).ScholarshipCalculationService._get_active_scholarships_for_student(
-            student
-        )
+
+        active_scholarships = cast(
+            "Any", _sch_services
+        ).ScholarshipCalculationService._get_active_scholarships_for_student(student)
         return len(active_scholarships) > 0
 
     @classmethod
@@ -264,7 +266,8 @@ class ScholarshipFinanceIntegrationService:
 
         # Check for scholarship conflicts (multiple active scholarships)
         from apps.scholarships import services as _sch_services
-        conflicts = cast(Any, _sch_services).ScholarshipCalculationService.get_scholarship_conflicts(
+
+        conflicts = cast("Any", _sch_services).ScholarshipCalculationService.get_scholarship_conflicts(
             scholarship.student
         )
 

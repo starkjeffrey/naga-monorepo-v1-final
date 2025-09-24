@@ -659,7 +659,7 @@ class AttendanceService:
                 enrollment = Enrollment.objects.get(id=record["enrollment_id"], section=section)
 
                 # Create or update attendance record
-                attendance, created = AttendanceRecord.objects.update_or_create(
+                _attendance, _created = AttendanceRecord.objects.update_or_create(
                     enrollment=enrollment,
                     date=date,
                     defaults={

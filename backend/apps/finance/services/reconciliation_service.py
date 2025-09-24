@@ -570,7 +570,7 @@ class ReconciliationErrorReport:
 
     def generate_executive_summary(self, period: tuple[datetime, datetime]) -> dict[str, Any]:
         """Generate executive summary for given period."""
-        start_date, end_date = period
+        _start_date, _end_date = period
 
         return {
             "total_payments_processed": self._get_payment_count(period),

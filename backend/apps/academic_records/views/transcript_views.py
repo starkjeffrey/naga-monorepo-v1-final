@@ -311,6 +311,7 @@ def generate_transcript_pdf(student, grades, term_gpas, cumulative_gpa) -> HttpR
     if grades:
         # Group grades by term
         from typing import Any
+
         terms_data: dict[Any, list[dict[str, Any]]] = {}
         for grade in grades:
             term = grade.enrollment.class_header.term
@@ -437,7 +438,7 @@ def bulk_generate_transcripts(request):
             student = StudentProfile.objects.get(id=student_id)
 
             # Create document request
-            request_obj, fee_calc = DocumentFeeCalculator.create_request_with_fee_calculation(
+            _request_obj, _fee_calc = DocumentFeeCalculator.create_request_with_fee_calculation(
                 student=student,
                 document_type=transcript_type,
                 requested_by=request.user,

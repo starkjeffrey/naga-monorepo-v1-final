@@ -122,7 +122,7 @@ class Command(BaseMigrationCommand):
 
                     # Create canonical requirement with FK to course
                     try:
-                        canonical_req, created = CanonicalRequirement.objects.get_or_create(
+                        _canonical_req, created = CanonicalRequirement.objects.get_or_create(
                             major=major,
                             required_course=course,  # FK to Course model
                             sequence_number=sequence,

@@ -286,7 +286,7 @@ class SeniorProjectPricingTest(TestCase):
         )
 
         # Regular course should use default pricing
-        price, currency, details = SeparatedPricingService.get_course_price(
+        price, _currency, details = SeparatedPricingService.get_course_price(
             course=regular_course, student=self.student, term=None
         )
 

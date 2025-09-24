@@ -52,7 +52,7 @@ class MyPyProgressTracker:
             for line in mypy_output.split("\n"):
                 match = error_pattern.match(line.strip())
                 if match:
-                    file_path, line_num, severity, message, error_code = match.groups()
+                    file_path, _line_num, _severity, message, error_code = match.groups()
 
                     # Count by error type
                     errors_by_type[error_code] += 1

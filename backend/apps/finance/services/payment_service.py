@@ -89,7 +89,7 @@ class PaymentService:
             raise FinancialError(msg)
 
         # Lock the invoice to prevent concurrent modifications
-        inv = cast(Any, invoice)
+        inv = cast("Any", invoice)
         locked_invoice = Invoice.objects.select_for_update().get(id=inv.id)
 
         # Check for duplicate payment if idempotency key provided
@@ -211,7 +211,7 @@ class PaymentService:
             raise FinancialError(msg)
 
         # Lock the invoice to prevent concurrent modifications
-        locked_invoice = Invoice.objects.select_for_update().get(id=cast(Any, payment.invoice).id)
+        locked_invoice = Invoice.objects.select_for_update().get(id=cast("Any", payment.invoice).id)
 
         # Verify refund doesn't exceed paid amount
         if refund_amount > locked_invoice.paid_amount:
@@ -254,11 +254,11 @@ class PaymentService:
         # Record financial transaction
         FinancialTransactionService.record_transaction(
             transaction_type=FinancialTransaction.TransactionType.PAYMENT_REFUNDED,
-            student=cast(Any, payment.invoice).student,
+            student=cast("Any", payment.invoice).student,
             amount=-refund_amount,
             currency=payment.currency,
             description=f"Refund {refund_reference} for payment {payment.payment_reference}",
-            invoice=cast(Any, payment.invoice),
+            invoice=cast("Any", payment.invoice),
             payment=refund,
             processed_by=processed_by,
             reference_data={
@@ -342,10 +342,8 @@ class PaymentService:
             invoices = invoices_list
         else:
             # Lock all provided invoices to prevent concurrent modification
-            invoice_ids = [cast(Any, inv).id for inv in invoices]
-            invoices = list(
-                Invoice.objects.select_for_update().filter(id__in=invoice_ids).order_by("due_date")
-            )
+            invoice_ids = [cast("Any", inv).id for inv in invoices]
+            invoices = list(Invoice.objects.select_for_update().filter(id__in=invoice_ids).order_by("due_date"))
 
         # Apply payment to invoices in order
         remaining_amount = amount

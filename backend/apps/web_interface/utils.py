@@ -520,7 +520,7 @@ class WebSocketTestMixin:
         communicator = await self.get_websocket_communicator(consumer_class, path)
 
         try:
-            connected, subprotocol = await communicator.connect()
+            connected, _subprotocol = await communicator.connect()
             if connected:
                 await communicator.disconnect()
                 return True
@@ -610,7 +610,7 @@ async def test_websocket_consumers():
 
             communicator.scope["user"] = AnonymousUser()  # Test with anonymous user first
 
-            connected, subprotocol = await communicator.connect()
+            connected, _subprotocol = await communicator.connect()
 
             if connected:
                 await communicator.disconnect()

@@ -210,7 +210,12 @@ def save_grade(request: HttpRequest) -> JsonResponse:
                 {
                     "success": True,
                     "message": _("Grade saved successfully"),
-                    "grade_display": getattr(grade, "get_grade_display", lambda: grade.letter_grade or (str(grade.numeric_score) if grade.numeric_score is not None else ""))(),
+                    "grade_display": getattr(
+                        grade,
+                        "get_grade_display",
+                        lambda: grade.letter_grade
+                        or (str(grade.numeric_score) if grade.numeric_score is not None else ""),
+                    )(),
                     "grade_id": getattr(grade, "pk", None),
                 }
             )

@@ -144,8 +144,10 @@ class ComprehensiveReconciliationService:
         try:
             return UserModel.objects.get(email=system_email)
         except UserModel.DoesNotExist:
-            from typing import cast, Any as _Any
-            return cast(_Any, UserModel.objects).create_user(
+            from typing import Any as _Any
+            from typing import cast
+
+            return cast("_Any", UserModel.objects).create_user(
                 email=system_email,
                 name="System User",
                 is_staff=True,

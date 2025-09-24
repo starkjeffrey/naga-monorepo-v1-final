@@ -40,7 +40,7 @@ class Command(BaseCommand):
     def update_student_progression(self, student: StudentProfile):
         """Update progression for a single student."""
         # Get or create progression record
-        progression, created = AcademicProgression.objects.get_or_create(
+        progression, _created = AcademicProgression.objects.get_or_create(
             student=student,
             defaults={
                 "student_name": student.person.full_name,

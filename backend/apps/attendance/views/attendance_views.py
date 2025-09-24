@@ -227,7 +227,7 @@ def mark_attendance(request, class_header_id):
             return JsonResponse({"error": "No attendance session found for today"}, status=400)
 
         # Update or create attendance record
-        attendance_record, created = AttendanceRecord.objects.update_or_create(
+        attendance_record, _created = AttendanceRecord.objects.update_or_create(
             student=student,
             attendance_session=attendance_session,
             defaults={
@@ -350,7 +350,7 @@ def quick_mark_all(request, class_header_id):
         # Bulk update attendance records
         updated_count = 0
         for student_id in enrolled_students:
-            attendance_record, created = AttendanceRecord.objects.update_or_create(
+            _attendance_record, _created = AttendanceRecord.objects.update_or_create(
                 student_id=student_id,
                 attendance_session=attendance_session,
                 defaults={
@@ -543,7 +543,7 @@ def bulk_attendance_update(request):
 
                 student = StudentProfile.objects.get(id=student_id)
 
-                attendance_record, created = AttendanceRecord.objects.update_or_create(
+                _attendance_record, _created = AttendanceRecord.objects.update_or_create(
                     student=student,
                     attendance_session=attendance_session,
                     defaults={

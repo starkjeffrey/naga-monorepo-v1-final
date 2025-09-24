@@ -561,7 +561,7 @@ class ClassSessionGradeService:
             gpa_points = Decimal("0.00")
 
         # Create or update session grade
-        session_grade, created = ClassSessionGrade.objects.update_or_create(
+        session_grade, _created = ClassSessionGrade.objects.update_or_create(
             enrollment=enrollment,
             class_session=class_session,
             defaults={
@@ -679,7 +679,7 @@ class GPACalculationService:
         )
 
         # Create or update GPA record
-        gpa_record, created = GPARecord.objects.update_or_create(
+        gpa_record, _created = GPARecord.objects.update_or_create(
             student=student,
             term=term,
             major=major,
@@ -774,7 +774,7 @@ class GPACalculationService:
         )
 
         # Create or update cumulative GPA record
-        gpa_record, created = GPARecord.objects.update_or_create(
+        gpa_record, _created = GPARecord.objects.update_or_create(
             student=student,
             term=current_term,
             major=major,

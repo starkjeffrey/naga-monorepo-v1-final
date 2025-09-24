@@ -68,7 +68,7 @@ class Command(BaseCommand):
             elif class_header.is_ieap_class() and session_count != 2:
                 issues["wrong_session_count"].append(f"{class_header}: IEAP with {session_count} sessions")
                 if fix_mode:
-                    created, sessions = class_header.ensure_sessions_exist()
+                    created, _sessions = class_header.ensure_sessions_exist()
                     if created > 0:
                         issues["fixed"].append(f"Fixed sessions for {class_header}")
 

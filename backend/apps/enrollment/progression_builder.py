@@ -1021,7 +1021,7 @@ class ProgressionBuilder:
     ):
         """Create denormalized progression record from multiple journey records."""
         # Get or create progression record
-        progression, created = AcademicProgression.objects.get_or_create(
+        progression, _created = AcademicProgression.objects.get_or_create(
             student=student,
             defaults={
                 "student_name": student.person.full_name if student.person else "",

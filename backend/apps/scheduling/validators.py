@@ -68,7 +68,7 @@ def validate_language_class_creation(course: Course) -> None:
         )
 
     # Validate template has active parts
-    if not getattr(template_set, "templates").filter(is_active=True).exists():
+    if not template_set.templates.filter(is_active=True).exists():
         raise ValidationError(
             f"Cannot create class for {course.code}: Template exists but has no active parts. "
             f"Please define at least one ClassPartTemplate for the template set."
@@ -93,7 +93,7 @@ def validate_class_has_proper_structure(class_header: ClassHeader) -> dict:
             # This is a language class - must have parts
 
             # Check sessions exist
-            sessions = getattr(class_header, "class_sessions").all()
+            sessions = class_header.class_sessions.all()
             if not sessions.exists():
                 errors.append(f"Language class {class_header.course.code} has no sessions")
 

@@ -300,7 +300,7 @@ class Command(BaseMigrationCommand):
 
             except ValidationError as e:
                 batch_errors += 1
-                error_msg = f"row_number: {row.get('csv_row_number', idx)}, validation_errors: {[f'{err['loc']}: {err['msg']}' for err in e.errors()]}, raw_data: {row_dict}"
+                error_msg = f"row_number: {row.get('csv_row_number', idx)}, validation_errors: {[f'{err["loc"]}: {err["msg"]}' for err in e.errors()]}, raw_data: {row_dict}"
                 self.record_rejection(
                     "VALIDATION_ERROR",
                     f"row_{row.get('csv_row_number', idx)}",

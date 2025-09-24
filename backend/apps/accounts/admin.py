@@ -159,7 +159,7 @@ class RoleAdmin(admin.ModelAdmin):
     @admin.display(description=_("Active Users"))
     def user_count(self, obj: Role) -> int:
         """Count of users assigned to this role."""
-        return getattr(obj, "user_assignments").filter(is_active=True).count()
+        return obj.user_assignments.filter(is_active=True).count()
 
     def get_queryset(self, request: HttpRequest):
         """Optimize queryset with select_related."""
@@ -315,7 +315,7 @@ class PermissionAdmin(admin.ModelAdmin):
     @admin.display(description=_("Active Role Assignments"))
     def role_count(self, obj: Permission) -> int:
         """Count of roles that have this permission."""
-        return getattr(obj, "role_assignments").filter(is_active=True).count()
+        return obj.role_assignments.filter(is_active=True).count()
 
 
 @admin.register(RolePermission)

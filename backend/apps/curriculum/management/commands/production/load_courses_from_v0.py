@@ -105,6 +105,7 @@ class Command(BaseCommand):
 
         # Determine course level based on V0 cycle field
         from typing import Any
+
         CourseLevel: Any = getattr(Course, "CourseLevel", None)
         cycle_mapping: dict[str, Any] = (
             {

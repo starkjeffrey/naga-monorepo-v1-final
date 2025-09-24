@@ -158,7 +158,7 @@ class ScholarshipReconciliationService(ReconciliationService):
             match_reason=match_reason,
             error_details={
                 "scholarship_count": len(active_scholarships),
-            "scholarship_ids": [getattr(s, "pk", None) for s in active_scholarships],
+                "scholarship_ids": [getattr(s, "pk", None) for s in active_scholarships],
                 "expected_amount": str(expected_amount),
                 "actual_discount": str(actual_discount),
             },
@@ -259,9 +259,11 @@ class ScholarshipReconciliationService(ReconciliationService):
     def _get_student_enrollments(self, student: StudentProfile, term: Term) -> list[ClassHeaderEnrollment]:
         """Get student enrollments for the term."""
 
-        return list(ClassHeaderEnrollment.objects.filter(
-            student=student, class_header__term=term, status__in=["ENROLLED", "COMPLETED"]
-        ).select_related("class_header__course"))
+        return list(
+            ClassHeaderEnrollment.objects.filter(
+                student=student, class_header__term=term, status__in=["ENROLLED", "COMPLETED"]
+            ).select_related("class_header__course")
+        )
 
     def _mark_reconciled(
         self,

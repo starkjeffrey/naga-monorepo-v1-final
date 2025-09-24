@@ -373,7 +373,7 @@ class Command(BaseCommand):
             msg = f"Student not found: {student_id}"
             raise ValueError(msg)
 
-        term_id, program_code, time_of_day, header_name, part_name = parsed_class
+        term_id, _program_code, _time_of_day, _header_name, _part_name = parsed_class
 
         if term_id not in self.term_cache:
             msg = f"Term not found: {term_id}"

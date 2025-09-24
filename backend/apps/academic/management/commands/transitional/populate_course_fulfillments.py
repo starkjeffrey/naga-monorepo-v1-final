@@ -188,7 +188,7 @@ class Command(BaseMigrationCommand):
         fulfillments_created = 0
 
         for record in course_records:
-            course_code, grade, credit, year, term_id = record
+            course_code, grade, credit, _year, term_id = record
 
             # Get course
             course = self.course_cache.get(course_code)
@@ -245,7 +245,7 @@ class Command(BaseMigrationCommand):
                 )
 
             # Create bridge requirement that matches the canonical requirement
-            legacy_requirement, created = Requirement.objects.get_or_create(
+            legacy_requirement, _created = Requirement.objects.get_or_create(
                 major=major,
                 requirement_type=general_type,
                 name=canonical_requirement.name,

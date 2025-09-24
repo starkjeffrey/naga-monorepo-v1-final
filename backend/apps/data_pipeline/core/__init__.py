@@ -18,12 +18,10 @@ from .stages import (
 __all__ = [
     # Parsers
     "ClassIDParser",
-    "StudentNameParser",
     # Pipeline
     "PipelineOrchestrator",
     # Registry
     "PipelineRegistry",
-    "get_registry",
     # Stages
     "Stage1Import",
     "Stage2Profile",
@@ -31,4 +29,6 @@ __all__ = [
     "Stage4Validate",
     "Stage5Transform",
     "Stage6Split",
+    "StudentNameParser",
+    "get_registry",
 ]

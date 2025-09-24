@@ -1,0 +1,23 @@
+Photo Download Summary - Sun Sep  7 06:11:44 +07 2025
+=========================================
+Tables processed successfully: 2
+Tables failed: 0
+Total photo records:        4
+
+Directory Structure:
+-------------------
+total 40
+drwxr-xr-x@  7 jeffreystark  staff  224 Sep  7 06:11 .
+drwxrwxr-x@ 18 jeffreystark  staff  576 Sep  7 06:08 ..
+-rw-r--r--@  1 jeffreystark  staff  185 Sep  7 06:11 00000_01.jpg.txt
+-rw-r--r--@  1 jeffreystark  staff  181 Sep  7 06:11 00000.jpg.txt
+-rw-r--r--@  1 jeffreystark  staff  185 Sep  7 06:11 00026.jpg.txt
+-rw-r--r--@  1 jeffreystark  staff  185 Sep  7 06:11 00051.jpg.txt
+-rw-r--r--@  1 jeffreystark  staff  218 Sep  7 06:11 download_summary.txt
+
+Notes:
+- Student IDs are formatted as left-zero-padded 5 digits
+- Duplicate student IDs are handled with numeric suffixes (_01, _02, etc.)
+- Uses same tsql connection as CSV export scripts
+- Academic and Engineering photos are saved in the same directory
+- Currently creates placeholder .txt files (binary data processing needed)

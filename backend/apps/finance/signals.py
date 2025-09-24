@@ -63,6 +63,8 @@ class InvoiceLineItemLike(Protocol):
     id: int
     invoice_id: int
     line_total: Any
+
+
 logger = logging.getLogger(__name__)
 
 # Cache system user to avoid repeated database queries
@@ -103,11 +105,11 @@ def store_original_enrollment_status(
     if instance.pk:
         try:
             original = sender.objects.only("status").get(pk=instance.pk)  # type: ignore[attr-defined]
-            setattr(instance, "_original_status", original.status)
+            instance._original_status = original.status
         except sender.DoesNotExist:  # type: ignore[attr-defined]
-            setattr(instance, "_original_status", None)
+            instance._original_status = None
     else:
-        setattr(instance, "_original_status", None)
+        instance._original_status = None
 
 
 @receiver(post_save, sender=ClassHeaderEnrollment)
@@ -277,7 +279,8 @@ def process_payment_and_update_invoice(
         invoice.refresh_from_db()
         # Cast to satisfy type expectations of the service helper
         from typing import cast as _cast
-        InvoiceService.update_invoice_payment_status(_cast(Invoice, invoice))
+
+        InvoiceService.update_invoice_payment_status(_cast("Invoice", invoice))
 
         # Create financial transaction for payment
         FinancialTransactionService.record_transaction(
@@ -517,12 +520,13 @@ def handle_payment_deletion(
         # Refresh invoice and update payment status
         invoice.refresh_from_db()
         from typing import cast as _cast
-        InvoiceService.update_invoice_payment_status(_cast(Invoice, invoice))
+
+        InvoiceService.update_invoice_payment_status(_cast("Invoice", invoice))
 
         # Record financial transaction for payment reversal
         system_user = get_system_user()
         # Cast invoice to Any to satisfy typing for helper accepting Invoice | None
-        from typing import Any as _Any
+
         FinancialTransactionService.record_transaction(
             transaction_type="PAYMENT_REVERSED",
             student=invoice.student,

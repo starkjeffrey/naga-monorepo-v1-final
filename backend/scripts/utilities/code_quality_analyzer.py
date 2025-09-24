@@ -49,7 +49,7 @@ class CodeQualityAnalyzer:
 
                 match = error_pattern.match(line)
                 if match:
-                    file_path, line_num, severity, message, error_code = match.groups()
+                    file_path, _line_num, severity, _message, error_code = match.groups()
 
                     # Only count errors, not notes
                     if severity == "error":

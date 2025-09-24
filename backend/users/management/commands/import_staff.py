@@ -146,7 +146,7 @@ class Command(BaseCommand):
             return
 
         # Create or update Person record
-        person, person_created = self._get_or_create_person(user, staff, dry_run, update_existing)
+        _person, person_created = self._get_or_create_person(user, staff, dry_run, update_existing)
 
         if person_created:
             results["created_persons"] += 1

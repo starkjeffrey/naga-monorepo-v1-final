@@ -232,9 +232,11 @@ class InvoiceService:
         invoice.save()
 
         # Record transaction
-        from typing import cast, Any as _Any
+        from typing import Any as _Any
+        from typing import cast
+
         FinancialTransactionService.record_transaction(
-            transaction_type=cast(_Any, FinancialTransaction.TransactionType).INVOICE_SENT,
+            transaction_type=cast("_Any", FinancialTransaction.TransactionType).INVOICE_SENT,
             student=invoice.student,
             amount=invoice.total_amount,
             currency=invoice.currency,
@@ -319,7 +321,7 @@ class InvoiceService:
         # Get course pricing
         try:
             pricing_service = SeparatedPricingService()
-            price, currency, pricing_details = cast(Any, pricing_service).get_course_price(
+            price, currency, _pricing_details = cast("Any", pricing_service).get_course_price(
                 course=course,
                 student=invoice.student,
                 term=invoice.term,
@@ -350,7 +352,7 @@ class InvoiceService:
 
         # Record transaction
         FinancialTransactionService.record_transaction(
-            transaction_type=cast(_Any, FinancialTransaction.TransactionType).INVOICE_MODIFIED,
+            transaction_type=cast("_Any", FinancialTransaction.TransactionType).INVOICE_MODIFIED,
             student=invoice.student,
             amount=price,
             currency=currency,

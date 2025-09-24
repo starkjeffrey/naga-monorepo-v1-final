@@ -279,14 +279,14 @@ class CashierSessionFactory(DjangoModelFactory):
     cashier = None
 
     opened_at = factory.LazyFunction(
-        lambda: timezone.now() - timedelta(hours=factory.Faker('random_int', min=1, max=8).generate({}))
+        lambda: timezone.now() - timedelta(hours=factory.Faker("random_int", min=1, max=8).generate({}))
     )
 
     opening_balance = factory.LazyAttribute(lambda obj: Decimal(str(factory.Faker("random_int", min=50, max=500))))
 
     closed_at = factory.LazyAttribute(
         lambda obj: (
-            obj.opened_at + timedelta(hours=factory.Faker('random_int', min=4, max=8).generate({}))
+            obj.opened_at + timedelta(hours=factory.Faker("random_int", min=4, max=8).generate({}))
             if factory.Faker("boolean", chance_of_getting_true=70)
             else None
         )

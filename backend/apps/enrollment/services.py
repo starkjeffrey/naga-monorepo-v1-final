@@ -68,14 +68,14 @@ _UserModel = get_user_model()
 def get_system_user() -> User:
     """Get or create the system user for automated operations."""
     try:
-        return cast(User, _UserModel.objects.get(email=SYSTEM_USER_EMAIL))
+        return cast("User", _UserModel.objects.get(email=SYSTEM_USER_EMAIL))
     except _UserModel.DoesNotExist:
         # Create system user if it doesn't exist
         # Note: User model uses 'name' field instead of first_name/last_name
         manager = getattr(_UserModel, "objects", _UserModel._default_manager)
-        create_user = getattr(manager, "create_user")
+        create_user = manager.create_user
         return cast(
-            User,
+            "User",
             create_user(
                 email=SYSTEM_USER_EMAIL,
                 name="System User",
@@ -210,7 +210,7 @@ class EnrollmentService:
                         )
 
                 # 5. Check major declaration consistency
-                is_valid, major_warnings = MajorDeclarationService.validate_course_registration(
+                _is_valid, major_warnings = MajorDeclarationService.validate_course_registration(
                     student,
                     locked_class_header.course,
                     locked_class_header.term,
@@ -858,7 +858,7 @@ class PrerequisiteService:
         if warnings:
             calculation_notes.append(f"Warnings: {'; '.join(warnings)}")
 
-        eligibility_obj, created = StudentCourseEligibility.objects.update_or_create(
+        _eligibility_obj, _created = StudentCourseEligibility.objects.update_or_create(
             student=student,
             course=course,
             term=term,
@@ -2390,7 +2390,7 @@ class CycleDetectionService:
         """Create or update cycle status for student."""
         from .models import StudentCycleStatus
 
-        status, created = StudentCycleStatus.objects.update_or_create(
+        status, _created = StudentCycleStatus.objects.update_or_create(
             student=student,
             cycle_type=cycle_type,
             target_program=target_program,

@@ -23,7 +23,7 @@ from ..models import DataProfile
 
 def get_sqlalchemy_engine():
     """Get SQLAlchemy engine for pandas operations"""
-    db_config = settings.DATABASES['default']
+    db_config = settings.DATABASES["default"]
     database_url = f"postgresql+psycopg://{db_config['USER']}:{db_config['PASSWORD']}@{db_config['HOST']}:{db_config['PORT']}/{db_config['NAME']}"
     return create_engine(database_url)
 
@@ -169,9 +169,7 @@ class Stage2Profile:
         self.logger = logger
         self.run_id = run_id
 
-    def execute(
-        self, stage1_result: dict[str, Any], dry_run: bool = False
-    ) -> dict[str, Any]:
+    def execute(self, stage1_result: dict[str, Any], dry_run: bool = False) -> dict[str, Any]:
         """Profile all columns for data quality"""
         start_time = time.time()
 
@@ -245,17 +243,13 @@ class Stage2Profile:
             LIMIT 10
         """)
 
-        common_values = [
-            {"value": row[0], "count": row[1]} for row in cursor.fetchall()
-        ]
+        common_values = [{"value": row[0], "count": row[1]} for row in cursor.fetchall()]
 
         return {
             "total_rows": stats[0],
             "unique_count": stats[1],
             "null_count": stats[2],
-            "completeness_score": ((stats[0] - stats[2]) / stats[0] * 100)
-            if stats[0] > 0
-            else 0,
+            "completeness_score": ((stats[0] - stats[2]) / stats[0] * 100) if stats[0] > 0 else 0,
             "common_values": common_values,
         }
 
@@ -265,9 +259,7 @@ class Stage2Profile:
 
         for col_name, profile in profiles.items():
             if profile["completeness_score"] < 50:
-                recommendations.append(
-                    f"Column '{col_name}' is {profile['completeness_score']:.1f}% complete"
-                )
+                recommendations.append(f"Column '{col_name}' is {profile['completeness_score']:.1f}% complete")
 
         return recommendations
 
@@ -280,9 +272,7 @@ class Stage3Clean:
         self.logger = logger
         self.run_id = run_id
 
-    def execute(
-        self, stage2_result: dict[str, Any], dry_run: bool = False
-    ) -> dict[str, Any]:
+    def execute(self, stage2_result: dict[str, Any], dry_run: bool = False) -> dict[str, Any]:
         """Clean and parse data"""
         start_time = time.time()
 
@@ -320,9 +310,7 @@ class Stage3Clean:
                 if not supplemental_records.empty:
                     supp_table = f"{self.config.table_name}_stage3_supplemental"
                     engine = get_sqlalchemy_engine()
-                    supplemental_records.to_sql(
-                        supp_table, engine, if_exists="replace", index=False
-                    )
+                    supplemental_records.to_sql(supp_table, engine, if_exists="replace", index=False)
 
             execution_time = time.time() - start_time
 
@@ -356,9 +344,7 @@ class Stage3Clean:
 
     def _parse_dates(self, df: pd.DataFrame) -> pd.DataFrame:
         """Parse date columns"""
-        date_columns = [
-            col for col in df.columns if "date" in col.lower() or "time" in col.lower()
-        ]
+        date_columns = [col for col in df.columns if "date" in col.lower() or "time" in col.lower()]
 
         for col in date_columns:
             if col in df.columns and not col.startswith("_"):
@@ -412,9 +398,7 @@ class Stage3Clean:
                 "2014": "French",
                 "2076": "Computer",
             }
-            result["parsed_program"] = (
-                program_map.get(parts[1], parts[1]) if len(parts) > 1 else None
-            )
+            result["parsed_program"] = program_map.get(parts[1], parts[1]) if len(parts) > 1 else None
 
             # Part 3: Term ID
             result["parsed_time_of_day"] = parts[2] if len(parts) > 2 else None
@@ -437,17 +421,13 @@ class Stage3Clean:
             # Part 5: Course code (academic) or component name (language)
             if len(parts) > 4:
                 if is_language_class:
-                    result["parsed_component_name"] = parts[
-                        4
-                    ]  # e.g., "Grammar", "Speaking"
+                    result["parsed_component_name"] = parts[4]  # e.g., "Grammar", "Speaking"
                 else:
                     result["parsed_course_code"] = parts[4]
 
             # Build standardized course code
             if result.get("parsed_program") and result.get("parsed_level"):
-                result["standardized_course_code"] = (
-                    f"{result['parsed_program']}-{result['parsed_level']}"
-                )
+                result["standardized_course_code"] = f"{result['parsed_program']}-{result['parsed_level']}"
 
             return result
 
@@ -520,9 +500,7 @@ class Stage3Clean:
             return level_map.get(level_text, level_text)
 
         # Apply parsing to each row
-        parsed_data = df.apply(
-            lambda row: parse_single_classid(row.get("ClassID"), row), axis=1
-        )
+        parsed_data = df.apply(lambda row: parse_single_classid(row.get("ClassID"), row), axis=1)
 
         # Extract all unique keys from parsed data
         all_keys = set()
@@ -535,15 +513,11 @@ class Stage3Clean:
                 df[col] = parsed_data.apply(lambda x: x.get(col))
 
         # Add parsing quality flags
-        df["_parsing_complete"] = parsed_data.apply(
-            lambda x: "parse_error" not in x and "parse_warning" not in x
-        )
+        df["_parsing_complete"] = parsed_data.apply(lambda x: "parse_error" not in x and "parse_warning" not in x)
         df["_parsing_warnings"] = parsed_data.apply(
             lambda x: x.get("parse_warning", "") if "parse_warning" in x else ""
         )
-        df["_parsing_errors"] = parsed_data.apply(
-            lambda x: x.get("parse_error", "") if "parse_error" in x else ""
-        )
+        df["_parsing_errors"] = parsed_data.apply(lambda x: x.get("parse_error", "") if "parse_error" in x else "")
 
         return df
 
@@ -552,9 +526,7 @@ class Stage3Clean:
         self.logger.info("Cleaning financial records")
 
         # Basic field cleaning and standardization
-        df["payment_amount"] = pd.to_numeric(
-            df.get("payment_amount", 0), errors="coerce"
-        )
+        df["payment_amount"] = pd.to_numeric(df.get("payment_amount", 0), errors="coerce")
         df["payment_date"] = pd.to_datetime(df.get("payment_date"), errors="coerce")
 
         if "term_id" in df.columns:
@@ -567,9 +539,7 @@ class Stage3Clean:
         df["_needs_allocation"] = df.get("payment_type", "").str.upper() == "BULK"
 
         # Flag records with missing critical data
-        df["_has_missing_data"] = (
-            df[["payment_amount", "student_id", "term_id"]].isnull().any(axis=1)
-        )
+        df["_has_missing_data"] = df[["payment_amount", "student_id", "term_id"]].isnull().any(axis=1)
 
         return df
 
@@ -579,7 +549,7 @@ class Stage3Clean:
 
         # Only for enrollment data with multiple components
         if self.config.table_name == "academiccoursetakers":
-            for idx, row in df.iterrows():
+            for _idx, row in df.iterrows():
                 if row.get("_has_multiple_components"):
                     # Create a supplemental record for component tracking
                     supp_record = {
@@ -605,11 +575,7 @@ class Stage3Clean:
 
     def _get_parsed_fields(self, df: pd.DataFrame) -> list[str]:
         """Get list of parsed fields"""
-        return [
-            col
-            for col in df.columns
-            if col.startswith("parsed_") or col.startswith("standardized_")
-        ]
+        return [col for col in df.columns if col.startswith("parsed_") or col.startswith("standardized_")]
 
 
 class Stage4Validate:
@@ -620,9 +586,7 @@ class Stage4Validate:
         self.logger = logger
         self.run_id = run_id
 
-    def execute(
-        self, stage3_result: dict[str, Any], dry_run: bool = False
-    ) -> dict[str, Any]:
+    def execute(self, stage3_result: dict[str, Any], dry_run: bool = False) -> dict[str, Any]:
         """Validate cleaned data"""
         start_time = time.time()
 
@@ -634,15 +598,13 @@ class Stage4Validate:
             df = pd.read_sql(f'SELECT * FROM "{cleaned_table}"', connection)
 
             # Update transformation path
-            df["_transformation_path"] = (
-                df["_transformation_path"] + "->stage4_validate"
-            )
+            df["_transformation_path"] = df["_transformation_path"] + "->stage4_validate"
 
             # Apply validation rules
             valid_rows = []
             invalid_rows = []
 
-            for idx, row in df.iterrows():
+            for _idx, row in df.iterrows():
                 validation_result = self._validate_row(row)
 
                 if validation_result["is_valid"]:
@@ -657,16 +619,12 @@ class Stage4Validate:
                 if valid_rows:
                     valid_df = pd.DataFrame(valid_rows)
                     valid_table = f"{self.config.table_name}_stage4_valid"
-                    valid_df.to_sql(
-                        valid_table, engine, if_exists="replace", index=False
-                    )
+                    valid_df.to_sql(valid_table, engine, if_exists="replace", index=False)
 
                 if invalid_rows:
                     invalid_df = pd.DataFrame(invalid_rows)
                     invalid_table = f"{self.config.table_name}_stage4_invalid"
-                    invalid_df.to_sql(
-                        invalid_table, engine, if_exists="replace", index=False
-                    )
+                    invalid_df.to_sql(invalid_table, engine, if_exists="replace", index=False)
 
             execution_time = time.time() - start_time
             success_rate = (len(valid_rows) / len(df) * 100) if len(df) > 0 else 0
@@ -677,12 +635,8 @@ class Stage4Validate:
                 "total_rows_invalid": len(invalid_rows),
                 "success_rate_percent": success_rate,
                 "execution_time_seconds": execution_time,
-                "valid_dataframe": pd.DataFrame(valid_rows)
-                if valid_rows
-                else pd.DataFrame(),
-                "invalid_dataframe": pd.DataFrame(invalid_rows)
-                if invalid_rows
-                else pd.DataFrame(),
+                "valid_dataframe": pd.DataFrame(valid_rows) if valid_rows else pd.DataFrame(),
+                "invalid_dataframe": pd.DataFrame(invalid_rows) if invalid_rows else pd.DataFrame(),
             }
 
         except Exception as e:
@@ -729,9 +683,7 @@ class Stage4Validate:
                         }
                     )
             else:
-                errors.append(
-                    {"field": "general", "error": str(e), "type": "validation_error"}
-                )
+                errors.append({"field": "general", "error": str(e), "type": "validation_error"})
 
         return errors
 
@@ -741,9 +693,7 @@ class Stage4Validate:
 
         # Check required fields
         if pd.isna(row.get("IPK")):
-            errors.append(
-                {"field": "IPK", "error": "Required field missing", "type": "required"}
-            )
+            errors.append({"field": "IPK", "error": "Required field missing", "type": "required"})
 
         # Check parsed fields
         if pd.isna(row.get("parsed_program")):
@@ -757,9 +707,7 @@ class Stage4Validate:
 
         # Validate standardized course code format (but not existence in new DB yet)
         if row.get("standardized_course_code"):
-            if not re.match(
-                r"^[A-Z]{3,6}-\d{2}$", str(row["standardized_course_code"])
-            ):
+            if not re.match(r"^[A-Z]{3,6}-\d{2}$", str(row["standardized_course_code"])):
                 errors.append(
                     {
                         "field": "standardized_course_code",
@@ -845,9 +793,7 @@ class Stage5Transform:
         self.logger = logger
         self.run_id = run_id
 
-    def execute(
-        self, stage4_result: dict[str, Any], dry_run: bool = False
-    ) -> dict[str, Any]:
+    def execute(self, stage4_result: dict[str, Any], dry_run: bool = False) -> dict[str, Any]:
         """Apply transformations like Limon to Unicode"""
         start_time = time.time()
 
@@ -861,9 +807,7 @@ class Stage5Transform:
                 df = pd.read_sql(f'SELECT * FROM "{valid_table}"', connection)
 
             # Update transformation path
-            df["_transformation_path"] = (
-                df["_transformation_path"] + "->stage5_transform"
-            )
+            df["_transformation_path"] = df["_transformation_path"] + "->stage5_transform"
 
             # Apply transformations based on configuration
             transformations_applied = []
@@ -881,9 +825,7 @@ class Stage5Transform:
                 # Save transformed data
                 engine = get_sqlalchemy_engine()
                 transformed_table = f"{self.config.table_name}_stage5_transformed"
-                df.to_sql(
-                    transformed_table, engine, if_exists="replace", index=False
-                )
+                df.to_sql(transformed_table, engine, if_exists="replace", index=False)
 
             execution_time = time.time() - start_time
 
@@ -952,9 +894,7 @@ class Stage6Split:
         self.logger = logger
         self.run_id = run_id
 
-    def execute(
-        self, stage5_result: dict[str, Any], dry_run: bool = False
-    ) -> dict[str, Any]:
+    def execute(self, stage5_result: dict[str, Any], dry_run: bool = False) -> dict[str, Any]:
         """Split records into headers and lines based on table type"""
         start_time = time.time()
 
@@ -968,9 +908,7 @@ class Stage6Split:
                 df = pd.read_sql(f'SELECT * FROM "{transformed_table}"', connection)
 
             # Update transformation path
-            df["_transformation_path"] = (
-                df.get("_transformation_path", "") + "->stage6_split"
-            )
+            df["_transformation_path"] = df.get("_transformation_path", "") + "->stage6_split"
 
             # Process based on table type
             if self.config.table_name == "academiccoursetakers":
@@ -1013,23 +951,15 @@ class Stage6Split:
         self.logger.info(f"Created {len(parts_df)} class parts")
 
         # Step 4: Create mapping records for traceability
-        mappings_df = self._create_enrollment_mappings(
-            df, headers_df, sessions_df, parts_df
-        )
+        mappings_df = self._create_enrollment_mappings(df, headers_df, sessions_df, parts_df)
 
         if not dry_run:
             # Save all tables
             engine = get_sqlalchemy_engine()
-            headers_df.to_sql(
-                "class_headers", engine, if_exists="replace", index=False
-            )
-            sessions_df.to_sql(
-                "class_sessions", engine, if_exists="replace", index=False
-            )
+            headers_df.to_sql("class_headers", engine, if_exists="replace", index=False)
+            sessions_df.to_sql("class_sessions", engine, if_exists="replace", index=False)
             parts_df.to_sql("class_parts", engine, if_exists="replace", index=False)
-            mappings_df.to_sql(
-                "enrollment_mappings", engine, if_exists="replace", index=False
-            )
+            mappings_df.to_sql("enrollment_mappings", engine, if_exists="replace", index=False)
 
         return {
             "headers_created": len(headers_df),
@@ -1069,14 +999,12 @@ class Stage6Split:
 
         return headers
 
-    def _create_class_sessions(
-        self, df: pd.DataFrame, headers_df: pd.DataFrame
-    ) -> pd.DataFrame:
+    def _create_class_sessions(self, df: pd.DataFrame, headers_df: pd.DataFrame) -> pd.DataFrame:
         """Create class sessions for language programs"""
         sessions = []
 
         # Filter for language classes that need sessions
-        language_df = df[df["needs_class_session"] == True]
+        language_df = df[df["needs_class_session"]]
 
         if language_df.empty:
             return pd.DataFrame()
@@ -1120,10 +1048,7 @@ class Stage6Split:
         for idx, row in df.iterrows():
             # Find matching header
             header_match = headers_df[
-                (
-                    headers_df["standardized_course_code"]
-                    == row.get("standardized_course_code")
-                )
+                (headers_df["standardized_course_code"] == row.get("standardized_course_code"))
                 & (headers_df["parsed_termid"] == row.get("parsed_termid"))
                 & (headers_df["parsed_section"] == row.get("parsed_section", "A"))
             ]
@@ -1149,10 +1074,7 @@ class Stage6Split:
             if row.get("needs_class_session") and row.get("parsed_component_name"):
                 session_match = sessions_df[
                     (sessions_df["class_header_id"] == part["class_header_id"])
-                    & (
-                        sessions_df["component_name"]
-                        == row.get("parsed_component_name")
-                    )
+                    & (sessions_df["component_name"] == row.get("parsed_component_name"))
                 ]
 
                 if not session_match.empty:
@@ -1162,9 +1084,7 @@ class Stage6Split:
 
         return pd.DataFrame(parts)
 
-    def _create_enrollment_mappings(
-        self, df, headers_df, sessions_df, parts_df
-    ) -> pd.DataFrame:
+    def _create_enrollment_mappings(self, df, headers_df, sessions_df, parts_df) -> pd.DataFrame:
         """Create mapping records for traceability"""
         mappings = []
 
@@ -1183,9 +1103,7 @@ class Stage6Split:
 
         return pd.DataFrame(mappings)
 
-    def _process_financial_records(
-        self, df: pd.DataFrame, dry_run: bool
-    ) -> dict[str, Any]:
+    def _process_financial_records(self, df: pd.DataFrame, dry_run: bool) -> dict[str, Any]:
         """Complex payment allocation and AR record creation"""
         self.logger.info("Processing financial records")
 
@@ -1197,7 +1115,7 @@ class Stage6Split:
         ar_lines = []
         allocation_log = []
 
-        for idx, payment in df.iterrows():
+        for _idx, payment in df.iterrows():
             if payment.get("_needs_allocation"):
                 # Complex allocation for bulk payments
                 result = self._allocate_bulk_payment(payment)
@@ -1217,15 +1135,9 @@ class Stage6Split:
         if not dry_run:
             # Save AR records
             engine = get_sqlalchemy_engine()
-            ar_headers_df.to_sql(
-                "ar_transaction_headers", engine, if_exists="replace", index=False
-            )
-            ar_lines_df.to_sql(
-                "ar_transaction_lines", engine, if_exists="replace", index=False
-            )
-            allocation_log_df.to_sql(
-                "payment_allocation_log", engine, if_exists="replace", index=False
-            )
+            ar_headers_df.to_sql("ar_transaction_headers", engine, if_exists="replace", index=False)
+            ar_lines_df.to_sql("ar_transaction_lines", engine, if_exists="replace", index=False)
+            allocation_log_df.to_sql("payment_allocation_log", engine, if_exists="replace", index=False)
 
         return {
             "ar_headers_created": len(ar_headers_df),
@@ -1240,9 +1152,7 @@ class Stage6Split:
         self.logger.info(f"Allocating bulk payment: {payment.get('receipt_id')}")
 
         # Step 1: Find related enrollments
-        enrollments = self._find_student_enrollments(
-            payment.get("student_id"), payment.get("term_id")
-        )
+        enrollments = self._find_student_enrollments(payment.get("student_id"), payment.get("term_id"))
 
         # Step 2: Impute missing data if needed
         if not enrollments or len(enrollments) == 0:
@@ -1316,9 +1226,7 @@ class Stage6Split:
 
     def _impute_enrollments(self, payment: pd.Series) -> list[dict]:
         """Impute enrollments when data is missing"""
-        self.logger.warning(
-            f"Imputing enrollments for payment {payment.get('receipt_id')}"
-        )
+        self.logger.warning(f"Imputing enrollments for payment {payment.get('receipt_id')}")
 
         # Default imputation strategy - assume standard course load
         # This would be customized based on your business rules
@@ -1327,9 +1235,7 @@ class Stage6Split:
             {"course_code": "IEAP-04", "section": "B"},
         ]
 
-    def _calculate_allocations(
-        self, enrollments: list[dict], total_amount: float
-    ) -> list[dict]:
+    def _calculate_allocations(self, enrollments: list[dict], total_amount: float) -> list[dict]:
         """Calculate how to allocate payment across courses"""
         if not enrollments:
             return []

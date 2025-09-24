@@ -134,7 +134,7 @@ class IncrementalCSVLoader:
         # Create or get batch record for tracking
         from apps.finance.models.ar_reconstruction import ARReconstructionBatch
 
-        batch_record, created = ARReconstructionBatch.objects.get_or_create(
+        batch_record, _created = ARReconstructionBatch.objects.get_or_create(
             batch_id=processor.batch_id,
             defaults={
                 "term_id": record.get("TermID", "INCREMENTAL"),

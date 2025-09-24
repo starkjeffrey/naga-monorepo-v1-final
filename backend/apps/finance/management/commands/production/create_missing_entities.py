@@ -88,7 +88,7 @@ class Command(BaseCommand):
                 try:
                     with transaction.atomic():
                         # Parse term code to extract meaningful data
-                        year, term_info = self.parse_term_code(term_code)
+                        _year, _term_info = self.parse_term_code(term_code)
 
                         Term.objects.create(
                             code=term_code,

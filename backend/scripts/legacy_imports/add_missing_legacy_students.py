@@ -107,18 +107,18 @@ def add_missing_students(missing_students, start_student_id):
                 current_student_id = start_student_id + i
 
                 (
-                    legacy_id,
+                    _legacy_id,
                     name,
                     kname,
                     birth_date,
                     gender,
                     email,
-                    mobile_phone,
-                    current_program,
+                    _mobile_phone,
+                    _current_program,
                     status,
-                    batch_id,
-                    first_term,
-                    numeric_id,
+                    _batch_id,
+                    _first_term,
+                    _numeric_id,
                 ) = student_data
 
                 # Parse the name into family_name and personal_name

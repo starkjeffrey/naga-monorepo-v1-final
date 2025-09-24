@@ -347,7 +347,7 @@ class SystemAuditLogAdmin(admin.ModelAdmin):
             return f"{obj.content_type} #{obj.object_id}"
         return f"{obj.target_app}.{obj.target_model} #{obj.target_object_id}"
 
-    cast(Any, target_info).short_description = _("Target")
+    cast("Any", target_info).short_description = _("Target")
 
     def override_reason_truncated(self, obj):
         """Truncate long override reasons."""
@@ -355,7 +355,7 @@ class SystemAuditLogAdmin(admin.ModelAdmin):
             return obj.override_reason[:100] + "..."
         return obj.override_reason
 
-    cast(Any, override_reason_truncated).short_description = _("Override Reason")
+    cast("Any", override_reason_truncated).short_description = _("Override Reason")
 
     def has_add_permission(self, request):
         """Prevent manual addition of audit logs."""

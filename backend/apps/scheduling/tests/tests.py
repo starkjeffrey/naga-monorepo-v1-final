@@ -791,11 +791,11 @@ class SchedulingIntegrityTest(TestCase):
         # Multiple calls should not create additional sessions
         original_count = class_header.class_sessions.count()
 
-        created1, sessions1 = class_header.ensure_sessions_exist()
+        created1, _sessions1 = class_header.ensure_sessions_exist()
         self.assertEqual(created1, 0)  # No new sessions created
         self.assertEqual(class_header.class_sessions.count(), original_count)
 
-        created2, sessions2 = class_header.ensure_sessions_exist()
+        created2, _sessions2 = class_header.ensure_sessions_exist()
         self.assertEqual(created2, 0)  # Still no new sessions
         self.assertEqual(class_header.class_sessions.count(), original_count)
 

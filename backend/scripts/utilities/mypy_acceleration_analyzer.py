@@ -46,7 +46,7 @@ class MyPyAccelerationAnalyzer:
             for line in result.stderr.split("\n"):
                 match = error_pattern.match(line.strip())
                 if match:
-                    file_path, line_num, severity, message, error_code = match.groups()
+                    file_path, line_num, _severity, message, error_code = match.groups()
 
                     errors.append(
                         {

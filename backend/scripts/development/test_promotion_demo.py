@@ -131,7 +131,7 @@ def enroll_students(data):
     grades = ["A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D"]
 
     for i, student in enumerate(data["students"]):
-        enrollment, created = ClassHeaderEnrollment.objects.get_or_create(
+        enrollment, _created = ClassHeaderEnrollment.objects.get_or_create(
             student=student,
             class_header=data["class_t1"],
             defaults={

@@ -424,7 +424,7 @@ class ReadingClassPricingService:
 
         # Get current pricing for this reading class
         try:
-            price, description = cls.calculate_price(class_header, student, is_foreign)
+            price, _description = cls.calculate_price(class_header, student, is_foreign)
 
             # Store the locked price in ClassHeader notes field as fallback
             # In a full implementation, this would use a dedicated locked_price field

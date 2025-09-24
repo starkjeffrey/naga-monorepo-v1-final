@@ -48,7 +48,6 @@ dependencies = [
     "django-import-export>=4.0.10,<5",
     "django-safedelete>=1.4.0,<2",
     "django-simple-history>=3.7.0,<4",
-    "django-viewflow>=2.2.9,<3",
     "django-widget-tweaks>=1.5.0,<2",
     "django-constance[redis]>=4.3.2",
     "django-multiselectfield>=0.1.13",

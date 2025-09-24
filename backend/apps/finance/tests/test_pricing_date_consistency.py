@@ -227,7 +227,7 @@ class TestPricingDateConsistency:
         assert price == Decimal("110.00")
 
         # Foreign student pricing
-        price, description = DefaultPricingService.get_price(data["cycle"], is_foreign=True, term=data["old_term"])
+        price, _description = DefaultPricingService.get_price(data["cycle"], is_foreign=True, term=data["old_term"])
         assert price == Decimal("150.00")
 
     def test_course_fixed_pricing_uses_term_date(self, setup_test_data):
@@ -272,7 +272,7 @@ class TestPricingDateConsistency:
         assert price == Decimal("330.00")
 
         # Foreign student pricing
-        price, description = SeniorProjectPricingService.calculate_price(
+        price, _description = SeniorProjectPricingService.calculate_price(
             data["course"], data["student"], data["old_term"], is_foreign=True
         )
         assert price == Decimal("350.00")
@@ -310,7 +310,7 @@ class TestPricingDateConsistency:
         class_header.term = data["old_term"]
         class_header.save()
 
-        price, description = ReadingClassPricingService.calculate_price(
+        price, _description = ReadingClassPricingService.calculate_price(
             class_header, data["student"], is_foreign=True, term=data["old_term"]
         )
         assert price == Decimal("450.00")

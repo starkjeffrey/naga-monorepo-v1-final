@@ -370,6 +370,7 @@ class Command(BaseCommand):
         try:
             # Get dependency order from registry
             from apps.data_pipeline.core.registry import get_registry
+
             dependency_order = get_registry().get_pipeline_order()
             details["dependency_order"] = dependency_order
 

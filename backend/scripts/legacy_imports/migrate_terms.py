@@ -128,7 +128,7 @@ def migrate_terms():
                     description,
                     add_date,
                     drop_date,
-                    pmt_period,
+                    _pmt_period,
                     ldp_date,
                 ) = legacy_term
 

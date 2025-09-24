@@ -129,7 +129,7 @@ class AdministrativeFeeService:
                     continue
 
                 # Apply administrative fee
-                line_item, quota = AdministrativeFeeService.apply_administrative_fee(
+                line_item, _quota = AdministrativeFeeService.apply_administrative_fee(
                     student=cycle_status.student, term=term, cycle_status=cycle_status
                 )
 

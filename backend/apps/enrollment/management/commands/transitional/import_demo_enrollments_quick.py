@@ -158,7 +158,7 @@ class Command(BaseMigrationCommand):
         enrollments_created = 0
 
         for record in course_records:
-            term_id, course_code, grade, credit, year = record
+            term_id, course_code, grade, _credit, _year = record
 
             # Get course
             course = self.course_cache.get(course_code)

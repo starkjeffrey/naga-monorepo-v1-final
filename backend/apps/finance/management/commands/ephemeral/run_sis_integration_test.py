@@ -233,6 +233,7 @@ class SISIntegrationTestService:
             pricing_details = []
 
             from typing import Any
+
             for enrollment in enrollments:
                 try:
                     ch: Any = enrollment.class_header
@@ -255,9 +256,7 @@ class SISIntegrationTestService:
                     )
                 except Exception as e:
                     ch: Any = enrollment.class_header
-                    logger.warning(
-                        f"Could not price course {getattr(getattr(ch, 'course', None), 'code', '')}: {e}"
-                    )
+                    logger.warning(f"Could not price course {getattr(getattr(ch, 'course', None), 'code', '')}: {e}")
                     # Use fallback pricing
                     fallback_price = Decimal("500.00")
                     total_base_price += fallback_price

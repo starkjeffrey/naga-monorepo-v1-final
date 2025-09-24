@@ -14,13 +14,13 @@ Key features:
 Migrated from apps.attendance.api to unified v1 API structure.
 """
 
+from typing import Any, cast
+
 from django.utils import timezone
 from ninja import Router, Schema
 from ninja.responses import Response
 
 from apps.attendance.models import RosterSync
-from typing import Any, cast
-
 from apps.attendance.services import AttendanceCodeService, RosterSyncService
 
 # Import business logic from apps
@@ -185,7 +185,7 @@ def start_attendance_session(request, data: AttendanceSessionCreateSchema):
             session.makeup_reason = data.makeup_reason or ""
             session.save()
 
-        s = cast(Any, session)
+        s = cast("Any", session)
         return AttendanceSessionResponseSchema(
             id=s.id,
             class_part_id=s.class_part.id,

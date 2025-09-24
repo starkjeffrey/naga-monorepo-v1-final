@@ -37,7 +37,7 @@ from django.db.models import (
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from apps.common.models import UserAuditModel, SoftDeleteManager
+from apps.common.models import SoftDeleteManager, UserAuditModel
 
 
 class PaymentMode(models.TextChoices):

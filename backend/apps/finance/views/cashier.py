@@ -190,8 +190,9 @@ class PaymentCollectionView(LoginRequiredMixin, PermissionRequiredMixin, View):
 
             # Process payment
             from typing import cast
+
             payment: PaymentLike = cast(
-                PaymentLike,
+                "PaymentLike",
                 PaymentService.process_payment(
                     student=student,
                     amount=amount,
@@ -247,7 +248,8 @@ class ReceiptView(LoginRequiredMixin, PermissionRequiredMixin, View):
         # Check if PDF requested
         if request.GET.get("format") == "pdf":
             from typing import cast
-            return ReceiptService.generate_pdf_receipt(cast(Any, payment))
+
+            return ReceiptService.generate_pdf_receipt(cast("Any", payment))
 
         return render(request, "finance/cashier/receipt.html", context)
 
@@ -374,8 +376,9 @@ class RefundProcessingView(LoginRequiredMixin, PermissionRequiredMixin, View):
 
             # Process refund
             from typing import cast
+
             refund: PaymentLike = cast(
-                PaymentLike,
+                "PaymentLike",
                 PaymentService.process_refund(
                     payment=payment,
                     amount=amount,

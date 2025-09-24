@@ -242,14 +242,16 @@ class TermFactory(DjangoModelFactory):
 
     start_date = Faker("date_between", start_date="-1y", end_date="+1y")
 
-    end_date = factory.LazyAttribute(lambda obj: obj.start_date + timedelta(days=Faker('random_int', min=90, max=120).generate({})))
+    end_date = factory.LazyAttribute(
+        lambda obj: obj.start_date + timedelta(days=Faker("random_int", min=90, max=120).generate({}))
+    )
 
     registration_start = factory.LazyAttribute(
-        lambda obj: obj.start_date - timedelta(days=Faker('random_int', min=14, max=45).generate({})),
+        lambda obj: obj.start_date - timedelta(days=Faker("random_int", min=14, max=45).generate({})),
     )
 
     registration_end = factory.LazyAttribute(
-        lambda obj: obj.start_date + timedelta(days=Faker('random_int', min=7, max=21).generate({})),
+        lambda obj: obj.start_date + timedelta(days=Faker("random_int", min=7, max=21).generate({})),
     )
 
     # Term type and status

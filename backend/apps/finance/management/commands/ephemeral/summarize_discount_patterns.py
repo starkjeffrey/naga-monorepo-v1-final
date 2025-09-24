@@ -148,7 +148,7 @@ class Command(BaseCommand):
 
             # Count percentages in early period
             early_percentages = Counter(r["percentage"] for r in early_receipts)
-            most_common_percent, count = early_percentages.most_common(1)[0]
+            most_common_percent, _count = early_percentages.most_common(1)[0]
 
             # Check if COVID period
             covid_count = sum(1 for r in receipts if r["is_covid"])

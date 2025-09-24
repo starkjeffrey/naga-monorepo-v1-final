@@ -591,9 +591,9 @@ class Command(BaseMigrationCommand):
             system_user = User.objects.filter(is_staff=True).first()
             if not system_user:
                 # Create a system user for historical payments
-                from typing import Any
-                system_user = (User.objects if hasattr(User, "objects") else User._default_manager)
-                system_user = getattr(system_user, "create_user")(
+
+                system_user = User.objects if hasattr(User, "objects") else User._default_manager
+                system_user = system_user.create_user(
                     username="ar_reconstruction_system",
                     email="system@ar-reconstruction.local",
                     first_name="A/R",

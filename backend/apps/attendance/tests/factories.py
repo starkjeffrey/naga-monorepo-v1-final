@@ -154,7 +154,7 @@ class AttendanceRecordFactory(DjangoModelFactory):
                     obj.attendance_session.session_date,
                     obj.attendance_session.start_time,
                 )
-                + timedelta(minutes=Faker('random_int', min=-5, max=20).generate({}))
+                + timedelta(minutes=Faker("random_int", min=-5, max=20).generate({}))
             ).time()
             if obj.status in ["PRESENT", "TARDY"]
             else None
@@ -165,7 +165,7 @@ class AttendanceRecordFactory(DjangoModelFactory):
         lambda obj: (
             (
                 datetime.combine(obj.attendance_session.session_date, obj.attendance_session.end_time)
-                + timedelta(minutes=Faker('random_int', min=-10, max=5).generate({}))
+                + timedelta(minutes=Faker("random_int", min=-10, max=5).generate({}))
             ).time()
             if obj.status == "PRESENT" and Faker("boolean", chance_of_getting_true=60)
             else None

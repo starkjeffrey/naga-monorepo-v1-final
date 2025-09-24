@@ -1,0 +1,16 @@
+Export Summary with Headers - Sat Sep  6 19:07:19 +07 2025
+=========================================
+Successful exports: 6
+Failed exports: 1
+
+File Details:
+-------------
+academicclasses.csv: 1 records + 1 header row (115B)
+academiccoursetakers.csv: 273953 records + 1 header row (56M)
+courses.csv: 875 records + 1 header row (88K)
+receipt_headers.csv: 100413 records + 1 header row (27M)
+receipt_items.csv: 103449 records + 1 header row (12M)
+students.csv: 18229 records + 1 header row (14M)
+terms.csv: 178 records + 1 header row (28K)
+
+Note: All CSV files now include column headers in the first row.

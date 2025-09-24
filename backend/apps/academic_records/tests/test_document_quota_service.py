@@ -227,7 +227,7 @@ class DocumentQuotaServiceTest(TestCase):
         )
 
         # Process request
-        success, quota_usage, excess_charge = DocumentQuotaService.process_document_request(request)
+        success, _quota_usage, excess_charge = DocumentQuotaService.process_document_request(request)
 
         self.assertTrue(success)
         self.assertIsNotNone(excess_charge)

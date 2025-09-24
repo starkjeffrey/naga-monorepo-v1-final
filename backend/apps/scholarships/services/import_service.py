@@ -204,7 +204,7 @@ class ScholarshipImportService:
         award_data = self._calculate_award_amount(receipt)
 
         # Validate date range
-        start_date, end_date = self._determine_date_range(receipt)
+        start_date, _end_date = self._determine_date_range(receipt)
 
         # Check for duplicates
         self._check_duplicate_scholarship(student, cycle, start_date, award_data)

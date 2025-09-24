@@ -1,9 +1,9 @@
 """API endpoints for document requests with quota integration."""
 
-from django.db import transaction
-from django.shortcuts import get_object_or_404
 from typing import Any, cast
 
+from django.db import transaction
+from django.shortcuts import get_object_or_404
 from ninja import Router, Schema
 from ninja.errors import HttpError
 
@@ -97,7 +97,7 @@ def list_document_types(request):
     types = DocumentTypeConfig.objects.filter(is_active=True).order_by("display_order", "name")
     results: list[DocumentTypeOut] = []
     for dt in types:
-        d = cast(Any, dt)
+        d = cast("Any", dt)
         results.append(
             DocumentTypeOut(
                 id=d.id,
@@ -203,7 +203,7 @@ def check_document_quota(request, student_id: int, document_type_id: int, term_i
     else:
         excess_units = units_required
 
-    dt_cfg = cast(Any, document_type)
+    dt_cfg = cast("Any", document_type)
     return DocumentQuotaCheckOut(
         document_type=DocumentTypeOut(
             id=dt_cfg.id,
@@ -263,7 +263,7 @@ def create_document_request(request, student_id: int, data: DocumentRequestIn):
     )
 
     # Process quota
-    success, quota_usage, excess_charge = DocumentQuotaService.process_document_request(document_request)
+    _success, quota_usage, excess_charge = DocumentQuotaService.process_document_request(document_request)
 
     # Determine quota usage
     quota_used = quota_usage is not None
@@ -281,8 +281,8 @@ def create_document_request(request, student_id: int, data: DocumentRequestIn):
         document_request.finance_invoice_id = excess_charge.invoice.id
         document_request.save()
 
-    dr = cast(Any, document_request)
-    dt = cast(Any, document_type)
+    dr = cast("Any", document_request)
+    dt = cast("Any", document_type)
     return DocumentRequestOut(
         id=dr.id,
         request_id=str(document_request.request_id),
@@ -327,7 +327,7 @@ def list_student_document_requests(request, student_id: int):
 
     results: list[DocumentRequestOut] = []
     for req in requests:
-        r = cast(Any, req)
+        r = cast("Any", req)
         # Check if quota was used
         quota_usage = r.quota_usage.first()
         quota_used = quota_usage is not None

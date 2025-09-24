@@ -37,7 +37,7 @@ class MoodleSyncStatusAdmin(admin.ModelAdmin):
             return obj.error_message[:100] + "..." if len(obj.error_message) > 100 else obj.error_message
         return "-"
 
-    cast(Any, error_summary).short_description = "Error Summary"
+    cast("Any", error_summary).short_description = "Error Summary"
 
     def get_queryset(self, request):
         """Optimize queryset with select_related."""
@@ -119,7 +119,7 @@ class MoodleEnrollmentMappingAdmin(admin.ModelAdmin):
         role_map = {3: "Teacher", 5: "Student", 1: "Manager", 2: "Course Creator"}
         return role_map.get(obj.moodle_role_id, f"Role {obj.moodle_role_id}")
 
-    cast(Any, role_name).short_description = "Role"
+    cast("Any", role_name).short_description = "Role"
 
     def get_queryset(self, request):
         """Optimize queryset with select_related."""
@@ -169,7 +169,7 @@ class MoodleAPILogAdmin(admin.ModelAdmin):
         else:
             return f"{obj.execution_time_ms / 1000:.2f}s"
 
-    cast(Any, formatted_execution_time).short_description = "Execution Time"
+    cast("Any", formatted_execution_time).short_description = "Execution Time"
 
     def has_error(self, obj):
         """Display whether the API call had errors."""
@@ -177,8 +177,8 @@ class MoodleAPILogAdmin(admin.ModelAdmin):
             return format_html('<span style="color: red;">Yes</span>')
         return format_html('<span style="color: green;">No</span>')
 
-    cast(Any, has_error).short_description = "Error"
-    cast(Any, has_error).admin_order_field = "error_message"
+    cast("Any", has_error).short_description = "Error"
+    cast("Any", has_error).admin_order_field = "error_message"
 
     def get_queryset(self, request):
         """Order by most recent first."""

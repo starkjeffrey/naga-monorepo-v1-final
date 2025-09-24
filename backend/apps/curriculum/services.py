@@ -167,7 +167,7 @@ class AcademicStructureService:
             )
 
             # Create or get cycle
-            cycle, created = Cycle.objects.get_or_create(
+            cycle, _created = Cycle.objects.get_or_create(
                 name=cycle_name,
                 division=division,
                 defaults={

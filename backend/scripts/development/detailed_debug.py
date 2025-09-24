@@ -40,7 +40,7 @@ def detailed_debug():
 
     # Try to create/get class
     try:
-        cloned_class, created = ClassHeader.objects.get_or_create(
+        cloned_class, _created = ClassHeader.objects.get_or_create(
             course=next_course,
             term=target_term,
             section_id=source_class.section_id,

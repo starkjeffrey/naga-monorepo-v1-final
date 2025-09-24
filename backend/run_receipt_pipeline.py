@@ -249,9 +249,7 @@ def run_simple_pipeline():
         print("📊 Data Profiling:")
         print(f"   • Columns analyzed: {profile_results.get('columns_profiled', 0)}")
         completeness_scores = profile_results.get("completeness_scores", {})
-        avg_completeness = (
-            sum(completeness_scores.values()) / max(len(completeness_scores), 1)
-        )
+        avg_completeness = sum(completeness_scores.values()) / max(len(completeness_scores), 1)
         print(f"   • Average completeness: {avg_completeness:.1f}%")
 
         print("\n🧹 Data Cleaning:")

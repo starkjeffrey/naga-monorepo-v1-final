@@ -137,7 +137,7 @@ def ensure_class_header_integrity(sender, instance: ClassHeader, created: bool, 
     """Automatically create appropriate sessions when ClassHeader is created."""
     if created:
         try:
-            created_count, sessions = instance.ensure_sessions_exist()
+            created_count, _sessions = instance.ensure_sessions_exist()
             if created_count > 0:
                 logger.info(
                     "Auto-created %d session(s) for %s",
@@ -207,7 +207,7 @@ def prevent_last_session_deletion(sender, instance: ClassSession, **kwargs):
     """Prevent deletion of the last session in a ClassHeader."""
     try:
         class_header = instance.class_header
-        session_count = getattr(class_header, "class_sessions").count()
+        session_count = class_header.class_sessions.count()
 
         if not class_header.is_ieap_class() and session_count <= 1:
             raise ValidationError("Cannot delete the only session of a regular class")

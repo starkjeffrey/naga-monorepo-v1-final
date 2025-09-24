@@ -188,7 +188,7 @@ def create_class_schedule(request: HttpRequest) -> JsonResponse:
             session_number = 1
             for item in schedule_items:
                 # Create session if it doesn't exist
-                session, created = ClassSession.objects.get_or_create(
+                session, _created = ClassSession.objects.get_or_create(
                     class_header=class_header,
                     session_number=session_number,
                     defaults={

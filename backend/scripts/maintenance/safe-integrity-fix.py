@@ -171,7 +171,7 @@ class SafeIntegrityFixer:
                 FROM {table_name}
             """
             )
-            total_rows, non_null_count = cursor.fetchone()
+            _total_rows, non_null_count = cursor.fetchone()
             return non_null_count > 0, non_null_count
 
     def drop_column(self, table_name, column_name):

@@ -6,9 +6,9 @@ Central registry for table configurations and pipeline orchestration.
 
 import importlib
 import logging
+from typing import Any, cast
 
 from ..configs.base import TableConfig
-from typing import Any, cast
 from .parsers import ClassIDParser, StudentNameParser
 
 
@@ -219,7 +219,7 @@ class PipelineRegistry:
             },
         }
 
-        return cast(dict[str, Any], stage_configs.get(stage, {}))
+        return cast("dict[str, Any]", stage_configs.get(stage, {}))
 
 
 # Global registry instance

@@ -112,7 +112,7 @@ class TestClassHeaderIntegrity(TransactionTestCase):
         class_header = ClassHeader.objects.create(course=self.course, term=self.term, section_id="A")
 
         # First call
-        created_count1, sessions1 = class_header.ensure_sessions_exist()
+        created_count1, _sessions1 = class_header.ensure_sessions_exist()
         self.assertEqual(created_count1, 1)
 
         # Second call should not create additional sessions

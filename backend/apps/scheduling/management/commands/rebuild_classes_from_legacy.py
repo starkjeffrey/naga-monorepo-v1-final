@@ -134,7 +134,7 @@ class Command(BaseMigrationCommand):
         created_parts = 0
 
         for group_data in class_groups:
-            term_id, norm_course, norm_section, norm_tod, class_ids, normalized_parts, course_codes = group_data
+            term_id, norm_course, norm_section, norm_tod, class_ids, _normalized_parts, course_codes = group_data
 
             # Validate prerequisites outside transaction
             if created_headers == 0:  # Log first example
@@ -350,7 +350,7 @@ class Command(BaseMigrationCommand):
                 # Create enrollment with get_or_create to prevent duplicates
                 from apps.enrollment.models import ClassHeaderEnrollment
 
-                enrollment, created = ClassHeaderEnrollment.objects.get_or_create(
+                _enrollment, created = ClassHeaderEnrollment.objects.get_or_create(
                     student=student,
                     class_header=class_header,
                     defaults={

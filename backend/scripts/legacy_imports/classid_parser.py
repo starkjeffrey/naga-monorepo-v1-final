@@ -119,7 +119,7 @@ def parse_classid_part4(part4: str) -> tuple[str | None, str | None]:
     # Pattern: PRE-course with time/other (PRE-B2/E1, PRE-B2/E, etc.)
     match = re.match(r"^(PRE-[A-Z0-9]+)/(.+)$", part4)
     if match:
-        course_code, suffix = match.groups()
+        course_code, _suffix = match.groups()
         return course_code, ""
 
     # Pattern: PRE-course with attached section (PRE-B2A, PRE-B1B, etc.) - section letter is attached

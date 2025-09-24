@@ -109,7 +109,7 @@ class Command(BaseCommand):
                         continue
 
                     # Create or update term using 'code' field (not 'name')
-                    term, was_created = Term.objects.update_or_create(
+                    _term, was_created = Term.objects.update_or_create(
                         code=term_id,  # Using TermID as code (correct field)
                         defaults={
                             "description": f"{term_name} - {row.get('Desp', '').strip()}".rstrip(" -").rstrip(),

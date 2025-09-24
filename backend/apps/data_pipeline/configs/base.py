@@ -24,7 +24,7 @@ class ColumnMapping:
     # Cleaning configuration
     cleaning_rules: list[str] = field(default_factory=list)  # ['trim', 'null_standardize', 'date_parse']
     custom_cleaner: Callable | None = None  # Custom cleaning function
-    
+
     # Cross-table optimization (NEW)
     is_shared_field: bool = False  # Whether this field is shared with other tables for optimization
 
@@ -105,10 +105,12 @@ class TableConfig:
     target_django_model: str | None = None
     business_transformations: dict[str, Any] = field(default_factory=dict)
     dependencies: list[str] = field(default_factory=list)  # Tables this depends on
-    
+
     # Cross-table dependency optimization (NEW)
     provides_shared_fields: list[str] = field(default_factory=list)  # Fields this table provides to others
-    table_filters: dict[str, Any] = field(default_factory=dict)  # Filters to apply when processing (e.g., {"is_shadow": 0})
+    table_filters: dict[str, Any] = field(
+        default_factory=dict
+    )  # Filters to apply when processing (e.g., {"is_shadow": 0})
 
     # Quality thresholds
     min_completeness_score: float = 70.0  # Minimum data completeness %

@@ -115,8 +115,9 @@ class NGOPortalService:
         current_year = timezone.now().year
 
         # Calculate total sponsored amount this year
-        from typing import cast, Any
-        sponsor_id = cast(Any, sponsor).id
+        from typing import Any, cast
+
+        sponsor_id = cast("Any", sponsor).id
         yearly_transactions = FinancialTransaction.objects.filter(
             payer_type="SPONSOR",
             payer_id=sponsor_id,
@@ -252,8 +253,10 @@ class NGOPortalService:
             total_amount += final_amount
 
         # Create consolidated invoice
-        from typing import Any as _Any, cast as _cast
-        invoice = _cast(_Any, InvoiceService).create_sponsor_invoice(
+        from typing import Any as _Any
+        from typing import cast as _cast
+
+        invoice = _cast("_Any", InvoiceService).create_sponsor_invoice(
             sponsor=sponsor,
             term=term,
             invoice_lines=invoice_lines,
@@ -415,11 +418,13 @@ class NGOPortalService:
         if sponsor.billing_cycle == "MONTHLY":
             # Next month on invoice_generation_day
             from datetime import timedelta
+
             next_month = today.replace(day=1) + timedelta(days=32)
             return next_month.replace(day=sponsor.invoice_generation_day or 1)
         elif sponsor.billing_cycle == "TERM":
             # Would need to check academic calendar
             from datetime import timedelta
+
             return today + timedelta(days=90)
 
         return None
@@ -428,6 +433,7 @@ class NGOPortalService:
     def _calculate_due_date(cls, sponsor: Sponsor) -> date:
         """Calculate invoice due date based on payment terms."""
         from datetime import timedelta
+
         return timezone.now().date() + timedelta(days=sponsor.payment_terms_days)
 
     @classmethod

@@ -64,7 +64,9 @@ class CleaningEngine:
         for rule in rules:
             if rule in self.cleaning_functions:
                 try:
-                    current_value = self.cleaning_functions[rule](str(current_value) if current_value is not None else "", column_name)
+                    current_value = self.cleaning_functions[rule](
+                        str(current_value) if current_value is not None else "", column_name
+                    )
                 except Exception as e:
                     self.logger.warning(
                         f"Cleaning rule '{rule}' failed for column '{column_name}', value '{value}': {e}"
@@ -392,23 +394,23 @@ class CleaningEngine:
         try:
             # Use the name parser to extract clean name and status
             parsed_result = parse_student_name(value)
-            
+
             # Store parsed data in a way the cleaning engine can track
             # The main name field gets the clean name
-            if hasattr(self, '_current_row_context'):
+            if hasattr(self, "_current_row_context"):
                 # Store status indicators for later processing
-                self._current_row_context['_name_parse_result'] = {
-                    'is_sponsored': parsed_result.is_sponsored,
-                    'sponsor_name': parsed_result.sponsor_name,
-                    'is_frozen': parsed_result.is_frozen,
-                    'has_admin_fees': parsed_result.has_admin_fees,
-                    'raw_indicators': parsed_result.raw_indicators,
-                    'parsing_warnings': parsed_result.parsing_warnings
+                self._current_row_context["_name_parse_result"] = {
+                    "is_sponsored": parsed_result.is_sponsored,
+                    "sponsor_name": parsed_result.sponsor_name,
+                    "is_frozen": parsed_result.is_frozen,
+                    "has_admin_fees": parsed_result.has_admin_fees,
+                    "raw_indicators": parsed_result.raw_indicators,
+                    "parsing_warnings": parsed_result.parsing_warnings,
                 }
-            
+
             # Return the clean name
             return parsed_result.clean_name
-            
+
         except Exception as e:
             self.logger.warning(f"Name parsing failed for {column_name}: '{value}' - {e}")
             # Fall back to basic trim if parsing fails
@@ -422,46 +424,46 @@ class CleaningEngine:
         try:
             # Clean up common formatting issues in emergency contact data
             cleaned = value.strip()
-            
+
             # Remove excessive whitespace
             cleaned = " ".join(cleaned.split())
-            
+
             # Handle common legacy formatting issues
             # Remove parentheses around entire name
-            if cleaned.startswith('(') and cleaned.endswith(')'):
+            if cleaned.startswith("(") and cleaned.endswith(")"):
                 cleaned = cleaned[1:-1].strip()
-            
+
             # Standardize relationship indicators
             relationship_mappings = {
-                'father': 'Father',
-                'mother': 'Mother', 
-                'parent': 'Parent',
-                'spouse': 'Spouse',
-                'wife': 'Spouse',
-                'husband': 'Spouse',
-                'brother': 'Brother',
-                'sister': 'Sister',
-                'son': 'Son',
-                'daughter': 'Daughter',
-                'friend': 'Friend',
-                'relative': 'Relative',
+                "father": "Father",
+                "mother": "Mother",
+                "parent": "Parent",
+                "spouse": "Spouse",
+                "wife": "Spouse",
+                "husband": "Spouse",
+                "brother": "Brother",
+                "sister": "Sister",
+                "son": "Son",
+                "daughter": "Daughter",
+                "friend": "Friend",
+                "relative": "Relative",
             }
-            
+
             # If this is a relationship field, normalize it
-            if column_name and 'relationship' in column_name.lower():
+            if column_name and "relationship" in column_name.lower():
                 cleaned_lower = cleaned.lower()
                 for key, standardized in relationship_mappings.items():
                     if key in cleaned_lower:
                         return standardized
-            
+
             # Title case for names
-            if column_name and 'name' in column_name.lower():
+            if column_name and "name" in column_name.lower():
                 # Split on spaces and title case each part
                 name_parts = cleaned.split()
-                cleaned = ' '.join(part.title() for part in name_parts)
-            
+                cleaned = " ".join(part.title() for part in name_parts)
+
             return cleaned
-            
+
         except Exception as e:
             self.logger.warning(f"Emergency contact parsing failed for {column_name}: '{value}' - {e}")
             return value.strip()
@@ -474,36 +476,40 @@ class CleaningEngine:
         try:
             # First apply the standard MSSQL datetime parsing
             parsed_date = self._parse_mssql_datetime(value, column_name)
-            
+
             if parsed_date and parsed_date != value:
                 # Additional validation for birth dates
                 from datetime import datetime
-                
+
                 try:
                     # Parse the ISO formatted date for validation
                     birth_dt = datetime.fromisoformat(parsed_date)
                     current_dt = datetime.now()
-                    
+
                     # Calculate age
                     age_years = (current_dt - birth_dt).days / 365.25
-                    
+
                     # Reasonable age range for students (5-120 years)
                     if age_years < 5:
-                        self.logger.warning(f"Birth date {parsed_date} indicates very young age ({age_years:.1f} years)")
+                        self.logger.warning(
+                            f"Birth date {parsed_date} indicates very young age ({age_years:.1f} years)"
+                        )
                     elif age_years > 120:
                         self.logger.warning(f"Birth date {parsed_date} indicates very old age ({age_years:.1f} years)")
                     elif age_years < 15 or age_years > 65:
                         # Unusual but not invalid for higher education
-                        self.logger.info(f"Birth date {parsed_date} indicates unusual student age ({age_years:.1f} years)")
-                        
+                        self.logger.info(
+                            f"Birth date {parsed_date} indicates unusual student age ({age_years:.1f} years)"
+                        )
+
                     return parsed_date
-                    
+
                 except (ValueError, TypeError):
                     # If ISO parsing fails, return the original parsed result
                     return parsed_date
-            
+
             return parsed_date
-            
+
         except Exception as e:
             self.logger.warning(f"Birth date normalization failed for {column_name}: '{value}' - {e}")
             return value
@@ -516,59 +522,61 @@ class CleaningEngine:
         try:
             # Clean up class ID format
             cleaned = value.strip().upper()
-            
+
             # Remove excessive whitespace
             cleaned = " ".join(cleaned.split())
-            
+
             # Standardize separators - use dash as standard separator
             # Replace various separators with dash
             separators = [" - ", " _ ", "_", " / ", "/", ".", " "]
             for sep in separators:
                 if sep in cleaned and sep != "-":
                     cleaned = cleaned.replace(sep, "-")
-            
+
             # Remove multiple consecutive dashes
             while "--" in cleaned:
                 cleaned = cleaned.replace("--", "-")
-            
+
             # Remove leading/trailing dashes
             cleaned = cleaned.strip("-")
-            
+
             # Validate basic class ID pattern
             # Expected format: COURSECODE-SECTION-TERMID
             # Examples: ENG101-001-2009T1, MATH200-A-2009T2
             parts = cleaned.split("-")
-            
+
             if len(parts) >= 2:
                 # Basic validation of parts
                 course_part = parts[0]
                 section_part = parts[1]
-                
+
                 # Course code should be alphanumeric (letters + numbers)
-                if re.match(r'^[A-Z]{2,8}[0-9]{2,4}[A-Z]?$', course_part):
+                if re.match(r"^[A-Z]{2,8}[0-9]{2,4}[A-Z]?$", course_part):
                     # Valid course code format
                     pass
-                elif re.match(r'^[A-Z]+[0-9]*$', course_part):
+                elif re.match(r"^[A-Z]+[0-9]*$", course_part):
                     # Less strict - just letters optionally followed by numbers
                     pass
                 else:
                     self.logger.info(f"Unusual course code format in class ID: {course_part}")
-                
+
                 # Section should be short alphanumeric
                 if len(section_part) > 10:
                     self.logger.warning(f"Unusually long section in class ID: {section_part}")
-                
+
                 # Term validation (if present)
                 if len(parts) >= 3:
                     term_part = parts[2]
                     # Basic term validation (e.g., 2009T1, 2009T2, FALL2009)
-                    if not (re.match(r'^\d{4}T[1-4]$', term_part) or 
-                            re.match(r'^(FALL|SPRING|SUMMER)\d{4}$', term_part) or
-                            re.match(r'^\d{4}(FALL|SPRING|SUMMER)$', term_part)):
+                    if not (
+                        re.match(r"^\d{4}T[1-4]$", term_part)
+                        or re.match(r"^(FALL|SPRING|SUMMER)\d{4}$", term_part)
+                        or re.match(r"^\d{4}(FALL|SPRING|SUMMER)$", term_part)
+                    ):
                         self.logger.info(f"Non-standard term format in class ID: {term_part}")
-            
+
             return cleaned
-            
+
         except Exception as e:
             self.logger.warning(f"Class ID normalization failed for {column_name}: '{value}' - {e}")
             return value.strip().upper()
@@ -819,42 +827,44 @@ class Stage3DataCleaner:
                 cleaning_applied[target_name] = changes
 
         # Handle parsed name results if available
-        name_parse_result = getattr(self.cleaning_engine, '_current_row_context', {}).get('_name_parse_result')
+        name_parse_result = getattr(self.cleaning_engine, "_current_row_context", {}).get("_name_parse_result")
         if name_parse_result:
             # Add parsed status fields to the row_dict for processing by column mappings
             virtual_columns = {
-                '_is_sponsored': name_parse_result['is_sponsored'],
-                '_sponsor_name': name_parse_result['sponsor_name'],
-                '_is_frozen': name_parse_result['is_frozen'],
-                '_has_admin_fees': name_parse_result['has_admin_fees'],
-                '_name_raw_indicators': name_parse_result['raw_indicators'],
-                '_name_parsing_warnings': json.dumps(name_parse_result['parsing_warnings']) if name_parse_result['parsing_warnings'] else None
+                "_is_sponsored": name_parse_result["is_sponsored"],
+                "_sponsor_name": name_parse_result["sponsor_name"],
+                "_is_frozen": name_parse_result["is_frozen"],
+                "_has_admin_fees": name_parse_result["has_admin_fees"],
+                "_name_raw_indicators": name_parse_result["raw_indicators"],
+                "_name_parsing_warnings": json.dumps(name_parse_result["parsing_warnings"])
+                if name_parse_result["parsing_warnings"]
+                else None,
             }
-            
+
             # Process virtual columns through the column mapping system
             for mapping in self.config.column_mappings:
                 source_name = mapping.source_name
                 target_name = mapping.target_name
-                
+
                 if source_name in virtual_columns:
                     original_value = virtual_columns[source_name]
-                    
+
                     # Apply cleaning rules (though most virtual columns won't need much cleaning)
                     cleaned_value = self.cleaning_engine.apply_cleaning_rules(
                         source_name, original_value, mapping.cleaning_rules
                     )
-                    
+
                     # Track changes (minimal for virtual columns)
                     stats = {"null_conversions": 0, "encoding_fixes": 0, "format_changes": 0}
                     changes = []
-                    
+
                     if original_value != cleaned_value:
                         stats["format_changes"] = 1
                         changes.append("format_change")
-                    
+
                     cleaned_row[target_name] = cleaned_value
                     row_cleaning_stats[source_name] = stats
-                    
+
                     if changes:
                         cleaning_applied[target_name] = changes
 

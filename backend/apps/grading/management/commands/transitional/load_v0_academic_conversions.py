@@ -135,7 +135,7 @@ class Command(BaseMigrationCommand):
 
         created_count = 0
         for conv_data in conversions_data:
-            conversion, created = GradeConversion.objects.get_or_create(
+            _conversion, created = GradeConversion.objects.get_or_create(
                 grading_scale=academic_scale,
                 letter_grade=conv_data["letter_grade"],
                 defaults={

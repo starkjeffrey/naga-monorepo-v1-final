@@ -73,6 +73,7 @@ class Command(BaseCommand):
 
     def extract_discount_dates(self, mappings) -> dict[str, dict]:
         """Extract discount-related date information from historical notes."""
+
         def _new_analysis() -> dict[str, Any]:
             return {
                 "early_bird_mentions": [],
@@ -84,9 +85,7 @@ class Command(BaseCommand):
                 "early_bird_receipts": 0,
             }
 
-        term_analysis = defaultdict(
-            _new_analysis
-        )
+        term_analysis = defaultdict(_new_analysis)
 
         # Date extraction patterns
         date_patterns = [

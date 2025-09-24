@@ -447,8 +447,9 @@ class Command(BaseMigrationCommand):
 
     def group_enrollments_by_program(self, enrollments: list[dict]) -> dict:
         """Group enrollments by term and identify program."""
-        from typing import DefaultDict, Any
-        term_programs: DefaultDict[str, dict[str, Any]] = defaultdict(
+        from typing import Any
+
+        term_programs: defaultdict[str, dict[str, Any]] = defaultdict(
             lambda: {"courses": [], "sections": set(), "credits": 0.0, "grade_points": 0.0}
         )
 
@@ -479,8 +480,9 @@ class Command(BaseMigrationCommand):
     def identify_program_periods(self, term_programs: dict) -> list[dict]:
         """Identify continuous program enrollment periods."""
         # First, group all terms by their program type (section)
-        from typing import DefaultDict, Any
-        program_groups: DefaultDict[str, dict[str, Any]] = defaultdict(
+        from typing import Any
+
+        program_groups: defaultdict[str, dict[str, Any]] = defaultdict(
             lambda: {
                 "terms": [],
                 "all_courses": [],
@@ -579,7 +581,7 @@ class Command(BaseMigrationCommand):
         cycle_choice = cycle_map.get(period["cycle"], "BA")
 
         # Create enrollment with all fields
-        enrollment, created = ProgramEnrollment.objects.get_or_create(
+        _enrollment, created = ProgramEnrollment.objects.get_or_create(
             student=student,
             program=major,
             start_date=start_term.start_date,
@@ -1128,7 +1130,7 @@ class Command(BaseMigrationCommand):
             }
             cycle_name = cycle_names.get(program_info["cycle"], program_info["cycle"])
 
-            cycle, _ = Cycle.objects.get_or_create(
+            _cycle, _ = Cycle.objects.get_or_create(
                 short_name=program_info["cycle"],
                 division=division,
                 defaults={

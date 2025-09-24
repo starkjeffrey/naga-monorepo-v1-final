@@ -92,7 +92,7 @@ class ClassTemplateService:
 
         # Get or create session for the term
         if term:
-            session, created = ClassSession.objects.get_or_create(
+            session, _created = ClassSession.objects.get_or_create(
                 class_header=class_header,
                 session_number=1,
                 defaults={

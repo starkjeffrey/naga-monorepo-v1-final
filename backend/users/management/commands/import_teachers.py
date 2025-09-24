@@ -240,7 +240,7 @@ class Command(BaseMigrationCommand):
                 self.stdout.write(f"Created Person record: {person.full_name}")
 
             # Step 3: Create TeacherProfile (if it doesn't exist)
-            teacher_profile, teacher_created = TeacherProfile.objects.get_or_create(
+            _teacher_profile, teacher_created = TeacherProfile.objects.get_or_create(
                 person=person,
                 defaults={
                     "terminal_degree": TeacherProfile.Qualification.OTHER,

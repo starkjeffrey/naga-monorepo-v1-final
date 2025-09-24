@@ -694,7 +694,7 @@ class ClassSchedulingService:
         )
 
         # Ensure proper session structure (this will be handled by signals)
-        created_sessions, sessions = class_header.ensure_sessions_exist()
+        _created_sessions, sessions = class_header.ensure_sessions_exist()
 
         # Ensure each session has parts
         all_parts = []
@@ -1005,7 +1005,7 @@ class ClassSchedulingService:
                 )
             elif session_count < expected_count:
                 if not dry_run:
-                    created_count, sessions = class_header.ensure_sessions_exist()
+                    created_count, _sessions = class_header.ensure_sessions_exist()
                     fix_results["fixes_applied"]["structures_corrected"] += 1
 
                 fix_results["actions_taken"].append(

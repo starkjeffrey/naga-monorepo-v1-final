@@ -110,7 +110,7 @@ class MyPyAggressiveFixer:
             for line in result.stdout.split("\n"):
                 match = error_pattern.match(line.strip())
                 if match:
-                    file_path, line_num, severity, message, error_code = match.groups()
+                    file_path, line_num, _severity, message, error_code = match.groups()
 
                     error_info = {
                         "file": file_path,
@@ -140,7 +140,7 @@ class MyPyAggressiveFixer:
             if "has no attribute" in error["message"]:
                 attr_match = re.search(r'"([^"]+)" has no attribute "([^"]+)"', error["message"])
                 if attr_match:
-                    class_name, attr_name = attr_match.groups()
+                    _class_name, attr_name = attr_match.groups()
                     attr_groups[attr_name].append(error)
 
         total_fixed = 0

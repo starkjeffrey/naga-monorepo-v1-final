@@ -356,7 +356,7 @@ class LegacyClassNormalizer:
                 school_time = row["SchoolTime"]
 
                 # Parse the desGroupID
-                norm_course, norm_part, norm_section, norm_tod_from_des = self.parse_des_group_id(
+                norm_course, norm_part, norm_section, _norm_tod_from_des = self.parse_des_group_id(
                     des_group_id,
                     program,
                 )

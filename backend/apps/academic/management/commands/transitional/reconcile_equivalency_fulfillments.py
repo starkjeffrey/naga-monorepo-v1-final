@@ -268,9 +268,12 @@ class Command(BaseMigrationCommand):
     ) -> dict[str, Any]:
         """Process a single enrollment for equivalency fulfillments."""
         # Check if enrollment has passing grade
-        session_grade = cast(Any, enrollment).class_session_grades.filter(enrollment=enrollment).order_by(
-            "-calculated_at"
-        ).first()
+        session_grade = (
+            cast("Any", enrollment)
+            .class_session_grades.filter(enrollment=enrollment)
+            .order_by("-calculated_at")
+            .first()
+        )
 
         if not session_grade or not self.is_passing_grade(session_grade.letter_grade):
             return {"created": False, "reason": "No passing grade", "fulfillments": []}

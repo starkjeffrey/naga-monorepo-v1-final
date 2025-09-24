@@ -143,7 +143,7 @@ class StudentNumberService:
         Returns:
             True if successfully reserved, False otherwise
         """
-        is_valid, errors = cls.validate_student_number(student_number)
+        is_valid, _errors = cls.validate_student_number(student_number)
         # Could implement a reservation table if needed
         return is_valid
 

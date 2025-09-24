@@ -1,0 +1,71 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    environment: 'evaluation'
+    cluster: 'naga-sis-evaluation'
+
+rule_files:
+  # - "evaluation_rules.yml"
+
+scrape_configs:
+  # Prometheus itself
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Django application metrics (if django-prometheus is installed)
+  - job_name: 'django'
+    static_configs:
+      - targets: ['django:8000']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+    scrape_timeout: 10s
+
+  # PostgreSQL metrics (if postgres_exporter is used)
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['postgres:5432']
+    scrape_interval: 30s
+
+  # Redis metrics (if redis_exporter is used)  
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis:6379']
+    scrape_interval: 30s
+
+  # Nginx metrics (if nginx-prometheus-exporter is used)
+  - job_name: 'nginx'
+    static_configs:
+      - targets: ['nginx:9113']
+    scrape_interval: 30s
+
+  # Node/system metrics from Netdata
+  - job_name: 'netdata'
+    static_configs:
+      - targets: ['netdata:19999']
+    metrics_path: '/api/v1/allmetrics'
+    params:
+      format: ['prometheus']
+    scrape_interval: 30s
+
+  # Uptime Kuma metrics (if available)
+  - job_name: 'uptime-kuma'
+    static_configs:
+      - targets: ['uptime-kuma:3001']
+    metrics_path: '/metrics'
+    scrape_interval: 60s
+
+# Alerting configuration (basic evaluation alerts)
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093
+
+# Storage configuration for evaluation environment
+storage:
+  tsdb:
+    retention.time: 30d
+    retention.size: 10GB
+    wal-compression: true

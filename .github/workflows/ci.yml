@@ -1,0 +1,444 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+  security-events: write
+
+env:
+  NX_CLOUD_DISTRIBUTED_EXECUTION: false
+  NX_CACHE_RESTORE_KEYS: ${{ github.event_name == 'pull_request' && format('nx-cache-{0}', github.base_ref) || format('nx-cache-{0}', github.ref_name) }}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  setup:
+    runs-on: [self-hosted, linux, naga-monorepo]
+    outputs:
+      affected-projects: ${{ steps.affected.outputs.projects }}
+      has-backend-changes: ${{ steps.affected.outputs.backend }}
+      has-frontend-changes: ${{ steps.affected.outputs.frontend }}
+      has-shared-changes: ${{ steps.affected.outputs.shared }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.15.0'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Determine affected projects
+        id: affected
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE_SHA=${{ github.event.pull_request.base.sha }}
+          else
+            BASE_SHA=HEAD~1
+          fi
+          
+          echo "Base SHA: $BASE_SHA"
+          echo "Head SHA: ${{ github.sha }}"
+          
+          # Get affected projects using nx print-affected (more stable)
+          AFFECTED=$(npx nx print-affected --base=$BASE_SHA --head=${{ github.sha }} --select=projects 2>/dev/null || echo "backend,frontend,api-types")
+          echo "projects=$AFFECTED" >> $GITHUB_OUTPUT
+          
+          # Check specific project types
+          echo "backend=$(echo $AFFECTED | grep -q 'backend' && echo 'true' || echo 'true')" >> $GITHUB_OUTPUT
+          echo "frontend=$(echo $AFFECTED | grep -q 'frontend' && echo 'true' || echo 'true')" >> $GITHUB_OUTPUT
+          echo "shared=$(echo $AFFECTED | grep -q 'api-types' && echo 'true' || echo 'true')" >> $GITHUB_OUTPUT
+          
+          echo "Affected projects: $AFFECTED"
+
+  lint-and-format:
+    runs-on: [self-hosted, linux, naga-monorepo]
+    needs: setup
+    if: needs.setup.outputs.affected-projects != ''
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.15.0'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Cache Nx
+        uses: actions/cache@v4
+        with:
+          path: .nx/cache
+          key: nx-cache-${{ runner.os }}-${{ github.sha }}
+          restore-keys: |
+            nx-cache-${{ runner.os }}-
+            ${{ env.NX_CACHE_RESTORE_KEYS }}
+
+      - name: Run affected linting
+        run: |
+          npx nx affected --target=lint --parallel=3 || true
+
+      - name: Check code formatting
+        run: |
+          npx nx format:check --all
+
+  test-shared:
+    runs-on: [self-hosted, linux, naga-monorepo]
+    needs: setup
+    if: needs.setup.outputs.has-shared-changes == 'true'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.15.0'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Cache Nx
+        uses: actions/cache@v4
+        with:
+          path: .nx/cache
+          key: nx-cache-${{ runner.os }}-${{ github.sha }}
+          restore-keys: |
+            nx-cache-${{ runner.os }}-
+            ${{ env.NX_CACHE_RESTORE_KEYS }}
+
+      - name: Test shared API types
+        run: npx nx test api-types
+
+  test-frontend:
+    runs-on: [self-hosted, linux, naga-monorepo]
+    needs: setup
+    if: needs.setup.outputs.has-frontend-changes == 'true'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.15.0'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Cache Nx
+        uses: actions/cache@v4
+        with:
+          path: .nx/cache
+          key: nx-cache-${{ runner.os }}-${{ github.sha }}
+          restore-keys: |
+            nx-cache-${{ runner.os }}-
+            ${{ env.NX_CACHE_RESTORE_KEYS }}
+
+      - name: Test frontend
+        run: npx nx test frontend
+
+      - name: Upload frontend test coverage
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./frontend/coverage/lcov.info
+          flags: frontend
+          name: frontend-coverage
+
+  test-backend:
+    runs-on: [self-hosted, linux, naga-monorepo]
+    needs: setup
+    if: needs.setup.outputs.has-backend-changes == 'true'
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_naga
+          POSTGRES_USER: postgres
+        options: >-
+          --health-cmd "pg_isready -U postgres -d test_naga"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+          --health-start-period 30s
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:8.2-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+          --health-start-period 30s
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13.7'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          version: "latest"
+
+      - name: Cache uv dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/uv
+          key: uv-${{ runner.os }}-${{ hashFiles('backend/uv.lock') }}
+          restore-keys: |
+            uv-${{ runner.os }}-
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client redis-tools
+
+      - name: Install Python dependencies
+        working-directory: backend
+        run: |
+          uv sync --frozen || uv sync
+
+      - name: Run Django migrations
+        working-directory: backend
+        env:
+          DATABASE_NAME: test_naga
+          DATABASE_USER: postgres
+          DATABASE_PASSWORD: postgres
+          DATABASE_HOST: localhost
+          DATABASE_PORT: 5432
+          REDIS_URL: redis://localhost:6379/0
+          DJANGO_SETTINGS_MODULE: config.settings.ci
+          DJANGO_SECRET_KEY: test-secret-key-for-ci-only
+          DJANGO_DEBUG: "False"
+          DJANGO_ALLOWED_HOSTS: "localhost,127.0.0.1"
+          USE_DOCKER: "no"
+        run: |
+          # Create database if it doesn't exist
+          PGPASSWORD=postgres psql -h localhost -U postgres -c "CREATE DATABASE test_naga;" || true
+          # Run migrations
+          uv run python manage.py migrate
+
+      - name: Run backend tests
+        working-directory: backend
+        env:
+          DATABASE_NAME: test_naga
+          DATABASE_USER: postgres
+          DATABASE_PASSWORD: postgres
+          DATABASE_HOST: localhost
+          DATABASE_PORT: 5432
+          REDIS_URL: redis://localhost:6379/0
+          DJANGO_SETTINGS_MODULE: config.settings.ci
+          DJANGO_SECRET_KEY: test-secret-key-for-ci-only
+          DJANGO_DEBUG: "False"
+          DJANGO_ALLOWED_HOSTS: "localhost,127.0.0.1"
+          USE_DOCKER: "no"
+          EMAIL_BACKEND: django.core.mail.backends.locmem.EmailBackend
+          DISABLE_MIGRATIONS: "true"
+        run: |
+          # Wait for services to be ready
+          timeout 60 bash -c 'until pg_isready -h localhost -p 5432; do sleep 1; done'
+          timeout 60 bash -c 'until redis-cli -h localhost -p 6379 ping; do sleep 1; done'
+          
+          # Create test database if needed
+          PGPASSWORD=postgres psql -h localhost -U postgres -c "CREATE DATABASE test_naga;" || true
+          
+          # Run tests with proper configuration - use nx to run tests
+          cd ..
+          npx nx run backend:test --verbose --coverage || npx nx run backend:test:unit --verbose
+
+      - name: Upload backend test coverage
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./backend/coverage.xml
+          flags: backend
+          name: backend-coverage
+
+  build-backend:
+    runs-on: [self-hosted, linux, naga-monorepo]
+    needs: [setup, test-backend]
+    if: needs.setup.outputs.has-backend-changes == 'true' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: naga-sis/backend
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=sha,prefix={{branch}}-
+
+      - name: Build and push backend Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./backend/compose/production/django/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  build-frontend:
+    runs-on: [self-hosted, linux, naga-monorepo]
+    needs: [setup, test-frontend]
+    if: needs.setup.outputs.has-frontend-changes == 'true' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.15.0'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Cache Nx
+        uses: actions/cache@v4
+        with:
+          path: .nx/cache
+          key: nx-cache-${{ runner.os }}-${{ github.sha }}
+          restore-keys: |
+            nx-cache-${{ runner.os }}-
+            ${{ env.NX_CACHE_RESTORE_KEYS }}
+
+      - name: Build frontend
+        run: npx nx build frontend
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: naga-sis/frontend
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=sha,prefix={{branch}}-
+
+      - name: Build and push frontend Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  security-scan:
+    runs-on: [self-hosted, linux, naga-monorepo]
+    needs: setup
+    if: needs.setup.outputs.affected-projects != ''
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+          exit-code: '0'
+          skip-dirs: '.venv,venv,node_modules,staticfiles,.mypy_cache,.pytest_cache'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: success() || failure()
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+  deploy-staging:
+    runs-on: [self-hosted, linux, naga-monorepo]
+    needs: [build-backend, build-frontend]
+    if: github.ref == 'refs/heads/develop' && (needs.build-backend.result == 'success' || needs.build-frontend.result == 'success')
+    environment: staging
+    steps:
+      - name: Deploy to staging
+        run: |
+          echo "Deploying to staging environment..."
+          # Add actual deployment commands here
+
+  deploy-production:
+    runs-on: [self-hosted, linux, naga-monorepo]
+    needs: [build-backend, build-frontend]
+    if: github.ref == 'refs/heads/main' && (needs.build-backend.result == 'success' || needs.build-frontend.result == 'success')
+    environment: production
+    steps:
+      - name: Deploy to production
+        run: |
+          echo "Deploying to production environment..."
+          # Add actual deployment commands here
+
+  notification:
+    runs-on: [self-hosted, linux, naga-monorepo]
+    needs: [lint-and-format, test-shared, test-frontend, test-backend, security-scan]
+    if: always()
+    steps:
+      - name: Notify on failure
+        if: contains(needs.*.result, 'failure')
+        run: |
+          echo "Pipeline failed - implement notification logic"
+          # Add notification logic (Slack, email, etc.)

@@ -1,0 +1,312 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block title %}
+  {% trans "Level
+  Testing Dashboard" %} - {{ block.super }}
+{% endblock %}
+{% block content %}
+  <div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Header -->
+      <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900">{% trans "Level Testing Dashboard" %}</h1>
+        <p class="mt-2 text-gray-600">{% trans "Manage test applications, payments, and duplicate reviews" %}</p>
+      </div>
+      <!-- Summary Statistics -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Pending Applications -->
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+          <div class="p-5">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <svg class="h-6 w-6 text-gray-400"
+                     fill="none"
+                     stroke="currentColor"
+                     viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                  </path>
+                </svg>
+              </div>
+              <div class="ml-5 w-0 flex-1">
+                <dl>
+                  <dt class="text-sm font-medium text-gray-500 truncate">{% trans "Pending Applications" %}</dt>
+                  <dd class="text-lg font-medium text-gray-900">
+                    {{ pending_applications_count }}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+          <div class="bg-gray-50 px-5 py-3">
+            <div class="text-sm">
+              <a href="{% url 'level_testing:staff_applications' %}?status=INITIATED,DUPLICATE_CHECK"
+                 class="font-medium text-blue-600 hover:text-blue-500">{% trans "View pending" %}</a>
+            </div>
+          </div>
+        </div>
+        <!-- Pending Payments -->
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+          <div class="p-5">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <svg class="h-6 w-6 text-gray-400"
+                     fill="none"
+                     stroke="currentColor"
+                     viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1">
+                  </path>
+                </svg>
+              </div>
+              <div class="ml-5 w-0 flex-1">
+                <dl>
+                  <dt class="text-sm font-medium text-gray-500 truncate">{% trans "Pending Payments" %}</dt>
+                  <dd class="text-lg font-medium text-gray-900">
+                    {{ pending_payments_count }}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+          <div class="bg-gray-50 px-5 py-3">
+            <div class="text-sm">
+              <a href="{% url 'level_testing:staff_applications' %}?payment_status=unpaid"
+                 class="font-medium text-blue-600 hover:text-blue-500">{% trans "Process payments" %}</a>
+            </div>
+          </div>
+        </div>
+        <!-- Duplicate Concerns -->
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+          <div class="p-5">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <svg class="h-6 w-6 text-gray-400"
+                     fill="none"
+                     stroke="currentColor"
+                     viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z">
+                  </path>
+                </svg>
+              </div>
+              <div class="ml-5 w-0 flex-1">
+                <dl>
+                  <dt class="text-sm font-medium text-gray-500 truncate">{% trans "Duplicate Concerns" %}</dt>
+                  <dd class="text-lg font-medium text-gray-900">
+                    {{ duplicate_concerns_count }}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+          <div class="bg-gray-50 px-5 py-3">
+            <div class="text-sm">
+              <a href="{% url 'level_testing:staff_applications' %}?has_duplicates=true"
+                 class="font-medium text-yellow-600 hover:text-yellow-500">{% trans "Review duplicates" %}</a>
+            </div>
+          </div>
+        </div>
+        <!-- Today's Tests -->
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+          <div class="p-5">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <svg class="h-6 w-6 text-gray-400"
+                     fill="none"
+                     stroke="currentColor"
+                     viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v6a2 2 0 002 2h6a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
+                  </path>
+                </svg>
+              </div>
+              <div class="ml-5 w-0 flex-1">
+                <dl>
+                  <dt class="text-sm font-medium text-gray-500 truncate">{% trans "Today's Tests" %}</dt>
+                  <dd class="text-lg font-medium text-gray-900">
+                    0
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+          <div class="bg-gray-50 px-5 py-3">
+            <div class="text-sm">
+              <a href="#" class="font-medium text-green-600 hover:text-green-500">{% trans "View schedule" %}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Quick Actions -->
+      <div class="mb-8">
+        <h2 class="text-lg font-medium text-gray-900 mb-4">{% trans "Quick Actions" %}</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <a href="{% url 'level_testing:staff_applications' %}"
+             class="bg-white p-4 rounded-lg shadow hover:shadow-md transition-shadow border border-gray-200">
+            <div class="flex items-center">
+              <svg class="h-8 w-8 text-blue-600 mr-3"
+                   fill="none"
+                   stroke="currentColor"
+                   viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                </path>
+              </svg>
+              <div>
+                <h3 class="font-medium text-gray-900">{% trans "View All Applications" %}</h3>
+                <p class="text-sm text-gray-500">{% trans "Browse and manage test applications" %}</p>
+              </div>
+            </div>
+          </a>
+          <a href="#"
+             class="bg-white p-4 rounded-lg shadow hover:shadow-md transition-shadow border border-gray-200">
+            <div class="flex items-center">
+              <svg class="h-8 w-8 text-green-600 mr-3"
+                   fill="none"
+                   stroke="currentColor"
+                   viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1">
+                </path>
+              </svg>
+              <div>
+                <h3 class="font-medium text-gray-900">{% trans "Process Payments" %}</h3>
+                <p class="text-sm text-gray-500">{% trans "Record test fee payments" %}</p>
+              </div>
+            </div>
+          </a>
+          <a href="#"
+             class="bg-white p-4 rounded-lg shadow hover:shadow-md transition-shadow border border-gray-200">
+            <div class="flex items-center">
+              <svg class="h-8 w-8 text-purple-600 mr-3"
+                   fill="none"
+                   stroke="currentColor"
+                   viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+                </path>
+              </svg>
+              <div>
+                <h3 class="font-medium text-gray-900">{% trans "Generate Reports" %}</h3>
+                <p class="text-sm text-gray-500">{% trans "Create test fee reports" %}</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <!-- Recent Applications -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Recent Applications Table -->
+        <div class="bg-white shadow rounded-lg">
+          <div class="px-4 py-5 sm:p-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">{% trans "Recent Applications" %}</h3>
+            {% if recent_applications %}
+              <div class="overflow-hidden">
+                <table class="min-w-full">
+                  <thead>
+                    <tr class="border-b border-gray-200">
+                      <th class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider py-2">{% trans "Name" %}</th>
+                      <th class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider py-2">{% trans "Test #" %}</th>
+                      <th class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider py-2">{% trans "Status" %}</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-200">
+                    {% for application in recent_applications %}
+                      <tr class="hover:bg-gray-50">
+                        <td class="py-3 text-sm">
+                          <div>
+                            <div class="font-medium text-gray-900">{{ application.full_name_eng }}</div>
+                            <div class="text-gray-500">{{ application.phone_number }}</div>
+                          </div>
+                        </td>
+                        <td class="py-3 text-sm font-mono text-gray-900">{{ application.test_number|default:"-" }}</td>
+                        <td class="py-3 text-sm">
+                          <span class="inline-flex px-2 py-1 text-xs font-medium rounded-full {% if application.status == 'INITIATED' %}bg-yellow-100 text-yellow-800 {% elif application.status == 'REGISTERED' %}bg-blue-100 text-blue-800 {% elif application.status == 'DUPLICATE_CHECK' %}bg-orange-100 text-orange-800 {% elif application.status == 'PAID' %}bg-green-100 text-green-800 {% else %}bg-gray-100 text-gray-800{% endif %}">
+                            {{ application.get_status_display }}
+                          </span>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            {% else %}
+              <div class="text-center py-8">
+                <svg class="mx-auto h-12 w-12 text-gray-400"
+                     fill="none"
+                     stroke="currentColor"
+                     viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                  </path>
+                </svg>
+                <h3 class="mt-2 text-sm font-medium text-gray-900">{% trans "No recent applications" %}</h3>
+                <p class="mt-1 text-sm text-gray-500">{% trans "New applications will appear here." %}</p>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+        <!-- High-Risk Duplicates -->
+        <div class="bg-white shadow rounded-lg">
+          <div class="px-4 py-5 sm:p-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">{% trans "High-Risk Duplicates" %}</h3>
+            {% if high_risk_duplicates %}
+              <div class="space-y-4">
+                {% for duplicate in high_risk_duplicates %}
+                  <div class="border border-red-200 rounded-lg p-4 bg-red-50">
+                    <div class="flex items-center justify-between">
+                      <div>
+                        <h4 class="text-sm font-medium text-gray-900">{{ duplicate.potential_student.full_name_eng }}</h4>
+                        <p class="text-sm text-gray-600">{% trans "Matches:" %} {{ duplicate.matched_name }}</p>
+                        <p class="text-xs text-gray-500">
+                          {% trans "Confidence:" %} {{ duplicate.confidence_score|floatformat:0 }}%
+                          {% if duplicate.has_outstanding_debt %}
+                            |
+                            <span class="text-red-600 font-medium">{% trans "Has Debt" %}</span>
+                          {% endif %}
+                        </p>
+                      </div>
+                      <a href="{% url 'level_testing:duplicate_review' duplicate.potential_student.pk %}"
+                         class="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded text-red-700 bg-red-100 hover:bg-red-200">
+                        {% trans "Review" %}
+                      </a>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            {% else %}
+              <div class="text-center py-8">
+                <svg class="mx-auto h-12 w-12 text-gray-400"
+                     fill="none"
+                     stroke="currentColor"
+                     viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
+                  </path>
+                </svg>
+                <h3 class="mt-2 text-sm font-medium text-gray-900">{% trans "No high-risk duplicates" %}</h3>
+                <p class="mt-1 text-sm text-gray-500">{% trans "Duplicate concerns will appear here." %}</p>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block extra_js %}
+  <script>
+    // Auto-refresh dashboard every 5 minutes
+    setInterval(function() {
+      if (document.visibilityState === 'visible') {
+        location.reload();
+      }
+    }, 300000);
+
+    // Add loading states to action links
+    document.addEventListener('DOMContentLoaded', function() {
+      const actionLinks = document.querySelectorAll('a[href*="level_testing"]');
+      actionLinks.forEach((link) => {
+        link.addEventListener('click', function() {
+          // Add subtle loading indication
+          this.style.opacity = '0.7';
+          this.style.pointerEvents = 'none';
+        });
+      });
+    });
+  </script>
+{% endblock %}

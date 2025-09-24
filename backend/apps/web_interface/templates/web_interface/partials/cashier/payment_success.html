@@ -1,0 +1,83 @@
+{% load i18n %}
+
+<div class="sis-alert sis-alert-success mb-4">
+    <div class="flex items-center">
+        <i class="fas fa-check-circle mr-2"></i>
+        <span>{% trans "Payment processed successfully!" %}</span>
+    </div>
+</div>
+
+<!-- Payment Details -->
+<div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+    <h4 class="font-bold text-green-800 mb-3">{% trans "Payment Details" %}</h4>
+    
+    <div class="grid grid-cols-2 gap-4 text-sm">
+        <div>
+            <span class="text-gray-600">{% trans "Payment ID" %}:</span>
+            <span class="font-medium">{{ payment.payment_reference }}</span>
+        </div>
+        <div>
+            <span class="text-gray-600">{% trans "Amount" %}:</span>
+            <span class="font-bold text-green-600">${{ payment.amount|floatformat:2 }}</span>
+        </div>
+        <div>
+            <span class="text-gray-600">{% trans "Method" %}:</span>
+            <span class="font-medium">{{ payment.get_payment_method_display }}</span>
+        </div>
+        <div>
+            <span class="text-gray-600">{% trans "Currency" %}:</span>
+            <span class="font-medium">{{ payment.currency }}</span>
+        </div>
+        <div>
+            <span class="text-gray-600">{% trans "Student" %}:</span>
+            <span class="font-medium">{{ student.person.full_name }}</span>
+        </div>
+        <div>
+            <span class="text-gray-600">{% trans "Invoice" %}:</span>
+            <span class="font-medium">{{ invoice.invoice_number }}</span>
+        </div>
+        <div>
+            <span class="text-gray-600">{% trans "Invoice Status" %}:</span>
+            <span class="sis-badge {% if invoice.status == 'PAID' %}sis-badge-success{% else %}sis-badge-warning{% endif %}">
+                {{ new_status }}
+            </span>
+        </div>
+        <div>
+            <span class="text-gray-600">{% trans "Remaining Balance" %}:</span>
+            <span class="font-bold {% if remaining_balance > 0 %}text-orange-600{% else %}text-green-600{% endif %}">
+                ${{ remaining_balance|floatformat:2 }}
+            </span>
+        </div>
+    </div>
+</div>
+
+<!-- Action Buttons -->
+<div class="flex space-x-3">
+    <button onclick="showReceipt({{ payment.id }})" 
+            class="sis-btn sis-btn-primary flex-1">
+        <i class="fas fa-receipt mr-2"></i>
+        {% trans "Print Receipt" %}
+    </button>
+    
+    <button onclick="clearPaymentForm()" 
+            class="sis-btn sis-btn-secondary flex-1">
+        <i class="fas fa-plus mr-2"></i>
+        {% trans "New Payment" %}
+    </button>
+</div>
+
+<script>
+function clearPaymentForm() {
+    // Reset the payment form for another payment
+    document.getElementById('payment-form').reset();
+    document.getElementById('payment-result').innerHTML = '';
+    
+    // Trigger event to refresh dashboard statistics
+    document.body.dispatchEvent(new CustomEvent('paymentSuccess'));
+}
+
+// Auto-trigger refresh
+setTimeout(() => {
+    document.body.dispatchEvent(new CustomEvent('paymentSuccess'));
+}, 1000);
+</script>

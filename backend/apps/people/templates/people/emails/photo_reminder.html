@@ -1,0 +1,101 @@
+{% extends "emails/base.html" %}
+
+{% load static %}
+
+{% block subject %}{{ subject }}{% endblock %}
+{% block content %}
+  <div style="font-family: Arial, sans-serif;
+              max-width: 600px;
+              margin: 0 auto">
+    <h2 style="color: #333;">Dear {{ person.full_name }},</h2>
+    {% if reminder_type == "overdue" %}
+      <div style="background-color: #f8d7da;
+                  border: 1px solid #f5c6cb;
+                  border-radius: 4px;
+                  padding: 15px;
+                  margin: 20px 0">
+        <p style="color: #721c24; margin: 0;">
+          <strong>Your student photo is overdue for an update.</strong>
+        </p>
+      </div>
+    {% elif reminder_type == "urgent" %}
+      <div style="background-color: #fff3cd;
+                  border: 1px solid #ffeeba;
+                  border-radius: 4px;
+                  padding: 15px;
+                  margin: 20px 0">
+        <p style="color: #856404; margin: 0;">
+          <strong>Your student photo will expire soon.</strong>
+        </p>
+      </div>
+    {% else %}
+      <div style="background-color: #d1ecf1;
+                  border: 1px solid #bee5eb;
+                  border-radius: 4px;
+                  padding: 15px;
+                  margin: 20px 0">
+        <p style="color: #0c5460; margin: 0;">It's time to update your student photo.</p>
+      </div>
+    {% endif %}
+    <p style="color: #666; line-height: 1.6;">
+      Your current student photo was uploaded on <strong>{{ upload_date|date:"F j, Y" }}</strong>
+      and is now <strong>{{ photo_age_months }} months old</strong>.
+    </p>
+    <p style="color: #666; line-height: 1.6;">
+      {% if is_monk %}
+        As a monk, your photo needs to be updated every <strong>12 months</strong>.
+      {% else %}
+        Student photos need to be updated every <strong>6 months</strong>.
+      {% endif %}
+    </p>
+    <h3 style="color: #333; margin-top: 30px;">How to Update Your Photo</h3>
+    <ol style="color: #666; line-height: 1.8;">
+      <li>Open the PUCSR Student app on your mobile device</li>
+      <li>Navigate to your profile section</li>
+      <li>Tap on "Update Photo"</li>
+      <li>
+        Take a new selfie following the guidelines:
+        <ul style="margin-top: 10px;">
+          <li>Face the camera directly</li>
+          <li>Ensure good lighting</li>
+          <li>Plain background preferred</li>
+          <li>Remove sunglasses or hats</li>
+        </ul>
+      </li>
+      <li>Submit your new photo</li>
+    </ol>
+    <div style="background-color: #e8f4f8;
+                border-radius: 4px;
+                padding: 20px;
+                margin: 30px 0">
+      <h4 style="color: #333; margin-top: 0;">Why Update Your Photo?</h4>
+      <p style="color: #666; margin: 10px 0;">An up-to-date photo ensures:</p>
+      <ul style="color: #666; margin: 0; padding-left: 20px;">
+        <li>Accurate identification for exams and campus services</li>
+        <li>Valid digital student ID on your mobile device</li>
+        <li>Security and access to university facilities</li>
+        <li>Compliance with university regulations</li>
+      </ul>
+    </div>
+    {% if reminder_type == "overdue" %}
+      <p style="color: #d9534f; font-weight: bold; margin-top: 30px;">
+        Please update your photo as soon as possible to avoid any disruption to your student services.
+      </p>
+    {% endif %}
+    <p style="color: #666; margin-top: 30px;">
+      If you have any questions or need assistance, please contact the Student Affairs Office.
+    </p>
+    <p style="color: #666; margin-top: 20px;">
+      Best regards,
+      <br />
+      <strong>PUCSR Student Affairs</strong>
+    </p>
+  </div>
+{% endblock %}
+{% block footer %}
+  <p style="color: #999; font-size: 12px; text-align: center;">
+    This is an automated reminder from the PUCSR Student Information System.
+    <br />
+    Pannasastra University of Cambodia, Siem Reap Campus
+  </p>
+{% endblock %}

@@ -1,0 +1,22 @@
+# CI/CD specific requirements for GitLab CI
+# Inherits from base requirements and adds CI-specific tools
+
+-r base.txt
+
+# Testing and coverage
+pytest>=8.0.0
+pytest-cov>=4.1.0
+pytest-django>=4.7.0
+pytest-xdist>=3.5.0
+pytest-mock>=3.12.0
+
+# Security scanning
+safety>=3.0.0
+bandit>=1.7.5
+
+# Code quality (already in base but ensuring versions)
+ruff>=0.1.0
+mypy>=1.8.0
+
+# CI-specific utilities
+coverage[toml]>=7.4.0

@@ -1,0 +1,154 @@
+{% load crud_tags %}
+
+<div id="table-loading-indicator"
+     class="htmx-indicator absolute inset-0 bg-white/70 dark:bg-slate-800/70 flex items-center justify-center z-20">
+  <div class="flex items-center space-x-2 text-slate-500">
+    <i class="fas fa-spinner fa-spin text-xl"></i>
+    <span>Loading...</span>
+  </div>
+</div>
+<div class="overflow-x-auto table-container">
+  <table id="crud-table" class="w-full responsive-table">
+    <thead class="bg-slate-50 dark:bg-slate-700">
+      <tr>
+        {% for field in crud.fields %}
+          <th data-key="{{ field.name }}"
+              class="sortable-header px-4 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider cursor-pointer select-none">
+            <div hx-get="{{ request.path }}"
+                 hx-target="#crud-table-container"
+                 hx-swap="innerHTML"
+                 hx-vals='{"search": "{{ request.GET.search|default_if_none:"" }}", "sort_by": "{{ field.name }}", "direction": "{% if request.GET.sort_by == field.name and request.GET.direction == "asc" %}desc{% else %}asc{% endif %}"}'
+                 hx-indicator="#table-loading-indicator"
+                 class="flex items-center justify-between group">
+              <span>{{ field.verbose_name }}</span>
+              {% if field.sortable %}
+                <span class="sort-indicator ml-2">
+                  {% if request.GET.sort_by == field.name %}
+                    {% if request.GET.direction == 'desc' %}
+                      <i class="fas fa-sort-down text-blue-500"></i>
+                    {% else %}
+                      <i class="fas fa-sort-up text-blue-500"></i>
+                    {% endif %}
+                  {% else %}
+                    <i class="fas fa-sort opacity-30 group-hover:opacity-70"></i>
+                  {% endif %}
+                </span>
+              {% endif %}
+            </div>
+          </th>
+        {% endfor %}
+        <th data-key="actions"
+            class="px-4 py-3 text-right text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+          Actions
+        </th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+      {% for object in object_list %}
+        <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors duration-150">
+          {% for field in crud.fields %}
+            <td data-key="{{ field.name }}"
+                class="px-4 py-3 whitespace-nowrap text-sm text-slate-600 dark:text-slate-300">
+              {{ object|render_field:field }}
+            </td>
+          {% endfor %}
+          <td data-key="actions"
+              class="px-4 py-3 whitespace-nowrap text-sm text-right">
+            {% for action in crud.row_actions %}
+              <a href="{{ action.url|format_pk:object.pk }}"
+                 class="p-1 {{ action.css_class|default:'text-slate-500 hover:text-blue-600' }}"
+                 title="{{ action.title }}">
+                <i class="fas {{ action.icon }}"></i>
+              </a>
+            {% endfor %}
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="{{ crud.fields|length|add:1 }}"
+              class="text-center py-12 text-slate-500">No student records found.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<!-- Pagination and Total Count -->
+{% if is_paginated %}
+  <div class="bg-white dark:bg-slate-800 px-4 py-3 flex items-center justify-between border-t border-slate-200 dark:border-slate-700 sm:px-6">
+    <div class="flex-1 flex justify-between sm:hidden">
+      {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}&{{ request_params.urlencode }}"
+           class="relative inline-flex items-center px-4 py-2 border border-slate-300 dark:border-slate-600 text-sm font-medium rounded-md text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-700 hover:bg-slate-50 dark:hover:bg-slate-600">
+          Previous
+        </a>
+      {% endif %}
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}&{{ request_params.urlencode }}"
+           class="ml-3 relative inline-flex items-center px-4 py-2 border border-slate-300 dark:border-slate-600 text-sm font-medium rounded-md text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-700 hover:bg-slate-50 dark:hover:bg-slate-600">
+          Next
+        </a>
+      {% endif %}
+    </div>
+    <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+      <div>
+        <p class="text-sm text-slate-700 dark:text-slate-300">
+          Showing
+          <span class="font-medium">{{ page_obj.start_index }}</span>
+          to
+          <span class="font-medium">{{ page_obj.end_index }}</span>
+          of
+          <span class="font-medium">{{ paginator.count }}</span>
+          results
+        </p>
+      </div>
+      <div>
+        <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+             aria-label="Pagination">
+          {% if page_obj.has_previous %}
+            <a href="?page=1&{{ request_params.urlencode }}"
+               class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-sm font-medium text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-600">
+              <span class="sr-only">First</span>
+              <i class="fas fa-angle-double-left h-5 w-5" aria-hidden="true"></i>
+            </a>
+            <a href="?page={{ page_obj.previous_page_number }}&{{ request_params.urlencode }}"
+               class="relative inline-flex items-center px-2 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-sm font-medium text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-600">
+              <span class="sr-only">Previous</span>
+              <i class="fas fa-angle-left h-5 w-5" aria-hidden="true"></i>
+            </a>
+          {% endif %}
+          {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+              <span class="relative inline-flex items-center px-4 py-2 border border-slate-300 dark:border-slate-600 bg-blue-50 dark:bg-blue-900 text-sm font-medium text-blue-600 dark:text-blue-200">
+                {{ num }}
+              </span>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+              <a href="?page={{ num }}&{{ request_params.urlencode }}"
+                 class="relative inline-flex items-center px-4 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-600">
+                {{ num }}
+              </a>
+            {% endif %}
+          {% endfor %}
+          {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}&{{ request_params.urlencode }}"
+               class="relative inline-flex items-center px-2 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-sm font-medium text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-600">
+              <span class="sr-only">Next</span>
+              <i class="fas fa-angle-right h-5 w-5" aria-hidden="true"></i>
+            </a>
+            <a href="?page={{ page_obj.paginator.num_pages }}&{{ request_params.urlencode }}"
+               class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-sm font-medium text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-600">
+              <span class="sr-only">Last</span>
+              <i class="fas fa-angle-double-right h-5 w-5" aria-hidden="true"></i>
+            </a>
+          {% endif %}
+        </nav>
+      </div>
+    </div>
+  </div>
+{% else %}
+  <!-- Total count for non-paginated results -->
+  <div class="bg-white dark:bg-slate-800 px-4 py-3 border-t border-slate-200 dark:border-slate-700 sm:px-6">
+    <p class="text-sm text-slate-700 dark:text-slate-300">
+      Total: <span class="font-medium">{{ object_list|length }}</span> results
+    </p>
+  </div>
+{% endif %}

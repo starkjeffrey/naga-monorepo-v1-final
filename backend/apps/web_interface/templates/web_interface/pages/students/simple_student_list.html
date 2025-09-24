@@ -1,0 +1,49 @@
+{% extends "web_interface/base/dashboard_base.html" %}
+
+{% load i18n %}
+
+{% block title %}Students - Simple View{% endblock %}
+{% block dashboard_content %}
+  <div class="page-content">
+    <div class="page-header">
+      <h1>{% trans "Students" %} ({{ students|length }} shown)</h1>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>{% trans "Student ID" %}</th>
+            <th>{% trans "Name" %}</th>
+            <th>{% trans "Status" %}</th>
+            <th>{% trans "Last Enrollment" %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for student in students %}
+            <tr>
+              <td>{{ student.student_id }}</td>
+              <td>
+                {{ student.person.full_name }}
+                {% if student.person.khmer_name %}
+                  <br />
+                  <small class="text-muted">{{ student.person.khmer_name }}</small>
+                {% endif %}
+              </td>
+              <td>
+                <span class="badge badge-{{ student.current_status|lower }}">{{ student.current_status }}</span>
+              </td>
+              <td>{{ student.last_enrollment_date|date:"M d, Y" }}</td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="4" class="text-center">{% trans "No students found" %}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if is_paginated %}
+      {% pagination page_obj %}
+    {% endif %}
+  </div>
+{% endblock %}

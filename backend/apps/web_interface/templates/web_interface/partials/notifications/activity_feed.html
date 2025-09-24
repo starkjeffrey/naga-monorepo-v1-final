@@ -1,0 +1,130 @@
+{% load i18n %}
+
+{% if activities %}
+    <div class="space-y-3">
+        {% for activity in activities %}
+            <div class="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg">
+                <!-- Activity Icon -->
+                <div class="flex-shrink-0 mt-1">
+                    {% if activity.activity_type == "LOGIN" %}
+                        <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-sign-in-alt text-green-600 text-sm"></i>
+                        </div>
+                    {% elif activity.activity_type == "LOGOUT" %}
+                        <div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-sign-out-alt text-gray-600 text-sm"></i>
+                        </div>
+                    {% elif activity.activity_type == "CREATE" %}
+                        <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-plus text-blue-600 text-sm"></i>
+                        </div>
+                    {% elif activity.activity_type == "UPDATE" %}
+                        <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-edit text-yellow-600 text-sm"></i>
+                        </div>
+                    {% elif activity.activity_type == "DELETE" %}
+                        <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-trash text-red-600 text-sm"></i>
+                        </div>
+                    {% elif activity.activity_type == "PAYMENT" %}
+                        <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-dollar-sign text-green-600 text-sm"></i>
+                        </div>
+                    {% elif activity.activity_type == "ENROLLMENT" %}
+                        <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-user-plus text-purple-600 text-sm"></i>
+                        </div>
+                    {% elif activity.activity_type == "GRADE_ENTRY" %}
+                        <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-clipboard-list text-indigo-600 text-sm"></i>
+                        </div>
+                    {% elif activity.activity_type == "ERROR" %}
+                        <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-exclamation-triangle text-red-600 text-sm"></i>
+                        </div>
+                    {% elif activity.activity_type == "EXPORT" %}
+                        <div class="w-8 h-8 bg-cyan-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-download text-cyan-600 text-sm"></i>
+                        </div>
+                    {% elif activity.activity_type == "IMPORT" %}
+                        <div class="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-upload text-orange-600 text-sm"></i>
+                        </div>
+                    {% else %}
+                        <div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-info-circle text-gray-600 text-sm"></i>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Activity Details -->
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1">
+                            <!-- User and Action -->
+                            <div class="text-sm">
+                                {% if activity.user %}
+                                    <span class="font-medium text-gray-900">
+                                        {{ activity.user.get_full_name|default:activity.user.username }}
+                                    </span>
+                                {% else %}
+                                    <span class="font-medium text-gray-600">{% trans "System" %}</span>
+                                {% endif %}
+                                <span class="text-gray-600">{{ activity.description }}</span>
+                            </div>
+                            
+                            <!-- Timestamp -->
+                            <div class="text-xs text-gray-500 mt-1">
+                                {{ activity.created_at|timesince }} {% trans "ago" %}
+                                {% if activity.ip_address %}
+                                    • {{ activity.ip_address }}
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Error details if applicable -->
+                            {% if not activity.success and activity.error_message %}
+                                <div class="text-xs text-red-600 mt-1 bg-red-50 p-1 rounded">
+                                    <i class="fas fa-exclamation-triangle mr-1"></i>
+                                    {{ activity.error_message|truncatechars:100 }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Status indicator -->
+                        <div class="flex-shrink-0 ml-2">
+                            {% if activity.success %}
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    {% trans "Success" %}
+                                </span>
+                            {% else %}
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                    {% trans "Failed" %}
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Load more -->
+    <div class="text-center pt-4">
+        <button onclick="loadMoreActivity()" 
+                class="text-sm text-blue-600 hover:text-blue-800 font-medium">
+            {% trans "Load more activity" %}
+        </button>
+    </div>
+{% else %}
+    <div class="text-center py-8 text-gray-500">
+        <i class="fas fa-history text-2xl mb-2"></i>
+        <div class="text-sm">{% trans "No recent activity" %}</div>
+    </div>
+{% endif %}
+
+<script>
+function loadMoreActivity() {
+    // TODO: Implement pagination for activity feed
+    alert('Load more activity functionality coming soon');
+}
+</script>

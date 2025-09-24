@@ -1,0 +1,13 @@
+{% extends "base_new.html" %}
+
+{% load static i18n %}
+
+{% block title %}{{ page_title|default:"Data Management" }} - {{ block.super }}{% endblock %}
+{% block content %}
+  <div class="p-6">
+    <div class="max-w-7xl mx-auto">{% include 'base_crud.html' %}</div>
+  </div>
+{% endblock %}
+{% block extra_js %}
+  <script src="{% static 'admin/js/crud.js' %}" defer></script>
+{% endblock extra_js %}

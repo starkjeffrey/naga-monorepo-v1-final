@@ -1,0 +1,28 @@
+# Naga SIS Fixture Load Order
+# Generated: 2025-08-02 07:17:01
+# Load fixtures in this order to avoid dependency issues
+
+# Foundation
+apps/common/fixtures/common_foundation.json
+
+# Academic Structure
+apps/curriculum/fixtures/divisions.json
+apps/curriculum/fixtures/majors.json
+apps/curriculum/fixtures/cycles.json
+apps/curriculum/fixtures/terms.json
+apps/curriculum/fixtures/courses.json
+
+# Academic Requirements
+apps/academic/fixtures/canonical_requirements.json
+
+# Finance Configuration
+apps/finance/fixtures/default_pricing.json
+apps/finance/fixtures/course_fixed_pricing.json
+apps/finance/fixtures/senior_project_pricing.json
+apps/finance/fixtures/reading_class_pricing.json
+apps/finance/fixtures/gl_accounts.json
+apps/finance/fixtures/fee_pricing.json
+apps/finance/fixtures/discount_rules.json
+
+# Scholarships
+apps/scholarships/fixtures/sponsors.json

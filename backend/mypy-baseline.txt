@@ -1,0 +1,13 @@
+warning: Failed to parse `pyproject.toml` during settings discovery:
+  TOML parse error at line 536, column 1
+      |
+  536 | "*/management/commands/*" = ["T201", "T203", "PLW2901", "S602", "S603", "S607", "RUF001"]
+      | ^
+  duplicate key `*/management/commands/*` in table `tool.ruff.lint.per-file-ignores`
+
+error: Failed to parse: `pyproject.toml`
+  Caused by: TOML parse error at line 536, column 1
+    |
+536 | "*/management/commands/*" = ["T201", "T203", "PLW2901", "S602", "S603", "S607", "RUF001"]
+    | ^
+duplicate key `*/management/commands/*` in table `tool.ruff.lint.per-file-ignores`

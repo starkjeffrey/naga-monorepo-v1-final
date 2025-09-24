@@ -1,0 +1,138 @@
+{% extends "common/crud/list.html" %}
+
+{% load i18n %}
+
+{% block additional_filters %}
+  <!-- Status Filter -->
+  <select name="status"
+          class="block px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-200"
+          hx-get="{{ request.path }}"
+          hx-trigger="change"
+          hx-target="#crud-table-container"
+          hx-include="[name='search'], [name='sort_by'], [name='direction'], [name='page_size']">
+    <option value="">{% trans "All Statuses" %}</option>
+    {% for value, label in status_choices %}
+      <option value="{{ value }}"
+              {% if request.GET.status == value %}selected{% endif %}>{{ label }}</option>
+    {% endfor %}
+  </select>
+  <!-- Study Time Filter -->
+  <select name="study_time"
+          class="block px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-200"
+          hx-get="{{ request.path }}"
+          hx-trigger="change"
+          hx-target="#crud-table-container"
+          hx-include="[name='search'], [name='sort_by'], [name='direction'], [name='page_size']">
+    <option value="">{% trans "All Study Times" %}</option>
+    {% for value, label in study_time_choices %}
+      <option value="{{ value }}"
+              {% if request.GET.study_time == value %}selected{% endif %}>{{ label }}</option>
+    {% endfor %}
+  </select>
+  <!-- Special Status Filters -->
+  <select name="is_monk"
+          class="block px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-200"
+          hx-get="{{ request.path }}"
+          hx-trigger="change"
+          hx-target="#crud-table-container"
+          hx-include="[name='search'], [name='sort_by'], [name='direction'], [name='page_size']">
+    <option value="">{% trans "All Students" %}</option>
+    <option value="yes" {% if request.GET.is_monk == 'yes' %}selected{% endif %}>{% trans "Monks Only" %}</option>
+    <option value="no" {% if request.GET.is_monk == 'no' %}selected{% endif %}>{% trans "Non-Monks Only" %}</option>
+  </select>
+  <select name="is_transfer"
+          class="block px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-200"
+          hx-get="{{ request.path }}"
+          hx-trigger="change"
+          hx-target="#crud-table-container"
+          hx-include="[name='search'], [name='sort_by'], [name='direction'], [name='page_size']">
+    <option value="">{% trans "All Students" %}</option>
+    <option value="yes"
+            {% if request.GET.is_transfer == 'yes' %}selected{% endif %}>{% trans "Transfer Students" %}</option>
+    <option value="no"
+            {% if request.GET.is_transfer == 'no' %}selected{% endif %}>{% trans "Non-Transfer" %}</option>
+  </select>
+{% endblock %}
+{% block pre_crud_content %}
+  <!-- Statistics Dashboard -->
+  <div class="mb-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          <i class="fas fa-users text-blue-500 text-2xl"></i>
+        </div>
+        <div class="ml-4">
+          <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{% trans "Total Students" %}</p>
+          <p class="text-2xl font-semibold text-gray-900 dark:text-gray-100">{{ stats.total|default:0 }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          <i class="fas fa-check-circle text-green-500 text-2xl"></i>
+        </div>
+        <div class="ml-4">
+          <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{% trans "Active" %}</p>
+          <p class="text-2xl font-semibold text-gray-900 dark:text-gray-100">{{ stats.active|default:0 }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          <i class="fas fa-graduation-cap text-blue-500 text-2xl"></i>
+        </div>
+        <div class="ml-4">
+          <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{% trans "Graduated" %}</p>
+          <p class="text-2xl font-semibold text-gray-900 dark:text-gray-100">{{ stats.graduated|default:0 }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          <i class="fas fa-dharmachakra text-orange-500 text-2xl"></i>
+        </div>
+        <div class="ml-4">
+          <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{% trans "Monks" %}</p>
+          <p class="text-2xl font-semibold text-gray-900 dark:text-gray-100">{{ stats.monks|default:0 }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          <i class="fas fa-exchange-alt text-purple-500 text-2xl"></i>
+        </div>
+        <div class="ml-4">
+          <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{% trans "Transfers" %}</p>
+          <p class="text-2xl font-semibold text-gray-900 dark:text-gray-100">{{ stats.transfers|default:0 }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Status Distribution Chart (optional, can use Chart.js or similar) -->
+  {% if status_distribution %}
+    <div class="mb-6 bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+      <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">{% trans "Status Distribution" %}</h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {% for status, count in status_distribution.items %}
+          <div class="text-center">
+            <p class="text-sm text-gray-500 dark:text-gray-400">{{ status|title }}</p>
+            <p class="text-xl font-semibold text-gray-900 dark:text-gray-100">{{ count }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}
+{% block post_crud_content %}
+  <!-- Help text -->
+  {% if help_text %}
+    <div class="mt-4 text-sm text-gray-600 dark:text-gray-400">
+      <i class="fas fa-info-circle mr-1"></i>
+      {{ help_text }}
+    </div>
+  {% endif %}
+{% endblock %}

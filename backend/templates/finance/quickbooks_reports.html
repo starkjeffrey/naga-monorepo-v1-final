@@ -1,0 +1,172 @@
+{% extends "base_new.html" %}
+
+\n
+{% load i18n %}
+
+\n\n
+{% block title %}QuickBooks Reports - {{ block.super }}{% endblock %}
+\n\n
+{% block content %}
+  \n
+  <div class="container mx-auto px-4 py-8">
+    \n
+    <h1 class="text-3xl font-bold mb-6">{% trans "QuickBooks Financial Reports" %}</h1>
+    \n    \n
+    <div class="bg-white rounded-lg shadow-md p-6 max-w-2xl">
+      \n
+      <p class="mb-6 text-gray-600">
+        \n            {% trans "Generate monthly financial reports for manual entry into QuickBooks." %}\n
+      </p>
+      \n        \n
+      <form method="post"
+            action="{% url 'finance:generate_quickbooks_report' %}"
+            n
+            class="space-y-6"
+            id="report-form">
+        \n            {% csrf_token %}\n            \n            <!-- Month Selection -->\n
+        <div>
+          \n
+          <label for="period" class="block text-sm font-medium text-gray-700 mb-2">
+            \n                    {% trans "Select Month" %}\n
+          </label>
+          \n
+          <select name="period"
+                  id="period"
+                  n
+                  class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            \n
+            {% for month in available_months %}
+              \n
+              <option value="{{ month.value }}"
+                      {% if month.value == current_month %}selected{% endif %}>
+                \n                            {{ month.display }}\n
+              </option>
+              \n
+            {% endfor %}
+            \n
+          </select>
+          \n
+        </div>
+        \n            \n            <!-- Report Type -->\n
+        <div>
+          \n
+          <label class="block text-sm font-medium text-gray-700 mb-2">\n                    {% trans "Report Type" %}\n</label>
+          \n
+          <div class="space-y-2">
+            \n
+            <label class="flex items-center">
+              \n
+              <input type="radio"
+                     name="report_type"
+                     value="summary"
+                     checked
+                     n
+                     class="mr-2 text-blue-600 focus:ring-blue-500" />
+              \n                        <span>{% trans "Cash Receipts Summary" %}</span>\n                        <span class="text-sm text-gray-500 ml-2">{% trans "(Revenue by category)" %}</span>\n
+            </label>
+            \n
+            <label class="flex items-center">
+              \n
+              <input type="radio"
+                     name="report_type"
+                     value="journal"
+                     n
+                     class="mr-2 text-blue-600 focus:ring-blue-500" />
+              \n                        <span>{% trans "Journal Entry Format" %}</span>\n                        <span class="text-sm text-gray-500 ml-2">{% trans "(Ready to copy into QuickBooks)" %}</span>\n
+            </label>
+            \n
+            <label class="flex items-center">
+              \n
+              <input type="radio"
+                     name="report_type"
+                     value="deposits"
+                     n
+                     class="mr-2 text-blue-600 focus:ring-blue-500" />
+              \n                        <span>{% trans "Daily Deposits Report" %}</span>\n                        <span class="text-sm text-gray-500 ml-2">{% trans "(For bank reconciliation)" %}</span>\n
+            </label>
+            \n
+          </div>
+          \n
+        </div>
+        \n            \n            <!-- Format (hidden by default, shown for certain report types) -->\n
+        <div id="format-section" class="hidden">
+          \n
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            \n                    {% trans "Output Format" %}\n
+          </label>
+          \n
+          <div class="space-y-2">
+            \n
+            <label class="flex items-center">
+              \n
+              <input type="radio"
+                     name="format"
+                     value="readable"
+                     checked
+                     n
+                     class="mr-2 text-blue-600 focus:ring-blue-500" />
+              \n                        <span>{% trans "Readable Text" %}</span>\n
+            </label>
+            \n
+            <label class="flex items-center">
+              \n
+              <input type="radio"
+                     name="format"
+                     value="csv"
+                     n
+                     class="mr-2 text-blue-600 focus:ring-blue-500" />
+              \n                        <span>{% trans "CSV (Excel)" %}</span>\n
+            </label>
+            \n
+          </div>
+          \n
+        </div>
+        \n            \n            <!-- Action Buttons -->\n
+        <div class="flex space-x-4 pt-4">
+          \n
+          <button type="button"
+                  onclick="previewReport()"
+                  n
+                  class="flex-1 bg-gray-600 text-white py-2 px-4 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+            \n                    <i class="fas fa-eye mr-2"></i>\n                    {% trans "Preview" %}\n
+          </button>
+          \n
+          <button type="submit"
+                  n
+                  class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            \n                    <i class="fas fa-download mr-2"></i>\n                    {% trans "Download" %}\n
+          </button>
+          \n
+        </div>
+        \n
+      </form>
+      \n        \n        <!-- Help Text -->\n
+      <div class="mt-8 p-4 bg-blue-50 rounded-md">
+        \n
+        <h3 class="font-semibold text-blue-900 mb-2">
+          \n                <i class="fas fa-info-circle mr-2"></i>\n                {% trans "How to use these reports:" %}\n
+        </h3>
+        \n
+        <ul class="list-disc list-inside text-sm text-blue-800 space-y-1">
+          \n
+          <li>{% trans "The Journal Entry format can be copied directly into QuickBooks as a journal entry" %}</li>
+          \n
+          <li>{% trans "Cash Receipts Summary shows total revenue by category for the month" %}</li>
+          \n
+          <li>{% trans "Daily Deposits Report helps with bank reconciliation" %}</li>
+          \n
+          <li>{% trans "All reports follow cash-basis (service) accounting principles" %}</li>
+          \n
+        </ul>
+        \n
+      </div>
+      \n
+    </div>
+    \n
+  </div>
+  \n\n<script>
+  \
+  n // Show/hide format section based on report type\ndocument.querySelectorAll('input[name="report_type"]').forEach(radio => {\n    radio.addEventListener('change', function() {\n        const formatSection = document.getElementById('format-section');\n        if (this.value === 'deposits' || this.value === 'summary') {\n            formatSection.classList.remove('hidden');\n        } else {\n            formatSection.classList.add('hidden');\n        }\n    });\n});\n\n// Preview report in new window\nfunction previewReport() {\n    const form = document.getElementById('report-form');\n    const originalAction = form.action;\n    form.action = "{% url 'finance:preview_quickbooks_report' %}";\n    form.target = "_blank";\n    form.submit();\n    form.action = originalAction;\n    form.target = "";\n}\n
+</script>
+  \n
+{% endblock %}

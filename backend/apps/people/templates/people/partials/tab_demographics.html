@@ -1,0 +1,199 @@
+<!-- Demographics Tab Content -->
+<div class="space-y-6">
+  <!-- Personal Information Card -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <i class="fas fa-user mr-2 text-gray-400"></i>
+      Personal Information
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Left Column -->
+      <div class="space-y-4">
+        <div>
+          <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Full Name</label>
+          <p class="mt-1 text-sm text-gray-900 dark:text-gray-100">{{ student.person.full_name }}</p>
+        </div>
+        <div>
+          <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Khmer Name</label>
+          <p class="mt-1 text-sm text-gray-900 dark:text-gray-100">{{ student.person.khmer_name|default:"—" }}</p>
+        </div>
+        <div>
+          <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Date of Birth</label>
+          <p class="mt-1 text-sm text-gray-900 dark:text-gray-100">
+            {{ student.person.date_of_birth|date:"F d, Y" }}
+            <span class="text-gray-500 dark:text-gray-400">({{ student.person.age }} years old)</span>
+          </p>
+        </div>
+        <div>
+          <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Gender</label>
+          <p class="mt-1 text-sm text-gray-900 dark:text-gray-100">{{ student.person.get_preferred_gender_display }}</p>
+        </div>
+      </div>
+      <!-- Right Column -->
+      <div class="space-y-4">
+        <div>
+          <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Student ID</label>
+          <p class="mt-1 text-sm text-gray-900 dark:text-gray-100 font-mono">{{ student.formatted_student_id }}</p>
+        </div>
+        <div>
+          <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Citizenship</label>
+          <p class="mt-1 text-sm text-gray-900 dark:text-gray-100">
+            <img src="https://flagcdn.com/16x12/{{ student.person.citizenship.code|lower }}.png"
+                 alt="{{ student.person.citizenship.name }}"
+                 class="inline mr-2" />
+            {{ student.person.citizenship.name }}
+          </p>
+        </div>
+        <div>
+          <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Birth Province</label>
+          <p class="mt-1 text-sm text-gray-900 dark:text-gray-100">
+            {{ student.person.get_birth_province_display|default:"—" }}
+          </p>
+        </div>
+        <div>
+          <label class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Study Preference</label>
+          <p class="mt-1 text-sm text-gray-900 dark:text-gray-100">{{ student.get_study_time_preference_display }}</p>
+        </div>
+      </div>
+    </div>
+    {% if student.person.use_legal_name_for_documents %}
+      <div class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-md">
+        <h3 class="text-sm font-medium text-blue-800 dark:text-blue-200 mb-2">
+          <i class="fas fa-info-circle mr-1"></i>
+          Legal Name for Documents
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+          <div>
+            <span class="text-blue-700 dark:text-blue-300">Legal Name:</span>
+            <span class="text-blue-900 dark:text-blue-100 ml-1">
+              {{ student.person.alternate_family_name }} {{ student.person.alternate_personal_name }}
+            </span>
+          </div>
+          <div>
+            <span class="text-blue-700 dark:text-blue-300">Legal Gender:</span>
+            <span class="text-blue-900 dark:text-blue-100 ml-1">{{ student.person.get_alternate_gender_display }}</span>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+  <!-- Contact Information Card -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <i class="fas fa-address-book mr-2 text-gray-400"></i>
+      Contact Information
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Email Addresses -->
+      <div>
+        <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Email Addresses</h3>
+        <div class="space-y-2">
+          <div class="flex items-center">
+            <i class="fas fa-school text-gray-400 mr-2 w-4"></i>
+            <div>
+              <p class="text-sm text-gray-900 dark:text-gray-100">{{ student.person.school_email|default:"—" }}</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">School Email</p>
+            </div>
+          </div>
+          <div class="flex items-center">
+            <i class="fas fa-envelope text-gray-400 mr-2 w-4"></i>
+            <div>
+              <p class="text-sm text-gray-900 dark:text-gray-100">{{ student.person.personal_email|default:"—" }}</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Personal Email</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Phone Numbers -->
+      <div>
+        <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Phone Numbers</h3>
+        <div class="space-y-2">
+          {% for phone in student.person.phone_numbers.all %}
+            <div class="flex items-center justify-between">
+              <div class="flex items-center">
+                <i class="fas fa-phone text-gray-400 mr-2 w-4"></i>
+                <div>
+                  <p class="text-sm text-gray-900 dark:text-gray-100">{{ phone.number }}</p>
+                  <p class="text-xs text-gray-500 dark:text-gray-400">
+                    {{ phone.comment|default:"Phone" }}
+                    {% if phone.is_telegram %}<i class="fab fa-telegram ml-1"></i>{% endif %}
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-center space-x-2">
+                {% if phone.is_preferred %}
+                  <span class="text-xs bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400 px-2 py-0.5 rounded">Primary</span>
+                {% endif %}
+                {% if phone.is_verified %}<i class="fas fa-check-circle text-green-500 text-sm" title="Verified"></i>{% endif %}
+              </div>
+            </div>
+          {% empty %}
+            <p class="text-sm text-gray-500 dark:text-gray-400 italic">No phone numbers on file</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Emergency Contacts Card -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+        <i class="fas fa-phone-alt mr-2 text-gray-400"></i>
+        Emergency Contacts
+      </h2>
+      <button class="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
+        <i class="fas fa-plus mr-1"></i> Add Contact
+      </button>
+    </div>
+    {% if student.person.emergency_contacts.exists %}
+      <div class="space-y-4">
+        {% for contact in student.person.emergency_contacts.all %}
+          <div class="border-l-4 {% if contact.is_primary %}border-blue-500{% else %}border-gray-300 dark:border-gray-600{% endif %} pl-4 py-2">
+            <div class="flex justify-between items-start">
+              <div class="flex-grow">
+                <h4 class="font-medium text-gray-900 dark:text-gray-100">
+                  {{ contact.name }}
+                  {% if contact.is_primary %}
+                    <span class="ml-2 text-xs bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400 px-2 py-0.5 rounded">Primary</span>
+                  {% endif %}
+                </h4>
+                <p class="text-sm text-gray-600 dark:text-gray-400">{{ contact.get_relationship_display }}</p>
+                <div class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+                  <div class="flex items-center text-gray-600 dark:text-gray-400">
+                    <i class="fas fa-phone mr-2 text-gray-400 w-4"></i>
+                    <span>{{ contact.primary_phone }}</span>
+                  </div>
+                  {% if contact.secondary_phone %}
+                    <div class="flex items-center text-gray-600 dark:text-gray-400">
+                      <i class="fas fa-phone mr-2 text-gray-400 w-4"></i>
+                      <span>{{ contact.secondary_phone }}</span>
+                    </div>
+                  {% endif %}
+                  {% if contact.email %}
+                    <div class="flex items-center text-gray-600 dark:text-gray-400">
+                      <i class="fas fa-envelope mr-2 text-gray-400 w-4"></i>
+                      <span>{{ contact.email }}</span>
+                    </div>
+                  {% endif %}
+                </div>
+                {% if contact.address %}
+                  <div class="mt-2 flex items-start text-sm text-gray-600 dark:text-gray-400">
+                    <i class="fas fa-map-marker-alt mr-2 text-gray-400 w-4 mt-0.5"></i>
+                    <span>{{ contact.address }}</span>
+                  </div>
+                {% endif %}
+              </div>
+              <div class="ml-4">
+                <button class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                  <i class="fas fa-ellipsis-v"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-sm text-gray-500 dark:text-gray-400 italic">No emergency contacts on file</p>
+    {% endif %}
+  </div>
+</div>

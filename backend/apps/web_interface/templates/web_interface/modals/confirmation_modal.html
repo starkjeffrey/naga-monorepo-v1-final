@@ -1,0 +1,69 @@
+{% extends "web_interface/modals/base_modal.html" %}
+
+{% load i18n %}
+
+{% block modal_content %}
+  <div class="confirmation-content">
+    <div class="confirmation-icon">
+      {% if action == 'delete' %}
+        <i class="fas fa-exclamation-triangle text-danger"></i>
+      {% elif action == 'archive' %}
+        <i class="fas fa-archive text-warning"></i>
+      {% elif action == 'activate' %}
+        <i class="fas fa-check-circle text-success"></i>
+      {% else %}
+        <i class="fas fa-question-circle text-info"></i>
+      {% endif %}
+    </div>
+    <div class="confirmation-message">
+      <p>{{ message }}</p>
+      {% if action == 'delete' %}
+        <div class="warning-note">
+          <i class="fas fa-exclamation-triangle"></i>
+          {% trans "This action cannot be undone." %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+  {% if confirm_url %}
+    <form id="confirmation-form"
+          method="post"
+          action="{{ confirm_url }}"
+          hx-post="{{ confirm_url }}"
+          hx-target="#modal-overlay"
+          hx-swap="outerHTML"
+          hx-indicator="#confirmation-loading">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="{{ action }}" />
+      <div id="confirmation-loading" class="htmx-indicator">
+        <div class="loading-spinner">
+          <i class="fas fa-spinner fa-spin"></i>
+          {% trans "Processing..." %}
+        </div>
+      </div>
+    </form>
+  {% endif %}
+{% endblock %}
+{% block modal_footer %}
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" onclick="closeModal()">{% trans "Cancel" %}</button>
+    {% if confirm_url %}
+      <button type="submit"
+              class="btn {% if action == 'delete' %}btn-danger{% elif action == 'archive' %}btn-warning{% elif action == 'activate' %}btn-success{% else %}btn-primary{% endif %}"
+              form="confirmation-form">
+        {% if action == 'delete' %}
+          <i class="fas fa-trash"></i>
+        {% elif action == 'archive' %}
+          <i class="fas fa-archive"></i>
+        {% elif action == 'activate' %}
+          <i class="fas fa-check"></i>
+        {% else %}
+          <i class="fas fa-check"></i>
+        {% endif %}
+        {{ confirm_text }}
+      </button>
+    {% else %}
+      <button type="button" class="btn btn-primary" onclick="closeModal()">{{ confirm_text }}</button>
+    {% endif %}
+  </div>
+{% endblock %}

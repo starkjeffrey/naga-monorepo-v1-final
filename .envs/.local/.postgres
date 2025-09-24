@@ -1,0 +1,12 @@
+# PostgreSQL configuration for local development
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=naga_local
+POSTGRES_USER=naga_evaluation_user
+POSTGRES_PASSWORD=b9f01768a149c15f
+
+
+
+# Connection pooling
+DB_CONN_MAX_AGE=3600
+DB_CONN_HEALTH_CHECKS=true

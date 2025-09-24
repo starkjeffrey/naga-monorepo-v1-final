@@ -1,0 +1,93 @@
+###############################################################################
+## Monit control file
+###############################################################################
+
+## Start Monit in the background (run as a daemon):
+# set daemon 30            # check services at 30-second intervals (disabled for container)
+
+## Set syslog logging
+set logfile syslog
+
+## Set the location of the Monit id file which stores the unique id for the
+## Monit instance. The id is generated and stored on first Monit start.
+set idfile /var/lib/monit/id
+
+## Set the location of the Monit state file which saves monitoring states
+## on each cycle. By default the file is placed in $HOME/.monit.state. If
+## the state file is stored on a persistent filesystem, Monit will recover
+## the monitoring state across reboots. If it is on temporary filesystem, the
+## state will be lost on reboot which may be convenient in some situations.
+set statefile /var/lib/monit/state
+
+## Set limits for various tests. The following example shows the default values:
+set limits {
+    programOutput:     512 B,      # check program's output truncate limit
+    sendExpectBuffer:  256 B,      # limit for send/expect protocol test
+    fileContentBuffer: 512 B,      # limit for file content test
+    httpContentBuffer: 1 MB,       # limit for HTTP content test
+    networkTimeout:    5 seconds   # timeout for network I/O
+}
+
+## Set global SSL options (just most common options showed, see manual for
+## full list).
+set ssl {
+    verify     : enable,
+    selfsigned : allow
+}
+
+## Set the list of mail servers for alert delivery. Multiple servers may be
+## specified using a comma separated list. If the first mail server fails,
+## Monit will use the next mail server in the list and so on. By default Monit
+## uses port 25 - it is possible to override this with the PORT option.
+# set mailserver mail.bar.baz,               # primary mailserver
+#                backup.bar.baz port 10025,  # backup mailserver on port 10025
+#                localhost                   # fallback relay
+
+## Set the envelope sender address
+# set mail-format {
+#     from:    Monit <monit@naga-sis.local>
+#     subject: $SERVICE $EVENT at $DATE on $HOST
+#     message: Monit $ACTION $SERVICE at $DATE on $HOST: $DESCRIPTION.
+#              Yours sincerely,
+#              Monit
+# }
+
+## Set alert recipient
+# set alert admin@naga-sis.local
+
+## Monit has an embedded HTTP interface. It can be used to view status of
+## services monitored and manage services from a web interface. See the
+## Monit Wiki if you want to enable SSL for the HTTP interface.
+set httpd port 2812 and
+    use address 0.0.0.0  # only accept connection from localhost (drop if you use M/Monit)
+    allow 0.0.0.0/0      # allow anyone to connect to the server (for Docker)
+    # allow admin:monit   # require user 'admin' with password 'monit'
+
+###############################################################################
+## Services
+###############################################################################
+
+## Check the Django application
+check host django-naga-sis with address 172.18.0.9
+    if failed port 8000 protocol http request "/api/health/" then alert
+
+## Check Redis service
+check host redis-naga-sis with address new_naga_sis_backend_local_redis
+    if failed port 6379 then alert
+
+## Check PostgreSQL service
+check host postgres-naga-sis with address new_naga_sis_backend_local_postgres
+    if failed port 5432 then alert
+
+## Check Celery worker (indirect check via Redis queue length)
+# check program celery-status with path "/usr/bin/docker"
+#     args "exec new_naga_sis_backend_local_redis redis-cli llen celery"
+#     if status != 0 then alert
+
+###############################################################################
+## Includes
+###############################################################################
+
+## It is possible to include additional configuration parts from other files or
+## directories.
+# include /etc/monit/conf.d/*

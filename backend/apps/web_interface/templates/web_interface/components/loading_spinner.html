@@ -1,0 +1,8 @@
+{% load i18n %}
+
+<div class="text-center">
+  <div class="spinner-border spinner-border-{{ size }}" role="status">
+    <span class="sr-only">{{ text|default:"Loading..." }}</span>
+  </div>
+  {% if text %}<div class="mt-2 text-muted">{{ text }}</div>{% endif %}
+</div>

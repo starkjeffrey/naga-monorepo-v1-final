@@ -1,0 +1,224 @@
+<!-- Academic History Tab Content -->
+<div class="space-y-6">
+  <!-- Academic Summary Card -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <i class="fas fa-graduation-cap mr-2 text-gray-400"></i>
+      Academic Summary
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Program Information -->
+      <div>
+        <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Program Information</h3>
+        <dl class="space-y-2">
+          <div class="flex justify-between">
+            <dt class="text-sm text-gray-500 dark:text-gray-400">Degree Program:</dt>
+            <dd class="text-sm font-medium text-gray-900 dark:text-gray-100">
+              {{ student.enrollment_records.last.degree_program.name|default:"Not Declared" }}
+            </dd>
+          </div>
+          <div class="flex justify-between">
+            <dt class="text-sm text-gray-500 dark:text-gray-400">Major:</dt>
+            <dd class="text-sm font-medium text-gray-900 dark:text-gray-100">
+              {{ student.declared_major.name|default:"Undeclared" }}
+            </dd>
+          </div>
+          <div class="flex justify-between">
+            <dt class="text-sm text-gray-500 dark:text-gray-400">Minor:</dt>
+            <dd class="text-sm font-medium text-gray-900 dark:text-gray-100">
+              {{ student.declared_minor.name|default:"None" }}
+            </dd>
+          </div>
+          <div class="flex justify-between">
+            <dt class="text-sm text-gray-500 dark:text-gray-400">Academic Level:</dt>
+            <dd class="text-sm font-medium text-gray-900 dark:text-gray-100">
+              {{ student.academic_level|default:"Freshman" }}
+            </dd>
+          </div>
+          <div class="flex justify-between">
+            <dt class="text-sm text-gray-500 dark:text-gray-400">Entry Date:</dt>
+            <dd class="text-sm font-medium text-gray-900 dark:text-gray-100">
+              {{ student.enrollment_records.first.start_date|date:"F Y"|default:"N/A" }}
+            </dd>
+          </div>
+          <div class="flex justify-between">
+            <dt class="text-sm text-gray-500 dark:text-gray-400">Expected Graduation:</dt>
+            <dd class="text-sm font-medium text-gray-900 dark:text-gray-100">
+              {{ student.expected_graduation_date|date:"F Y"|default:"TBD" }}
+            </dd>
+          </div>
+        </dl>
+      </div>
+      <!-- Academic Standing -->
+      <div>
+        <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Academic Standing</h3>
+        <dl class="space-y-2">
+          <div class="flex justify-between">
+            <dt class="text-sm text-gray-500 dark:text-gray-400">Cumulative GPA:</dt>
+            <dd class="text-sm font-medium text-gray-900 dark:text-gray-100">
+              {{ student.cumulative_gpa|floatformat:2|default:"0.00" }}
+            </dd>
+          </div>
+          <div class="flex justify-between">
+            <dt class="text-sm text-gray-500 dark:text-gray-400">Credits Earned:</dt>
+            <dd class="text-sm font-medium text-gray-900 dark:text-gray-100">
+              {{ student.total_credits_earned|default:0 }}
+            </dd>
+          </div>
+          <div class="flex justify-between">
+            <dt class="text-sm text-gray-500 dark:text-gray-400">Credits Required:</dt>
+            <dd class="text-sm font-medium text-gray-900 dark:text-gray-100">
+              {{ student.enrollment_records.last.degree_program.total_credits_required|default:120 }}
+            </dd>
+          </div>
+          <div class="flex justify-between">
+            <dt class="text-sm text-gray-500 dark:text-gray-400">Academic Status:</dt>
+            <dd class="text-sm font-medium">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {% if student.academic_standing == 'GOOD' %}bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400 {% elif student.academic_standing == 'PROBATION' %}bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400 {% else %}bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400{% endif %}">
+                {{ student.academic_standing|default:"Good Standing" }}
+              </span>
+            </dd>
+          </div>
+          <div class="flex justify-between">
+            <dt class="text-sm text-gray-500 dark:text-gray-400">Dean's List:</dt>
+            <dd class="text-sm font-medium text-gray-900 dark:text-gray-100">
+              {% if student.is_deans_list %}
+                <i class="fas fa-check-circle text-green-500"></i> Yes
+              {% else %}
+                <i class="fas fa-times-circle text-gray-400"></i> No
+              {% endif %}
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </div>
+  <!-- Degree Progress Card -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <i class="fas fa-tasks mr-2 text-gray-400"></i>
+      Degree Progress
+    </h2>
+    <!-- Overall Progress Bar -->
+    <div class="mb-6">
+      <div class="flex justify-between text-sm mb-2">
+        <span class="text-gray-600 dark:text-gray-400">Overall Progress</span>
+        <span class="font-medium text-gray-900 dark:text-gray-100">
+          {{ student.total_credits_earned|default:0 }} of {{ student.enrollment_records.last.degree_program.total_credits_required|default:120 }} credits
+          ({{ student.degree_progress_percentage|floatformat:1|default:0 }}%)
+        </span>
+      </div>
+      <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+        <div class="bg-blue-600 h-3 rounded-full transition-all duration-300"
+             style="width: {{ student.degree_progress_percentage|default:0 }}%"></div>
+      </div>
+    </div>
+    <!-- Requirement Categories -->
+    <div class="space-y-4">
+      {% for requirement in degree_requirements %}
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <div class="flex justify-between items-start mb-2">
+            <div>
+              <h3 class="font-medium text-gray-900 dark:text-gray-100">{{ requirement.category_name }}</h3>
+              <p class="text-sm text-gray-500 dark:text-gray-400">{{ requirement.description }}</p>
+            </div>
+            <span class="text-sm font-medium text-gray-900 dark:text-gray-100">
+              {{ requirement.credits_completed }} / {{ requirement.credits_required }}
+            </span>
+          </div>
+          <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+            <div class="bg-green-600 h-2 rounded-full"
+                 style="width: {{ requirement.progress_percentage }}%"></div>
+          </div>
+          {% if requirement.remaining_courses %}
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Remaining: {{ requirement.remaining_courses|join:", " }}</p>
+          {% endif %}
+        </div>
+      {% empty %}
+        <p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4">No degree requirements available.</p>
+      {% endfor %}
+    </div>
+  </div>
+  <!-- Academic History Timeline -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <i class="fas fa-history mr-2 text-gray-400"></i>
+      Academic History
+    </h2>
+    <div class="space-y-4">
+      {% for term in academic_history %}
+        <div class="relative pl-8 pb-4 {% if not forloop.last %}border-l-2 border-gray-200 dark:border-gray-700{% endif %}">
+          <div class="absolute left-0 top-0 -translate-x-1/2 w-4 h-4 bg-blue-600 rounded-full"></div>
+          <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="font-medium text-gray-900 dark:text-gray-100">{{ term.term_name }}</h3>
+              <div class="text-right">
+                <span class="text-sm font-medium text-gray-900 dark:text-gray-100">GPA: {{ term.term_gpa|floatformat:2 }}</span>
+                <span class="text-xs text-gray-500 dark:text-gray-400 block">{{ term.credits_attempted }} credits</span>
+              </div>
+            </div>
+            <div class="text-sm text-gray-600 dark:text-gray-300">
+              <p>{{ term.courses_count }} courses completed</p>
+              {% if term.honors %}
+                <p class="text-green-600 dark:text-green-400 mt-1">
+                  <i class="fas fa-star"></i> {{ term.honors }}
+                </p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4">No academic history available.</p>
+      {% endfor %}
+    </div>
+  </div>
+  <!-- Transfer Credits (if applicable) -->
+  {% if student.is_transfer_student and transfer_credits %}
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <i class="fas fa-exchange-alt mr-2 text-gray-400"></i>
+        Transfer Credits
+      </h2>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead>
+            <tr>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                Institution
+              </th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                Course
+              </th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                Credits
+              </th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                Equivalent
+              </th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+            {% for credit in transfer_credits %}
+              <tr>
+                <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">{{ credit.institution_name }}</td>
+                <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">{{ credit.original_course_code }}</td>
+                <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">{{ credit.credits }}</td>
+                <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
+                  {{ credit.equivalent_course_code|default:"General Credit" }}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr class="bg-gray-50 dark:bg-gray-700">
+              <td colspan="2"
+                  class="px-4 py-3 text-sm font-medium text-gray-900 dark:text-gray-100">Total Transfer Credits</td>
+              <td class="px-4 py-3 text-sm font-medium text-gray-900 dark:text-gray-100">{{ total_transfer_credits }}</td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  {% endif %}
+</div>

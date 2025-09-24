@@ -1,0 +1,78 @@
+{% load i18n %}
+{% load web_interface_tags %}
+
+{% if page_obj.has_other_pages %}
+<div class="pagination-container">
+    <div class="pagination-info">
+        {% if page_obj.paginator.count > 0 %}
+            {% blocktrans with start=page_obj.start_index end=page_obj.end_index total=page_obj.paginator.count %}
+                Showing {{ start }} to {{ end }} of {{ total }} results
+            {% endblocktrans %}
+        {% endif %}
+    </div>
+    
+    <nav class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="{% query_string request page=1 %}" class="page-link" title="{% trans 'First Page' %}">
+                <i class="fas fa-angle-double-left"></i>
+                <span class="sr-only">{% trans "First" %}</span>
+            </a>
+            <a href="{% query_string request page=page_obj.previous_page_number %}" class="page-link" title="{% trans 'Previous Page' %}">
+                <i class="fas fa-angle-left"></i>
+                <span class="sr-only">{% trans "Previous" %}</span>
+            </a>
+        {% else %}
+            <span class="page-link disabled" aria-disabled="true">
+                <i class="fas fa-angle-double-left"></i>
+                <span class="sr-only">{% trans "First" %}</span>
+            </span>
+            <span class="page-link disabled" aria-disabled="true">
+                <i class="fas fa-angle-left"></i>
+                <span class="sr-only">{% trans "Previous" %}</span>
+            </span>
+        {% endif %}
+
+        <!-- Page numbers -->
+        {% with page_obj.number as current_page %}
+        {% with page_obj.paginator.num_pages as total_pages %}
+            <!-- Show pages around current page -->
+            {% for page_num in page_obj.paginator.page_range %}
+                {% if page_num == current_page %}
+                    <span class="page-link current" aria-current="page">{{ page_num }}</span>
+                {% elif page_num|add:"-3" <= current_page and page_num|add:"3" >= current_page %}
+                    <a href="{% query_string request page=page_num %}" class="page-link">{{ page_num }}</a>
+                {% elif page_num == 1 or page_num == total_pages %}
+                    {% if page_num == 1 and current_page > 4 %}
+                        <a href="{% query_string request page=1 %}" class="page-link">1</a>
+                        {% if current_page > 5 %}<span class="page-link dots">…</span>{% endif %}
+                    {% elif page_num == total_pages and current_page < total_pages|add:"-3" %}
+                        {% if current_page < total_pages|add:"-4" %}<span class="page-link dots">…</span>{% endif %}
+                        <a href="{% query_string request page=total_pages %}" class="page-link">{{ total_pages }}</a>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        {% endwith %}
+        {% endwith %}
+
+        {% if page_obj.has_next %}
+            <a href="{% query_string request page=page_obj.next_page_number %}" class="page-link" title="{% trans 'Next Page' %}">
+                <i class="fas fa-angle-right"></i>
+                <span class="sr-only">{% trans "Next" %}</span>
+            </a>
+            <a href="{% query_string request page=page_obj.paginator.num_pages %}" class="page-link" title="{% trans 'Last Page' %}">
+                <i class="fas fa-angle-double-right"></i>
+                <span class="sr-only">{% trans "Last" %}</span>
+            </a>
+        {% else %}
+            <span class="page-link disabled" aria-disabled="true">
+                <i class="fas fa-angle-right"></i>
+                <span class="sr-only">{% trans "Next" %}</span>
+            </span>
+            <span class="page-link disabled" aria-disabled="true">
+                <i class="fas fa-angle-double-right"></i>
+                <span class="sr-only">{% trans "Last" %}</span>
+            </span>
+        {% endif %}
+    </nav>
+</div>
+{% endif %}

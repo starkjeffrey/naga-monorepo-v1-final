@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "PUC Level Testing" %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Mobile-first responsive design */
+    body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+    }
+    
+    .mobile-container {
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 1rem;
+    }
+    
+    @media (min-width: 768px) {
+        .mobile-container {
+            max-width: 600px;
+            padding: 2rem;
+        }
+    }
+    
+    .glass-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 1rem;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    }
+    
+    .hero-gradient {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="mobile-container">
+    <!-- Language Toggle -->
+    <div class="text-center mb-4">
+        <div class="inline-flex bg-white rounded-full p-1 shadow-lg">
+            <button class="px-4 py-2 rounded-full bg-purple-600 text-white font-medium">
+                English
+            </button>
+            <button class="px-4 py-2 rounded-full text-gray-600 hover:bg-gray-100">
+                ខ្មែរ
+            </button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="glass-card p-6 mb-6">
+        <div class="text-center">
+            <img src="{% static 'images/puc-logo.png' %}" 
+                 alt="PUC Logo" 
+                 class="w-20 h-20 mx-auto mb-4"
+                 onerror="this.style.display='none'">
+            
+            <h1 class="text-2xl font-bold text-gray-800 mb-2">
+                {% trans "Welcome to PUC Level Testing" %}
+            </h1>
+            
+            <p class="text-gray-600">
+                {% trans "Complete your application in just a few minutes" %}
+            </p>
+        </div>
+    </div>
+
+    <!-- Access Verification Card -->
+    <div class="glass-card p-6 mb-6">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-semibold text-gray-800">
+                {% trans "Your Access" %}
+            </h2>
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                <i class="fas fa-check-circle mr-1"></i>
+                {% trans "Verified" %}
+            </span>
+        </div>
+
+        <div class="space-y-3">
+            <div class="flex justify-between">
+                <span class="text-gray-600">{% trans "Name" %}:</span>
+                <span class="font-medium">{{ token.student_name }}</span>
+            </div>
+            <div class="flex justify-between">
+                <span class="text-gray-600">{% trans "Access Code" %}:</span>
+                <span class="font-mono font-bold">{{ access_code }}</span>
+            </div>
+            <div class="flex justify-between">
+                <span class="text-gray-600">{% trans "Payment" %}:</span>
+                <span class="text-green-600 font-medium">
+                    <i class="fas fa-check mr-1"></i>
+                    {% trans "Paid" %}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Telegram Integration Section -->
+    {% if not telegram_verified %}
+    <div class="glass-card p-6 mb-6 hero-gradient">
+        <div class="text-center text-white">
+            <i class="fab fa-telegram text-4xl mb-3"></i>
+            <h3 class="text-xl font-semibold mb-2">
+                {% trans "Connect Telegram" %}
+            </h3>
+            <p class="text-white/90 mb-4">
+                {% trans "Get instant test updates and results" %}
+            </p>
+            <a href="{{ telegram_verify_url }}" 
+               class="inline-block bg-white text-purple-600 px-6 py-3 rounded-full font-medium hover:bg-gray-100 transition">
+                <i class="fab fa-telegram mr-2"></i>
+                {% trans "Connect Now" %}
+            </a>
+            <p class="text-sm text-white/70 mt-3">
+                {% trans "Optional but recommended" %}
+            </p>
+        </div>
+    </div>
+    {% else %}
+    <div class="glass-card p-4 mb-6 bg-green-50 border border-green-200">
+        <div class="flex items-center text-green-700">
+            <i class="fab fa-telegram text-2xl mr-3"></i>
+            <div>
+                <p class="font-medium">{% trans "Telegram Connected" %}</p>
+                <p class="text-sm">@{{ token.telegram_username }}</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Start Application Button -->
+    <div class="glass-card p-6">
+        <a href="{{ application_url }}" 
+           class="block w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white text-center py-4 rounded-lg font-semibold text-lg hover:from-purple-700 hover:to-blue-700 transition shadow-lg">
+            <i class="fas fa-file-alt mr-2"></i>
+            {% trans "Start Application Form" %}
+        </a>
+        
+        <div class="mt-4 text-center">
+            <p class="text-sm text-gray-600">
+                <i class="fas fa-clock mr-1"></i>
+                {% trans "Estimated time: 10-15 minutes" %}
+            </p>
+            <p class="text-sm text-gray-600 mt-1">
+                <i class="fas fa-save mr-1"></i>
+                {% trans "Your progress is saved automatically" %}
+            </p>
+        </div>
+    </div>
+
+    <!-- Help Section -->
+    <div class="mt-6 text-center">
+        <p class="text-white/90 text-sm">
+            {% trans "Need help?" %}
+            <a href="tel:+85523123456" class="text-white font-medium underline">
+                {% trans "Call us" %}
+            </a>
+        </p>
+    </div>
+</div>
+
+<!-- Progressive Web App -->
+<script>
+// Register service worker for offline capability
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('{% static "js/service-worker.js" %}')
+        .then(reg => console.log('Service Worker registered'))
+        .catch(err => console.log('Service Worker registration failed'));
+}
+</script>
+{% endblock %}

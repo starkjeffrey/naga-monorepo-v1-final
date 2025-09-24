@@ -1,0 +1,212 @@
+<!-- Attendance Tab Content -->
+<div class="space-y-6">
+  <!-- Attendance Overview Card -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <i class="fas fa-calendar-check mr-2 text-gray-400"></i>
+      Attendance Overview - {{ current_term.name|default:"Spring 2024" }}
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <div class="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+        <p class="text-3xl font-bold text-green-600 dark:text-green-400">
+          {{ overall_attendance_rate|floatformat:1|default:"0.0" }}%
+        </p>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Overall Attendance</p>
+      </div>
+      <div class="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+        <p class="text-3xl font-bold text-blue-600 dark:text-blue-400">{{ total_classes_attended|default:0 }}</p>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Classes Attended</p>
+      </div>
+      <div class="text-center p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
+        <p class="text-3xl font-bold text-orange-600 dark:text-orange-400">{{ total_absences|default:0 }}</p>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Total Absences</p>
+      </div>
+      <div class="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+        <p class="text-3xl font-bold text-purple-600 dark:text-purple-400">{{ total_tardies|default:0 }}</p>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Total Tardies</p>
+      </div>
+    </div>
+    <!-- Attendance Alerts -->
+    {% if attendance_alerts %}
+      <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-4">
+        <div class="flex items-start">
+          <i class="fas fa-exclamation-triangle text-red-600 dark:text-red-400 mt-0.5 mr-3"></i>
+          <div>
+            <h3 class="font-medium text-red-900 dark:text-red-200 mb-2">Attendance Alerts</h3>
+            <ul class="space-y-1 text-sm text-red-700 dark:text-red-300">
+              {% for alert in attendance_alerts %}
+                <li>• {{ alert.course_code }}: {{ alert.message }} ({{ alert.absences }} absences)</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+  <!-- Course Attendance Details -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <i class="fas fa-list mr-2 text-gray-400"></i>
+      Course Attendance Details
+    </h2>
+    <div class="space-y-4">
+      {% for course in course_attendance %}
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <div class="flex justify-between items-start mb-3">
+            <div>
+              <h3 class="font-medium text-gray-900 dark:text-gray-100">{{ course.course_code }} - {{ course.course_title }}</h3>
+              <p class="text-sm text-gray-500 dark:text-gray-400">{{ course.instructor }} | {{ course.meeting_pattern }}</p>
+            </div>
+            <div class="text-right">
+              <p class="text-2xl font-bold {% if course.attendance_rate >= 90 %}text-green-600 dark:text-green-400 {% elif course.attendance_rate >= 80 %}text-yellow-600 dark:text-yellow-400 {% else %}text-red-600 dark:text-red-400{% endif %}">
+                {{ course.attendance_rate|floatformat:1 }}%
+              </p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Attendance Rate</p>
+            </div>
+          </div>
+          <!-- Attendance Stats -->
+          <div class="grid grid-cols-4 gap-4 text-center mb-3">
+            <div class="bg-gray-50 dark:bg-gray-700 rounded p-2">
+              <p class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ course.present_count }}</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Present</p>
+            </div>
+            <div class="bg-gray-50 dark:bg-gray-700 rounded p-2">
+              <p class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ course.absent_count }}</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Absent</p>
+            </div>
+            <div class="bg-gray-50 dark:bg-gray-700 rounded p-2">
+              <p class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ course.tardy_count }}</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Tardy</p>
+            </div>
+            <div class="bg-gray-50 dark:bg-gray-700 rounded p-2">
+              <p class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ course.excused_count }}</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Excused</p>
+            </div>
+          </div>
+          <!-- Recent Attendance -->
+          <div class="flex items-center space-x-1">
+            <span class="text-xs text-gray-500 dark:text-gray-400 mr-2">Recent:</span>
+            {% for record in course.recent_attendance %}
+              <div class="w-6 h-6 rounded flex items-center justify-center text-xs font-medium {% if record.status == 'PRESENT' %}bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400 {% elif record.status == 'ABSENT' %}bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400 {% elif record.status == 'TARDY' %}bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400 {% else %}bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400{% endif %}"
+                   title="{{ record.date|date:'M d' }} - {{ record.get_status_display }}">
+                {{ record.status|first }}
+              </div>
+            {% endfor %}
+          </div>
+          {% if course.next_class %}
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Next class: {{ course.next_class|date:"l, M d @ g:i A" }}</p>
+          {% endif %}
+        </div>
+      {% empty %}
+        <p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4">
+          No attendance data available for current courses.
+        </p>
+      {% endfor %}
+    </div>
+  </div>
+  <!-- Attendance Calendar -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+        <i class="fas fa-calendar mr-2 text-gray-400"></i>
+        Attendance Calendar
+      </h2>
+      <div class="flex space-x-2">
+        <button class="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <span class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ current_month|date:"F Y" }}</span>
+        <button class="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+    <!-- Calendar Grid Placeholder -->
+    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg h-64 flex items-center justify-center">
+      <p class="text-sm text-gray-500 dark:text-gray-400">
+        <i class="fas fa-calendar-alt mr-2"></i>
+        Interactive attendance calendar would display here
+      </p>
+    </div>
+    <!-- Legend -->
+    <div class="mt-4 flex justify-center space-x-4 text-xs">
+      <div class="flex items-center">
+        <div class="w-3 h-3 bg-green-500 rounded mr-1"></div>
+        <span class="text-gray-600 dark:text-gray-400">Present</span>
+      </div>
+      <div class="flex items-center">
+        <div class="w-3 h-3 bg-red-500 rounded mr-1"></div>
+        <span class="text-gray-600 dark:text-gray-400">Absent</span>
+      </div>
+      <div class="flex items-center">
+        <div class="w-3 h-3 bg-yellow-500 rounded mr-1"></div>
+        <span class="text-gray-600 dark:text-gray-400">Tardy</span>
+      </div>
+      <div class="flex items-center">
+        <div class="w-3 h-3 bg-blue-500 rounded mr-1"></div>
+        <span class="text-gray-600 dark:text-gray-400">Excused</span>
+      </div>
+    </div>
+  </div>
+  <!-- Attendance History -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <i class="fas fa-history mr-2 text-gray-400"></i>
+      Recent Attendance Records
+    </h2>
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+        <thead>
+          <tr>
+            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+              Date
+            </th>
+            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+              Course
+            </th>
+            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+              Time
+            </th>
+            <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+              Status
+            </th>
+            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+              Notes
+            </th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+          {% for record in recent_attendance %}
+            <tr>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{{ record.date|date:"M d, Y" }}</td>
+              <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
+                {{ record.course_code }} - {{ record.course_title }}
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ record.class_time }}</td>
+              <td class="px-4 py-3 text-center">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {% if record.status == 'PRESENT' %}bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400 {% elif record.status == 'ABSENT' %}bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400 {% elif record.status == 'TARDY' %}bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400 {% else %}bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400{% endif %}">
+                  {{ record.get_status_display }}
+                </span>
+              </td>
+              <td class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">{{ record.notes|default:"-" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <!-- Pagination -->
+    <div class="mt-4 flex justify-between items-center">
+      <p class="text-sm text-gray-700 dark:text-gray-300">
+        Showing {{ recent_attendance|length }} of {{ total_attendance_records }} records
+      </p>
+      <div class="flex space-x-2">
+        <button class="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600">
+          Previous
+        </button>
+        <button class="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600">
+          Next
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Payment Successful" %}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 max-w-3xl">
+    <div class="bg-white shadow-lg rounded-lg p-6">
+        <!-- Success Header -->
+        <div class="text-center mb-6">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+                <i class="fas fa-check-circle text-3xl text-green-600"></i>
+            </div>
+            <h1 class="text-2xl font-bold text-gray-800">
+                {% trans "Payment Collected Successfully!" %}
+            </h1>
+            <p class="text-gray-600 mt-2">
+                {% trans "Access code generated for student" %}
+            </p>
+        </div>
+
+        <!-- Student Information -->
+        <div class="bg-gray-50 rounded-lg p-4 mb-6">
+            <h2 class="text-lg font-semibold mb-3 text-gray-700">
+                <i class="fas fa-user mr-2"></i>
+                {% trans "Student Information" %}
+            </h2>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <span class="text-sm text-gray-600">{% trans "Name" %}:</span>
+                    <p class="font-medium">{{ token.student_name }}</p>
+                </div>
+                <div>
+                    <span class="text-sm text-gray-600">{% trans "Phone" %}:</span>
+                    <p class="font-medium">{{ token.student_phone }}</p>
+                </div>
+                <div>
+                    <span class="text-sm text-gray-600">{% trans "Amount Paid" %}:</span>
+                    <p class="font-medium text-green-600">${{ token.payment_amount }}</p>
+                </div>
+                <div>
+                    <span class="text-sm text-gray-600">{% trans "Payment Method" %}:</span>
+                    <p class="font-medium">{{ token.get_payment_method_display }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Access Code Display -->
+        <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-6 mb-6 text-center">
+            <h3 class="text-lg font-semibold mb-2 text-blue-800">
+                {% trans "Access Code" %}
+            </h3>
+            <div class="text-4xl font-mono font-bold text-blue-900 tracking-wider">
+                {{ token.access_code }}
+            </div>
+            <p class="text-sm text-blue-600 mt-2">
+                {% trans "Valid for 24 hours" %}
+            </p>
+        </div>
+
+        <!-- QR Code Display -->
+        <div class="text-center mb-6">
+            <h3 class="text-lg font-semibold mb-3 text-gray-700">
+                {% trans "QR Code for Student" %}
+            </h3>
+            <div class="inline-block p-4 bg-white border-2 border-gray-300 rounded-lg">
+                <img src="data:image/png;base64,{{ qr_code_base64 }}" 
+                     alt="QR Code" 
+                     class="w-64 h-64">
+            </div>
+            <p class="text-sm text-gray-600 mt-2">
+                {% trans "Student should scan this with their phone" %}
+            </p>
+        </div>
+
+        <!-- Instructions -->
+        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-info-circle text-yellow-400"></i>
+                </div>
+                <div class="ml-3">
+                    <h4 class="text-sm font-semibold text-yellow-800">
+                        {% trans "Instructions for Student" %}
+                    </h4>
+                    <ol class="text-sm text-yellow-700 mt-2 list-decimal list-inside">
+                        <li>{% trans "Scan the QR code with your phone camera" %}</li>
+                        <li>{% trans "Complete the application form online" %}</li>
+                        <li>{% trans "Optional: Connect Telegram for test updates" %}</li>
+                        <li>{% trans "Keep this receipt for your records" %}</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- Print Status -->
+        {% if print_sent %}
+        <div class="bg-gray-100 rounded-lg p-4 mb-6">
+            <div class="flex items-center">
+                {% if print_success %}
+                    <i class="fas fa-print text-green-600 mr-3"></i>
+                    <span class="text-green-600">
+                        {% trans "Receipt sent to printer successfully" %}
+                    </span>
+                {% else %}
+                    <i class="fas fa-exclamation-triangle text-yellow-600 mr-3"></i>
+                    <span class="text-yellow-600">
+                        {% trans "Print failed - Please print manually or take a photo" %}
+                    </span>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Action Buttons -->
+        <div class="flex justify-between">
+            <button type="button" 
+                    onclick="window.print()"
+                    class="px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition">
+                <i class="fas fa-print mr-2"></i>
+                {% trans "Print Page" %}
+            </button>
+            
+            <a href="{% url 'level_testing:cashier_payment' %}" 
+               class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition inline-block">
+                <i class="fas fa-plus-circle mr-2"></i>
+                {% trans "New Payment" %}
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Print Styles -->
+<style>
+@media print {
+    .no-print {
+        display: none;
+    }
+    .container {
+        max-width: 100%;
+    }
+}
+</style>
+{% endblock %}

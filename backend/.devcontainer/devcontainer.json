@@ -1,0 +1,69 @@
+{
+  "name": "Naga Backend - Docker Development",
+  "dockerComposeFile": "../docker-compose.local.yml",
+  "service": "django",
+  "workspaceFolder": "/app",
+  
+  "customizations": {
+    "vscode": {
+      "settings": {
+        // Python settings
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.terminal.activateEnvironment": false,
+        
+        // Linting & Formatting (matches your pyproject.toml)
+        "python.linting.enabled": true,
+        "python.linting.ruffEnabled": true,
+        "python.formatting.provider": "black",
+        "python.formatting.blackArgs": ["--line-length=119"],
+        "[python]": {
+          "editor.formatOnSave": true,
+          "editor.rulers": [119]
+        },
+        
+        // Django
+        "python.djangoTestRunner": "pytest",
+        "python.testing.pytestEnabled": true,
+        
+        // Terminal
+        "terminal.integrated.defaultProfile.linux": "bash"
+      },
+      
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "batisteo.vscode-django",
+        "ms-azuretools.vscode-docker",
+        "charliermarsh.ruff",
+        "mtxr.sqltools",
+        "mtxr.sqltools-driver-pg"
+      ]
+    }
+  },
+  
+  // Ports to forward
+  "forwardPorts": [
+    8000,  // Django
+    5432,  // PostgreSQL
+    6379,  // Redis
+    19999, // Netdata
+    3001,  // Uptime Kuma
+    9090   // Prometheus
+  ],
+  
+  // Run after container starts
+  "postCreateCommand": "echo '✅ Container ready! Just use: python manage.py runserver'",
+  
+  // Environment variables (no more USE_DOCKER=no confusion!)
+  "remoteEnv": {
+    "USE_DOCKER": "yes",
+    "DJANGO_SETTINGS_MODULE": "config.settings.local",
+    "DATABASE_URL": "postgresql://debug:debug@postgres:5432/naga_local"
+  },
+  
+  // Keep the container running
+  "overrideCommand": false,
+  
+  // User to run as (match your docker-compose)
+  "remoteUser": "django"
+}

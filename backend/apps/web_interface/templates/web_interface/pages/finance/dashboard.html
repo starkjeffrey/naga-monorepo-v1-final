@@ -1,0 +1,168 @@
+{% extends "web_interface/base/dashboard_base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Finance Management" %}{% endblock %}
+
+{% block page_header %}
+<div class="flex items-center justify-between">
+    <div>
+        <h1 class="text-3xl font-bold text-gray-900">{% trans "Finance Management" %}</h1>
+        <p class="mt-2 text-sm text-gray-600">
+            {% trans "Manage billing, payments, and financial operations" %}
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Financial Overview Statistics -->
+<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="p-5">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <span class="text-2xl">📄</span>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                    <dl>
+                        <dt class="text-sm font-medium text-gray-500 truncate">{% trans "Total Invoices" %}</dt>
+                        <dd class="text-lg font-medium text-gray-900">{{ total_invoices }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="p-5">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <span class="text-2xl">💰</span>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                    <dl>
+                        <dt class="text-sm font-medium text-gray-500 truncate">{% trans "Total Revenue" %}</dt>
+                        <dd class="text-lg font-medium text-gray-900">${{ total_revenue|floatformat:2 }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="p-5">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <span class="text-2xl">✅</span>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                    <dl>
+                        <dt class="text-sm font-medium text-gray-500 truncate">{% trans "Total Payments" %}</dt>
+                        <dd class="text-lg font-medium text-gray-900">${{ total_payments|floatformat:2 }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="p-5">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <span class="text-2xl">⚠️</span>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                    <dl>
+                        <dt class="text-sm font-medium text-gray-500 truncate">{% trans "Outstanding Balance" %}</dt>
+                        <dd class="text-lg font-medium text-gray-900">${{ outstanding_balance|floatformat:2 }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="bg-white shadow overflow-hidden sm:rounded-md mb-8">
+    <div class="px-4 py-5 sm:p-6">
+        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+            {% trans "Quick Actions" %}
+        </h3>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {% for action in quick_actions %}
+            <a href="{% url action.url %}" 
+               class="relative block p-6 border border-gray-200 rounded-lg hover:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200">
+                <div class="flex items-center">
+                    <span class="text-2xl mr-3">{{ action.icon }}</span>
+                    <span class="text-sm font-medium text-gray-900">{{ action.name }}</span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+    <!-- Recent Invoices -->
+    <div class="bg-white shadow overflow-hidden sm:rounded-md">
+        <div class="px-4 py-5 sm:p-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+                {% trans "Recent Invoices" %}
+            </h3>
+            {% if recent_invoices %}
+            <ul class="divide-y divide-gray-200">
+                {% for invoice in recent_invoices %}
+                <li class="py-3">
+                    <div class="flex items-center space-x-3">
+                        <div class="flex-1 space-y-1">
+                            <div class="flex items-center justify-between">
+                                <h4 class="text-sm font-medium">{{ invoice.invoice_number }}</h4>
+                                <p class="text-sm text-gray-900">${{ invoice.amount|floatformat:2 }}</p>
+                            </div>
+                            {% if invoice.student %}
+                            <p class="text-sm text-gray-500">{{ invoice.student.person.full_name }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-sm text-gray-500">{% trans "No recent invoices" %}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Recent Payments -->
+    <div class="bg-white shadow overflow-hidden sm:rounded-md">
+        <div class="px-4 py-5 sm:p-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+                {% trans "Recent Payments" %}
+            </h3>
+            {% if recent_payments %}
+            <ul class="divide-y divide-gray-200">
+                {% for payment in recent_payments %}
+                <li class="py-3">
+                    <div class="flex items-center space-x-3">
+                        <div class="flex-1 space-y-1">
+                            <div class="flex items-center justify-between">
+                                <h4 class="text-sm font-medium">{{ payment.payment_method|title }}</h4>
+                                <p class="text-sm text-gray-900">${{ payment.amount|floatformat:2 }}</p>
+                            </div>
+                            {% if payment.invoice.student %}
+                            <p class="text-sm text-gray-500">{{ payment.invoice.student.person.full_name }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-sm text-gray-500">{% trans "No recent payments" %}</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

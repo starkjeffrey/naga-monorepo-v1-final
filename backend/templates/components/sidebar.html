@@ -1,0 +1,337 @@
+{% load static i18n %}
+
+<!-- Sidebar Navigation -->
+<aside id="sidebar" class="overflow-y-auto">
+  <div class="py-4">
+    <!-- Active Terms Section -->
+    <div class="current-term-section px-4 pb-4 border-b border-slate-700">
+      <div class="text-gray-400 text-xs font-medium uppercase tracking-wide mb-2">{% trans "Active Terms" %}</div>
+      {% if request.active_terms %}
+        <div class="space-y-1">
+          {% for term in request.active_terms %}
+            <div class="text-slate-50 text-xs">
+              <span class="font-medium">{{ term.get_term_type_display|default:term.term_type }}:</span>
+              <span class="text-gray-300">{{ term.code }}</span>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="text-slate-50 text-sm font-medium">{% trans "No Active Terms" %}</div>
+      {% endif %}
+    </div>
+    <!-- Main Navigation -->
+    <nav class="pt-4"
+         role="navigation"
+         aria-label="{% trans 'Main navigation' %}">
+      
+      <!-- Dashboard -->
+      <a href="{% url 'web_interface:dashboard' %}"
+         class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring"
+         {% if request.resolver_match.url_name == 'dashboard' %}aria-current="page"{% endif %}>
+        <i class="fas fa-home w-5 text-center mr-3" aria-hidden="true"></i>
+        <span>{% trans "Dashboard" %}</span>
+      </a>
+      
+      <!-- Students Section -->
+      <div class="nav-section mt-2">
+        <div class="nav-section-header px-4 py-2 mx-2">
+          <div class="text-gray-400 text-xs font-medium uppercase tracking-wide">{% trans "Students" %}</div>
+        </div>
+        <a href="{% url 'web_interface:student-list' %}"
+           class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring"
+           {% if request.resolver_match.url_name == 'student-list' %}aria-current="page"{% endif %}>
+          <i class="fas fa-users w-5 text-center mr-3" aria-hidden="true"></i>
+          <span>{% trans "All Students" %}</span>
+        </a>
+        <a href="{% url 'web_interface:student-create' %}"
+           class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring"
+           {% if request.resolver_match.url_name == 'student-create' %}aria-current="page"{% endif %}>
+          <i class="fas fa-user-plus w-5 text-center mr-3" aria-hidden="true"></i>
+          <span>{% trans "Add Student" %}</span>
+        </a>
+        <a href="{% url 'web_interface:student-locator' %}"
+           class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring"
+           {% if request.resolver_match.url_name == 'student-locator' %}aria-current="page"{% endif %}>
+          <i class="fas fa-search-location w-5 text-center mr-3" aria-hidden="true"></i>
+          <span>{% trans "Student Locator" %}</span>
+        </a>
+        <a href="{% url 'web_interface:student-advanced-search' %}"
+           class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring"
+           {% if request.resolver_match.url_name == 'student-advanced-search' %}aria-current="page"{% endif %}>
+          <i class="fas fa-search w-5 text-center mr-3" aria-hidden="true"></i>
+          <span>{% trans "Advanced Search" %}</span>
+        </a>
+      </div>
+      
+      <!-- Level Testing Section -->
+      <div class="nav-section mt-4">
+        <div class="nav-section-header px-4 py-2 mx-2">
+          <div class="text-gray-400 text-xs font-medium uppercase tracking-wide">{% trans "Level Testing" %}</div>
+        </div>
+        <a href="{% url 'level_testing:application_start' %}"
+           class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring"
+           {% if request.resolver_match.url_name == 'application_start' %}aria-current="page"{% endif %}>
+          <i class="fas fa-file-signature w-5 text-center mr-3" aria-hidden="true"></i>
+          <span>{% trans "Student Application" %}</span>
+        </a>
+        {% if request.user.is_staff %}
+          <a href="{% url 'level_testing:staff_dashboard' %}"
+             class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring"
+             {% if request.resolver_match.url_name == 'staff_dashboard' %}aria-current="page"{% endif %}>
+            <i class="fas fa-tachometer-alt w-5 text-center mr-3" aria-hidden="true"></i>
+            <span>{% trans "Staff Dashboard" %}</span>
+          </a>
+          <a href="{% url 'level_testing:staff_applications' %}"
+             class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring"
+             {% if request.resolver_match.url_name == 'staff_applications' %}aria-current="page"{% endif %}>
+            <i class="fas fa-list-alt w-5 text-center mr-3" aria-hidden="true"></i>
+            <span>{% trans "Application Management" %}</span>
+          </a>
+        {% endif %}
+      </div>
+      
+      <!-- Academic Section -->
+      <div class="nav-section mt-4">
+        <div class="nav-section-header px-4 py-2 mx-2">
+          <div class="text-gray-400 text-xs font-medium uppercase tracking-wide">{% trans "Academic" %}</div>
+        </div>
+        <a href="{% url 'web_interface:course-list' %}"
+           class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring"
+           {% if request.resolver_match.url_name == 'course-list' %}aria-current="page"{% endif %}>
+          <i class="fas fa-book w-5 text-center mr-3" aria-hidden="true"></i>
+          <span>{% trans "Courses" %}</span>
+        </a>
+        <a href="{% url 'scheduling:dashboard' %}"
+           class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring"
+           {% if 'scheduling' in request.resolver_match.url_name %}aria-current="page"{% endif %}>
+          <i class="fas fa-calendar-alt w-5 text-center mr-3" aria-hidden="true"></i>
+          <span>{% trans "Class Schedule" %}</span>
+        </a>
+        <a href="{% url 'web_interface:enrollment-management' %}"
+           class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring"
+           {% if request.resolver_match.url_name == 'enrollment-management' %}aria-current="page"{% endif %}>
+          <i class="fas fa-graduation-cap w-5 text-center mr-3" aria-hidden="true"></i>
+          <span>{% trans "Enrollment" %}</span>
+        </a>
+        <a href="{% url 'web_interface:grades' %}"
+           class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring"
+           {% if request.resolver_match.url_name == 'grades' %}aria-current="page"{% endif %}>
+          <i class="fas fa-star w-5 text-center mr-3" aria-hidden="true"></i>
+          <span>{% trans "Grades" %}</span>
+        </a>
+        <a href="{% url 'web_interface:grade-entry' %}"
+           class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring"
+           {% if request.resolver_match.url_name == 'grade-entry' %}aria-current="page"{% endif %}>
+          <i class="fas fa-edit w-5 text-center mr-3" aria-hidden="true"></i>
+          <span>{% trans "Grade Entry" %}</span>
+        </a>
+        <a href="{% url 'web_interface:attendance' %}"
+           class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring"
+           {% if request.resolver_match.url_name == 'attendance' %}aria-current="page"{% endif %}>
+          <i class="fas fa-check-circle w-5 text-center mr-3" aria-hidden="true"></i>
+          <span>{% trans "Attendance" %}</span>
+          <span class="ml-auto text-xs bg-yellow-600 text-white px-2 py-0.5 rounded">{% trans "In Dev" %}</span>
+        </a>
+        <a href="{% url 'web_interface:transcripts' %}"
+           class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring"
+           {% if request.resolver_match.url_name == 'transcripts' %}aria-current="page"{% endif %}>
+          <i class="fas fa-file-alt w-5 text-center mr-3" aria-hidden="true"></i>
+          <span>{% trans "Transcripts" %}</span>
+        </a>
+      </div>
+      
+      <!-- Finance Section -->
+      <div class="nav-section mt-4">
+        <div class="nav-section-header px-4 py-2 mx-2">
+          <div class="text-gray-400 text-xs font-medium uppercase tracking-wide">{% trans "Finance" %}</div>
+        </div>
+        <a href="{% url 'finance:dashboard' %}"
+           class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring"
+           {% if 'finance' in request.resolver_match.url_name and 'dashboard' in request.resolver_match.url_name %}aria-current="page"{% endif %}>
+          <i class="fas fa-chart-line w-5 text-center mr-3" aria-hidden="true"></i>
+          <span>{% trans "Finance Dashboard" %}</span>
+        </a>
+        <a href="{% url 'web_interface:cashier' %}"
+           class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring"
+           {% if 'cashier' in request.resolver_match.url_name %}aria-current="page"{% endif %}>
+          <i class="fas fa-cash-register w-5 text-center mr-3" aria-hidden="true"></i>
+          <span>{% trans "Cashier" %}</span>
+        </a>
+        <a href="{% url 'web_interface:billing' %}"
+           class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring"
+           {% if request.resolver_match.url_name == 'billing' %}aria-current="page"{% endif %}>
+          <i class="fas fa-file-invoice w-5 text-center mr-3" aria-hidden="true"></i>
+          <span>{% trans "Billing" %}</span>
+        </a>
+        <a href="{% url 'web_interface:payment-processing' %}"
+           class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring"
+           {% if request.resolver_match.url_name == 'payment-processing' %}aria-current="page"{% endif %}>
+          <i class="fas fa-credit-card w-5 text-center mr-3" aria-hidden="true"></i>
+          <span>{% trans "Payment Processing" %}</span>
+        </a>
+        <a href="{% url 'finance:outstanding-balances' %}"
+           class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring"
+           {% if 'outstanding-balances' in request.resolver_match.url_name %}aria-current="page"{% endif %}>
+          <i class="fas fa-dollar-sign w-5 text-center mr-3" aria-hidden="true"></i>
+          <span>{% trans "Outstanding Balances" %}</span>
+        </a>
+        <a href="{% url 'finance:fee-management' %}"
+           class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring"
+           {% if 'fee-management' in request.resolver_match.url_name %}aria-current="page"{% endif %}>
+          <i class="fas fa-file-invoice-dollar w-5 text-center mr-3"
+             aria-hidden="true"></i>
+          <span>{% trans "Fee Management" %}</span>
+        </a>
+        <a href="{% url 'finance:scholarship-overview' %}"
+           class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring"
+           {% if 'scholarship' in request.resolver_match.url_name %}aria-current="page"{% endif %}>
+          <i class="fas fa-hand-holding-usd w-5 text-center mr-3"
+             aria-hidden="true"></i>
+          <span>{% trans "Scholarships" %}</span>
+        </a>
+      </div>
+      
+      <!-- Reports Section -->
+      <div class="nav-section mt-4">
+        <div class="nav-section-header px-4 py-2 mx-2">
+          <div class="text-gray-400 text-xs font-medium uppercase tracking-wide">{% trans "Reports" %}</div>
+        </div>
+        <a href="{% url 'finance:reports-hub' %}"
+           class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring"
+           {% if 'finance' in request.resolver_match.url_name and 'reports' in request.resolver_match.url_name %}aria-current="page"{% endif %}>
+          <i class="fas fa-chart-bar w-5 text-center mr-3" aria-hidden="true"></i>
+          <span>{% trans "Financial Reports" %}</span>
+        </a>
+        <a href="{% url 'web_interface:reports-dashboard' %}"
+           class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring"
+           {% if request.resolver_match.url_name == 'reports-dashboard' %}aria-current="page"{% endif %}>
+          <i class="fas fa-chart-pie w-5 text-center mr-3" aria-hidden="true"></i>
+          <span>{% trans "Dashboard Reports" %}</span>
+        </a>
+        <a href="{% url 'web_interface:teaching-reports' %}"
+           class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring"
+           {% if request.resolver_match.url_name == 'teaching-reports' %}aria-current="page"{% endif %}>
+          <i class="fas fa-chalkboard-teacher w-5 text-center mr-3" aria-hidden="true"></i>
+          <span>{% trans "Teaching Reports" %}</span>
+          <span class="ml-auto text-xs bg-yellow-600 text-white px-2 py-0.5 rounded">{% trans "In Dev" %}</span>
+        </a>
+        <a href="{% url 'web_interface:export-report' report_type='general' %}"
+           class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring">
+          <i class="fas fa-file-export w-5 text-center mr-3" aria-hidden="true"></i>
+          <span>{% trans "Export Data" %}</span>
+        </a>
+      </div>
+      
+      <!-- Schedule Builder (Staff Only) -->
+      {% if request.user.is_staff %}
+        <div class="nav-section mt-4">
+          <div class="nav-section-header px-4 py-2 mx-2">
+            <div class="text-gray-400 text-xs font-medium uppercase tracking-wide">{% trans "Planning Tools" %}</div>
+          </div>
+          <a href="{% url 'web_interface:schedule-builder' %}"
+             class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring"
+             {% if request.resolver_match.url_name == 'schedule-builder' %}aria-current="page"{% endif %}>
+            <i class="fas fa-calendar-plus w-5 text-center mr-3" aria-hidden="true"></i>
+            <span>{% trans "Schedule Builder" %}</span>
+          </a>
+          <a href="{% url 'web_interface:schedules' %}"
+             class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring"
+             {% if request.resolver_match.url_name == 'schedules' %}aria-current="page"{% endif %}>
+            <i class="fas fa-calendar w-5 text-center mr-3" aria-hidden="true"></i>
+            <span>{% trans "View Schedules" %}</span>
+          </a>
+        </div>
+      {% endif %}
+      
+      <!-- Student Portal (Placeholder) -->
+      <div class="nav-section mt-4">
+        <div class="nav-section-header px-4 py-2 mx-2">
+          <div class="text-gray-400 text-xs font-medium uppercase tracking-wide">{% trans "Student Portal" %}</div>
+        </div>
+        <a href="{% url 'web_interface:my-courses' %}"
+           class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring">
+          <i class="fas fa-book-open w-5 text-center mr-3" aria-hidden="true"></i>
+          <span>{% trans "My Courses" %}</span>
+          <span class="ml-auto text-xs bg-yellow-600 text-white px-2 py-0.5 rounded">{% trans "In Dev" %}</span>
+        </a>
+        <a href="{% url 'web_interface:my-grades' %}"
+           class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring">
+          <i class="fas fa-star-half-alt w-5 text-center mr-3" aria-hidden="true"></i>
+          <span>{% trans "My Grades" %}</span>
+          <span class="ml-auto text-xs bg-yellow-600 text-white px-2 py-0.5 rounded">{% trans "In Dev" %}</span>
+        </a>
+        <a href="{% url 'web_interface:my-balance' %}"
+           class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring">
+          <i class="fas fa-wallet w-5 text-center mr-3" aria-hidden="true"></i>
+          <span>{% trans "My Balance" %}</span>
+          <span class="ml-auto text-xs bg-yellow-600 text-white px-2 py-0.5 rounded">{% trans "In Dev" %}</span>
+        </a>
+      </div>
+      
+      <!-- Teacher Portal (Placeholder) -->
+      <div class="nav-section mt-4">
+        <div class="nav-section-header px-4 py-2 mx-2">
+          <div class="text-gray-400 text-xs font-medium uppercase tracking-wide">{% trans "Teacher Portal" %}</div>
+        </div>
+        <a href="{% url 'web_interface:my-classes' %}"
+           class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring">
+          <i class="fas fa-chalkboard w-5 text-center mr-3" aria-hidden="true"></i>
+          <span>{% trans "My Classes" %}</span>
+          <span class="ml-auto text-xs bg-yellow-600 text-white px-2 py-0.5 rounded">{% trans "In Dev" %}</span>
+        </a>
+        <a href="{% url 'web_interface:my-students' %}"
+           class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring">
+          <i class="fas fa-user-graduate w-5 text-center mr-3" aria-hidden="true"></i>
+          <span>{% trans "My Students" %}</span>
+          <span class="ml-auto text-xs bg-yellow-600 text-white px-2 py-0.5 rounded">{% trans "In Dev" %}</span>
+        </a>
+      </div>
+      
+      <!-- Administration Section -->
+      {% if request.user.is_staff %}
+        <div class="nav-section mt-4">
+          <div class="nav-section-header px-4 py-2 mx-2">
+            <div class="text-gray-400 text-xs font-medium uppercase tracking-wide">{% trans "Administration" %}</div>
+          </div>
+          <a href="{% url 'admin:index' %}"
+             class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring"
+             target="_blank">
+            <i class="fas fa-cog w-5 text-center mr-3" aria-hidden="true"></i>
+            <span>{% trans "Admin Panel" %}</span>
+            <i class="fas fa-external-link-alt w-3 ml-2 opacity-50" aria-hidden="true"></i>
+          </a>
+          <a href="{% url 'web_interface:user-list' %}"
+             class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring">
+            <i class="fas fa-users-cog w-5 text-center mr-3" aria-hidden="true"></i>
+            <span>{% trans "User Management" %}</span>
+            <span class="ml-auto text-xs bg-yellow-600 text-white px-2 py-0.5 rounded">{% trans "In Dev" %}</span>
+          </a>
+          <a href="{% url 'web_interface:backup' %}"
+             class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring">
+            <i class="fas fa-database w-5 text-center mr-3" aria-hidden="true"></i>
+            <span>{% trans "System Backup" %}</span>
+            <span class="ml-auto text-xs bg-yellow-600 text-white px-2 py-0.5 rounded">{% trans "In Dev" %}</span>
+          </a>
+        </div>
+      {% endif %}
+      
+      <!-- Settings Section -->
+      <div class="nav-section mt-4 mb-4">
+        <div class="nav-section-header px-4 py-2 mx-2">
+          <div class="text-gray-400 text-xs font-medium uppercase tracking-wide">{% trans "Settings" %}</div>
+        </div>
+        <a href="{% url 'web_interface:role-switch' %}"
+           class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring"
+           {% if request.resolver_match.url_name == 'role-switch' %}aria-current="page"{% endif %}>
+          <i class="fas fa-exchange-alt w-5 text-center mr-3" aria-hidden="true"></i>
+          <span>{% trans "Switch Role" %}</span>
+        </a>
+        <a href="{% url 'web_interface:logout' %}"
+           class="nav-link flex items-center px-4 py-3 mx-2 text-gray-200 no-underline rounded-lg transition-all duration-200 hover:bg-slate-700 hover:text-white focus-ring">
+          <i class="fas fa-sign-out-alt w-5 text-center mr-3" aria-hidden="true"></i>
+          <span>{% trans "Logout" %}</span>
+        </a>
+      </div>
+    </nav>
+  </div>
+</aside>

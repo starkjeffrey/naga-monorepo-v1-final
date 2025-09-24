@@ -1,0 +1,145 @@
+{% extends "web_interface/modals/base_modal.html" %}
+
+{% load i18n %}
+{% load web_interface_tags %}
+
+{% block modal_content %}
+  <form id="invoice-create-form"
+        hx-post="{% url 'web_interface:invoice-create' %}"
+        hx-target="#modal-overlay"
+        hx-swap="outerHTML"
+        hx-indicator="#invoice-create-loading">
+    {% csrf_token %}
+    <div class="form-sections">
+      <div class="form-section">
+        <h4 class="form-section-title">
+          <i class="fas fa-file-invoice"></i>
+          {% trans "Invoice Details" %}
+        </h4>
+        {% if not selected_student %}
+          <div class="form-group">
+            <label for="student-search" class="form-label required">{% trans "Student" %}</label>
+            <div class="student-search-container">
+              <input type="text"
+                     id="student-search"
+                     name="q"
+                     class="form-input"
+                     placeholder="{% trans 'Search for student...' %}"
+                     hx-get="{% url 'web_interface:finance-student-search' %}"
+                     hx-target="#student-search-results"
+                     hx-trigger="keyup changed delay:500ms"
+                     hx-include="this"
+                     autocomplete="off" />
+              <div id="student-search-results" class="search-results"></div>
+            </div>
+            <input type="hidden" id="student_id" name="student_id" required />
+          </div>
+        {% else %}
+          <div class="form-group">
+            <label class="form-label">{% trans "Student" %}</label>
+            <div class="selected-student">
+              <div class="student-info">
+                <span class="student-name">{{ selected_student.person.full_name }}</span>
+                <span class="student-id">{{ selected_student.student_id }}</span>
+              </div>
+            </div>
+            <input type="hidden" name="student_id" value="{{ selected_student.id }}" />
+          </div>
+        {% endif %}
+        <div class="form-row">
+          <div class="form-group">
+            <label for="amount" class="form-label required">{% trans "Amount" %}</label>
+            <div class="input-group">
+              <span class="input-group-text">$</span>
+              <input type="number"
+                     id="amount"
+                     name="amount"
+                     class="form-input"
+                     step="0.01"
+                     min="0.01"
+                     required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="due_days" class="form-label">{% trans "Due in Days" %}</label>
+            <select id="due_days" name="due_days" class="form-select">
+              <option value="30" selected>30 {% trans "days" %}</option>
+              <option value="15">15 {% trans "days" %}</option>
+              <option value="7">7 {% trans "days" %}</option>
+              <option value="1">1 {% trans "day" %}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="description" class="form-label required">{% trans "Description" %}</label>
+          <textarea id="description"
+                    name="description"
+                    class="form-textarea"
+                    rows="3"
+                    placeholder="{% trans 'Invoice description...' %}"
+                    required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="invoice_type" class="form-label">{% trans "Invoice Type" %}</label>
+          <select id="invoice_type" name="invoice_type" class="form-select">
+            <option value="COURSE">{% trans "Course Enrollment" %}</option>
+            <option value="FEE">{% trans "Administrative Fee" %}</option>
+            <option value="ADJUSTMENT">{% trans "Account Adjustment" %}</option>
+            <option value="OTHER">{% trans "Other" %}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-section">
+        <h4 class="form-section-title">
+          <i class="fas fa-info-circle"></i>
+          {% trans "Additional Information" %}
+        </h4>
+        <div class="form-group">
+          <label for="notes" class="form-label">{% trans "Internal Notes" %}</label>
+          <textarea id="notes"
+                    name="notes"
+                    class="form-textarea"
+                    rows="2"
+                    placeholder="{% trans 'Internal notes (not visible to student)...' %}"></textarea>
+        </div>
+        <div class="form-check">
+          <input type="checkbox"
+                 id="send_immediately"
+                 name="send_immediately"
+                 class="form-checkbox"
+                 checked />
+          <label for="send_immediately" class="form-check-label">{% trans "Send invoice to student immediately" %}</label>
+        </div>
+      </div>
+    </div>
+    <div id="invoice-create-loading" class="htmx-indicator">
+      <div class="loading-spinner">
+        <i class="fas fa-spinner fa-spin"></i>
+        {% trans "Creating invoice..." %}
+      </div>
+    </div>
+  </form>
+  <script>
+    // Handle student selection from search results
+    document.addEventListener('click', function(e) {
+      if (e.target.closest('.student-search-result')) {
+        const result = e.target.closest('.student-search-result');
+        const studentId = result.dataset.studentId;
+        const studentName = result.dataset.studentName;
+
+        document.getElementById('student_id').value = studentId;
+        document.getElementById('student-search').value = studentName;
+        document.getElementById('student-search-results').innerHTML = '';
+      }
+    });
+  </script>
+{% endblock %}
+{% block modal_footer %}
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" onclick="closeModal()">{% trans "Cancel" %}</button>
+    <button type="submit" class="btn btn-primary" form="invoice-create-form">
+      <i class="fas fa-file-invoice"></i>
+      {% trans "Generate Invoice" %}
+    </button>
+  </div>
+{% endblock %}

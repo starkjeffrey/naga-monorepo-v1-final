@@ -1,0 +1,12 @@
+/* Reset and let Quasar handle styling */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Let Quasar handle body styles */
+body {
+  margin: 0;
+  padding: 0;
+}

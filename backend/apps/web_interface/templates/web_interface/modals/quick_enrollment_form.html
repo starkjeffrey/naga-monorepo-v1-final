@@ -1,0 +1,187 @@
+<!-- templates/web_interface/modals/quick_enrollment_form.html -->
+<!-- INSTRUCTION FOR SONNET: Quick enrollment form modal -->
+
+<div class="bg-white rounded-lg shadow-xl">
+  <!-- Header -->
+  <div class="px-6 py-4 border-b border-gray-200">
+    <div class="flex justify-between items-center">
+      <h3 class="text-lg font-semibold text-gray-900">
+        {% trans "Quick Enrollment" %} - {{ class.course.code }}
+      </h3>
+      <button type="button" 
+              class="text-gray-400 hover:text-gray-600"
+              onclick="closeModal()">
+        <span class="sr-only">{% trans "Close" %}</span>
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="px-6 py-4">
+    <!-- Class Info -->
+    <div class="mb-6 p-4 bg-blue-50 rounded-lg">
+      <h4 class="font-medium text-gray-900">{{ class.course.title|default:class.course.name }}</h4>
+      <div class="mt-2 text-sm text-gray-600 grid grid-cols-2 gap-4">
+        <div>
+          <span class="font-medium">{% trans "Instructor:" %}</span>
+          {% if class.teacher %}
+            {{ class.teacher.person.full_name }}
+          {% elif class.instructor %}
+            {{ class.instructor.person.full_name }}
+          {% else %}
+            {% trans "TBD" %}
+          {% endif %}
+        </div>
+        <div>
+          <span class="font-medium">{% trans "Available Seats:" %}</span>
+          <span class="{% if class.seats_available > 5 %}text-green-600{% elif class.seats_available > 0 %}text-yellow-600{% else %}text-red-600{% endif %} font-semibold">
+            {{ class.seats_available|default:0 }}
+          </span>
+        </div>
+        <div>
+          <span class="font-medium">{% trans "Credits:" %}</span>
+          {{ class.course.credits|default:"3" }}
+        </div>
+        <div>
+          <span class="font-medium">{% trans "Schedule:" %}</span>
+          {% if class.schedule_display %}
+            {{ class.schedule_display }}
+          {% else %}
+            {% trans "TBD" %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Enrollment Form -->
+    <form id="quick-enrollment-form"
+          hx-post="{% url 'web_interface:process-quick-enrollment' class.id %}"
+          hx-target="#enrollment-messages"
+          hx-swap="innerHTML">
+      
+      <!-- Student Search -->
+      <div class="mb-4">
+        <label for="student-search" class="block text-sm font-medium text-gray-700 mb-2">
+          {% trans "Search Student" %}
+        </label>
+        <div class="relative">
+          <input type="text"
+                 id="student-search"
+                 name="student_search"
+                 placeholder="{% trans 'Search by ID, name, or email...' %}"
+                 hx-get="{% url 'web_interface:student-search-enrollment' %}"
+                 hx-trigger="keyup changed delay:300ms"
+                 hx-target="#student-search-results"
+                 hx-indicator="#student-search-spinner"
+                 class="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+          </div>
+          <div id="student-search-spinner" class="htmx-indicator absolute inset-y-0 right-0 pr-3 flex items-center">
+            <svg class="animate-spin h-5 w-5 text-indigo-500" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+            </svg>
+          </div>
+        </div>
+        
+        <!-- Search Results -->
+        <div id="student-search-results" class="mt-2">
+          <!-- Results will be loaded here -->
+        </div>
+      </div>
+
+      <!-- Selected Student -->
+      <div id="selected-student" class="mb-4 hidden">
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+          {% trans "Selected Student" %}
+        </label>
+        <div class="p-3 bg-green-50 border border-green-200 rounded-md">
+          <div id="selected-student-info">
+            <!-- Student info will be displayed here -->
+          </div>
+        </div>
+        <input type="hidden" id="selected-student-id" name="student_id" value="">
+      </div>
+
+      <!-- Enrollment Notes -->
+      <div class="mb-4">
+        <label for="enrollment-notes" class="block text-sm font-medium text-gray-700 mb-2">
+          {% trans "Notes (Optional)" %}
+        </label>
+        <textarea id="enrollment-notes"
+                  name="notes"
+                  rows="3"
+                  class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  placeholder="{% trans 'Any special notes or requirements...' %}"></textarea>
+      </div>
+
+      <!-- Messages -->
+      <div id="enrollment-messages" class="mb-4">
+        <!-- Messages will be displayed here -->
+      </div>
+    </form>
+  </div>
+
+  <!-- Footer -->
+  <div class="px-6 py-4 border-t border-gray-200 bg-gray-50">
+    <div class="flex justify-end space-x-3">
+      <button type="button" 
+              class="btn btn-secondary"
+              onclick="closeModal()">
+        {% trans "Cancel" %}
+      </button>
+      <button type="submit" 
+              form="quick-enrollment-form"
+              id="enroll-button"
+              class="btn btn-primary"
+              disabled>
+        {% trans "Enroll Student" %}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript for student selection -->
+<script>
+function selectStudent(studentId, studentName, studentEmail) {
+  // Set hidden input value
+  document.getElementById('selected-student-id').value = studentId;
+  
+  // Update selected student display
+  document.getElementById('selected-student-info').innerHTML = `
+    <div class="flex items-center justify-between">
+      <div>
+        <div class="font-medium text-gray-900">${studentName}</div>
+        <div class="text-sm text-gray-600">${studentEmail}</div>
+      </div>
+      <button type="button" onclick="clearSelectedStudent()" class="text-red-600 hover:text-red-800">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+  `;
+  
+  // Show selected student section
+  document.getElementById('selected-student').classList.remove('hidden');
+  
+  // Enable enroll button
+  document.getElementById('enroll-button').disabled = false;
+  
+  // Clear search results
+  document.getElementById('student-search-results').innerHTML = '';
+  document.getElementById('student-search').value = '';
+}
+
+function clearSelectedStudent() {
+  document.getElementById('selected-student-id').value = '';
+  document.getElementById('selected-student').classList.add('hidden');
+  document.getElementById('enroll-button').disabled = true;
+}
+</script>

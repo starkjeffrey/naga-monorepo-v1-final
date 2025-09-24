@@ -1,0 +1,116 @@
+[
+{
+  "model": "finance.readingclasspricing",
+  "pk": 2,
+  "fields": {
+    "created_at": "2025-07-25T06:23:26.676Z",
+    "updated_at": "2025-07-25T06:23:26.676Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "created_by": 1,
+    "updated_by": 1,
+    "effective_date": "2015-12-28",
+    "end_date": "2018-10-15",
+    "notes": "",
+    "cycle": 2,
+    "tier": "1-2",
+    "domestic_price": "100.00",
+    "foreign_price": "100.00"
+  }
+},
+{
+  "model": "finance.readingclasspricing",
+  "pk": 3,
+  "fields": {
+    "created_at": "2025-07-25T06:24:43.331Z",
+    "updated_at": "2025-07-25T06:24:43.331Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "created_by": 1,
+    "updated_by": 1,
+    "effective_date": "2015-12-28",
+    "end_date": "2018-10-15",
+    "notes": "",
+    "cycle": 2,
+    "tier": "3-5",
+    "domestic_price": "72.00",
+    "foreign_price": "72.00"
+  }
+},
+{
+  "model": "finance.readingclasspricing",
+  "pk": 4,
+  "fields": {
+    "created_at": "2025-07-25T06:25:42.626Z",
+    "updated_at": "2025-07-25T06:25:53.349Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "created_by": 1,
+    "updated_by": 1,
+    "effective_date": "2015-12-28",
+    "end_date": "2018-10-15",
+    "notes": "",
+    "cycle": 2,
+    "tier": "6-15",
+    "domestic_price": "54.00",
+    "foreign_price": "54.00"
+  }
+},
+{
+  "model": "finance.readingclasspricing",
+  "pk": 5,
+  "fields": {
+    "created_at": "2025-07-25T06:27:38.216Z",
+    "updated_at": "2025-07-31T09:45:38.293Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "created_by": 1,
+    "updated_by": 1,
+    "effective_date": "2024-02-14",
+    "end_date": null,
+    "notes": "",
+    "cycle": 2,
+    "tier": "1-2",
+    "domestic_price": "150.00",
+    "foreign_price": "250.00"
+  }
+},
+{
+  "model": "finance.readingclasspricing",
+  "pk": 6,
+  "fields": {
+    "created_at": "2025-07-25T06:28:13.529Z",
+    "updated_at": "2025-07-31T09:45:49.815Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "created_by": 1,
+    "updated_by": 1,
+    "effective_date": "2024-02-14",
+    "end_date": null,
+    "notes": "",
+    "cycle": 2,
+    "tier": "3-5",
+    "domestic_price": "100.00",
+    "foreign_price": "150.00"
+  }
+},
+{
+  "model": "finance.readingclasspricing",
+  "pk": 7,
+  "fields": {
+    "created_at": "2025-07-25T06:28:47.146Z",
+    "updated_at": "2025-07-31T09:46:25.169Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "created_by": 1,
+    "updated_by": 1,
+    "effective_date": "2024-02-14",
+    "end_date": null,
+    "notes": "",
+    "cycle": 2,
+    "tier": "6-15",
+    "domestic_price": "85.00",
+    "foreign_price": "100.00"
+  }
+}
+]

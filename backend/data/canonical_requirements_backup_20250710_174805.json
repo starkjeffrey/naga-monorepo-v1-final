@@ -1,0 +1,4277 @@
+[
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 120,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.517Z",
+      "updated_at": "2025-07-09T05:33:14.517Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 1,
+      "required_course": 10,
+      "name": "ACCT-300 - Cost Accounting I",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 121,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.522Z",
+      "updated_at": "2025-07-09T05:33:14.522Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 2,
+      "required_course": 11,
+      "name": "ACCT-310 - Accounting Principles I",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 122,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.525Z",
+      "updated_at": "2025-07-09T05:33:14.525Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 3,
+      "required_course": 12,
+      "name": "ACCT-312 - Accounting Principles II",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 123,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.528Z",
+      "updated_at": "2025-07-09T05:33:14.528Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 4,
+      "required_course": 13,
+      "name": "ACCT-313 - Accounting Principles III",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 124,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.530Z",
+      "updated_at": "2025-07-09T05:33:14.530Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 5,
+      "required_course": 15,
+      "name": "ANTH-102 - Cultural Anthropology",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 125,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.533Z",
+      "updated_at": "2025-07-09T05:33:14.533Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 6,
+      "required_course": 16,
+      "name": "ARIL-210 - Academic Research: Information Literacy",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 126,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.536Z",
+      "updated_at": "2025-07-09T05:33:14.536Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 7,
+      "required_course": 17,
+      "name": "BUS-360 - Management and Organizational Behavior Theory",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 127,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.539Z",
+      "updated_at": "2025-07-09T05:33:14.539Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 8,
+      "required_course": 18,
+      "name": "BUS-425 - Business Formation and Entrepreneurship",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 128,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.541Z",
+      "updated_at": "2025-07-09T05:33:14.541Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 9,
+      "required_course": 19,
+      "name": "BUS-460 - Fundamental of Global Business Management",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 129,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.543Z",
+      "updated_at": "2025-07-09T05:33:14.543Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 10,
+      "required_course": 20,
+      "name": "BUS-461 - Business Planning and Policy Development",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 130,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.545Z",
+      "updated_at": "2025-07-09T05:33:14.545Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 11,
+      "required_course": 21,
+      "name": "BUS-463 - Operation Management",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 131,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.548Z",
+      "updated_at": "2025-07-09T05:33:14.548Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 12,
+      "required_course": 22,
+      "name": "BUS-464 - Human Resource Management",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 132,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.550Z",
+      "updated_at": "2025-07-09T05:33:14.550Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 13,
+      "required_course": 23,
+      "name": "BUS-465 - Labor & Industrial Relations",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 133,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.552Z",
+      "updated_at": "2025-07-09T05:33:14.552Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 14,
+      "required_course": 95,
+      "name": "BUS-489 - Senior Project",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 134,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.555Z",
+      "updated_at": "2025-07-09T05:33:14.555Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 15,
+      "required_course": 285,
+      "name": "COMP-210 - Introduction to Computers",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 135,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.557Z",
+      "updated_at": "2025-07-09T05:33:14.557Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 16,
+      "required_course": 26,
+      "name": "ECON-101 - Introduction to Economics and Entrepreneurship",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 136,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.559Z",
+      "updated_at": "2025-07-09T05:33:14.559Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 17,
+      "required_course": 27,
+      "name": "ECON-211 - Microeconomic Principles",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 137,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.562Z",
+      "updated_at": "2025-07-09T05:33:14.562Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 18,
+      "required_course": 28,
+      "name": "ECON-212 - Macroeconomic Principles",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 138,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.564Z",
+      "updated_at": "2025-07-09T05:33:14.564Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 19,
+      "required_course": 46,
+      "name": "ENGL-110 - College English I: Reading & Composition",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 139,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.566Z",
+      "updated_at": "2025-07-09T05:33:14.566Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 20,
+      "required_course": 47,
+      "name": "ENGL-120 - College English II: Reading & Composition",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 140,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.569Z",
+      "updated_at": "2025-07-09T05:33:14.569Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 21,
+      "required_course": 53,
+      "name": "ENGL-210 - Fundamentals of Communication",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 141,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.571Z",
+      "updated_at": "2025-07-09T05:33:14.571Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 22,
+      "required_course": 58,
+      "name": "ENGL-311 - Technical Writing for Business",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 142,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.573Z",
+      "updated_at": "2025-07-09T05:33:14.573Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 23,
+      "required_course": 63,
+      "name": "FIN-300 - Corporate Finance",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 143,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.575Z",
+      "updated_at": "2025-07-09T05:33:14.575Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 24,
+      "required_course": 64,
+      "name": "FIN-351 - Budget Technique and Procedures",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 144,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.577Z",
+      "updated_at": "2025-07-09T05:33:14.577Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 25,
+      "required_course": 66,
+      "name": "FIN-375 - Fiscal Legislation and Taxation",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 145,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.580Z",
+      "updated_at": "2025-07-09T05:33:14.580Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 26,
+      "required_course": 67,
+      "name": "FIN-420 - Financial Management II",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 146,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.582Z",
+      "updated_at": "2025-07-09T05:33:14.582Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 27,
+      "required_course": 75,
+      "name": "HF-101 - Health Education I",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 147,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.584Z",
+      "updated_at": "2025-07-09T05:33:14.584Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 28,
+      "required_course": 77,
+      "name": "HIST-230 - History of Cambodia",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 148,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.586Z",
+      "updated_at": "2025-07-09T05:33:14.586Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 29,
+      "required_course": 84,
+      "name": "KHMR-210 - Introduction to Khmer Studies",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 149,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.589Z",
+      "updated_at": "2025-07-09T05:33:14.589Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 30,
+      "required_course": 85,
+      "name": "LAW-273 - Business Law",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 150,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.591Z",
+      "updated_at": "2025-07-09T05:33:14.591Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 31,
+      "required_course": 91,
+      "name": "MATH-101 - College Algebra",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 151,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.594Z",
+      "updated_at": "2025-07-09T05:33:14.594Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 32,
+      "required_course": 92,
+      "name": "MGT-210 - Management Principles",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 152,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.596Z",
+      "updated_at": "2025-07-09T05:33:14.596Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 33,
+      "required_course": 93,
+      "name": "MGT-466 - Management and Leadership Development Skills",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 153,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.599Z",
+      "updated_at": "2025-07-09T05:33:14.599Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 34,
+      "required_course": 94,
+      "name": "MGT-467 - Administrative Procurement and Negotiation Skills",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 154,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.601Z",
+      "updated_at": "2025-07-09T05:33:14.601Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 35,
+      "required_course": 96,
+      "name": "MKT-220 - Introduction to Marketing",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 155,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.603Z",
+      "updated_at": "2025-07-09T05:33:14.603Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 36,
+      "required_course": 97,
+      "name": "NATS-102 - Introduction to Environmental Science",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 156,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.606Z",
+      "updated_at": "2025-07-09T05:33:14.606Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 37,
+      "required_course": 100,
+      "name": "PHIL-110 - Logic & Critical Thinking",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 157,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.608Z",
+      "updated_at": "2025-07-09T05:33:14.608Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 38,
+      "required_course": 103,
+      "name": "PHIL-312 - Introduction to Ethics",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 158,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.610Z",
+      "updated_at": "2025-07-09T05:33:14.610Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 39,
+      "required_course": 104,
+      "name": "POL-101 - Introduction to Political Science",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 159,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.612Z",
+      "updated_at": "2025-07-09T05:33:14.612Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 40,
+      "required_course": 106,
+      "name": "POL-201A - ASEAN Government, Politics and Economics",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 160,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.615Z",
+      "updated_at": "2025-07-09T05:33:14.615Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 41,
+      "required_course": 113,
+      "name": "PSYC-102 - Personal Growth and Development",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 161,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.618Z",
+      "updated_at": "2025-07-09T05:33:14.618Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 42,
+      "required_course": 115,
+      "name": "SOC-110 - Gender Studies",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 162,
+    "fields": {
+      "created_at": "2025-07-09T05:33:14.622Z",
+      "updated_at": "2025-07-09T05:33:14.622Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 1,
+      "sequence_number": 43,
+      "required_course": 117,
+      "name": "STAT-105 - Introduction to Statistics",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 163,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.633Z",
+      "updated_at": "2025-07-09T05:43:25.633Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 1,
+      "required_course": 15,
+      "name": "ANTH-102 - Cultural Anthropology",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 164,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.645Z",
+      "updated_at": "2025-07-09T05:43:25.645Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 2,
+      "required_course": 16,
+      "name": "ARIL-210 - Academic Research: Information Literacy",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 165,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.648Z",
+      "updated_at": "2025-07-09T05:43:25.648Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 3,
+      "required_course": 285,
+      "name": "COMP-210 - Introduction to Computers",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 166,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.652Z",
+      "updated_at": "2025-07-09T05:43:25.652Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 4,
+      "required_course": 37,
+      "name": "EDUC-300 - Foundations of Education",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 167,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.656Z",
+      "updated_at": "2025-07-09T05:43:25.656Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 5,
+      "required_course": 38,
+      "name": "EDUC-301 - Introduction to Educational Philosophy",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 168,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.660Z",
+      "updated_at": "2025-07-09T05:43:25.660Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 6,
+      "required_course": 39,
+      "name": "EDUC-400 - Introduction to TESOL",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 169,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.666Z",
+      "updated_at": "2025-07-09T05:43:25.666Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 7,
+      "required_course": 40,
+      "name": "EDUC-401 - Introduction to Language Acquisition",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 170,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.670Z",
+      "updated_at": "2025-07-09T05:43:25.670Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 8,
+      "required_course": 41,
+      "name": "EDUC-403 - Methodology in TESOL II/Methodology in Teaching English II",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 171,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.673Z",
+      "updated_at": "2025-07-09T05:43:25.673Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 9,
+      "required_course": 42,
+      "name": "EDUC-404 - Introduction to Assessment and Evaluation",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 172,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.676Z",
+      "updated_at": "2025-07-09T05:43:25.676Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 10,
+      "required_course": 43,
+      "name": "EDUC-405 - Introduction to Curriculum & Material Design",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 173,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.678Z",
+      "updated_at": "2025-07-09T05:43:25.678Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 11,
+      "required_course": 44,
+      "name": "EDUC-407 - Seminar in TESOL",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 174,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.681Z",
+      "updated_at": "2025-07-09T05:43:25.681Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 12,
+      "required_course": 45,
+      "name": "EDUC-408 - Practicum in TESOL/Senior Project",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 175,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.685Z",
+      "updated_at": "2025-07-09T05:43:25.685Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 13,
+      "required_course": 46,
+      "name": "ENGL-110 - College English I: Reading & Composition",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 176,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.691Z",
+      "updated_at": "2025-07-09T05:43:25.691Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 14,
+      "required_course": 47,
+      "name": "ENGL-120 - College English II: Reading & Composition",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 177,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.699Z",
+      "updated_at": "2025-07-09T05:43:25.699Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 15,
+      "required_course": 48,
+      "name": "ENGL-130 - English Phonetics and Pronunciation",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 178,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.704Z",
+      "updated_at": "2025-07-09T05:43:25.704Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 16,
+      "required_course": 49,
+      "name": "ENGL-140 - Speaking and Listening Development",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 179,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.709Z",
+      "updated_at": "2025-07-09T05:43:25.709Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 17,
+      "required_course": 50,
+      "name": "ENGL-200 - Basic Research and Academic Writing",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 180,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.712Z",
+      "updated_at": "2025-07-09T05:43:25.712Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 18,
+      "required_course": 51,
+      "name": "ENGL-200A - English for Effective Communication",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 181,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.716Z",
+      "updated_at": "2025-07-09T05:43:25.716Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 19,
+      "required_course": 52,
+      "name": "ENGL-201A - Writing Development",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 182,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.719Z",
+      "updated_at": "2025-07-09T05:43:25.719Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 20,
+      "required_course": 53,
+      "name": "ENGL-210 - Fundamentals of Communication",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 183,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.721Z",
+      "updated_at": "2025-07-09T05:43:25.721Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 21,
+      "required_course": 54,
+      "name": "ENGL-301 - Advanced English: Grammar & Composition",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 184,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.724Z",
+      "updated_at": "2025-07-09T05:43:25.724Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 22,
+      "required_course": 55,
+      "name": "ENGL-302A - Advanced Writing",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 185,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.726Z",
+      "updated_at": "2025-07-09T05:43:25.726Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 23,
+      "required_course": 56,
+      "name": "ENGL-303 - English Syntax",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 186,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.728Z",
+      "updated_at": "2025-07-09T05:43:25.728Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 24,
+      "required_course": 57,
+      "name": "ENGL-306 - Introduction to Literature",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 187,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.731Z",
+      "updated_at": "2025-07-09T05:43:25.731Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 25,
+      "required_course": 59,
+      "name": "ENGL-401A - English for Proficiency Testing",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 188,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.733Z",
+      "updated_at": "2025-07-09T05:43:25.733Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 26,
+      "required_course": 60,
+      "name": "ENGL-403 - Advanced Conversation",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 189,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.735Z",
+      "updated_at": "2025-07-09T05:43:25.735Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 27,
+      "required_course": 61,
+      "name": "ENGL-450 - Introduction to Translation: Khmer to English, English to Khmer",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 190,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.737Z",
+      "updated_at": "2025-07-09T05:43:25.737Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 28,
+      "required_course": 75,
+      "name": "HF-101 - Health Education I",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 191,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.739Z",
+      "updated_at": "2025-07-09T05:43:25.739Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 29,
+      "required_course": 76,
+      "name": "HIST-101 - World Civilization",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 192,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.741Z",
+      "updated_at": "2025-07-09T05:43:25.741Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 30,
+      "required_course": 77,
+      "name": "HIST-230 - History of Cambodia",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 193,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.744Z",
+      "updated_at": "2025-07-09T05:43:25.744Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 31,
+      "required_course": 84,
+      "name": "KHMR-210 - Introduction to Khmer Studies",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 194,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.746Z",
+      "updated_at": "2025-07-09T05:43:25.746Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 32,
+      "required_course": 90,
+      "name": "LIT-325 - Comparative Literature",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 195,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.748Z",
+      "updated_at": "2025-07-09T05:43:25.748Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 33,
+      "required_course": 91,
+      "name": "MATH-101 - College Algebra",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 196,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.750Z",
+      "updated_at": "2025-07-09T05:43:25.750Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 34,
+      "required_course": 100,
+      "name": "PHIL-110 - Logic & Critical Thinking",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 197,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.752Z",
+      "updated_at": "2025-07-09T05:43:25.752Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 35,
+      "required_course": 102,
+      "name": "PHIL-213 - Introduction to Buddhism & Eastern Philosophy",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 198,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.754Z",
+      "updated_at": "2025-07-09T05:43:25.754Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 36,
+      "required_course": 103,
+      "name": "PHIL-312 - Introduction to Ethics",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 199,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.756Z",
+      "updated_at": "2025-07-09T05:43:25.756Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 37,
+      "required_course": 104,
+      "name": "POL-101 - Introduction to Political Science",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 200,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.758Z",
+      "updated_at": "2025-07-09T05:43:25.758Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 38,
+      "required_course": 106,
+      "name": "POL-201A - ASEAN Government, Politics and Economics",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 201,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.760Z",
+      "updated_at": "2025-07-09T05:43:25.760Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 39,
+      "required_course": 113,
+      "name": "PSYC-102 - Personal Growth and Development",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 202,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.762Z",
+      "updated_at": "2025-07-09T05:43:25.762Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 40,
+      "required_course": 114,
+      "name": "PSYC-313 - Education and Character Building",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 203,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.764Z",
+      "updated_at": "2025-07-09T05:43:25.764Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 41,
+      "required_course": 115,
+      "name": "SOC-110 - Gender Studies",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 204,
+    "fields": {
+      "created_at": "2025-07-09T05:43:25.766Z",
+      "updated_at": "2025-07-09T05:43:25.766Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 5,
+      "sequence_number": 42,
+      "required_course": 117,
+      "name": "STAT-105 - Introduction to Statistics",
+      "description": "",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": ""
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 205,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.341Z",
+      "updated_at": "2025-07-10T10:28:51.341Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 1,
+      "required_course": 10,
+      "name": "ACCT-300 - Cost Accounting I",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 206,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.348Z",
+      "updated_at": "2025-07-10T10:28:51.348Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 2,
+      "required_course": 11,
+      "name": "ACCT-310 - Accounting Principles I",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 207,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.351Z",
+      "updated_at": "2025-07-10T10:28:51.351Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 3,
+      "required_course": 12,
+      "name": "ACCT-312 - Accounting Principles II",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 208,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.357Z",
+      "updated_at": "2025-07-10T10:28:51.357Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 4,
+      "required_course": 13,
+      "name": "ACCT-313 - Accounting Principles III",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 209,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.361Z",
+      "updated_at": "2025-07-10T10:28:51.361Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 5,
+      "required_course": 14,
+      "name": "ACCT-432 - Cost Accounting I (Managerial Accounting I)",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 210,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.367Z",
+      "updated_at": "2025-07-10T10:28:51.367Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 6,
+      "required_course": 15,
+      "name": "ANTH-102 - Cultural Anthropology",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 211,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.370Z",
+      "updated_at": "2025-07-10T10:28:51.370Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 7,
+      "required_course": 16,
+      "name": "ARIL-210 - Academic Research: Information Literacy",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 212,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.372Z",
+      "updated_at": "2025-07-10T10:28:51.372Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 8,
+      "required_course": 7,
+      "name": "COMEX-488 - Exit Exam",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 213,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.374Z",
+      "updated_at": "2025-07-10T10:28:51.374Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 9,
+      "required_course": 285,
+      "name": "COMP-210 - Introduction to Computers",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 214,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.376Z",
+      "updated_at": "2025-07-10T10:28:51.376Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 10,
+      "required_course": 26,
+      "name": "ECON-101 - Introduction to Economics and Entrepreneurship",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 215,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.377Z",
+      "updated_at": "2025-07-10T10:28:51.377Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 11,
+      "required_course": 27,
+      "name": "ECON-211 - Microeconomic Principles",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 216,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.379Z",
+      "updated_at": "2025-07-10T10:28:51.379Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 12,
+      "required_course": 30,
+      "name": "ECON-310A - Introduction to Economics and Entrepreneurship",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 217,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.381Z",
+      "updated_at": "2025-07-10T10:28:51.381Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 13,
+      "required_course": 32,
+      "name": "ECON-425 - Principles of Public Finance",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 218,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.383Z",
+      "updated_at": "2025-07-10T10:28:51.383Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 14,
+      "required_course": 33,
+      "name": "ECON-449 - International Economics and Finance",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 219,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.385Z",
+      "updated_at": "2025-07-10T10:28:51.385Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 15,
+      "required_course": 35,
+      "name": "ECON-456 - Economic Analysis of Public Policy",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 220,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.387Z",
+      "updated_at": "2025-07-10T10:28:51.387Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 16,
+      "required_course": 46,
+      "name": "ENGL-110 - College English I: Reading & Composition",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 221,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.389Z",
+      "updated_at": "2025-07-10T10:28:51.389Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 17,
+      "required_course": 47,
+      "name": "ENGL-120 - College English II: Reading & Composition",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 222,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.390Z",
+      "updated_at": "2025-07-10T10:28:51.390Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 18,
+      "required_course": 53,
+      "name": "ENGL-210 - Fundamentals of Communication",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 223,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.392Z",
+      "updated_at": "2025-07-10T10:28:51.392Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 19,
+      "required_course": 58,
+      "name": "ENGL-311 - Technical Writing for Business",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 224,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.394Z",
+      "updated_at": "2025-07-10T10:28:51.394Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 20,
+      "required_course": 62,
+      "name": "FIN-299 - Financial Management I",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 225,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.396Z",
+      "updated_at": "2025-07-10T10:28:51.396Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 21,
+      "required_course": 63,
+      "name": "FIN-300 - Corporate Finance",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 226,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.398Z",
+      "updated_at": "2025-07-10T10:28:51.398Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 22,
+      "required_course": 64,
+      "name": "FIN-351 - Budget Technique and Procedures",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 227,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.399Z",
+      "updated_at": "2025-07-10T10:28:51.399Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 23,
+      "required_course": 65,
+      "name": "FIN-360 - Financial Institutions",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 228,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.400Z",
+      "updated_at": "2025-07-10T10:28:51.400Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 24,
+      "required_course": 66,
+      "name": "FIN-375 - Fiscal Legislation and Taxation",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 229,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.403Z",
+      "updated_at": "2025-07-10T10:28:51.403Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 25,
+      "required_course": 67,
+      "name": "FIN-420 - Financial Management II",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 230,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.404Z",
+      "updated_at": "2025-07-10T10:28:51.404Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 26,
+      "required_course": 68,
+      "name": "FIN-442 - Risk and Credit Management",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 231,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.406Z",
+      "updated_at": "2025-07-10T10:28:51.406Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 27,
+      "required_course": 69,
+      "name": "FIN-442A - Risk Management & Insurance",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 232,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.407Z",
+      "updated_at": "2025-07-10T10:28:51.407Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 28,
+      "required_course": 70,
+      "name": "FIN-443 - Bank Operations",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 233,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.408Z",
+      "updated_at": "2025-07-10T10:28:51.408Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 29,
+      "required_course": 71,
+      "name": "FIN-444 - Business Decision Analysis",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 234,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.409Z",
+      "updated_at": "2025-07-10T10:28:51.409Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 30,
+      "required_course": 72,
+      "name": "FIN-445 - Investment Principles & Portfolio Management",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 235,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.410Z",
+      "updated_at": "2025-07-10T10:28:51.410Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 31,
+      "required_course": 73,
+      "name": "FIN-453 - Money, Banking and Financial Markets",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 236,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.411Z",
+      "updated_at": "2025-07-10T10:28:51.411Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 32,
+      "required_course": 74,
+      "name": "FIN-489 - Senior Project",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 237,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.413Z",
+      "updated_at": "2025-07-10T10:28:51.413Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 33,
+      "required_course": 75,
+      "name": "HF-101 - Health Education I",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 238,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.414Z",
+      "updated_at": "2025-07-10T10:28:51.414Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 34,
+      "required_course": 77,
+      "name": "HIST-230 - History of Cambodia",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 239,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.415Z",
+      "updated_at": "2025-07-10T10:28:51.415Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 35,
+      "required_course": 84,
+      "name": "KHMR-210 - Introduction to Khmer Studies",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 240,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.417Z",
+      "updated_at": "2025-07-10T10:28:51.417Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 36,
+      "required_course": 85,
+      "name": "LAW-273 - Business Law",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 241,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.418Z",
+      "updated_at": "2025-07-10T10:28:51.418Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 37,
+      "required_course": 87,
+      "name": "LAW-301A - Corporate & Business Law",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 242,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.419Z",
+      "updated_at": "2025-07-10T10:28:51.419Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 38,
+      "required_course": 91,
+      "name": "MATH-101 - College Algebra",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 243,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.420Z",
+      "updated_at": "2025-07-10T10:28:51.420Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 39,
+      "required_course": 92,
+      "name": "MGT-210 - Management Principles",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 244,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.421Z",
+      "updated_at": "2025-07-10T10:28:51.421Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 40,
+      "required_course": 93,
+      "name": "MGT-466 - Management and Leadership Development Skills",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 245,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.422Z",
+      "updated_at": "2025-07-10T10:28:51.422Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 41,
+      "required_course": 96,
+      "name": "MKT-220 - Introduction to Marketing",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 246,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.423Z",
+      "updated_at": "2025-07-10T10:28:51.423Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 42,
+      "required_course": 97,
+      "name": "NATS-102 - Introduction to Environmental Science",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 247,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.424Z",
+      "updated_at": "2025-07-10T10:28:51.424Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 43,
+      "required_course": 100,
+      "name": "PHIL-110 - Logic & Critical Thinking",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 248,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.425Z",
+      "updated_at": "2025-07-10T10:28:51.425Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 44,
+      "required_course": 103,
+      "name": "PHIL-312 - Introduction to Ethics",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 249,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.426Z",
+      "updated_at": "2025-07-10T10:28:51.426Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 45,
+      "required_course": 104,
+      "name": "POL-101 - Introduction to Political Science",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 250,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.428Z",
+      "updated_at": "2025-07-10T10:28:51.428Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 46,
+      "required_course": 106,
+      "name": "POL-201A - ASEAN Government, Politics and Economics",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 251,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.429Z",
+      "updated_at": "2025-07-10T10:28:51.429Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 47,
+      "required_course": 113,
+      "name": "PSYC-102 - Personal Growth and Development",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 252,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.430Z",
+      "updated_at": "2025-07-10T10:28:51.430Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 48,
+      "required_course": 115,
+      "name": "SOC-110 - Gender Studies",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 253,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.431Z",
+      "updated_at": "2025-07-10T10:28:51.431Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 4,
+      "sequence_number": 49,
+      "required_course": 117,
+      "name": "STAT-105 - Introduction to Statistics",
+      "description": "Required course for Finance and Banking degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'fin'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 254,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.438Z",
+      "updated_at": "2025-07-10T10:28:51.438Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 1,
+      "required_course": 15,
+      "name": "ANTH-102 - Cultural Anthropology",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 255,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.439Z",
+      "updated_at": "2025-07-10T10:28:51.439Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 2,
+      "required_course": 16,
+      "name": "ARIL-210 - Academic Research: Information Literacy",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 256,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.440Z",
+      "updated_at": "2025-07-10T10:28:51.440Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 3,
+      "required_course": 7,
+      "name": "COMEX-488 - Exit Exam",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 257,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.441Z",
+      "updated_at": "2025-07-10T10:28:51.441Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 4,
+      "required_course": 285,
+      "name": "COMP-210 - Introduction to Computers",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 258,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.442Z",
+      "updated_at": "2025-07-10T10:28:51.442Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 5,
+      "required_course": 26,
+      "name": "ECON-101 - Introduction to Economics and Entrepreneurship",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 259,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.443Z",
+      "updated_at": "2025-07-10T10:28:51.443Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 6,
+      "required_course": 29,
+      "name": "ECON-310 - Economic Development",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 260,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.444Z",
+      "updated_at": "2025-07-10T10:28:51.444Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 7,
+      "required_course": 30,
+      "name": "ECON-310A - Introduction to Economics and Entrepreneurship",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 261,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.446Z",
+      "updated_at": "2025-07-10T10:28:51.446Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 8,
+      "required_course": 31,
+      "name": "ECON-368 - Political Economy",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 262,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.447Z",
+      "updated_at": "2025-07-10T10:28:51.447Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 9,
+      "required_course": 34,
+      "name": "ECON-455 - International Economics",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 263,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.448Z",
+      "updated_at": "2025-07-10T10:28:51.448Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 10,
+      "required_course": 36,
+      "name": "ECON-459 - Comparative Economic Systems",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 264,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.449Z",
+      "updated_at": "2025-07-10T10:28:51.449Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 11,
+      "required_course": 46,
+      "name": "ENGL-110 - College English I: Reading & Composition",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 265,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.450Z",
+      "updated_at": "2025-07-10T10:28:51.450Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 12,
+      "required_course": 47,
+      "name": "ENGL-120 - College English II: Reading & Composition",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 266,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.451Z",
+      "updated_at": "2025-07-10T10:28:51.451Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 13,
+      "required_course": 53,
+      "name": "ENGL-210 - Fundamentals of Communication",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 267,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.452Z",
+      "updated_at": "2025-07-10T10:28:51.452Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 14,
+      "required_course": 75,
+      "name": "HF-101 - Health Education I",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 268,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.453Z",
+      "updated_at": "2025-07-10T10:28:51.453Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 15,
+      "required_course": 76,
+      "name": "HIST-101 - World Civilization",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 269,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.454Z",
+      "updated_at": "2025-07-10T10:28:51.454Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 16,
+      "required_course": 77,
+      "name": "HIST-230 - History of Cambodia",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 270,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.455Z",
+      "updated_at": "2025-07-10T10:28:51.455Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 17,
+      "required_course": 78,
+      "name": "IR-479 - Communism, Fascism, and Democracy",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 271,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.457Z",
+      "updated_at": "2025-07-10T10:28:51.457Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 18,
+      "required_course": 79,
+      "name": "IR-480 - Theories of International Politics",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 272,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.458Z",
+      "updated_at": "2025-07-10T10:28:51.458Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 19,
+      "required_course": 80,
+      "name": "IR-481 - United Nations System",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 273,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.459Z",
+      "updated_at": "2025-07-10T10:28:51.459Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 20,
+      "required_course": 81,
+      "name": "IR-482 - Political Systems of Major Asian Nations",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 274,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.460Z",
+      "updated_at": "2025-07-10T10:28:51.460Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 21,
+      "required_course": 82,
+      "name": "IR-485 - Modern Diplomacy and International Cooperation",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 275,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.461Z",
+      "updated_at": "2025-07-10T10:28:51.461Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 22,
+      "required_course": 83,
+      "name": "IR-489 - Senior Project",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 276,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.462Z",
+      "updated_at": "2025-07-10T10:28:51.462Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 23,
+      "required_course": 84,
+      "name": "KHMR-210 - Introduction to Khmer Studies",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 277,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.464Z",
+      "updated_at": "2025-07-10T10:28:51.464Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 24,
+      "required_course": 86,
+      "name": "LAW-301 - Introduction to Law",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 278,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.465Z",
+      "updated_at": "2025-07-10T10:28:51.465Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 25,
+      "required_course": 88,
+      "name": "LAW-304 - Introduction to International Law",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 279,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.466Z",
+      "updated_at": "2025-07-10T10:28:51.466Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 26,
+      "required_course": 89,
+      "name": "LAW-305 - International Business Transactions and Dispute Resolutions",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 280,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.467Z",
+      "updated_at": "2025-07-10T10:28:51.467Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 27,
+      "required_course": 91,
+      "name": "MATH-101 - College Algebra",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 281,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.468Z",
+      "updated_at": "2025-07-10T10:28:51.468Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 28,
+      "required_course": 97,
+      "name": "NATS-102 - Introduction to Environmental Science",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 282,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.469Z",
+      "updated_at": "2025-07-10T10:28:51.469Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 29,
+      "required_course": 98,
+      "name": "PA-110 - Theories of International Relations",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 283,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.470Z",
+      "updated_at": "2025-07-10T10:28:51.470Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 30,
+      "required_course": 99,
+      "name": "PAD-110 - Introduction to Public Policy and Administration",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 284,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.472Z",
+      "updated_at": "2025-07-10T10:28:51.472Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 31,
+      "required_course": 100,
+      "name": "PHIL-110 - Logic & Critical Thinking",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 285,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.473Z",
+      "updated_at": "2025-07-10T10:28:51.473Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 32,
+      "required_course": 101,
+      "name": "PHIL-210 - Introduction to World Philosophy",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 286,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.474Z",
+      "updated_at": "2025-07-10T10:28:51.474Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 33,
+      "required_course": 103,
+      "name": "PHIL-312 - Introduction to Ethics",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 287,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.475Z",
+      "updated_at": "2025-07-10T10:28:51.475Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 34,
+      "required_course": 104,
+      "name": "POL-101 - Introduction to Political Science",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 288,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.477Z",
+      "updated_at": "2025-07-10T10:28:51.477Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 35,
+      "required_course": 105,
+      "name": "POL-120 - Theories of International Relations",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 289,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.478Z",
+      "updated_at": "2025-07-10T10:28:51.478Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 36,
+      "required_course": 106,
+      "name": "POL-201A - ASEAN Government, Politics and Economics",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 290,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.479Z",
+      "updated_at": "2025-07-10T10:28:51.479Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 37,
+      "required_course": 107,
+      "name": "POL-302 - International Organizations",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 291,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.481Z",
+      "updated_at": "2025-07-10T10:28:51.481Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 38,
+      "required_course": 108,
+      "name": "POL-304 - Contemporary Political Theory",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 292,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.482Z",
+      "updated_at": "2025-07-10T10:28:51.482Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 39,
+      "required_course": 109,
+      "name": "POL-305 - Human Rights and World Politics",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 293,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.483Z",
+      "updated_at": "2025-07-10T10:28:51.483Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 40,
+      "required_course": 110,
+      "name": "POL-306 - The Politics and Economics of Major Regional Powers: The US, China, India and EU",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 294,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.484Z",
+      "updated_at": "2025-07-10T10:28:51.484Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 41,
+      "required_course": 111,
+      "name": "POL-405 - The Politics and Economics of Globalization",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 295,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.486Z",
+      "updated_at": "2025-07-10T10:28:51.486Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 42,
+      "required_course": 112,
+      "name": "POL-413 - Comparative Political Systems",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 296,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.487Z",
+      "updated_at": "2025-07-10T10:28:51.487Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 43,
+      "required_course": 113,
+      "name": "PSYC-102 - Personal Growth and Development",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 297,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.488Z",
+      "updated_at": "2025-07-10T10:28:51.488Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 44,
+      "required_course": 115,
+      "name": "SOC-110 - Gender Studies",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 298,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.490Z",
+      "updated_at": "2025-07-10T10:28:51.490Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 45,
+      "required_course": 116,
+      "name": "SOC-429 - Research Methods in Social Science",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 299,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.491Z",
+      "updated_at": "2025-07-10T10:28:51.491Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 6,
+      "sequence_number": 46,
+      "required_course": 117,
+      "name": "STAT-105 - Introduction to Statistics",
+      "description": "Required course for International Relations degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'int'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 300,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.494Z",
+      "updated_at": "2025-07-10T10:28:51.494Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 1,
+      "required_course": 11,
+      "name": "ACCT-310 - Accounting Principles I",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 301,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.496Z",
+      "updated_at": "2025-07-10T10:28:51.496Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 2,
+      "required_course": 12,
+      "name": "ACCT-312 - Accounting Principles II",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 302,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.497Z",
+      "updated_at": "2025-07-10T10:28:51.497Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 3,
+      "required_course": 15,
+      "name": "ANTH-102 - Cultural Anthropology",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 303,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.498Z",
+      "updated_at": "2025-07-10T10:28:51.498Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 4,
+      "required_course": 16,
+      "name": "ARIL-210 - Academic Research: Information Literacy",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 304,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.499Z",
+      "updated_at": "2025-07-10T10:28:51.499Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 5,
+      "required_course": 7,
+      "name": "COMEX-488 - Exit Exam",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 305,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.500Z",
+      "updated_at": "2025-07-10T10:28:51.500Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 6,
+      "required_course": 285,
+      "name": "COMP-210 - Introduction to Computers",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 306,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.501Z",
+      "updated_at": "2025-07-10T10:28:51.501Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 7,
+      "required_course": 46,
+      "name": "ENGL-110 - College English I: Reading & Composition",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 307,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.503Z",
+      "updated_at": "2025-07-10T10:28:51.503Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 8,
+      "required_course": 47,
+      "name": "ENGL-120 - College English II: Reading & Composition",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 308,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.504Z",
+      "updated_at": "2025-07-10T10:28:51.504Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 9,
+      "required_course": 75,
+      "name": "HF-101 - Health Education I",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 309,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.505Z",
+      "updated_at": "2025-07-10T10:28:51.505Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 10,
+      "required_course": 77,
+      "name": "HIST-230 - History of Cambodia",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 310,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.506Z",
+      "updated_at": "2025-07-10T10:28:51.506Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 11,
+      "required_course": 84,
+      "name": "KHMR-210 - Introduction to Khmer Studies",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 311,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.507Z",
+      "updated_at": "2025-07-10T10:28:51.507Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 12,
+      "required_course": 91,
+      "name": "MATH-101 - College Algebra",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 312,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.509Z",
+      "updated_at": "2025-07-10T10:28:51.509Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 13,
+      "required_course": 92,
+      "name": "MGT-210 - Management Principles",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 313,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.510Z",
+      "updated_at": "2025-07-10T10:28:51.510Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 14,
+      "required_course": 93,
+      "name": "MGT-466 - Management and Leadership Development Skills",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 314,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.511Z",
+      "updated_at": "2025-07-10T10:28:51.511Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 15,
+      "required_course": 97,
+      "name": "NATS-102 - Introduction to Environmental Science",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 315,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.512Z",
+      "updated_at": "2025-07-10T10:28:51.512Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 16,
+      "required_course": 100,
+      "name": "PHIL-110 - Logic & Critical Thinking",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 316,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.514Z",
+      "updated_at": "2025-07-10T10:28:51.514Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 17,
+      "required_course": 103,
+      "name": "PHIL-312 - Introduction to Ethics",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 317,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.515Z",
+      "updated_at": "2025-07-10T10:28:51.515Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 18,
+      "required_course": 104,
+      "name": "POL-101 - Introduction to Political Science",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 318,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.516Z",
+      "updated_at": "2025-07-10T10:28:51.516Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 19,
+      "required_course": 106,
+      "name": "POL-201A - ASEAN Government, Politics and Economics",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 319,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.517Z",
+      "updated_at": "2025-07-10T10:28:51.517Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 20,
+      "required_course": 113,
+      "name": "PSYC-102 - Personal Growth and Development",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 320,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.518Z",
+      "updated_at": "2025-07-10T10:28:51.518Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 21,
+      "required_course": 115,
+      "name": "SOC-110 - Gender Studies",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 321,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.520Z",
+      "updated_at": "2025-07-10T10:28:51.520Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 22,
+      "required_course": 118,
+      "name": "THM-215 - Introduction to Tourism and Hospitality",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 322,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.521Z",
+      "updated_at": "2025-07-10T10:28:51.521Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 23,
+      "required_course": 119,
+      "name": "THM-225 - ASEAN Tourism Products",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 323,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.522Z",
+      "updated_at": "2025-07-10T10:28:51.522Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 24,
+      "required_course": 120,
+      "name": "THM-311 - Customer Service",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 324,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.523Z",
+      "updated_at": "2025-07-10T10:28:51.523Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 25,
+      "required_course": 121,
+      "name": "THM-312 - Tourism and Cultural Heritage",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 325,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.525Z",
+      "updated_at": "2025-07-10T10:28:51.525Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 26,
+      "required_course": 122,
+      "name": "THM-313 - Introduction to Interpersonal Communication",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 326,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.526Z",
+      "updated_at": "2025-07-10T10:28:51.526Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 27,
+      "required_course": 123,
+      "name": "THM-314 - Tourism Economics",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 327,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.527Z",
+      "updated_at": "2025-07-10T10:28:51.527Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 28,
+      "required_course": 124,
+      "name": "THM-321 - Entrepreneurship & Small Business Management in Hospitality Industry",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 328,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.528Z",
+      "updated_at": "2025-07-10T10:28:51.528Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 29,
+      "required_course": 125,
+      "name": "THM-322 - Front Office Operation and Management",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 329,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.530Z",
+      "updated_at": "2025-07-10T10:28:51.530Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 30,
+      "required_course": 126,
+      "name": "THM-323 - Hospitality Sales and Promotion",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 330,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.531Z",
+      "updated_at": "2025-07-10T10:28:51.531Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 31,
+      "required_course": 127,
+      "name": "THM-324 - Hospitality Supervision",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 331,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.532Z",
+      "updated_at": "2025-07-10T10:28:51.532Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 32,
+      "required_course": 128,
+      "name": "THM-331 - Statistics for Tourism and Hospitality",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 332,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.534Z",
+      "updated_at": "2025-07-10T10:28:51.534Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 33,
+      "required_course": 129,
+      "name": "THM-332 - Hospitality Accounting and Financial Management",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 333,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.536Z",
+      "updated_at": "2025-07-10T10:28:51.536Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 34,
+      "required_course": 130,
+      "name": "THM-333 - Catering, Food, and Beverage Management",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 334,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.537Z",
+      "updated_at": "2025-07-10T10:28:51.537Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 35,
+      "required_course": 131,
+      "name": "THM-411 - Hotel & Resort Operation and Management",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 335,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.539Z",
+      "updated_at": "2025-07-10T10:28:51.539Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 36,
+      "required_course": 132,
+      "name": "THM-412 - Travel Agency and Tour Operations",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 336,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.541Z",
+      "updated_at": "2025-07-10T10:28:51.541Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 37,
+      "required_course": 133,
+      "name": "THM-413 - Events: Meetings, Conventions, adn Exhibitions",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 337,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.542Z",
+      "updated_at": "2025-07-10T10:28:51.542Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 38,
+      "required_course": 134,
+      "name": "THM-414 - Hospitality Management Cost Analysis",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 338,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.544Z",
+      "updated_at": "2025-07-10T10:28:51.544Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 39,
+      "required_course": 135,
+      "name": "THM-421 - Research Methods in Tourism and Hospitality",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 339,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.546Z",
+      "updated_at": "2025-07-10T10:28:51.546Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 40,
+      "required_course": 136,
+      "name": "THM-422 - Tourism and Hospitality Marketing",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 340,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.547Z",
+      "updated_at": "2025-07-10T10:28:51.547Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 41,
+      "required_course": 137,
+      "name": "THM-423 - Ecotourism and Environmental Sustainability",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 341,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.548Z",
+      "updated_at": "2025-07-10T10:28:51.548Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 42,
+      "required_course": 138,
+      "name": "THM-424 - Tourism Policy and Planning",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 342,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.549Z",
+      "updated_at": "2025-07-10T10:28:51.549Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 43,
+      "required_course": 139,
+      "name": "THM-431 - Development and Management of Visitor Attractions",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 343,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.551Z",
+      "updated_at": "2025-07-10T10:28:51.551Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 44,
+      "required_course": 140,
+      "name": "THM-432 - Tourism & Hospitality Industry Internship",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  },
+  {
+    "model": "academic.canonicalrequirement",
+    "pk": 344,
+    "fields": {
+      "created_at": "2025-07-10T10:28:51.552Z",
+      "updated_at": "2025-07-10T10:28:51.552Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "major": 3,
+      "sequence_number": 45,
+      "required_course": 141,
+      "name": "THM-433 - Senior Research Project",
+      "description": "Required course for Tourism & Hospitality degree program",
+      "effective_term": 177,
+      "end_term": null,
+      "is_active": true,
+      "notes": "Imported from ba_req.csv column 'tou'"
+    }
+  }
+]

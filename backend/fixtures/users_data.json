@@ -1,0 +1,2146 @@
+[
+{
+  "model": "users.user",
+  "pk": 1,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$SEpKNW5uT2F0RTNESUxra00zUzBtMw$d6gS/4buBd7uIFLfGR6k9/gM1WjRKOetOsGFSY3/gYU",
+    "last_login": "2025-08-19T20:50:03.459Z",
+    "is_superuser": true,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-07-15T04:50:01Z",
+    "name": "STARK Jeffrey",
+    "email": "stark.jeffrey@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 2,
+  "fields": {
+    "password": "md5$7i07e93LqPvi2m2Y01jlmL$534162ed097337e59ed6fe099831a4ce",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-07-22T06:37:21.443Z",
+    "name": "",
+    "email": "test@test.com",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 5,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$dnlxUWNsMmpod3oxc3JCTkdsNjRHVA$5Gv9SZ365m/DYK0zxn6SKuT90HjCP3YGZtx63VZO5zM",
+    "last_login": null,
+    "is_superuser": true,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-07-23T11:07:50.993Z",
+    "name": "",
+    "email": "admin@naga.local",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 6,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-07-30T06:19:44.983Z",
+    "name": "Samlei CHHOUN",
+    "email": "chhoun.samlei@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 7,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-07-30T06:19:44.994Z",
+    "name": "Phouchhit HOENG",
+    "email": "phouchhit@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 8,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-07-30T06:19:44.995Z",
+    "name": "Channthy REN",
+    "email": "ren.channthy@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 9,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-07-30T06:19:44.996Z",
+    "name": "Chamroeun HING",
+    "email": "hing.chamroeun@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 10,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-07-30T06:19:44.997Z",
+    "name": "Visal SIEV",
+    "email": "siev.visal@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 11,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-07-30T06:19:44.998Z",
+    "name": "Cheu HING",
+    "email": "hing.cheu@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 12,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-07-30T06:19:44.999Z",
+    "name": "Siengvon MOK",
+    "email": "mok.siengvon@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 13,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-07-30T06:19:45.000Z",
+    "name": "Soklin YAN",
+    "email": "yan.soklin@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 14,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-07-30T06:19:45.002Z",
+    "name": "Sothida TY",
+    "email": "ty.sothida@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 15,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-07-30T06:19:45.004Z",
+    "name": "Tula LAV",
+    "email": "lav.tula@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 16,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-07-30T06:19:45.005Z",
+    "name": "Kimsan VAT",
+    "email": "vat.kimsan@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 17,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-07-30T06:19:45.007Z",
+    "name": "Dana NORNG",
+    "email": "norng.dana@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 18,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-07-30T06:19:45.008Z",
+    "name": "Mesa BO",
+    "email": "bo.mesa@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 19,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-07-30T06:19:45.010Z",
+    "name": "Voleak KEING",
+    "email": "keing.voleak@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 20,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-07-30T06:19:45.012Z",
+    "name": "Sereiroth SANG",
+    "email": "sang.sereiroth@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 21,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-07-30T06:19:45.014Z",
+    "name": "Deng LEAS",
+    "email": "leas.deng@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 22,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-07-30T06:19:45.015Z",
+    "name": "Nol NAY",
+    "email": "nay.nol@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 23,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-07-30T06:19:45.017Z",
+    "name": "Seam SAN",
+    "email": "san.seam@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 24,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-07-30T06:19:45.019Z",
+    "name": "Poratnika LIM",
+    "email": "lim.poratnika@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 25,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-07-30T06:19:45.020Z",
+    "name": "Sopheak THOR",
+    "email": "thor.sopheak@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 26,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-07-30T06:19:45.023Z",
+    "name": "Rina RAT",
+    "email": "rat.rina@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 27,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-07-30T06:19:45.024Z",
+    "name": "Ra PHY",
+    "email": "phy.ra@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 28,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-07-30T06:19:45.026Z",
+    "name": "Samo VAI",
+    "email": "vai.samo@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 29,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-07-30T06:19:45.028Z",
+    "name": "Sokheang NAL",
+    "email": "nal.sokheang@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 30,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-07-30T06:19:45.030Z",
+    "name": "Mike BAILEY",
+    "email": "bailey.mike@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 31,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-07-30T06:19:45.031Z",
+    "name": "Ratha CHIV",
+    "email": "chiv.ratha@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 32,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": false,
+    "date_joined": "2025-07-31T08:09:40.720Z",
+    "name": "System User",
+    "email": "system@naga-sis.local",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 33,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-07-31T08:15:18.512Z",
+    "name": "System Processor",
+    "email": "system@naga.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 34,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-08-04T00:23:11.232Z",
+    "name": "A/R Reconstruction System",
+    "email": "system@ar-reconstruction.local",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 36,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$YTNMNWIxR2M1ZlpKcFc4c1NtNjY4cg$Six0GypFTQ7ptRFlR98jF7eXjl+tbOxnTEb/JUha0EA",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:53.074Z",
+    "name": "Gary Babb",
+    "email": "babb.gary@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 37,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$ZGJqdlVRV052OGNjUjk5NUJxUUx2TA$mT6qARz0exRA6iFHfsWyaQzYQRV4+KN+DuTQAbehV7M",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:53.204Z",
+    "name": "Philip Brownhill",
+    "email": "brownhill.philip@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 38,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$RE5wRGo5bVZTRERIekNpdjFPWlZ3dw$9rkPY4iGyKEEyx4t8BmfUZvFiiEImHiKK9oo/dqzY80",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:53.414Z",
+    "name": "James Carver",
+    "email": "carver.james@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 39,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$UVFmNUxxeUpSQXhPSlJMZnIwZVozZQ$1UDatVyPhDMSPhi3AAE3uh27VFQ6RJ6mZgrskUXVpEQ",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:53.487Z",
+    "name": "Stephen Cline",
+    "email": "cline.stephen@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 40,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$RkZCQW9EemE2VjhaTzU1dkhwQ1BXSA$wU07CuMhagLiXmWVcT/Y1BwhKmOZDVoF2guZ+vuLkEQ",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:53.558Z",
+    "name": "Tim Davis",
+    "email": "davis.tim@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 41,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$TnR3d2R4Q2o3d2dPOEhqQUNzRXY1dg$9iYut58XZNL/FoeNz6Ll0gXcHyL537MD39ms65iDv8g",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:53.634Z",
+    "name": "George Hannen",
+    "email": "hannen.george@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 42,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$Nnc5T0hLbUdkNTY2V051dmdXMnpZaA$Ai5RFRjSH3mjC45wLXZM16zK/o4ZC19FzUIKYYfU3o0",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:53.704Z",
+    "name": "Pahlaj Moolio",
+    "email": "moolio.pahlaj@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 43,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$QjBvUUZrQlNtOTh3UDdmUjU2c3JHSw$0IaSrgjvS6Ou/eWJIjXlQPvjcQqZtedyTEzz2YLLuAs",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:53.779Z",
+    "name": "Lucita Narag",
+    "email": "narag.lucita@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 44,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$QldQZWNlVUh2RzlUTGd0ZXdWUFc2cw$Xqe0m2zxw5C6n0Phr+KzXJ19wftXJ5M06w65yWpKh0A",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:54.052Z",
+    "name": "Kelly Van Roy",
+    "email": "vanroy.kelly@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 45,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$QzFDWlNOWUZNQXh3MEpnNHdocEgzNA$NE25wJrSghQGCaxUFufd80XaJ0jlxXnfpwEM2bwhHgY",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:54.293Z",
+    "name": "Ted Warren",
+    "email": "warren.ted@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 46,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$TzlxM1dYbmE0bDd4amc5NkNRRVQ2bA$TknIVqjG2TS2+YJyl8nK9OiEJYhJ++OcMlqUbgLcpvA",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:54.440Z",
+    "name": "Hornmann Banh",
+    "email": "banh.hornmann@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 47,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$Y3IwSFhZOXZ6T3puV0JGQVRnbkgxTg$i7WJrEZcZfCNl+mvgKIkC/amWmthSS5kqD98WXqIMx8",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:54.535Z",
+    "name": "By Bun",
+    "email": "bun.by@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 48,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$Zmk2TElTSGhBOHdoaTA2RWlURkZtcA$K6xD+bIqS7Al54oTENXyHleSyQeZ3MfGPX82D4qVgUI",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:54.596Z",
+    "name": "Heng Bun",
+    "email": "bun.heng@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 49,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$TFllZ1FEQ0ZuVUhzbUtOaEtTY3pONA$DX44rnZHoihgFHAHW5EPEtBn4Lje3ssSdjd5Wo7APio",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:54.646Z",
+    "name": "Ly Bun",
+    "email": "bun.ly@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 50,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$TEVTRWIwNlJsakxrY201V2RSREcwSw$RuvrbIriQqbBHm9ViaD9oCOSBL0hCe7S7yZX0Q3IS/8",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:54.697Z",
+    "name": "Nget Cheng",
+    "email": "cheng.nget@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 51,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$dmgyazlDZEJLbzFHUVE4VzRQVTh0Ug$tWUo+KdtIFeSOAGF6oTgBgDQ5FlQTFwfD6aSH77FY9o",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:54.746Z",
+    "name": "Sochea Chho",
+    "email": "chho.sochea@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 52,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$MXd2VFBUaVhVb1c4Q1Y1YWhZUTdXbQ$inRRiKtG/i1dZdz7boPl3RXilXiuSniIXYUAWI6tSBE",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:54.804Z",
+    "name": "Kimsan Dam",
+    "email": "dam.kimsan@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 53,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$SkNmZVk0V1YwaDNDMUZrSUgydGdHMQ$j4Oc8UZwla97VJn6GOu6SLLZoQNB5ULNYOPySPzUtN0",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:54.863Z",
+    "name": "Oukdom Doeum",
+    "email": "doeum.oukdom@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 54,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$UUx3ODdvSUZ3dVdVV3VvNTRwamlYbA$zU6lqqo/5MUsff9yuJ872hmB6X6wQa9WyRk3ohDAsw0",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:55.039Z",
+    "name": "Chanthet Duch",
+    "email": "duch.chanthet@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 55,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$dU50MkZJU2VTbFZUdGc2TGpoMzV3UQ$UiBkKsboFWDSDgjuAiCOTzxR9hIUrm6OQJg2rVv7LnM",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:55.118Z",
+    "name": "Darith Ea",
+    "email": "ea.darith@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 56,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$aXhleVlrQkE1NmdFenc4V0ZNUlpFbQ$jBCWx4sq+tJ05DhF50FSK/m8Q2rY3xQlBZSz0PMGFUI",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:55.177Z",
+    "name": "Mark Ellams",
+    "email": "ellams.mark@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 57,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$d2JOQU94ajFpZVh2TDY3aWdDczdDNA$588XStKsonN3oooEd5x/2C5jDPwhzsA4nsVluL+sfYg",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:55.226Z",
+    "name": "Keegan Hain",
+    "email": "hain.keegan@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 58,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$R2ZHWGp2SjVmUWwwR2dZVGg3a3BQdw$wDRbBYqyYhVkI3lAVYJhEQMfbSnam0i0tb/cgt0sgXQ",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:55.274Z",
+    "name": "Bunkai Hang",
+    "email": "hang.bunkai@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 59,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$STBYeXVNUmhQaHRyRE5WdGFiMk9qWQ$aCNNat9ov44IibwjYkbZldI6Vu7XMCAFvyZu1JTy+Cw",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:55.327Z",
+    "name": "Savet Hang",
+    "email": "hang.savet@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 60,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$c3FuekJoeG1vNDVuMlN3aFh2UkNWUQ$bbni00rdOBFrWlONTSuSIgsKWJGSBsW2xx/Go5MbZUI",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:55.377Z",
+    "name": "Piseth Has",
+    "email": "has.piseth@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 61,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$UDNpR3VQZlZVMVhpUFZpSHhqNmRNUQ$9M/4nJcfEPjcWtYN6+FbcXXC5dNj81RLeDemMqII/jA",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:55.430Z",
+    "name": "Sokhal Hean",
+    "email": "hean.sokhal@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 62,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$RFp1Y3h6VkR6UDF2Mlo2YVM3UElFUA$ALmGBJIcsJlIPQ5LziUh2Dvy+bGiqfnuXb824Oo+EgE",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:55.484Z",
+    "name": "Sary Heng",
+    "email": "heng.sary@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 63,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$a3gzczZ6MDZKUEludmg1d3V2bmdZYg$nphYd6FHGfkR3x/7pFA3FLymUWH0wUJ4hc38mbbnczA",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:55.556Z",
+    "name": "Sokpheng Heng",
+    "email": "heng.sokpheng@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 64,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$bDZGcHQ1OHg4a2t1WXRCYkYyak8zbA$HVC6QqXmYuxVL3idQ85txi5Jtsfx/i09qpbVxV33pvM",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:55.608Z",
+    "name": "Sophea Heng",
+    "email": "heng.sophea@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 65,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$YUZhS2ZKVEJiUGpsUXZMQ2tkN1VJcg$idMinb5lA4QLra/20uAYwPvOLs5P0IJcbWJFs+QzcFs",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:55.681Z",
+    "name": "Visith Hoeng",
+    "email": "hoeng.visith@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 66,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$bEw3MEY5bmhESHZ3eWR6YU5RbmVoNg$hGZpn9jHlK/Z0EhRbGPK1smU5W/QtzYMNWjqvPQy+/I",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:55.728Z",
+    "name": "Chindavolack Hon",
+    "email": "hon.chindavolack@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 67,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$SDVWbW8yeExyUkhTQ2pUWHlTRUxWQQ$uSa80aS0mGUe9w9jaOYFHEGOLrL9RBp1kKFLivPkMCE",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:55.777Z",
+    "name": "Muyheng Hong",
+    "email": "hong.muyheng@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 68,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$YkszYXp4VGhLNjIwd2JzZEc3eGdkOQ$jo7hSUcFKoX9LYxJuxnvzXxVQFEE8SMBbz9NEAAZ2b8",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:55.826Z",
+    "name": "Vichny Hout",
+    "email": "hout.vichny@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 69,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$QTZyQUZCeHFxeFlUdlZuZkxnb1hGUA$KMUV0dMcXlyOaEs25NyEICFCVc/tsU9UipfNquZgVPA",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:55.871Z",
+    "name": "Vichny Huot",
+    "email": "huot.vichny@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 70,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$YnRvRzhDcFk0cEEwUTV4QXB5UmtsSw$jrsehbzzIyNW6+i8xvyUcKnhiBPJ10Pi4q63h73KzEA",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:55.920Z",
+    "name": "Sroem Khen",
+    "email": "khen.sroem@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 71,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$TUR1eHpMMlhzZVZVM0k1TXhma1BXcw$NKa/vzsBKFxDUoiSTX1GnyQZdA4pCUyq6zHjBN67muM",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:55.967Z",
+    "name": "Sey Khut",
+    "email": "khut.sey@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 72,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$eldxTzN6bk5majdjMW1ac2ZHRGlaNw$yOWW5ANSiydj7iUEHc6YH1hWFJ7JRoPXnIrJs/YafOs",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:56.031Z",
+    "name": "Bunsin Khy",
+    "email": "khy.bunsin@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 73,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$NmJlekZja2N6OFNFRzJmTzliMk1EMQ$d9w3FNNkX0HEWlk2DFw7tNbkAiJwWexBcf2YSUz0NR0",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:56.109Z",
+    "name": "Sanratana Kong",
+    "email": "kong.sanratana@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 74,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$cFI4MDlZUzE2Zm5LTW9OTHhzZkd3cQ$sJ3+5i75GlCbEGipRMl5Iv+/OKZc7Ypaad1HIMVUdYE",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:56.182Z",
+    "name": "Saroeun Kong",
+    "email": "kong.saroeun@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 75,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$cEpLUWN4dTF1Zk10aDJ2b1kzU2pLUw$0ew1J2wxn4KG2x3hps5v5D33tsCFVlBxcpt1/yZYIH8",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:56.372Z",
+    "name": "Vet Kou",
+    "email": "kou.vet@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 76,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$OU5UM3p3SWl5NU5DMTBFODJiZEIyeg$h0+GligCDnIQJxr2LJNT3GBC6lQ7JhBDxpv9KfxMnH8",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:56.527Z",
+    "name": "Sovanara Koun",
+    "email": "koun.sovanara@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 77,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$a0VXV1VnVEhvYXM3TzB4WWh5TXRPMg$4K4vVm4obn/8PMsxcr3QlT0BN/hRoVDR/hf8KY8DZag",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:56.581Z",
+    "name": "Sengthai Kun",
+    "email": "kun.sengthai@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 78,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$NjVFWXE2bjZjYUpXZzZ2QUNsclpDZw$3NjCbjuMHQCNxVhIXdKz/eAoDldzHLhP9kFx625W5s8",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:56.637Z",
+    "name": "Sovannara Kuon",
+    "email": "kuon.sovannara@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 79,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$T0xjRjFsWDVFeVhBQVA0MmhhMEtRTw$HY3z3RWzt3lkbejBuZ+YWDADMNjZlRvbjFOc7RFVcqw",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:56.685Z",
+    "name": "Sambath Lach",
+    "email": "lach.sambath@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 80,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$eXl3Q09IUHBPZ1JDemVRd1ppNlBEUQ$HV0r2CxCtWhvmx6fxRVP5u8veRkXkj1iAdsS1mS0fLE",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:56.732Z",
+    "name": "Ratanak Lok",
+    "email": "lok.ratanak@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 81,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$YVBaTWJwRTlZUUxQSW9Cdkp4NTBnOQ$xyUzX/PIrrbihHWthQtiZWKiDXFhSgEK/4xLF3jIwKk",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:56.783Z",
+    "name": "Bora Ly",
+    "email": "ly.bora@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 82,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$SDROeVdVTVNkd3dBaXl0a2RvbkVrYw$IcJz6HiCtC+ulhx9FE5pFeoIXDxgUQIJneEKcnrOWSI",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:56.887Z",
+    "name": "Monirith Ly",
+    "email": "ly.monirith@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 83,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$eURpTzB3cWppM242UDU4ODhzQ2pFdg$zV8G2SsgiNLXgymSVDxU++wKJvD9nES/63yd3jCe1Rk",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:56.953Z",
+    "name": "Vanmonich Ly",
+    "email": "ly.vanmonich@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 84,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$WU56S3NxTnNYa044ck04cXlCeGZIcg$9Xj8CckXevSZymfX5eTS89Bmjp63xqvvUO6nbEeP69w",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:57.007Z",
+    "name": "Chanthy Mab",
+    "email": "mab.chanthy@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 85,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$dnR1Nm5VS2p1d1ZCZWM2ZVNoRWQwMw$LFf38mumZayRRxkaJIs1r+PQkoX/JpJ+eDl0I7t3E8M",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:57.137Z",
+    "name": "Nearyroth Meas",
+    "email": "meas.nearyroth@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 86,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$R1dFRnczdFZlRU93bDJXVkR3WXlVRA$SNPDAcCcxqPytvH5yVUCW61igdjzT7EuUUETSqNzF+c",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:57.283Z",
+    "name": "Veasna Meas",
+    "email": "meas.veasna@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 87,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$RmYydW05ekxSUVExWU9YQmpvb2ZLNA$f9ZBePQryC2jiuDF2waNRWnknMuz/OwXcHK7Hm61hs0",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:57.377Z",
+    "name": "Toum Nay",
+    "email": "nay.toum@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 88,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$eXNYaUVaTkdxaTNLU25SdGtJMWJadw$EMYgwpnmprGAGw1xf9ojiqQH+GCWt7BosaM1uTtz1bE",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:57.421Z",
+    "name": "Sotheara Ngin",
+    "email": "ngin.sotheara@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 89,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$Vm9vQnRLUm1XTU56b29uQlo5NWR3dA$lc2mG7K5+xSOt1td644TmOIeFsfUVzFECQYAO+1+/zI",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:57.489Z",
+    "name": "Virath Ngin",
+    "email": "ngin.virath@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 90,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$VjV4cWdWamJSUVFaVjZXdEduTDJUVA$Bw75DvSYJ8gL9kFxD/enhW0i3Fl/xWmHnKuMWRkkJuc",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:57.550Z",
+    "name": "Malineth Or",
+    "email": "or.malineth@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 91,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$aVc4UDF0dTI2bXIwWElaT1ZheWpTaQ$QUjsB1viSXaKT3g0C0hRfDnEhdpOjqzn6xDGa8UmnMs",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:57.620Z",
+    "name": "Kimleng Ouk",
+    "email": "ouk.kimleng@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 92,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$N1UwT1VpanRYbnlLRklOajk4aEpsRQ$lXaCtIu2/d+1dwDEaS3K7oWUMpFtE5bbVdxkxm08Tx8",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:57.707Z",
+    "name": "Tola Ouk",
+    "email": "ouk.tola@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 93,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$eXVsRHJYN0RoVGs0b1FYZ3JGcWlkVw$F45asXE33W5focsUCkkcMtPvoxmBBUhpzZ0OC+anP0c",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:57.867Z",
+    "name": "Phoeum Phan",
+    "email": "phan.phoeum@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 94,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$Z0FmMnFIRVlITTBpVDVKQzJKbGhmTA$mZFgRgVVWu81J6yDf8EunwOyL1XDVfhqdTC90647kIY",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:57.929Z",
+    "name": "Sophen Phoeurt",
+    "email": "phoeurt.sophen@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 95,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$ckNqRXlKN1U5Y3dYR0xXWDZlYnRnbw$nZoWDvNBSkcaKEawfpo78y51+dSUsbg7zJk/3dXoNo8",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:57.980Z",
+    "name": "Soury Phonn",
+    "email": "phonn.soury@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 96,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$VGdYMkphaEZlWWpQWTVPSnJ1dTN1UQ$uxlLg475LLHpcPYv6tOpmUjpYLtvTdAQiu6L1TQbHjI",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:58.053Z",
+    "name": "Sarakk Rith",
+    "email": "rith.sarakk@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 97,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$YXlQaUFEV0NwWVloYVZ5MGlqYVdYSw$gHR1a85AMBTDJbCiqil9b9a0F8akr9Io9FmH5BFsGiU",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:58.124Z",
+    "name": "Bunthoeun Ros",
+    "email": "ros.bunthoeun@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 98,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$RllzWHRGWW5QNzV1NUZjRXpUaUhUbw$+LshSRodbvMZQcbz85XiN9sFJJYuNwZp9Jlid6qqm7U",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:58.196Z",
+    "name": "Lida Sam",
+    "email": "sam.lida@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 99,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$SjJpdHpDVWZwVEZoRGtYRWtDek83Zw$FAZY2wymEoRlL+SD0SZIkWqrwHdiR0V90YRk1VN5DeY",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:58.254Z",
+    "name": "Sophany San",
+    "email": "san.sophany@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 100,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$YW5rNGNwcDJ1RUdaaVlzd3VQNHFOZg$iaxN/3gF3Dgs08oURP45nUpHxDsAjxsNIiEOe/1YHWk",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:58.342Z",
+    "name": "Chanviphou Sao",
+    "email": "sao.chanviphou@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 101,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$M0lmalJjb1djdmkxbEticUNSNlJsQw$Q1sRw/fttnVvs46wrDzmoBcKuINAR33VFBUzMgrc7MU",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:58.393Z",
+    "name": "Puthy Say",
+    "email": "say.puthy@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 102,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$bWd6ZFFjQVZTTVFlbDZqQU9DYkZJbw$7/JHbtJW9jaBuN3onEX1kg3HJFaDINsqiTg4l8fZNMo",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:58.450Z",
+    "name": "Botto Sean",
+    "email": "sean.botto@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 103,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$Tzd1d3RheXBreGdnWHJ1OHE5ckUwaQ$0u2IV1e7ujhm4NSs/+SS+pTSHEO7m8R20uPVH8mSaOk",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:58.530Z",
+    "name": "Ratha Seng",
+    "email": "seng.ratha@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 104,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$VjVQUnZvWFUyY0hIU2E4d0F2eDBBdw$+Tz5POBWCf+6s0mODW5TYInVOkkwIRvfQlUJle+QIkM",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:58.745Z",
+    "name": "Seab Seng",
+    "email": "seng.seab@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 105,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$cGtPRUJtUTZtVVJYZjJHRE9DTWE1eQ$m/MksgZctFwv4fBf+VKOuXGGG6uG9MZ69Gwh0pX5Ps0",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:58.851Z",
+    "name": "Soneang Seng",
+    "email": "seng.soneang@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 106,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$TGlmSjNQcXUzQTREQ3ozejNJMnRRdg$KgAW0yf4ILmKHhPhwnam7ef60Rivr+VJ4hD5S+4kWpk",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:58.899Z",
+    "name": "Oudom Set",
+    "email": "set.oudom@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 107,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$TUs0dzBHNGYwNGlZbVpDbWZ4bE9ocA$GikyjxUy6YkcswAdhFEss3urXQc0aQBNv62/Mv2GpdA",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:58.944Z",
+    "name": "Vannry Siev",
+    "email": "siev.vannry@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 108,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$R3pqNzkxN0hOaWFhWDVhcGFCZWoyZw$x1cm+xf5blOU5NC1MawiPgHZxop3mf/xqMiyDIykvdE",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:58.995Z",
+    "name": "Sothan Sin",
+    "email": "sin.sothan@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 109,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$WGF4RTZJS0lSQXRQbDRjRlNpV0xFcA$u7bQX8UP8V0nT1FAQ/vr+voPlStEACL1sb21aijOCIs",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:59.058Z",
+    "name": "Sovantha Sok",
+    "email": "sok.sovantha@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 110,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$SUs4c1RuM3Z6WVdNSVRkankxc040OQ$ilv35g93wP0/0hQraAOhUy/vC5pR+rUu0lwaBd96f2A",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:59.127Z",
+    "name": "Nat Son",
+    "email": "son.nat@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 111,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$WWlvcWZkVk1aVjBQMHVwa0dObll6Nw$MTRW6joKEENIPG+gkuBjCR5moWNDxKdubikxhaKlIwI",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:59.185Z",
+    "name": "Visith Sorng",
+    "email": "sorng.visith@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 112,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$NWNQZ2ZYUUpDZUlPN3pJWFQxTjg3Wg$wMNNNz1YLbJeMWianZP2MYbr0RLFsyCpeUNEonwhBBU",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:59.233Z",
+    "name": "Ravy Soth",
+    "email": "soth.ravy@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 113,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$c2lNaFVoV2VteEZzdmZHUnJVV2hyQw$nW0Q5Qcv0221XEG3wS+4A/uUpubKAjaOn0630nILJsc",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:59.284Z",
+    "name": "Tola Tem",
+    "email": "tem.tola@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 114,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$UVd3cDBOeURvcWcxVWFra1RKT2RDcQ$hZNnLiV5ts/CMhDhoNKOnn+WB6Saim7Z7jp7pfoaINM",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:59.375Z",
+    "name": "Bunthat Than",
+    "email": "than.bunthat@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 115,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$T3hhSm5PSHBzVTNhRHhHeTlWR2VlVg$nbqpzlhONhxC3ww8tl1elIJpsptw1ONzGqB7McrQ9MI",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:59.433Z",
+    "name": "Rathana Theang",
+    "email": "theang.rathana@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 116,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$SDZkUzdyaWdPcWh3dHZZNVg4Z1FTVA$zudaqEzMFYsiUcxngHJ4KYiYKUvEhyfF2mbRS+dbMbk",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:59.481Z",
+    "name": "Bunthen Thorn",
+    "email": "thorn.bunthen@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 117,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$QmszaHlqR0pWc25qRTVjRTlja3VpbQ$9HeB6gU96xMTWfI/GmYgtHNYnVYFQd1HRNjdRsBlfGc",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:59.534Z",
+    "name": "Dara Tong",
+    "email": "tong.dara@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 118,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$WkRuWFdCRmNza0lBQ2dtU2o5SkJ5cQ$JGpsbv19rQ7a2mLavNSaXerRSgAklH9A5hlx+3KlRsQ",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:59.580Z",
+    "name": "Lisovannda Tout",
+    "email": "tout.lisovannda@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 119,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$dEhjOWRKOFZacXh1ekxrSkhPdnNINg$7MJHzRhCeTOJNfraz6DljffccpWpJW3/TSilsL/nuPI",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:59.644Z",
+    "name": "Savoeun Ver",
+    "email": "ver.savoeun@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 120,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$Y05lRTFVRXNiUEJDWVQyNU10UkRWaQ$isOtFXt+lgU/Xb6zd4YD7BTBzD6WFtaYnI7qExw5FBI",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:59.697Z",
+    "name": "Soksan Yen",
+    "email": "yen.soksan@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 121,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$cjRXcEVhWGowcVF6MjhibFFoMFo2aA$cvSK7S/rQUrd9Vfm/gOAKI0vJzyrh1yY19QsKwg+j+0",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:59.753Z",
+    "name": "Amour Booyens",
+    "email": "booyens.amour@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 122,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$SjhQekhiZmlZVGkxNzFmRWJDVWtENQ$aE6yYe/UMP98UmyT3f0LdY2MsrTtDPSpT/ug1m0Ev3o",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:59.800Z",
+    "name": "Mark Briscoe",
+    "email": "briscoe.mark@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 123,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$QUZ3cmZ2UWszUmFEY1ZPUFdNdEdZcw$OJIHrFjZ0TS5hdS9U/2WQEzTIlzjaYSWc7Tk8eULucE",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:59.852Z",
+    "name": "Kate Dansereau",
+    "email": "dansereau.kate@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 124,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$ZHQwMWd4azlOOUpXZ2k3cjNvclB3Mg$+FKXb1azRMfzUtNmhbkgRbYz0zcOyrMuLnHdF4yekmI",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:59.908Z",
+    "name": "Ashley Galler",
+    "email": "galler.ashley@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 125,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$Uzh5Ym1tZ1AyN0FSYmtiRVZxdTZTVg$LpVMsX4PHPc1nT6UEe5pXVfrZr65tM7Td67BQBOORQE",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:13:59.968Z",
+    "name": "Joseph Gibbons",
+    "email": "gibbons.joseph@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 126,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$eW9OUG92QkxmcWJLamhCWWhUblE0aQ$LUc2FqcpgtBTwDG/vfwPYkNl6NBmrvN8CwanVW+Zbfc",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:14:00.018Z",
+    "name": "Elizabeth Jeroy",
+    "email": "jeroy.elizabeth@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 127,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$VVhHVk9ZQjlZdGtxa1JDZTVxbmNPcA$uqc81Iktru8vrr1n98PEObqzjAt5rb8er1Vmr5H3oLQ",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:14:00.105Z",
+    "name": "Chris Mcevoy",
+    "email": "mcevoy.chris@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 128,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$Um96UlM1SzdXM05BRTU4bTNrVWlySQ$MfgfP97684gneoKX3IuwxGgtMPdG42UHKR7GkexMFfg",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:14:00.176Z",
+    "name": "Tanya Melody",
+    "email": "melody.tanya@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 129,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$c0JDR3N4ZmFSVlA1SWFQSW1wTFJJcg$e0F2WteYb4LcrgutDsLvIrLerCYWZkb45znYM7SOeYQ",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:14:00.237Z",
+    "name": "Moh Nakash",
+    "email": "nakash.moh@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 130,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$eXA2S3VHNHBMZGR1Rzc4T2lKWXMxdg$opUkjjLz/5TBbqn+TQ6r50/hDR6OcHqkf4UH5GiN8vg",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:14:00.289Z",
+    "name": "Rose Nanton",
+    "email": "nanton.rose@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 131,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$UHhtbkI4NUtadFVsYk5mckFGSmg2dw$wOFPSqsdCO9Ugkk45Urck8RRPZguSFMvR9PgEpkioAQ",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:14:00.335Z",
+    "name": "Tobin Rothlein",
+    "email": "rothlein.tobin@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 132,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$Z21hYmI3V3k3clR5RFZqSVVMMWlVSg$X3AXI3WYF6mF3UaE/uEPz17E1q7VNF9FryoDC0ftCkE",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:14:00.384Z",
+    "name": "Evert Scholtz",
+    "email": "scholtz.evert@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 133,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$NUtRVEtTSWJtWlBmcld5R1pEb0Jvbg$9Pv4Vl4WHKVaWUANybYosvbj/5N1gO5DrEFZrWvDbog",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:14:00.435Z",
+    "name": "Chhaiievya Sok",
+    "email": "sok.chhaiievya@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 134,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$VmZIdEptTUVraUZqcHhISHRzS045Sw$Hq6QLsZZIQLp4oLcQ3n7OagiJJvsjxCV2Kuuni5n96Q",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:14:00.488Z",
+    "name": "Karen Walker",
+    "email": "walker.karen@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 135,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$WnQ2M1REM3Vkd1JrOFRqMmxGNzZYcw$/Vs0AeZpD5mFphFD0ioW2nGhm31YxnWwfm85DLB98zs",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-08-10T04:14:00.671Z",
+    "name": "Faye Williams",
+    "email": "williams.faye@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 136,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$QWVJVjJuNDdnelNvamtDWmVmNmJtMw$CNb86LlsVYtDPgAN+d8Szqp8jv4sGxxYRF0jKmUIsRM",
+    "last_login": null,
+    "is_superuser": true,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-08-17T10:35:01.558Z",
+    "name": "System User",
+    "email": "no-reply@pucsr.edu.kh",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 137,
+  "fields": {
+    "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$R0hZQ1NyRVU5NGF0cVFvUlBBQ2R1SQ$N/ZVMCsPdda0gbFdJzhnfZ+CTps76Cz8wwApvuKtlMs",
+    "last_login": null,
+    "is_superuser": false,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-08-19T01:34:14.992Z",
+    "name": "Test Cashier",
+    "email": "cashier@test.com",
+    "groups": [],
+    "user_permissions": []
+  }
+}
+]

@@ -1,0 +1,30 @@
+# PostgreSQL Configuration for Evaluation Environment
+# ------------------------------------------------------------------------------
+
+# Database Configuration
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=naga_evaluation
+POSTGRES_USER=naga_evaluation_user
+POSTGRES_PASSWORD=b9f01768a149c15f
+
+# Connection Pool Settings
+POSTGRES_MAX_CONNECTIONS=100
+POSTGRES_SHARED_BUFFERS=256MB
+POSTGRES_EFFECTIVE_CACHE_SIZE=1GB
+POSTGRES_MAINTENANCE_WORK_MEM=64MB
+POSTGRES_WORK_MEM=4MB
+
+# Performance and Monitoring Settings
+POSTGRES_LOG_MIN_DURATION_STATEMENT=1000  # Log queries taking longer than 1s
+POSTGRES_LOG_CONNECTIONS=on
+POSTGRES_LOG_DISCONNECTIONS=on
+POSTGRES_LOG_LOCK_WAITS=on
+POSTGRES_LOG_STATEMENT=ddl  # Log DDL statements
+
+# Backup Configuration
+POSTGRES_BACKUP_RETENTION=7  # Keep backups for 7 days
+POSTGRES_BACKUP_SCHEDULE=daily
+
+# Timezone
+TZ=Asia/Phnom_Penh

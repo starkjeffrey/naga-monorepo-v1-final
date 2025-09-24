@@ -1,0 +1,51 @@
+# Pre-commit hooks for automatic code formatting and linting
+# Run `pre-commit install` to set up the git hooks
+# Run `pre-commit run --all-files` to run on all files
+
+repos:
+  # Black code formatter
+  - repo: https://github.com/psf/black
+    rev: 25.1.0
+    hooks:
+      - id: black
+        args: [--line-length=119, --target-version=py313]
+        language_version: python3.13
+
+  # Ruff linter and formatter
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.9.2
+    hooks:
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
+      - id: ruff-format
+
+  # Django template formatting
+  - repo: https://github.com/Riverside-Healthcare/djLint
+    rev: v1.35.3
+    hooks:
+      - id: djlint-reformat-django
+        files: \.(html)$
+      - id: djlint-django
+        files: \.(html)$
+
+  # MyPy type checking baseline enforcement (disabled for now)
+  # - repo: local
+  #   hooks:
+  #     - id: mypy-baseline-check
+  #       name: MyPy Baseline Check
+  #       entry: python ../scripts/utilities/mypy_baseline_check.py
+  #       language: system
+  #       files: \.py$
+  #       stages: [commit]
+
+  # Basic file checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+      - id: check-merge-conflict
+      - id: debug-statements

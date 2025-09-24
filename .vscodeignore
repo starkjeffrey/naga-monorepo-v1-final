@@ -1,0 +1,120 @@
+# VS Code ignore for naga-monorepo performance optimization
+# Excludes files and directories from VS Code's file watching and indexing
+
+# Node.js dependencies (root and frontend)
+node_modules/
+**/node_modules/
+frontend/node_modules/
+
+# Build outputs
+dist/
+build/
+out/
+dev-dist/
+frontend/dist/
+frontend/dev-dist/
+backend/staticfiles/
+backend/media/
+
+# Cache directories
+.cache/
+.turbo/
+.parcel-cache/
+.next/
+.nuxt/
+.nx/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+__pycache__/
+
+# Python virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Version control
+.git/
+.svn/
+.hg/
+
+# IDE files
+.idea/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Log files
+*.log
+logs/
+.logs/
+
+# Coverage and testing
+coverage/
+.nyc_output/
+test-results/
+playwright-report/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Temporary files
+.tmp/
+.temp/
+tmp/
+
+# Documentation build
+docs/_build/
+docs/dist/
+
+# Package manager files
+.pnpm-store/
+.yarn/cache/
+.yarn/unplugged/
+
+# Large data files
+*.zip
+*.tar
+*.gz
+*.rar
+*.7z
+*.dmg
+*.iso
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Media files
+*.mp4
+*.avi
+*.mov
+*.wmv
+*.mp3
+*.wav
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+
+# Monitoring and session data
+monitoring/data/
+sessions/
+claude-sessions/
+
+# Generated files
+dependency-graph.json
+settings_merged.json
+uv.lock
+package-lock.json

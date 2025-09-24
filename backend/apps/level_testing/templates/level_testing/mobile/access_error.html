@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Access Error" %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        min-height: 100vh;
+    }
+    
+    .mobile-container {
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 1rem;
+    }
+    
+    @media (min-width: 768px) {
+        .mobile-container {
+            max-width: 600px;
+            padding: 2rem;
+        }
+    }
+    
+    .error-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 1rem;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="mobile-container">
+    <div class="error-card p-6 mt-10">
+        <!-- Error Icon -->
+        <div class="text-center mb-6">
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-red-100 rounded-full mb-4">
+                <i class="fas fa-exclamation-triangle text-4xl text-red-600"></i>
+            </div>
+            
+            <h1 class="text-2xl font-bold text-gray-800 mb-2">
+                {% trans "Access Problem" %}
+            </h1>
+        </div>
+
+        <!-- Error Messages -->
+        <div class="space-y-4 mb-6">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="bg-red-50 border-l-4 border-red-400 p-4">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-times-circle text-red-400"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-red-700">
+                                    {{ message }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="bg-red-50 border-l-4 border-red-400 p-4">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-times-circle text-red-400"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-red-700">
+                                {% trans "There was a problem accessing your application. This could be because:" %}
+                            </p>
+                            <ul class="list-disc list-inside mt-2 text-sm text-red-600">
+                                <li>{% trans "The access code is invalid or incorrect" %}</li>
+                                <li>{% trans "The access code has expired (24 hours limit)" %}</li>
+                                <li>{% trans "The access code has already been used" %}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- What to Do Section -->
+        <div class="bg-blue-50 rounded-lg p-4 mb-6">
+            <h2 class="text-lg font-semibold text-blue-800 mb-2">
+                <i class="fas fa-info-circle mr-2"></i>
+                {% trans "What Should I Do?" %}
+            </h2>
+            <ol class="list-decimal list-inside text-sm text-blue-700 space-y-2">
+                <li>{% trans "Check your receipt for the correct access code" %}</li>
+                <li>{% trans "Make sure you're entering all 7 digits correctly" %}</li>
+                <li>{% trans "If the code has expired, visit the registration desk" %}</li>
+                <li>{% trans "Contact our support team if you need help" %}</li>
+            </ol>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="bg-gray-100 rounded-lg p-4 mb-6">
+            <h3 class="font-semibold text-gray-800 mb-3">
+                {% trans "Need Help?" %}
+            </h3>
+            <div class="space-y-2">
+                <a href="tel:{{ support_phone }}" 
+                   class="flex items-center text-blue-600 hover:text-blue-800">
+                    <i class="fas fa-phone mr-3"></i>
+                    <span>{{ support_phone }}</span>
+                </a>
+                <a href="mailto:{{ support_email }}" 
+                   class="flex items-center text-blue-600 hover:text-blue-800">
+                    <i class="fas fa-envelope mr-3"></i>
+                    <span>{{ support_email }}</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="space-y-3">
+            <button onclick="window.history.back()" 
+                    class="w-full bg-gray-600 text-white py-3 rounded-lg font-medium hover:bg-gray-700 transition">
+                <i class="fas fa-arrow-left mr-2"></i>
+                {% trans "Go Back" %}
+            </button>
+            
+            <a href="tel:{{ support_phone }}" 
+               class="block w-full bg-blue-600 text-white text-center py-3 rounded-lg font-medium hover:bg-blue-700 transition">
+                <i class="fas fa-phone mr-2"></i>
+                {% trans "Call Support" %}
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-6 text-center">
+        <p class="text-white/90 text-sm">
+            {% trans "Office hours: Monday-Friday 8:00 AM - 5:00 PM" %}
+        </p>
+    </div>
+</div>
+{% endblock %}

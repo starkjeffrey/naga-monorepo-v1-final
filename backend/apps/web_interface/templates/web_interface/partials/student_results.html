@@ -1,0 +1,56 @@
+<!-- templates/web_interface/partials/student_results.html -->
+<!-- INSTRUCTION FOR SONNET: Search results partial -->
+
+{% if students %}
+<div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+  <table class="sis-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Program</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-200">
+      {% for student in students %}
+      <tr class="hover:bg-gray-50 cursor-pointer" 
+          onclick="showQuickActions('{{ student.id }}')">
+        <td class="font-medium">{{ student.student_id }}</td>
+        <td>
+          <div>{{ student.person.full_name }}</div>
+          {% if student.person.khmer_name %}
+          <div class="text-xs text-gray-500">{{ student.person.khmer_name }}</div>
+          {% endif %}
+        </td>
+        <td>
+          {% if student.program_enrollments.exists %}
+            {{ student.program_enrollments.first.program.code }}
+          {% else %}
+            <span class="text-gray-400">No program</span>
+          {% endif %}
+        </td>
+        <td>
+          <span class="badge badge-{% if student.current_status == 'ACTIVE' %}success{% elif student.current_status == 'INACTIVE' %}warning{% else %}danger{% endif %}">
+            {{ student.get_current_status_display }}
+          </span>
+        </td>
+        <td>
+          <button class="btn btn-sm btn-secondary"
+                  hx-get="{% url 'web_interface:student-detail' student.pk %}"
+                  hx-target="#student-detail"
+                  hx-swap="innerHTML">
+            View
+          </button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+  {% if query %}
+  <p class="text-gray-500 text-center py-4">No students found for "{{ query }}"</p>
+  {% endif %}
+{% endif %}

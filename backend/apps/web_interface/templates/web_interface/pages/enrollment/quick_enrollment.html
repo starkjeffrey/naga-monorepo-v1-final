@@ -1,0 +1,157 @@
+{% extends "web_interface/base/dashboard_base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Quick Enrollment" %}{% endblock %}
+
+{% block dashboard_content %}
+<!-- Navigation breadcrumb -->
+<nav class="bg-gray-50 border-b border-gray-200 px-4 py-2">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex items-center space-x-2 text-sm">
+      <a href="{% url 'web_interface:dashboard' %}" class="text-blue-600 hover:text-blue-800">Dashboard</a>
+      <span class="text-gray-400">></span>
+      <a href="{% url 'web_interface:enrollment-management' %}" class="text-blue-600 hover:text-blue-800">Enrollment</a>
+      <span class="text-gray-400">></span>
+      <span class="text-gray-600">Quick Enrollment</span>
+    </div>
+  </div>
+</nav>
+<div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+  <div class="bg-white shadow-sm border border-gray-200 rounded-lg">
+    <!-- Header -->
+    <div class="px-6 py-4 border-b border-gray-200">
+      <h1 class="text-2xl font-bold text-gray-900">{% trans "Quick Enrollment" %}</h1>
+      <p class="text-gray-600 mt-2">{% trans "Fast enrollment form for immediate class registration" %}</p>
+    </div>
+
+    <!-- Form -->
+    <form id="quick-enrollment-form" class="px-6 py-6 space-y-6">
+      {% csrf_token %}
+      
+      <!-- Student Selection -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">{% trans "Select Student" %}</label>
+        <input type="text" 
+               id="student-search" 
+               name="student_search"
+               placeholder="{% trans 'Search by name or student ID...' %}"
+               class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+               required>
+        <input type="hidden" id="selected-student-id" name="student_id">
+      </div>
+
+      <!-- Class Selection -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">{% trans "Select Class" %}</label>
+        <select id="class-select" 
+                name="class_id" 
+                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                required>
+          <option value="">{% trans "Choose a class..." %}</option>
+          {% for class in classes %}
+          <option value="{{ class.id }}" 
+                  data-seats="{{ class.seats_available }}"
+                  data-enrolled="{{ class.enrolled_count }}"
+                  data-capacity="{{ class.max_enrollment }}">
+            {{ class.course.code }} - {{ class.course.title }} 
+            ({{ class.enrolled_count }}/{{ class.max_enrollment }} enrolled)
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Class Info Display -->
+      <div id="class-info" class="hidden p-4 bg-gray-50 rounded-lg">
+        <h4 class="font-medium text-gray-900 mb-2">{% trans "Selected Class Information" %}</h4>
+        <div class="grid grid-cols-2 gap-4 text-sm">
+          <div><strong>{% trans "Course:" %}</strong> <span id="course-info"></span></div>
+          <div><strong>{% trans "Instructor:" %}</strong> <span id="instructor-info">{% trans "TBD" %}</span></div>
+          <div><strong>{% trans "Capacity:" %}</strong> <span id="capacity-info"></span></div>
+          <div><strong>{% trans "Available Seats:" %}</strong> <span id="seats-info"></span></div>
+        </div>
+      </div>
+
+      <!-- Enrollment Options -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">{% trans "Enrollment Options" %}</label>
+        <div class="space-y-2">
+          <label class="flex items-center">
+            <input type="checkbox" name="send_confirmation" value="1" checked 
+                   class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+            <span class="ml-2 text-sm text-gray-700">{% trans "Send enrollment confirmation email" %}</span>
+          </label>
+          <label class="flex items-center">
+            <input type="checkbox" name="override_capacity" value="1" 
+                   class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+            <span class="ml-2 text-sm text-gray-700">{% trans "Override capacity restrictions (if class is full)" %}</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Notes -->
+      <div>
+        <label for="notes" class="block text-sm font-medium text-gray-700 mb-2">{% trans "Notes" %}</label>
+        <textarea id="notes" 
+                  name="notes" 
+                  rows="3" 
+                  placeholder="{% trans 'Optional enrollment notes...' %}"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+      </div>
+    </form>
+
+    <!-- Actions -->
+    <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end space-x-3">
+      <button type="button" 
+              onclick="window.history.back()" 
+              class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+        {% trans "Cancel" %}
+      </button>
+      <button type="submit" 
+              form="quick-enrollment-form"
+              class="px-4 py-2 bg-blue-600 text-white rounded-md shadow-sm text-sm font-medium hover:bg-blue-700">
+        {% trans "Enroll Student" %}
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Class selection handler
+document.getElementById('class-select').addEventListener('change', function() {
+  const selected = this.selectedOptions[0];
+  const classInfo = document.getElementById('class-info');
+  
+  if (selected.value) {
+    document.getElementById('course-info').textContent = selected.textContent.split(' (')[0];
+    document.getElementById('capacity-info').textContent = selected.dataset.capacity;
+    document.getElementById('seats-info').textContent = selected.dataset.seats;
+    
+    classInfo.classList.remove('hidden');
+  } else {
+    classInfo.classList.add('hidden');
+  }
+});
+
+// Form submission handler
+document.getElementById('quick-enrollment-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  const studentId = document.getElementById('selected-student-id').value;
+  const classId = document.getElementById('class-select').value;
+  
+  if (!studentId) {
+    alert('{% trans "Please select a student." %}');
+    return;
+  }
+  
+  if (!classId) {
+    alert('{% trans "Please select a class." %}');
+    return;
+  }
+  
+  // Here you would normally submit via HTMX or AJAX
+  alert('{% trans "Enrollment submitted! (Demo mode)" %}');
+});
+</script>
+{% endblock %}

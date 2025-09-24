@@ -1,0 +1,401 @@
+{% extends "admin/base_site.html" %}
+
+{% load i18n admin_urls static admin_modify
+%}
+
+{% block title %}
+  Enrollment Wizard | {{ site_title|default:"Django site
+  admin" }}
+{% endblock %}
+{% block extrahead %}
+  <style>
+    .wizard-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .wizard-steps {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .wizard-step {
+      flex: 1;
+      text-align: center;
+      position: relative;
+      padding: 10px;
+    }
+
+    .wizard-step::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: -50%;
+      width: 100%;
+      height: 2px;
+      background: #ddd;
+      z-index: -1;
+    }
+
+    .wizard-step:last-child::after {
+      display: none;
+    }
+
+    .wizard-step.active {
+      color: #0066cc;
+      font-weight: bold;
+    }
+
+    .wizard-step.completed {
+      color: #28a745;
+    }
+
+    .wizard-step.active::after,
+    .wizard-step.completed::after {
+      background: #0066cc;
+    }
+
+    .step-number {
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #ddd;
+      color: white;
+      line-height: 30px;
+      margin-bottom: 5px;
+    }
+
+    .wizard-step.active .step-number {
+      background: #0066cc;
+    }
+
+    .wizard-step.completed .step-number {
+      background: #28a745;
+    }
+
+    .wizard-content {
+      background: #f8f9fa;
+      padding: 30px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .form-row {
+      margin-bottom: 20px;
+    }
+
+    .form-row label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .form-row input,
+    .form-row select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    .eligibility-check {
+      background: white;
+      padding: 15px;
+      border-radius: 6px;
+      margin: 15px 0;
+      border-left: 4px solid #0066cc;
+    }
+
+    .eligibility-check.warning {
+      border-left-color: #fd7e14;
+      background: #fff3cd;
+    }
+
+    .eligibility-check.error {
+      border-left-color: #dc3545;
+      background: #f8d7da;
+    }
+
+    .eligibility-check.success {
+      border-left-color: #28a745;
+      background: #d4edda;
+    }
+
+    .student-info {
+      background: white;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 15px;
+    }
+
+    .class-info {
+      background: white;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 15px;
+    }
+
+    .conflict-warning {
+      background: #fff3cd;
+      color: #856404;
+      padding: 10px;
+      border-radius: 4px;
+      margin: 10px 0;
+    }
+
+    .wizard-actions {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .wizard-actions button {
+      margin: 0 10px;
+      padding: 10px 20px;
+    }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const steps = ['student', 'class', 'validation', 'confirm'];
+      let currentStep = 0;
+
+      function updateStepDisplay() {
+        // Update step indicators
+        document.querySelectorAll('.wizard-step').forEach((step, index) => {
+          if (index < currentStep) {
+            step.className = 'wizard-step completed';
+          } else if (index === currentStep) {
+            step.className = 'wizard-step active';
+          } else {
+            step.className = 'wizard-step';
+          }
+        });
+
+        // Show/hide step content
+        document.querySelectorAll('.step-content').forEach((content, index) => {
+          content.style.display = index === currentStep ? 'block' : 'none';
+        });
+
+        // Update navigation buttons
+        document.getElementById('prevBtn').style.display =
+          currentStep === 0 ? 'none' : 'inline-block';
+        document.getElementById('nextBtn').style.display =
+          currentStep === steps.length - 1 ? 'none' : 'inline-block';
+        document.getElementById('enrollBtn').style.display =
+          currentStep === steps.length - 1 ? 'inline-block' : 'none';
+      }
+
+      function nextStep() {
+        if (currentStep < steps.length - 1) {
+          currentStep++;
+          updateStepDisplay();
+        }
+      }
+
+      function prevStep() {
+        if (currentStep > 0) {
+          currentStep--;
+          updateStepDisplay();
+        }
+      }
+
+      // Bind navigation events
+      document.getElementById('nextBtn').addEventListener('click', nextStep);
+      document.getElementById('prevBtn').addEventListener('click', prevStep);
+
+      // Initialize display
+      updateStepDisplay();
+    });
+  </script>
+{% endblock %}
+{% block content %}
+  <div class="wizard-container">
+    <h1>Student Enrollment Wizard</h1>
+    <ol class="wizard-steps">
+      <li class="wizard-step active">
+        <div class="step-number">1</div>
+        <div>Select Student</div>
+      </li>
+      <li class="wizard-step">
+        <div class="step-number">2</div>
+        <div>Choose Class</div>
+      </li>
+      <li class="wizard-step">
+        <div class="step-number">3</div>
+        <div>Validation</div>
+      </li>
+      <li class="wizard-step">
+        <div class="step-number">4</div>
+        <div>Confirm</div>
+      </li>
+    </ol>
+    <div class="wizard-content">
+      <form method="post" action="">
+        {% csrf_token %}
+        <!-- Step 1: Select Student -->
+        <div class="step-content" id="step-student">
+          <h3>Step 1: Select Student</h3>
+          <div class="form-row">
+            <label for="student_search">Search Student:</label>
+            <input type="text"
+                   id="student_search"
+                   name="student_search"
+                   placeholder="Enter student ID or name..." />
+          </div>
+          <div class="form-row">
+            <label for="student_id">Or Select Student:</label>
+            <select id="student_id" name="student_id">
+              <option value="">-- Choose a student --</option>
+              <!-- This would be populated via AJAX or server-side -->
+            </select>
+          </div>
+          <div id="selected-student" class="student-info" style="display: none">
+            <h4>Selected Student:</h4>
+            <p>
+              <strong>Name:</strong> <span id="student-name"></span>
+            </p>
+            <p>
+              <strong>Student ID:</strong> <span id="student-id-display"></span>
+            </p>
+            <p>
+              <strong>Status:</strong> <span id="student-status"></span>
+            </p>
+            <p>
+              <strong>Program:</strong> <span id="student-program"></span>
+            </p>
+          </div>
+        </div>
+        <!-- Step 2: Choose Class -->
+        <div class="step-content" id="step-class" style="display: none">
+          <h3>Step 2: Choose Class</h3>
+          <div class="form-row">
+            <label for="term">Term:</label>
+            <select id="term" name="term">
+              <option value="">-- Select term --</option>
+              <!-- Populated from active terms -->
+            </select>
+          </div>
+          <div class="form-row">
+            <label for="course">Course:</label>
+            <select id="course" name="course">
+              <option value="">-- Select course --</option>
+              <!-- Populated based on term selection -->
+            </select>
+          </div>
+          <div class="form-row">
+            <label for="class_header">Class Section:</label>
+            <select id="class_header" name="class_header">
+              <option value="">-- Select section --</option>
+              <!-- Populated based on course selection -->
+            </select>
+          </div>
+          <div id="selected-class" class="class-info" style="display: none">
+            <h4>Selected Class:</h4>
+            <p>
+              <strong>Course:</strong> <span id="class-course"></span>
+            </p>
+            <p>
+              <strong>Section:</strong> <span id="class-section"></span>
+            </p>
+            <p>
+              <strong>Instructor:</strong> <span id="class-instructor"></span>
+            </p>
+            <p>
+              <strong>Capacity:</strong> <span id="class-capacity"></span>
+            </p>
+            <p>
+              <strong>Schedule:</strong> <span id="class-schedule"></span>
+            </p>
+          </div>
+        </div>
+        <!-- Step 3: Validation -->
+        <div class="step-content" id="step-validation" style="display: none">
+          <h3>Step 3: Enrollment Validation</h3>
+          <div class="eligibility-check success" id="eligibility-status">
+            <h4>✓ Eligibility Check</h4>
+            <p>Checking student eligibility for selected course...</p>
+          </div>
+          <div class="eligibility-check success" id="capacity-status">
+            <h4>✓ Capacity Check</h4>
+            <p>Class has available spots.</p>
+          </div>
+          <div class="eligibility-check success" id="schedule-status">
+            <h4>✓ Schedule Check</h4>
+            <p>No schedule conflicts detected.</p>
+          </div>
+          <div class="eligibility-check" id="prerequisite-status">
+            <h4>⚠ Prerequisite Check</h4>
+            <p>Verifying course prerequisites...</p>
+          </div>
+          <div class="form-row">
+            <label>
+              <input type="checkbox" name="override_capacity" value="1" />
+              Override capacity restrictions (if class is full)
+            </label>
+          </div>
+          <div class="form-row">
+            <label>
+              <input type="checkbox" name="override_prerequisites" value="1" />
+              Override prerequisite requirements
+            </label>
+          </div>
+          <div class="form-row">
+            <label for="enrollment_notes">Enrollment Notes:</label>
+            <textarea id="enrollment_notes"
+                      name="enrollment_notes"
+                      rows="3"
+                      placeholder="Optional notes about this enrollment..."></textarea>
+          </div>
+        </div>
+        <!-- Step 4: Confirm -->
+        <div class="step-content" id="step-confirm" style="display: none">
+          <h3>Step 4: Confirm Enrollment</h3>
+          <div class="student-info">
+            <h4>Student Information:</h4>
+            <p>
+              <strong>Name:</strong> <span id="confirm-student-name"></span>
+            </p>
+            <p>
+              <strong>Student ID:</strong> <span id="confirm-student-id"></span>
+            </p>
+          </div>
+          <div class="class-info">
+            <h4>Class Information:</h4>
+            <p>
+              <strong>Course:</strong> <span id="confirm-class-course"></span>
+            </p>
+            <p>
+              <strong>Section:</strong> <span id="confirm-class-section"></span>
+            </p>
+            <p>
+              <strong>Term:</strong> <span id="confirm-class-term"></span>
+            </p>
+          </div>
+          <div class="eligibility-check success">
+            <h4>Enrollment Status:</h4>
+            <p id="confirm-enrollment-status">Student will be enrolled in the class.</p>
+          </div>
+          <div class="form-row">
+            <label>
+              <input type="checkbox" name="send_confirmation" value="1" checked />
+              Send enrollment confirmation to student
+            </label>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="wizard-actions">
+      <button type="button" id="prevBtn" class="button default">« Previous</button>
+      <button type="button" id="nextBtn" class="button default">Next »</button>
+      <button type="submit" id="enrollBtn" class="button" style="display: none">Complete Enrollment</button>
+    </div>
+    <div style="margin-top: 20px; text-align: left">
+      <a href="{% url 'admin:enrollment_classenrollment_changelist' %}"
+         class="button">« Back to Enrollments</a>
+    </div>
+  </div>
+{% endblock %}

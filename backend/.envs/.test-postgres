@@ -1,0 +1,35 @@
+# Test PostgreSQL Environment Variables
+# Using different credentials to prevent crossover with local environment
+
+# PostgreSQL (different credentials)
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=naga_test_migrations
+POSTGRES_USER=testuser
+POSTGRES_PASSWORD=testpass123
+
+# Redis
+REDIS_URL=redis://redis:6379/0
+
+# Django
+DJANGO_DEBUG=False
+DJANGO_SECRET_KEY=test-postgres-secret-key-migration-squashing-xyz789
+DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,django
+
+# Database URL (different from local)
+DATABASE_URL=postgres://testuser:testpass123@postgres:5432/naga_test_migrations
+
+# Email (test mode)
+EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
+
+# Celery/Dramatiq
+CELERY_BROKER_URL=redis://redis:6379/0
+DRAMATIQ_BROKER_URL=redis://redis:6379/0
+
+# Testing flags
+USE_DOCKER=yes
+IPYTHONDIR=/app/.ipython
+
+# Ensure we're in test mode
+TESTING_ENVIRONMENT=true
+MIGRATION_TESTING=true

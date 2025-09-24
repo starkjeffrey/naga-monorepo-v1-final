@@ -1,0 +1,239 @@
+<!-- Grades Tab Content -->
+<div class="space-y-6">
+  <!-- GPA Summary Card -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <i class="fas fa-chart-line mr-2 text-gray-400"></i>
+      Grade Point Average Summary
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div class="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+        <p class="text-3xl font-bold text-blue-600 dark:text-blue-400">
+          {{ student.cumulative_gpa|floatformat:2|default:"0.00" }}
+        </p>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Cumulative GPA</p>
+        <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">{{ total_credits_attempted }} credits attempted</p>
+      </div>
+      <div class="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+        <p class="text-3xl font-bold text-green-600 dark:text-green-400">
+          {{ current_term_gpa|floatformat:2|default:"0.00" }}
+        </p>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Current Term GPA</p>
+        <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">{{ current_term_credits }} credits</p>
+      </div>
+      <div class="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+        <p class="text-3xl font-bold text-purple-600 dark:text-purple-400">{{ major_gpa|floatformat:2|default:"0.00" }}</p>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Major GPA</p>
+        <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">{{ major_credits }} major credits</p>
+      </div>
+      <div class="text-center p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
+        <p class="text-3xl font-bold text-orange-600 dark:text-orange-400">
+          {{ quality_points|floatformat:1|default:"0.0" }}
+        </p>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Quality Points</p>
+        <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">Total earned</p>
+      </div>
+    </div>
+    <!-- GPA Trend Chart Placeholder -->
+    <div class="mt-6">
+      <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">GPA Trend</h3>
+      <div class="h-48 bg-gray-50 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+          <i class="fas fa-chart-area mr-2"></i>
+          GPA trend chart would display here
+        </p>
+      </div>
+    </div>
+  </div>
+  <!-- Current Term Grades -->
+  {% if current_term_grades %}
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <i class="fas fa-book mr-2 text-gray-400"></i>
+        Current Term Grades - {{ current_term.name }}
+      </h2>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead>
+            <tr>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                Course
+              </th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                Title
+              </th>
+              <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                Credits
+              </th>
+              <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                Midterm
+              </th>
+              <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                Current
+              </th>
+              <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                Final
+              </th>
+              <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                Points
+              </th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+            {% for grade in current_term_grades %}
+              <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                <td class="px-4 py-3 text-sm font-medium text-gray-900 dark:text-gray-100">{{ grade.course_code }}</td>
+                <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">{{ grade.course_title }}</td>
+                <td class="px-4 py-3 text-sm text-center text-gray-900 dark:text-gray-100">{{ grade.credits }}</td>
+                <td class="px-4 py-3 text-sm text-center">
+                  {% if grade.midterm_grade %}
+                    <span class="font-medium text-gray-900 dark:text-gray-100">{{ grade.midterm_grade }}</span>
+                  {% else %}
+                    <span class="text-gray-400">-</span>
+                  {% endif %}
+                </td>
+                <td class="px-4 py-3 text-sm text-center">
+                  {% if grade.current_grade %}
+                    <span class="font-medium text-gray-900 dark:text-gray-100">{{ grade.current_grade }}</span>
+                  {% else %}
+                    <span class="text-gray-400">-</span>
+                  {% endif %}
+                </td>
+                <td class="px-4 py-3 text-sm text-center">
+                  {% if grade.final_grade %}
+                    <span class="font-semibold text-gray-900 dark:text-gray-100">{{ grade.final_grade }}</span>
+                  {% else %}
+                    <span class="text-gray-400">-</span>
+                  {% endif %}
+                </td>
+                <td class="px-4 py-3 text-sm text-center text-gray-900 dark:text-gray-100">
+                  {{ grade.quality_points|floatformat:2|default:"-" }}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot class="bg-gray-50 dark:bg-gray-700">
+            <tr>
+              <td colspan="2"
+                  class="px-4 py-3 text-sm font-medium text-gray-900 dark:text-gray-100">Term Totals</td>
+              <td class="px-4 py-3 text-sm text-center font-medium text-gray-900 dark:text-gray-100">
+                {{ current_term_total_credits }}
+              </td>
+              <td colspan="3"
+                  class="px-4 py-3 text-sm text-right font-medium text-gray-900 dark:text-gray-100">
+                Term GPA: {{ current_term_gpa|floatformat:2 }}
+              </td>
+              <td class="px-4 py-3 text-sm text-center font-medium text-gray-900 dark:text-gray-100">
+                {{ current_term_quality_points|floatformat:2 }}
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  {% endif %}
+  <!-- Grade History -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+        <i class="fas fa-history mr-2 text-gray-400"></i>
+        Grade History
+      </h2>
+      <button class="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
+        <i class="fas fa-download mr-1"></i> Download Transcript
+      </button>
+    </div>
+    <!-- Term Accordion -->
+    <div class="space-y-4">
+      {% for term_grades in grade_history %}
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg">
+          <button class="w-full px-4 py-3 flex justify-between items-center text-left hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                  onclick="toggleAccordion('term-{{ term_grades.term.id }}')">
+            <div>
+              <span class="font-medium text-gray-900 dark:text-gray-100">{{ term_grades.term.name }}</span>
+              <span class="text-sm text-gray-500 dark:text-gray-400 ml-2">
+                {{ term_grades.credits }} credits | GPA: {{ term_grades.term_gpa|floatformat:2 }}
+              </span>
+            </div>
+            <i class="fas fa-chevron-down text-gray-400 transition-transform"
+               id="icon-term-{{ term_grades.term.id }}"></i>
+          </button>
+          <div id="term-{{ term_grades.term.id }}" class="hidden px-4 pb-4">
+            <table class="w-full text-sm">
+              <thead class="text-xs text-gray-500 dark:text-gray-400 uppercase">
+                <tr>
+                  <th class="text-left py-2">Course</th>
+                  <th class="text-left py-2">Title</th>
+                  <th class="text-center py-2">Credits</th>
+                  <th class="text-center py-2">Grade</th>
+                  <th class="text-center py-2">Points</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+                {% for course in term_grades.courses %}
+                  <tr>
+                    <td class="py-2 text-gray-900 dark:text-gray-100">{{ course.course_code }}</td>
+                    <td class="py-2 text-gray-600 dark:text-gray-400">{{ course.course_title }}</td>
+                    <td class="py-2 text-center text-gray-900 dark:text-gray-100">{{ course.credits }}</td>
+                    <td class="py-2 text-center font-medium text-gray-900 dark:text-gray-100">{{ course.final_grade }}</td>
+                    <td class="py-2 text-center text-gray-900 dark:text-gray-100">{{ course.quality_points|floatformat:2 }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      {% empty %}
+        <p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4">No grade history available.</p>
+      {% endfor %}
+    </div>
+  </div>
+  <!-- Grade Distribution -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <i class="fas fa-chart-pie mr-2 text-gray-400"></i>
+      Grade Distribution
+    </h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {% for grade, count in grade_distribution.items %}
+        <div class="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+          <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">{{ count }}</p>
+          <p class="text-sm text-gray-600 dark:text-gray-400">{{ grade }}</p>
+          <p class="text-xs text-gray-500 dark:text-gray-500">{{ count|percentage:total_courses }}%</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  <!-- Repeated Courses -->
+  {% if repeated_courses %}
+    <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
+      <h3 class="font-medium text-yellow-900 dark:text-yellow-200 mb-2">
+        <i class="fas fa-redo mr-2"></i>
+        Repeated Courses
+      </h3>
+      <p class="text-sm text-yellow-700 dark:text-yellow-300 mb-3">Only the most recent grade is calculated in GPA</p>
+      <div class="space-y-2">
+        {% for course in repeated_courses %}
+          <div class="flex justify-between text-sm">
+            <span class="text-yellow-900 dark:text-yellow-200">{{ course.course_code }} - {{ course.course_title }}</span>
+            <span class="text-yellow-700 dark:text-yellow-300">{{ course.original_grade }} → {{ course.repeat_grade }}</span>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+</div>
+<script>
+  function toggleAccordion(id) {
+    const content = document.getElementById(id);
+    const icon = document.getElementById('icon-' + id);
+
+    if (content.classList.contains('hidden')) {
+      content.classList.remove('hidden');
+      icon.classList.add('rotate-180');
+    } else {
+      content.classList.add('hidden');
+      icon.classList.remove('rotate-180');
+    }
+  }
+</script>

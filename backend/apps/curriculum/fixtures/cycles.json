@@ -1,0 +1,53 @@
+[
+{
+  "model": "curriculum.cycle",
+  "pk": 1,
+  "fields": {
+    "created_at": "2024-01-01T10:00:00Z",
+    "updated_at": "2025-07-15T04:51:41.832Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "division": 1,
+    "name": "Language Program",
+    "short_name": "LANG",
+    "typical_duration_terms": 6,
+    "description": "English Language Learning Certificate Program",
+    "is_active": true,
+    "display_order": 10
+  }
+},
+{
+  "model": "curriculum.cycle",
+  "pk": 2,
+  "fields": {
+    "created_at": "2024-01-01T10:00:00Z",
+    "updated_at": "2025-07-05T02:36:58.160Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "division": 2,
+    "name": "Bachelor's Program",
+    "short_name": "BA",
+    "typical_duration_terms": 16,
+    "description": "Bachelor of Arts degree program",
+    "is_active": true,
+    "display_order": 20
+  }
+},
+{
+  "model": "curriculum.cycle",
+  "pk": 3,
+  "fields": {
+    "created_at": "2024-01-01T10:00:00Z",
+    "updated_at": "2025-07-05T02:36:36.741Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "division": 2,
+    "name": "Master's Program",
+    "short_name": "MASTERS",
+    "typical_duration_terms": 8,
+    "description": "MBA, MEd programs",
+    "is_active": true,
+    "display_order": 30
+  }
+}
+]

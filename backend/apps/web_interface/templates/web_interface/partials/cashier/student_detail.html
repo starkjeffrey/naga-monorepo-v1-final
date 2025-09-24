@@ -1,0 +1,107 @@
+{% load i18n %}
+
+<div class="sis-card">
+    <div class="sis-card-header">
+        <h3 class="sis-card-title">{% trans "Selected Student" %}</h3>
+    </div>
+    <div class="sis-card-content">
+        <!-- Student Info -->
+        <div class="flex items-center space-x-3 mb-4">
+            {% if student.person.photo %}
+                <img src="{{ student.person.photo.url }}" 
+                     alt="{{ student.person.full_name }}"
+                     class="w-12 h-12 rounded-full object-cover">
+            {% else %}
+                <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
+                    <i class="fas fa-user text-gray-600"></i>
+                </div>
+            {% endif %}
+            
+            <div>
+                <p class="font-bold">{{ student.person.full_name }}</p>
+                <p class="text-sm text-gray-600">{% trans "ID" %}: {{ student.student_id }}</p>
+                {% if student.person.khmer_name %}
+                    <p class="text-sm text-gray-500">{{ student.person.khmer_name }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Financial Summary -->
+        <div class="bg-gray-50 rounded-lg p-3 mb-4">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-medium">{% trans "Total Outstanding" %}:</span>
+                <span class="text-lg font-bold {% if total_outstanding > 0 %}text-red-600{% else %}text-green-600{% endif %}">
+                    ${{ total_outstanding|floatformat:2 }}
+                </span>
+            </div>
+            
+            {% if outstanding_invoices %}
+                <div class="text-xs text-gray-600">
+                    {{ outstanding_invoices.count }} {% trans "outstanding invoice(s)" %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Outstanding Invoices -->
+        {% if outstanding_invoices %}
+            <div class="space-y-2 mb-4">
+                <h4 class="font-medium text-sm">{% trans "Outstanding Invoices" %}:</h4>
+                {% for invoice in outstanding_invoices %}
+                    <div class="flex justify-between items-center p-2 bg-orange-50 border border-orange-200 rounded">
+                        <div>
+                            <p class="text-sm font-medium">{{ invoice.invoice_number }}</p>
+                            <p class="text-xs text-gray-600">
+                                {% trans "Due" %}: {{ invoice.due_date|date:"M d, Y" }}
+                            </p>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-orange-600">${{ invoice.amount_due|floatformat:2 }}</p>
+                            <p class="text-xs text-gray-500">{{ invoice.get_status_display }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Recent Payments -->
+        {% if recent_payments %}
+            <div class="space-y-2">
+                <h4 class="font-medium text-sm">{% trans "Recent Payments" %}:</h4>
+                {% for payment in recent_payments %}
+                    <div class="flex justify-between items-center p-2 bg-green-50 border border-green-200 rounded">
+                        <div>
+                            <p class="text-sm font-medium">{{ payment.payment_reference }}</p>
+                            <p class="text-xs text-gray-600">
+                                {{ payment.payment_date|date:"M d, Y" }} - {{ payment.get_payment_method_display }}
+                            </p>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-green-600">${{ payment.amount|floatformat:2 }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Change Student Button -->
+        <button onclick="clearStudentSelection()" 
+                class="sis-btn sis-btn-outline w-full mt-4">
+            {% trans "Select Different Student" %}
+        </button>
+    </div>
+</div>
+
+<script>
+function clearStudentSelection() {
+    selectedStudentId = null;
+    document.getElementById('payment-form-container').classList.add('hidden');
+    document.getElementById('student-details').classList.add('hidden');
+    document.getElementById('student-search-results').innerHTML = `
+        <div class="text-center text-gray-500 py-8">
+            <i class="fas fa-search text-2xl mb-2"></i>
+            <p>{% trans "Start typing to search for students..." %}</p>
+        </div>
+    `;
+    document.getElementById('student-search').focus();
+}
+</script>

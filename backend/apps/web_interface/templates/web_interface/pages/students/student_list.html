@@ -1,0 +1,12 @@
+{% extends "web_interface/base/dashboard_base.html" %}
+
+{% load i18n %}
+{% load static %}
+{% load web_interface_tags %}
+
+{% block title %}
+  {% trans "Student Management" %} - {{ block.super }}
+{% endblock %}
+{% block dashboard_content %}
+  {% include "web_interface/pages/students/student_list_content.html" %}
+{% endblock %}

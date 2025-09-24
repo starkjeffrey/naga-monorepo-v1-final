@@ -1,0 +1,350 @@
+{% extends "base_new.html" %}
+
+{% load static i18n humanize %}
+
+{% block title %}
+  Daily\nPayment Summary - {{ report_date|date:"M d, Y" }} - {{ block.super }}
+{% endblock\n %}
+{% block extra_css %}
+  \n<style>
+  \n .report-header {
+    \n @apply bg-gray-50 rounded-lg p-6 mb-6;
+    \n
+  }
+
+  \n .summary-grid {
+    \n @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6;
+    \n
+  }
+
+  \n .metric-card {
+    \n @apply bg-white rounded-lg shadow-md p-4;
+    \n
+  }
+
+  \n .metric-label {
+    \n @apply text-sm text-gray-600 mb-1;
+    \n
+  }
+
+  \n .metric-value {
+    \n @apply text-2xl font-bold;
+    \n
+  }
+
+  \n @media print {
+    \n .no-print {
+      \n display: none !important;
+      \n
+    }
+
+    \n .page-break {
+      \n page-break-after: always;
+      \n
+    }
+
+    \n
+  }
+
+  \n
+</style>
+  \n
+{% endblock %}
+{% block content %}
+  \n
+  <div class="container mx-auto px-4 py-6">
+    \n  <!-- Report Header -->\n
+    <div class="report-header">
+      \n
+      <div class="flex justify-between items-start">
+        \n
+        <div>
+          \n
+          <h1 class="text-3xl font-bold text-gray-800">Daily Payment Summary</h1>
+          \n
+          <p class="text-lg text-gray-600 mt-2">\n          {{ report_date|date:"l, F j, Y" }}\n</p>
+          \n
+        </div>
+        \n
+        <div class="flex space-x-3 no-print">
+          \n
+          <button onclick="window.print()" class="btn btn-outline-secondary">
+            \n
+            <svg\n class="w-5 h-5 mr-2"\n            fill="none"\n            stroke="currentColor"\n            viewBox="0 0 24 24"\n>
+              \n
+              <path\n stroke-linecap="round"\n              stroke-linejoin="round"\n              stroke-width="2"\n              d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2z"\n>
+              </path>
+              \n
+            </svg>
+            \n          Print Report\n
+          </button>
+          \n
+        </div>
+        \n
+      </div>
+      \n
+    </div>
+    \n\n  <!-- Key Metrics -->\n
+    <div class="summary-grid">
+      \n
+      <div class="metric-card">
+        \n
+        <p class="metric-label">Total Revenue</p>
+        \n
+        <p class="metric-value text-green-600">\n        ${{ total_amount|floatformat:2|intcomma }}\n</p>
+        \n
+      </div>
+      \n
+      <div class="metric-card">
+        \n
+        <p class="metric-label">Total Payments</p>
+        \n
+        <p class="metric-value text-blue-600">{{ total_count|intcomma }}</p>
+        \n
+      </div>
+      \n
+      <div class="metric-card">
+        \n
+        <p class="metric-label">Average Payment</p>
+        \n
+        <p class="metric-value text-purple-600">\n        ${{ average_payment|floatformat:2|intcomma }}\n</p>
+        \n
+      </div>
+      \n
+      <div class="metric-card">
+        \n
+        <p class="metric-label">Peak Hour</p>
+        \n
+        <p class="metric-value text-orange-600">
+          \n
+          {% for hour in hourly_payments %}
+            {% if hour.total ==\n        hourly_payments|dictsort:"total"|last.total %}
+              {{ hour.hour }}
+            {% endif\n %}
+          {% endfor %}
+          \n
+        </p>
+        \n
+      </div>
+      \n
+    </div>
+    \n\n  <!-- Payment Method Breakdown -->\n
+    <div class="bg-white rounded-lg shadow-md mb-6">
+      \n
+      <div class="px-6 py-4 border-b border-gray-200">
+        \n
+        <h2 class="text-xl font-semibold text-gray-800">\n        Payment Method Breakdown\n</h2>
+        \n
+      </div>
+      \n
+      <div class="p-6">
+        \n
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          \n        <!-- Table -->\n
+          <div>
+            \n
+            <table class="w-full">
+              \n
+              <thead class="bg-gray-50">
+                \n
+                <tr>
+                  \n
+                  <th\n class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase"\n>\n                  Method\n</th>
+                  \n
+                  <th\n class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase"\n>\n                  Count\n</th>
+                  \n
+                  <th\n class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase"\n>\n                  Amount\n</th>
+                  \n
+                </tr>
+                \n
+              </thead>
+              \n
+              <tbody class="divide-y divide-gray-200">
+                \n
+                {% for method in payment_by_method %}
+                  \n
+                  <tr>
+                    \n
+                    <td class="px-4 py-3 text-sm font-medium text-gray-900">\n                  {{ method.payment_method }}\n</td>
+                    \n
+                    <td class="px-4 py-3 text-sm text-gray-900 text-right">\n                  {{ method.count }}\n</td>
+                    \n
+                    <td class="px-4 py-3 text-sm text-gray-900 text-right">
+                      \n                  ${{ method.total|floatformat:2|intcomma }}\n
+                    </td>
+                    \n
+                  </tr>
+                  \n
+                {% endfor %}
+                \n
+              </tbody>
+              \n
+            </table>
+            \n
+          </div>
+          \n        <!-- Chart placeholder -->\n
+          <div>
+            \n          <canvas id="paymentMethodChart" width="400" height="200"></canvas>\n
+          </div>
+          \n
+        </div>
+        \n
+      </div>
+      \n
+    </div>
+    \n\n  <!-- Payment Type Breakdown -->\n
+    <div class="bg-white rounded-lg shadow-md mb-6">
+      \n
+      <div class="px-6 py-4 border-b border-gray-200">
+        \n
+        <h2 class="text-xl font-semibold text-gray-800">\n        Payment Type Breakdown\n</h2>
+        \n
+      </div>
+      \n
+      <div class="p-6">
+        \n
+        <table class="w-full">
+          \n
+          <thead class="bg-gray-50">
+            \n
+            <tr>
+              \n
+              <th\n class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase"\n>\n              Type\n</th>
+              \n
+              <th\n class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase"\n>\n              Count\n</th>
+              \n
+              <th\n class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase"\n>\n              Amount\n</th>
+              \n
+              <th\n class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase"\n>\n              Percentage\n</th>
+              \n
+            </tr>
+            \n
+          </thead>
+          \n
+          <tbody class="divide-y divide-gray-200">
+            \n
+            {% for type in payment_by_type %}
+              \n
+              <tr>
+                \n
+                <td class="px-4 py-3 text-sm font-medium text-gray-900">
+                  \n              {{ type.invoice__invoice_type|default:"Other" }}\n
+                </td>
+                \n
+                <td class="px-4 py-3 text-sm text-gray-900 text-right">\n              {{ type.count }}\n</td>
+                \n
+                <td class="px-4 py-3 text-sm text-gray-900 text-right">\n              ${{ type.total|floatformat:2|intcomma }}\n</td>
+                \n
+                <td class="px-4 py-3 text-sm text-gray-900 text-right">
+                  \n
+                  {% if total_amount > 0 %}
+                    {% widthratio type.total total_amount\n              100 %}%
+                  {% else %}
+                    0%
+                  {% endif %}
+                  \n
+                </td>
+                \n
+              </tr>
+              \n
+            {% endfor %}
+            \n
+          </tbody>
+          \n
+        </table>
+        \n
+      </div>
+      \n
+    </div>
+    \n\n  <!-- Hourly Distribution -->\n
+    <div class="bg-white rounded-lg shadow-md mb-6">
+      \n
+      <div class="px-6 py-4 border-b border-gray-200">
+        \n
+        <h2 class="text-xl font-semibold text-gray-800">\n        Hourly Payment Distribution\n</h2>
+        \n
+      </div>
+      \n
+      <div class="p-6">
+        \n      <canvas id="hourlyChart" width="800" height="300"></canvas>\n
+      </div>
+      \n
+    </div>
+    \n\n  <!-- Cashier Performance -->\n
+    <div class="bg-white rounded-lg shadow-md">
+      \n
+      <div class="px-6 py-4 border-b border-gray-200">
+        \n
+        <h2 class="text-xl font-semibold text-gray-800">Cashier Performance</h2>
+        \n
+      </div>
+      \n
+      <div class="p-6">
+        \n
+        <table class="w-full">
+          \n
+          <thead class="bg-gray-50">
+            \n
+            <tr>
+              \n
+              <th\n class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase"\n>\n              Cashier\n</th>
+              \n
+              <th\n class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase"\n>\n              Payments\n</th>
+              \n
+              <th\n class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase"\n>
+                \n              Total Collected\n
+              </th>
+              \n
+              <th\n class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase"\n>\n              Average\n</th>
+              \n
+            </tr>
+            \n
+          </thead>
+          \n
+          <tbody class="divide-y divide-gray-200">
+            \n
+            {% for cashier in cashier_performance %}
+              \n
+              <tr>
+                \n
+                <td class="px-4 py-3 text-sm font-medium text-gray-900">
+                  \n              {{ cashier.processed_by__first_name }} {{\n              cashier.processed_by__last_name }}\n
+                </td>
+                \n
+                <td class="px-4 py-3 text-sm text-gray-900 text-right">\n              {{ cashier.count }}\n</td>
+                \n
+                <td class="px-4 py-3 text-sm text-gray-900 text-right">
+                  \n              ${{ cashier.total|floatformat:2|intcomma }}\n
+                </td>
+                \n
+                <td class="px-4 py-3 text-sm text-gray-900 text-right">
+                  \n
+                  {% if cashier.count > 0 %}
+                    ${{ cashier.total|floatformat:2 }} {%\n              else %} $0.00
+                  {% endif %}
+                  \n
+                </td>
+                \n
+              </tr>
+              \n
+            {% endfor %}
+            \n
+          </tbody>
+          \n
+        </table>
+        \n
+      </div>
+      \n
+    </div>
+    \n
+  </div>
+  \n
+{% endblock %}
+{% block extra_js %}
+  \n<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>\n<script>
+  \
+  n // Payment Method Pie Chart\n  const paymentMethodCtx = document.getElementById('paymentMethodChart').getContext('2d');\n  new Chart(paymentMethodCtx, {\n      type: 'pie',\n      data: {\n          labels: [{% for method in payment_by_method %}'{{ method.payment_method }}'{% if not forloop.last %},{% endif %}{% endfor %}],\n          datasets: [{\n              data: [{% for method in payment_by_method %}{{ method.total }}{% if not forloop.last %},{% endif %}{% endfor %}],\n              backgroundColor: ['#10B981', '#3B82F6', '#F59E0B', '#EF4444', '#8B5CF6']\n          }]\n      },\n      options: {\n          responsive: true,\n          maintainAspectRatio: false,\n          plugins: {\n              legend: {\n                  position: 'right',\n              }\n          }\n      }\n  });\n\n  // Hourly Distribution Bar Chart\n  const hourlyCtx = document.getElementById('hourlyChart').getContext('2d');\n  new Chart(hourlyCtx, {\n      type: 'bar',\n      data: {\n          labels: [{% for hour in hourly_payments %}'{{ hour.hour }}'{% if not forloop.last %},{% endif %}{% endfor %}],\n          datasets: [{\n              label: 'Payment Amount',\n              data: [{% for hour in hourly_payments %}{{ hour.total }}{% if not forloop.last %},{% endif %}{% endfor %}],\n              backgroundColor: '#3B82F6',\n              borderColor: '#2563EB',\n              borderWidth: 1\n          }]\n      },\n      options: {\n          responsive: true,\n          maintainAspectRatio: false,\n          scales: {\n              y: {\n                  beginAtZero: true,\n                  ticks: {\n                      callback: function(value) {\n                          return '$' + value.toLocaleString();\n                      }\n                  }\n              }\n          },\n          plugins: {\n              legend: {\n                  display: false\n              }\n          }\n      }\n  });\n
+</script>
+  \n
+{% endblock %}
+\n

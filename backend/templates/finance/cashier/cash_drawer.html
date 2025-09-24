@@ -1,0 +1,308 @@
+{% extends "base_new.html" %}
+
+{% load static i18n humanize %}
+
+{% block title %}Cash Drawer Management - {{ block.super }}{% endblock %}
+{% block extra_css %}
+  <style>
+    .denomination-row {
+      @apply grid grid-cols-4 gap-4 items-center py-2 px-4 hover:bg-gray-50 rounded;
+    }
+
+    .cash-summary {
+      @apply bg-gray-50 p-4 rounded-lg;
+    }
+
+    .variance-positive {
+      @apply text-green-600 font-bold;
+    }
+
+    .variance-negative {
+      @apply text-red-600 font-bold;
+    }
+  </style>
+{% endblock %}
+{% block content %}
+  <div class="container mx-auto px-4 py-6" x-data="cashDrawerManager()">
+    <!-- Header -->
+    <div class="mb-6">
+      <a href="{% url 'finance:cashier-dashboard' %}"
+         class="text-blue-600 hover:text-blue-800 mb-2 inline-block">← Back to Dashboard</a>
+      <h1 class="text-3xl font-bold text-gray-800">Cash Drawer Management</h1>
+    </div>
+    <div class="max-w-4xl mx-auto">
+      {% if session.is_open %}
+        <!-- Cash Drawer is Open -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <div class="mb-6">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-xl font-semibold text-gray-800">Close Cash Drawer</h2>
+              <div class="text-sm text-gray-600">Opened at {{ session.open_time|time:"g:i A" }}</div>
+            </div>
+            <!-- Current Status -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <div class="cash-summary">
+                <p class="text-sm text-gray-600">Opening Balance</p>
+                <p class="text-xl font-bold text-gray-900">${{ session.opening_cash|floatformat:2|intcomma }}</p>
+              </div>
+              <div class="cash-summary">
+                <p class="text-sm text-gray-600">Expected Cash</p>
+                <p class="text-xl font-bold text-gray-900">${{ current_cash|floatformat:2|intcomma }}</p>
+              </div>
+              <div class="cash-summary">
+                <p class="text-sm text-gray-600">Cash Collected Today</p>
+                <p class="text-xl font-bold text-green-600">${{ session.cash_collected|default:"0.00"|floatformat:2|intcomma }}</p>
+              </div>
+            </div>
+            <!-- Cash Count Form -->
+            <form method="post" @submit.prevent="submitCashCount()">
+              {% csrf_token %}
+              <input type="hidden" name="action" value="close" />
+              <h3 class="text-lg font-semibold text-gray-700 mb-4">Count Your Cash</h3>
+              <div class="space-y-2 mb-6">
+                {% for denom in denominations %}
+                  <div class="denomination-row">
+                    <div class="text-right font-medium">{{ denom.label }}</div>
+                    <div class="text-center text-gray-500">×</div>
+                    <div>
+                      <input type="number"
+                             x-model.number="denominations[{{ denom.value }}]"
+                             @input="calculateTotal()"
+                             min="0"
+                             class="w-full px-3 py-2 border border-gray-300 rounded-md text-center" />
+                    </div>
+                    <div class="text-right font-medium">
+                      = $<span x-text="(denominations[{{ denom.value }}] * {{ denom.value }}).toFixed(2)"></span>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+              <!-- Total and Variance -->
+              <div class="border-t pt-4 space-y-3">
+                <div class="flex justify-between text-lg font-semibold">
+                  <span>Total Counted:</span>
+                  <span>$<span x-text="totalCounted.toFixed(2)"></span></span>
+                </div>
+                <div class="flex justify-between text-lg">
+                  <span>Expected:</span>
+                  <span>${{ current_cash|floatformat:2 }}</span>
+                </div>
+                <div class="flex justify-between text-xl font-bold"
+                     :class="variance === 0 ? 'text-green-600' : (variance > 0 ? 'variance-positive' : 'variance-negative')">
+                  <span>Variance:</span>
+                  <span>
+                    <span x-show="variance >= 0">+</span>$<span x-text="Math.abs(variance).toFixed(2)"></span>
+                  </span>
+                </div>
+              </div>
+              <!-- Variance Explanation (if any) -->
+              <div x-show="Math.abs(variance) > 0.01" x-transition class="mt-4">
+                <label for="variance_notes"
+                       class="block text-sm font-medium text-gray-700 mb-2">Please explain the variance:</label>
+                <textarea id="variance_notes"
+                          name="variance_notes"
+                          x-model="varianceNotes"
+                          rows="3"
+                          class="w-full px-4 py-2 border border-gray-300 rounded-md"
+                          :required="Math.abs(variance) > 5"
+                          placeholder="Describe the reason for the cash variance..."></textarea>
+              </div>
+              <input type="hidden" name="closing_cash" :value="totalCounted" />
+              <!-- Actions -->
+              <div class="mt-6 flex justify-end space-x-3">
+                <a href="{% url 'finance:cashier-dashboard' %}"
+                   class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary" :disabled="processing">
+                  <span x-show="!processing">Close Cash Drawer</span>
+                  <span x-show="processing">Processing...</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      {% else %}
+        <!-- Cash Drawer is Closed -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <h2 class="text-xl font-semibold text-gray-800 mb-6">Open Cash Drawer</h2>
+          <form method="post" @submit.prevent="submitOpenDrawer()">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="open" />
+            <p class="text-gray-600 mb-6">
+              Count your starting cash and enter the total amount to open the cash
+              drawer for today.
+            </p>
+            <!-- Opening Cash Count -->
+            <div class="space-y-2 mb-6">
+              <h3 class="text-lg font-semibold text-gray-700 mb-4">Count Your Starting Cash</h3>
+              {% for denom in denominations %}
+                <div class="denomination-row">
+                  <div class="text-right font-medium">{{ denom.label }}</div>
+                  <div class="text-center text-gray-500">×</div>
+                  <div>
+                    <input type="number"
+                           x-model.number="denominations[{{ denom.value }}]"
+                           @input="calculateTotal()"
+                           min="0"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md text-center" />
+                  </div>
+                  <div class="text-right font-medium">
+                    = $<span x-text="(denominations[{{ denom.value }}] * {{ denom.value }}).toFixed(2)"></span>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+            <!-- Total -->
+            <div class="border-t pt-4">
+              <div class="flex justify-between text-xl font-bold text-gray-900">
+                <span>Total Opening Cash:</span>
+                <span>$<span x-text="totalCounted.toFixed(2)"></span></span>
+              </div>
+            </div>
+            <input type="hidden" name="opening_cash" :value="totalCounted" />
+            <!-- Actions -->
+            <div class="mt-6 flex justify-end space-x-3">
+              <a href="{% url 'finance:cashier-dashboard' %}"
+                 class="btn btn-secondary">Cancel</a>
+              <button type="submit"
+                      class="btn btn-primary"
+                      :disabled="totalCounted <= 0 || processing">
+                <span x-show="!processing">Open Cash Drawer</span>
+                <span x-show="processing">Processing...</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      {% endif %}
+      <!-- Previous Sessions -->
+      <div class="mt-8 bg-white rounded-lg shadow-md p-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">Recent Cash Drawer Sessions</h3>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cashier</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Opening</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Closing</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Variance</th>
+                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              {% for previous_session in recent_sessions %}
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ previous_session.date|date:"M d, Y" }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ previous_session.cashier.get_full_name }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-right">
+                    ${{ previous_session.opening_cash|floatformat:2|intcomma }}
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-right">
+                    {% if previous_session.closing_cash %}
+                      ${{ previous_session.closing_cash|floatformat:2|intcomma }}
+                    {% else %}
+                      -
+                    {% endif %}
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-medium">
+                    {% if previous_session.variance is not None %}
+                      <span class="{% if previous_session.variance == 0 %}text-green-600{% elif previous_session.variance > 0 %}variance-positive{% else %}variance-negative{% endif %}">
+                        {% if previous_session.variance >= 0 %}+{% endif %}
+                        ${{ previous_session.variance|floatformat:2 }}
+                      </span>
+                    {% else %}
+                      -
+                    {% endif %}
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-center">
+                    {% if previous_session.is_open %}
+                      <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Open</span>
+                    {% else %}
+                      <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Closed</span>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="6" class="px-6 py-4 text-center text-gray-500">No previous sessions found</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block extra_js %}
+  <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    function cashDrawerManager() {
+      return {
+        denominations: {
+          100: 0,
+          50: 0,
+          20: 0,
+          10: 0,
+          5: 0,
+          1: 0
+        },
+        totalCounted: 0,
+        expectedCash: {
+          {
+            current_cash |
+              default: "0"
+          }
+        },
+        variance: 0,
+        varianceNotes: '',
+        processing: false,
+
+        calculateTotal() {
+          this.totalCounted = Object.entries(this.denominations).reduce((sum, [value, count]) => {
+            return sum + (parseInt(value) * count);
+          }, 0);
+
+          this.variance = this.totalCounted - this.expectedCash;
+        },
+
+        async submitOpenDrawer() {
+          if (this.totalCounted <= 0) {
+            Swal.fire('Error', 'Please enter the opening cash amount', 'error');
+            return;
+          }
+
+          this.processing = true;
+          document.querySelector('form').submit();
+        },
+
+        async submitCashCount() {
+          if (Math.abs(this.variance) > 5 && !this.varianceNotes.trim()) {
+            Swal.fire('Error', 'Please explain the cash variance', 'error');
+            return;
+          }
+
+          const result = await Swal.fire({
+            title: 'Confirm Cash Count',
+            html: `
+                      <p>Total Counted: <strong>$${this.totalCounted.toFixed(2)}</strong></p>
+                      <p>Expected: <strong>$${this.expectedCash.toFixed(2)}</strong></p>
+                      <p>Variance: <strong class="${this.variance >= 0 ? 'text-green-600' : 'text-red-600'}">
+                          ${this.variance >= 0 ? '+' : ''}$${Math.abs(this.variance).toFixed(2)}
+                      </strong></p>
+                  `,
+            icon: Math.abs(this.variance) > 0.01 ? 'warning' : 'info',
+            showCancelButton: true,
+            confirmButtonText: 'Close Drawer',
+            cancelButtonText: 'Recount'
+          });
+
+          if (result.isConfirmed) {
+            this.processing = true;
+            document.querySelector('form').submit();
+          }
+        }
+      }
+    }
+  </script>
+{% endblock %}

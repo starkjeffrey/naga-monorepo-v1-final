@@ -1,0 +1,279 @@
+# Naga SIS Alerting Rules
+groups:
+  - name: naga-backend-alerts
+    rules:
+      # Backend service availability
+      - alert: BackendServiceDown
+        expr: up{job="django-backend"} == 0
+        for: 30s
+        labels:
+          severity: critical
+          service: backend
+        annotations:
+          summary: "Naga backend service is down"
+          description: "The Django backend service has been down for more than 30 seconds."
+
+      # High error rate in backend
+      - alert: BackendHighErrorRate
+        expr: rate(django_http_requests_total{status=~"5.."}[5m]) / rate(django_http_requests_total[5m]) > 0.05
+        for: 2m
+        labels:
+          severity: warning
+          service: backend
+        annotations:
+          summary: "High error rate in Naga backend"
+          description: "Backend error rate is {{ $value | humanizePercentage }} over the last 5 minutes."
+
+      # High response time
+      - alert: BackendHighResponseTime
+        expr: histogram_quantile(0.95, rate(django_http_request_duration_seconds_bucket[5m])) > 2
+        for: 3m
+        labels:
+          severity: warning
+          service: backend
+        annotations:
+          summary: "High response time in Naga backend"
+          description: "95th percentile response time is {{ $value }}s over the last 5 minutes."
+
+      # Database connection issues
+      - alert: DatabaseConnectionHigh
+        expr: django_db_connections_total > 80
+        for: 2m
+        labels:
+          severity: warning
+          service: database
+        annotations:
+          summary: "High database connection count"
+          description: "Database connection count is {{ $value }}, approaching the limit."
+
+  - name: naga-frontend-alerts
+    rules:
+      # Frontend service availability
+      - alert: FrontendServiceDown
+        expr: up{job="nginx-frontend"} == 0
+        for: 30s
+        labels:
+          severity: critical
+          service: frontend
+        annotations:
+          summary: "Naga frontend service is down"
+          description: "The frontend nginx service has been down for more than 30 seconds."
+
+      # High frontend error rate
+      - alert: FrontendHighErrorRate
+        expr: rate(nginx_http_requests_total{status=~"5.."}[5m]) / rate(nginx_http_requests_total[5m]) > 0.05
+        for: 2m
+        labels:
+          severity: warning
+          service: frontend
+        annotations:
+          summary: "High error rate in Naga frontend"
+          description: "Frontend error rate is {{ $value | humanizePercentage }} over the last 5 minutes."
+
+  - name: naga-infrastructure-alerts
+    rules:
+      # High CPU usage
+      - alert: HighCPUUsage
+        expr: (100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)) > 80
+        for: 5m
+        labels:
+          severity: warning
+          service: infrastructure
+        annotations:
+          summary: "High CPU usage detected"
+          description: "CPU usage is above 80% on {{ $labels.instance }} for more than 5 minutes."
+
+      # High memory usage
+      - alert: HighMemoryUsage
+        expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+          service: infrastructure
+        annotations:
+          summary: "High memory usage detected"
+          description: "Memory usage is above 85% on {{ $labels.instance }}."
+
+      # Low disk space
+      - alert: LowDiskSpace
+        expr: (node_filesystem_avail_bytes / node_filesystem_size_bytes) * 100 < 10
+        for: 5m
+        labels:
+          severity: critical
+          service: infrastructure
+        annotations:
+          summary: "Low disk space"
+          description: "Disk space is below 10% on {{ $labels.instance }} filesystem {{ $labels.mountpoint }}."
+
+      # High disk I/O
+      - alert: HighDiskIO
+        expr: rate(node_disk_io_time_seconds_total[5m]) > 0.8
+        for: 5m
+        labels:
+          severity: warning
+          service: infrastructure
+        annotations:
+          summary: "High disk I/O detected"
+          description: "Disk I/O usage is above 80% on {{ $labels.instance }}."
+
+  - name: naga-database-alerts
+    rules:
+      # PostgreSQL service down
+      - alert: PostgreSQLDown
+        expr: up{job="postgres"} == 0
+        for: 30s
+        labels:
+          severity: critical
+          service: database
+        annotations:
+          summary: "PostgreSQL service is down"
+          description: "PostgreSQL database service has been down for more than 30 seconds."
+
+      # High database connections
+      - alert: PostgreSQLHighConnections
+        expr: pg_stat_database_numbackends / pg_settings_max_connections * 100 > 80
+        for: 2m
+        labels:
+          severity: warning
+          service: database
+        annotations:
+          summary: "High PostgreSQL connection usage"
+          description: "PostgreSQL connection usage is above 80%."
+
+      # Long running queries
+      - alert: PostgreSQLLongRunningQueries
+        expr: pg_stat_activity_max_tx_duration{state="active"} > 300
+        for: 1m
+        labels:
+          severity: warning
+          service: database
+        annotations:
+          summary: "Long running PostgreSQL queries detected"
+          description: "Query running for more than 5 minutes detected."
+
+      # Database size growth
+      - alert: PostgreSQLDatabaseSizeGrowth
+        expr: increase(pg_database_size_bytes[1h]) > 1e9  # 1GB growth per hour
+        for: 0m
+        labels:
+          severity: warning
+          service: database
+        annotations:
+          summary: "Rapid database growth detected"
+          description: "Database {{ $labels.database }} has grown by {{ $value | humanizeBytes }} in the last hour."
+
+  - name: naga-redis-alerts
+    rules:
+      # Redis service down
+      - alert: RedisDown
+        expr: up{job="redis"} == 0
+        for: 30s
+        labels:
+          severity: critical
+          service: cache
+        annotations:
+          summary: "Redis service is down"
+          description: "Redis cache service has been down for more than 30 seconds."
+
+      # High Redis memory usage
+      - alert: RedisHighMemoryUsage
+        expr: redis_memory_used_bytes / redis_memory_max_bytes * 100 > 90
+        for: 2m
+        labels:
+          severity: warning
+          service: cache
+        annotations:
+          summary: "High Redis memory usage"
+          description: "Redis memory usage is above 90%."
+
+      # High Redis connection count
+      - alert: RedisHighConnections
+        expr: redis_connected_clients > 100
+        for: 2m
+        labels:
+          severity: warning
+          service: cache
+        annotations:
+          summary: "High Redis connection count"
+          description: "Redis has {{ $value }} connected clients."
+
+  - name: naga-application-alerts
+    rules:
+      # Student enrollment system alerts
+      - alert: HighEnrollmentErrors
+        expr: rate(django_http_requests_total{view=~".*enrollment.*", status=~"5.."}[5m]) > 0.1
+        for: 1m
+        labels:
+          severity: critical
+          service: enrollment
+        annotations:
+          summary: "High errors in enrollment system"
+          description: "Enrollment system experiencing high error rate: {{ $value }} errors/second."
+
+      # Attendance system alerts
+      - alert: AttendanceSystemDown
+        expr: up{job="django-backend", endpoint=~".*attendance.*"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: attendance
+        annotations:
+          summary: "Attendance system unavailable"
+          description: "The attendance system endpoints are not responding."
+
+      # Authentication system alerts
+      - alert: AuthenticationErrors
+        expr: rate(django_http_requests_total{view=~".*auth.*", status=~"5.."}[5m]) > 0.05
+        for: 2m
+        labels:
+          severity: warning
+          service: authentication
+        annotations:
+          summary: "Authentication errors detected"
+          description: "High error rate in authentication system: {{ $value }} errors/second."
+
+      # Grade system alerts
+      - alert: GradeSystemErrors
+        expr: rate(django_http_requests_total{view=~".*grade.*", status=~"5.."}[5m]) > 0.05
+        for: 2m
+        labels:
+          severity: warning
+          service: grading
+        annotations:
+          summary: "Grading system errors"
+          description: "Errors detected in grading system: {{ $value }} errors/second."
+
+  - name: naga-business-alerts
+    rules:
+      # Academic calendar alerts
+      - alert: TermEndingsSoon
+        expr: (naga_academic_term_end_timestamp - time()) / 86400 < 7
+        for: 0m
+        labels:
+          severity: info
+          service: academic
+        annotations:
+          summary: "Academic term ending soon"
+          description: "Academic term {{ $labels.term_name }} is ending in less than 7 days."
+
+      # Enrollment deadline alerts
+      - alert: EnrollmentDeadlineApproaching
+        expr: (naga_enrollment_deadline_timestamp - time()) / 86400 < 3
+        for: 0m
+        labels:
+          severity: warning
+          service: enrollment
+        annotations:
+          summary: "Enrollment deadline approaching"
+          description: "Enrollment deadline for {{ $labels.term_name }} is in less than 3 days."
+
+      # System maintenance alerts
+      - alert: ScheduledMaintenanceReminder
+        expr: (naga_scheduled_maintenance_timestamp - time()) / 3600 < 2
+        for: 0m
+        labels:
+          severity: info
+          service: maintenance
+        annotations:
+          summary: "Scheduled maintenance in 2 hours"
+          description: "Scheduled system maintenance will begin in less than 2 hours."

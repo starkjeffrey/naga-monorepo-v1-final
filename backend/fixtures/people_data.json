@@ -1,0 +1,2072 @@
+[
+{
+  "model": "people.teacherprofile",
+  "pk": 137,
+  "fields": {
+    "created_at": "2025-07-31T05:02:56.708Z",
+    "updated_at": "2025-07-31T05:02:56.708Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70013,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-07-31",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 138,
+  "fields": {
+    "created_at": "2025-07-31T05:02:56.727Z",
+    "updated_at": "2025-07-31T05:02:56.727Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70015,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-07-31",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 139,
+  "fields": {
+    "created_at": "2025-07-31T05:02:56.740Z",
+    "updated_at": "2025-07-31T05:02:56.740Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70017,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-07-31",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 140,
+  "fields": {
+    "created_at": "2025-07-31T05:02:56.746Z",
+    "updated_at": "2025-07-31T05:02:56.746Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70018,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-07-31",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 141,
+  "fields": {
+    "created_at": "2025-07-31T05:02:56.754Z",
+    "updated_at": "2025-07-31T05:02:56.754Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70019,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-07-31",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 142,
+  "fields": {
+    "created_at": "2025-07-31T05:02:56.762Z",
+    "updated_at": "2025-07-31T05:02:56.762Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70020,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-07-31",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 147,
+  "fields": {
+    "created_at": "2025-07-31T05:02:56.882Z",
+    "updated_at": "2025-07-31T05:02:56.882Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70059,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-07-31",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 149,
+  "fields": {
+    "created_at": "2025-07-31T05:02:57.056Z",
+    "updated_at": "2025-07-31T05:02:57.056Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70114,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-07-31",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 257,
+  "fields": {
+    "created_at": "2025-08-10T04:15:08.859Z",
+    "updated_at": "2025-08-10T04:15:08.859Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70233,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 258,
+  "fields": {
+    "created_at": "2025-08-10T04:15:08.872Z",
+    "updated_at": "2025-08-10T04:15:08.872Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70234,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 259,
+  "fields": {
+    "created_at": "2025-08-10T04:15:08.881Z",
+    "updated_at": "2025-08-10T04:15:08.881Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70235,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 260,
+  "fields": {
+    "created_at": "2025-08-10T04:15:08.888Z",
+    "updated_at": "2025-08-10T04:15:08.888Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70236,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 261,
+  "fields": {
+    "created_at": "2025-08-10T04:15:08.894Z",
+    "updated_at": "2025-08-10T04:15:08.894Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70237,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 262,
+  "fields": {
+    "created_at": "2025-08-10T04:15:08.901Z",
+    "updated_at": "2025-08-10T04:15:08.901Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70238,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 263,
+  "fields": {
+    "created_at": "2025-08-10T04:15:08.920Z",
+    "updated_at": "2025-08-10T04:15:08.920Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70239,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 264,
+  "fields": {
+    "created_at": "2025-08-10T04:15:08.928Z",
+    "updated_at": "2025-08-10T04:15:08.928Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70240,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 265,
+  "fields": {
+    "created_at": "2025-08-10T04:15:08.944Z",
+    "updated_at": "2025-08-10T04:15:08.944Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70241,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 266,
+  "fields": {
+    "created_at": "2025-08-10T04:15:08.951Z",
+    "updated_at": "2025-08-10T04:15:08.951Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70242,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 267,
+  "fields": {
+    "created_at": "2025-08-10T04:15:08.956Z",
+    "updated_at": "2025-08-10T04:15:08.956Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70243,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 268,
+  "fields": {
+    "created_at": "2025-08-10T04:15:08.962Z",
+    "updated_at": "2025-08-10T04:15:08.962Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 60230,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 269,
+  "fields": {
+    "created_at": "2025-08-10T04:15:08.970Z",
+    "updated_at": "2025-08-10T04:15:08.970Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 52081,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 270,
+  "fields": {
+    "created_at": "2025-08-10T04:15:08.976Z",
+    "updated_at": "2025-08-10T04:15:08.976Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 56569,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 271,
+  "fields": {
+    "created_at": "2025-08-10T04:15:08.983Z",
+    "updated_at": "2025-08-10T04:16:36.251Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 56567,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 272,
+  "fields": {
+    "created_at": "2025-08-10T04:15:08.988Z",
+    "updated_at": "2025-08-10T04:15:08.988Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70244,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 273,
+  "fields": {
+    "created_at": "2025-08-10T04:15:08.996Z",
+    "updated_at": "2025-08-10T04:15:08.996Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 52513,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 274,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.005Z",
+    "updated_at": "2025-08-10T04:15:09.005Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70245,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 275,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.024Z",
+    "updated_at": "2025-08-10T04:15:09.024Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70246,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 276,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.078Z",
+    "updated_at": "2025-08-10T04:15:09.078Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70247,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 277,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.093Z",
+    "updated_at": "2025-08-10T04:15:09.094Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 58830,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 278,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.104Z",
+    "updated_at": "2025-08-10T04:15:09.104Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70248,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 279,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.116Z",
+    "updated_at": "2025-08-10T04:15:09.116Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70249,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 280,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.126Z",
+    "updated_at": "2025-08-10T04:15:09.126Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70250,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 281,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.134Z",
+    "updated_at": "2025-08-10T04:15:09.134Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70251,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 282,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.144Z",
+    "updated_at": "2025-08-10T04:15:09.144Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70252,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 283,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.157Z",
+    "updated_at": "2025-08-10T04:15:09.157Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 67642,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 284,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.164Z",
+    "updated_at": "2025-08-10T04:15:09.164Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 53915,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 285,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.178Z",
+    "updated_at": "2025-08-10T04:15:09.178Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70253,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 286,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.186Z",
+    "updated_at": "2025-08-10T04:15:09.186Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 52771,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 287,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.195Z",
+    "updated_at": "2025-08-10T04:15:09.195Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70254,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 288,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.212Z",
+    "updated_at": "2025-08-10T04:15:09.212Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 56697,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 289,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.222Z",
+    "updated_at": "2025-08-10T04:15:09.222Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 52587,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 290,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.229Z",
+    "updated_at": "2025-08-10T04:15:09.229Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 52586,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 291,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.237Z",
+    "updated_at": "2025-08-10T04:15:09.237Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 52248,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 292,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.242Z",
+    "updated_at": "2025-08-10T04:15:09.242Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70255,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 293,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.250Z",
+    "updated_at": "2025-08-10T04:15:09.250Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 59074,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 294,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.258Z",
+    "updated_at": "2025-08-10T04:15:09.258Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 68030,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 295,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.263Z",
+    "updated_at": "2025-08-10T04:15:09.263Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70256,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 296,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.268Z",
+    "updated_at": "2025-08-10T04:15:09.268Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 53414,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 297,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.274Z",
+    "updated_at": "2025-08-10T04:15:09.274Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70257,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 298,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.279Z",
+    "updated_at": "2025-08-10T04:15:09.279Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 53343,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 299,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.284Z",
+    "updated_at": "2025-08-10T04:15:09.284Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 53888,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 300,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.291Z",
+    "updated_at": "2025-08-10T04:15:09.291Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70258,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 301,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.297Z",
+    "updated_at": "2025-08-10T04:15:09.297Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 54089,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 302,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.303Z",
+    "updated_at": "2025-08-10T04:15:09.303Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70259,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 303,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.308Z",
+    "updated_at": "2025-08-10T04:15:09.308Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70260,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 304,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.317Z",
+    "updated_at": "2025-08-10T04:15:09.317Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70261,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 305,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.324Z",
+    "updated_at": "2025-08-10T04:15:09.324Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 56409,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 306,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.330Z",
+    "updated_at": "2025-08-10T04:15:09.330Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70262,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 307,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.336Z",
+    "updated_at": "2025-08-10T04:15:09.336Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 53122,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 308,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.342Z",
+    "updated_at": "2025-08-10T04:15:09.342Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 54217,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 309,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.348Z",
+    "updated_at": "2025-08-10T04:15:09.348Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70263,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 310,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.353Z",
+    "updated_at": "2025-08-10T04:15:09.353Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 54984,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 311,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.359Z",
+    "updated_at": "2025-08-10T04:15:09.360Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70264,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 312,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.365Z",
+    "updated_at": "2025-08-10T04:15:09.365Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70265,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 313,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.371Z",
+    "updated_at": "2025-08-10T04:15:09.371Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 58948,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 314,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.379Z",
+    "updated_at": "2025-08-10T04:15:09.379Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 55241,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 315,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.384Z",
+    "updated_at": "2025-08-10T04:15:09.384Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 53935,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 316,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.390Z",
+    "updated_at": "2025-08-10T04:15:09.390Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70266,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 317,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.395Z",
+    "updated_at": "2025-08-10T04:15:09.395Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70267,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 318,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.400Z",
+    "updated_at": "2025-08-10T04:15:09.400Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70268,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 319,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.405Z",
+    "updated_at": "2025-08-10T04:15:09.405Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70269,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 320,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.414Z",
+    "updated_at": "2025-08-10T04:15:09.414Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 66213,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 321,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.422Z",
+    "updated_at": "2025-08-10T04:15:09.422Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 53117,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 322,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.430Z",
+    "updated_at": "2025-08-10T04:15:09.430Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 52199,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 323,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.436Z",
+    "updated_at": "2025-08-10T04:15:09.436Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 58332,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 324,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.442Z",
+    "updated_at": "2025-08-10T04:15:09.442Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 61167,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 325,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.450Z",
+    "updated_at": "2025-08-10T04:15:09.450Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 59117,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 326,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.457Z",
+    "updated_at": "2025-08-10T04:15:09.457Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70270,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 327,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.464Z",
+    "updated_at": "2025-08-10T04:15:09.464Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 52806,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 328,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.470Z",
+    "updated_at": "2025-08-10T04:15:09.470Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70271,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 329,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.477Z",
+    "updated_at": "2025-08-10T04:15:09.477Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 58728,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 330,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.482Z",
+    "updated_at": "2025-08-10T04:15:09.482Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70272,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 331,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.487Z",
+    "updated_at": "2025-08-10T04:15:09.487Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70273,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 332,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.492Z",
+    "updated_at": "2025-08-10T04:15:09.493Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 53747,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 333,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.497Z",
+    "updated_at": "2025-08-10T04:15:09.497Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70274,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 334,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.503Z",
+    "updated_at": "2025-08-10T04:15:09.503Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 56718,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 335,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.508Z",
+    "updated_at": "2025-08-10T04:15:09.508Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70275,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 336,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.513Z",
+    "updated_at": "2025-08-10T04:15:09.513Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 54386,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 337,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.519Z",
+    "updated_at": "2025-08-10T04:15:09.519Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 54253,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 338,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.525Z",
+    "updated_at": "2025-08-10T04:15:09.525Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 53028,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 339,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.533Z",
+    "updated_at": "2025-08-10T04:15:09.533Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 69201,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 340,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.539Z",
+    "updated_at": "2025-08-10T04:15:09.539Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70276,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 341,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.547Z",
+    "updated_at": "2025-08-10T04:15:09.547Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 52399,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 342,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.552Z",
+    "updated_at": "2025-08-10T04:15:09.552Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 53194,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 343,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.557Z",
+    "updated_at": "2025-08-10T04:15:09.557Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70277,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 344,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.563Z",
+    "updated_at": "2025-08-10T04:15:09.563Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70278,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 345,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.568Z",
+    "updated_at": "2025-08-10T04:15:09.568Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 53543,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 346,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.574Z",
+    "updated_at": "2025-08-10T04:15:09.574Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70279,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 347,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.581Z",
+    "updated_at": "2025-08-10T04:15:09.581Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 54501,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 348,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.589Z",
+    "updated_at": "2025-08-10T04:15:09.589Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 54359,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 349,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.596Z",
+    "updated_at": "2025-08-10T04:15:09.596Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 53180,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 350,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.602Z",
+    "updated_at": "2025-08-10T04:15:09.602Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 58974,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 351,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.608Z",
+    "updated_at": "2025-08-10T04:15:09.608Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 58921,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 352,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.626Z",
+    "updated_at": "2025-08-10T04:15:09.626Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70280,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 353,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.649Z",
+    "updated_at": "2025-08-10T04:15:09.649Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70281,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 354,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.671Z",
+    "updated_at": "2025-08-10T04:15:09.671Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70282,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 355,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.678Z",
+    "updated_at": "2025-08-10T04:15:09.678Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70283,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 356,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.684Z",
+    "updated_at": "2025-08-10T04:15:09.684Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70284,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 357,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.690Z",
+    "updated_at": "2025-08-10T04:15:09.690Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70285,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 358,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.695Z",
+    "updated_at": "2025-08-10T04:15:09.695Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70286,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 359,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.700Z",
+    "updated_at": "2025-08-10T04:15:09.700Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70287,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 360,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.706Z",
+    "updated_at": "2025-08-10T04:15:09.706Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70288,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 361,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.711Z",
+    "updated_at": "2025-08-10T04:15:09.711Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70289,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 362,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.717Z",
+    "updated_at": "2025-08-10T04:15:09.717Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70290,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 363,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.723Z",
+    "updated_at": "2025-08-10T04:15:09.723Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70291,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 364,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.730Z",
+    "updated_at": "2025-08-10T04:15:09.730Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70292,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 365,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.738Z",
+    "updated_at": "2025-08-10T04:15:09.738Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70293,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.teacherprofile",
+  "pk": 366,
+  "fields": {
+    "created_at": "2025-08-10T04:15:09.744Z",
+    "updated_at": "2025-08-10T04:15:09.744Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 70294,
+    "terminal_degree": "OTH",
+    "status": "ACTIVE",
+    "start_date": "2025-08-10",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 1,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.805Z",
+    "updated_at": "2025-07-30T06:24:44.805Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 52248,
+    "position": "Head of Administration and HR Office",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 2,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.809Z",
+    "updated_at": "2025-07-30T06:24:44.809Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 61167,
+    "position": "Head of English Program Department",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 3,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.810Z",
+    "updated_at": "2025-07-30T06:24:44.810Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 52587,
+    "position": "Head of Enrollment and Registrar's Office",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 4,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.813Z",
+    "updated_at": "2025-07-30T06:24:44.813Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 52586,
+    "position": "Head of Bookstore",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 5,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.815Z",
+    "updated_at": "2025-07-30T06:24:44.815Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 55241,
+    "position": "Head of Academic Program Department",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 6,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.816Z",
+    "updated_at": "2025-07-30T06:24:44.816Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 55229,
+    "position": "Head of Accounting Office",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 7,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.817Z",
+    "updated_at": "2025-07-30T06:24:44.817Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 54359,
+    "position": "Head of the Information and Testing Center",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 8,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.818Z",
+    "updated_at": "2025-07-30T06:24:44.818Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 59384,
+    "position": "Coordinator of Security & Maintenance Service",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 9,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.820Z",
+    "updated_at": "2025-07-30T06:24:44.820Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 53180,
+    "position": "Cashier",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 10,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.821Z",
+    "updated_at": "2025-07-30T06:24:44.821Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 58909,
+    "position": "Junior Accountant",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 11,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.823Z",
+    "updated_at": "2025-07-30T06:24:44.823Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 60230,
+    "position": "Coordinator, Language Program Department",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 12,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.824Z",
+    "updated_at": "2025-07-30T06:24:44.824Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 62583,
+    "position": "APD Assistant & Community Service Coordinator",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 13,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.825Z",
+    "updated_at": "2025-07-30T06:24:44.825Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 62627,
+    "position": "Librarian",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 14,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.827Z",
+    "updated_at": "2025-07-30T06:24:44.827Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 65026,
+    "position": "Front Desk Assistant",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 15,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.828Z",
+    "updated_at": "2025-07-30T06:24:44.828Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 58326,
+    "position": "Maintenance Assistant",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 16,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.831Z",
+    "updated_at": "2025-07-30T06:24:44.831Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 62749,
+    "position": "Adminstrative Assistant of ITC",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 17,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.832Z",
+    "updated_at": "2025-07-30T06:24:44.832Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 65038,
+    "position": "Enrollment Assistant",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 18,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.834Z",
+    "updated_at": "2025-07-30T06:24:44.834Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 65573,
+    "position": "HR Assistant",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 19,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.837Z",
+    "updated_at": "2025-07-30T06:24:44.837Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 63595,
+    "position": "Librarian Assistant",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 20,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.838Z",
+    "updated_at": "2025-07-30T06:24:44.838Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 66637,
+    "position": "Adminstrative Assistant of ITC",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+}
+]

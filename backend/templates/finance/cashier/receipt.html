@@ -1,0 +1,316 @@
+{% extends "base_new.html" %}
+
+{% load static i18n humanize %}
+
+{% block title\n %}Receipt #{{ payment.payment_reference }} - {{ block.super }}{% endblock %}
+{%\nblock extra_css %}\n<style>
+  \n @media print {
+    \n
+
+    /* Hide everything except receipt content */
+    \n body * {
+      \n visibility: hidden;
+      \n
+    }
+
+    \n #receipt-content,
+    \n #receipt-content * {
+      \n visibility: visible;
+      \n
+    }
+
+    \n #receipt-content {
+      \n position: absolute;
+      \n left: 0;
+      \n top: 0;
+      \n width: 100%;
+      \n
+    }
+
+    \n
+
+    /* Remove shadows and borders for print */
+    \n .receipt-container {
+      \n box-shadow: none !important;
+      \n border: none !important;
+      \n
+    }
+
+    \n
+
+    /* Hide action buttons */
+    \n .no-print {
+      \n display: none !important;
+      \n
+    }
+
+    \n
+  }
+
+  \n\n .receipt-container {
+    \n max-width: 600px;
+    \n margin: 0 auto;
+    \n background: white;
+    \n box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    \n
+  }
+
+  \n\n .receipt-header {
+    \n background-color: #1e40af;
+    \n color: white;
+    \n padding: 2rem;
+    \n text-align: center;
+    \n
+  }
+
+  \n\n .receipt-body {
+    \n padding: 2rem;
+    \n
+  }
+
+  \n\n .receipt-table {
+    \n width: 100%;
+    \n border-collapse: collapse;
+    \n
+  }
+
+  \n\n .receipt-table th,
+  \n .receipt-table td {
+    \n padding: 0.75rem;
+    \n text-align: left;
+    \n border-bottom: 1px solid #e5e7eb;
+    \n
+  }
+
+  \n\n .receipt-table th {
+    \n font-weight: 600;
+    \n color: #374151;
+    \n
+  }
+
+  \n\n .receipt-footer {
+    \n background-color: #f9fafb;
+    \n padding: 1.5rem 2rem;
+    \n text-align: center;
+    \n border-top: 2px dashed #e5e7eb;
+    \n
+  }
+
+  \n
+</style>
+\n
+{% endblock %}
+{% block content %}
+  \n
+  <div class="container mx-auto px-4 py-6">
+    \n  <!-- Action Buttons (Hidden on print) -->\n
+    <div class="mb-6 flex justify-between items-center no-print">
+      \n    <a\n href="{% url 'finance:cashier-dashboard' %}"\n      class="text-blue-600 hover:text-blue-800"\n>\n      ← Back to Dashboard\n    </a>\n
+      <div class="space-x-3">
+        \n
+        <button onclick="window.print()" class="btn btn-primary">
+          \n
+          <svg\n class="w-5 h-5 mr-2"\n          fill="none"\n          stroke="currentColor"\n          viewBox="0 0 24 24"\n>
+            \n
+            <path\n stroke-linecap="round"\n            stroke-linejoin="round"\n            stroke-width="2"\n            d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2z"\n>
+            </path>
+            \n
+          </svg>
+          \n        Print Receipt\n
+        </button>
+        \n      <a href="?format=pdf" class="btn btn-secondary">\n
+        <svg\n class="w-5 h-5 mr-2"\n          fill="none"\n          stroke="currentColor"\n          viewBox="0 0 24 24"\n>
+          \n
+          <path\n stroke-linecap="round"\n            stroke-linejoin="round"\n            stroke-width="2"\n            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"\n>
+          </path>
+          \n
+        </svg>
+        \n        Download PDF\n      </a>\n
+      </div>
+      \n
+    </div>
+    \n\n  <!-- Receipt Content -->\n
+    <div id="receipt-content" class="receipt-container">
+      \n    <!-- Header -->\n
+      <div class="receipt-header">
+        \n
+        <h1 class="text-2xl font-bold mb-2">{{ institution_name }}</h1>
+        \n
+        <p class="text-blue-100">{{ institution_address }}</p>
+        \n
+        <div class="mt-4">
+          \n
+          <h2 class="text-3xl font-bold">PAYMENT RECEIPT</h2>
+          \n
+        </div>
+        \n
+      </div>
+      \n\n    <!-- Body -->\n
+      <div class="receipt-body">
+        \n      <!-- Receipt Info -->\n
+        <div class="mb-6 grid grid-cols-2 gap-4">
+          \n
+          <div>
+            \n
+            <p class="text-sm text-gray-600">Receipt Number</p>
+            \n
+            <p class="font-bold text-lg">{{ payment.payment_reference }}</p>
+            \n
+          </div>
+          \n
+          <div class="text-right">
+            \n
+            <p class="text-sm text-gray-600">Date</p>
+            \n
+            <p class="font-bold text-lg">\n            {{ payment.payment_date|date:"M d, Y" }}\n</p>
+            \n
+          </div>
+          \n
+        </div>
+        \n\n      <!-- Student Info -->\n
+        <div class="mb-6 p-4 bg-gray-50 rounded-lg">
+          \n
+          <h3 class="font-semibold text-gray-700 mb-2">Student Information</h3>
+          \n
+          <div class="grid grid-cols-2 gap-4">
+            \n
+            <div>
+              \n
+              <p class="text-sm text-gray-600">Name</p>
+              \n
+              <p class="font-medium">{{ payment.invoice.student }}</p>
+              \n
+            </div>
+            \n
+            <div>
+              \n
+              <p class="text-sm text-gray-600">Student ID</p>
+              \n
+              <p class="font-medium">{{ payment.invoice.student.student_id }}</p>
+              \n
+            </div>
+            \n
+          </div>
+          \n
+        </div>
+        \n\n      <!-- Payment Details -->\n
+        <div class="mb-6">
+          \n
+          <h3 class="font-semibold text-gray-700 mb-3">Payment Details</h3>
+          \n
+          <table class="receipt-table">
+            \n
+            <tbody>
+              \n
+              <tr>
+                \n
+                <th>Invoice Number</th>
+                \n
+                <td>{{ payment.invoice.invoice_number }}</td>
+                \n
+              </tr>
+              \n
+              <tr>
+                \n
+                <th>Payment Method</th>
+                \n
+                <td>{{ payment.get_payment_method_display }}</td>
+                \n
+              </tr>
+              \n
+              {% if payment.external_reference %}
+                \n
+                <tr>
+                  \n
+                  <th>Reference</th>
+                  \n
+                  <td>{{ payment.external_reference }}</td>
+                  \n
+                </tr>
+                \n
+              {% endif %}
+              {% if payment.payer_name and payment.payer_name !=\n            payment.invoice.student|stringformat:"s" %}
+                \n
+                <tr>
+                  \n
+                  <th>Paid By</th>
+                  \n
+                  <td>{{ payment.payer_name }}</td>
+                  \n
+                </tr>
+                \n
+              {% endif %}
+              \n
+            </tbody>
+            \n
+          </table>
+          \n
+        </div>
+        \n\n      <!-- Amount -->\n
+        <div class="mb-6 p-4 bg-blue-50 rounded-lg">
+          \n
+          <div class="flex justify-between items-center">
+            \n          <span class="text-lg font-semibold text-gray-700">Amount Paid</span>\n          <span class="text-2xl font-bold text-blue-600">\n            ${{ payment.amount|floatformat:2|intcomma }} {{ payment.currency }}\n          </span>\n
+          </div>
+          \n
+        </div>
+        \n\n      <!-- Cashier Info -->\n
+        <div class="text-sm text-gray-600">
+          \n
+          <p>Processed by: {{ payment.processed_by.get_full_name }}</p>
+          \n
+          <p>Time: {{ payment.processed_date|date:"g:i A" }}</p>
+          \n
+        </div>
+        \n
+      </div>
+      \n\n    <!-- Footer -->\n
+      <div class="receipt-footer">
+        \n
+        <p class="text-sm text-gray-600 mb-2">Thank you for your payment!</p>
+        \n
+        <p class="text-xs text-gray-500">\n        This is an official receipt. Please keep for your records.\n</p>
+        \n
+        {% if payment.invoice.amount_due > 0 %}
+          \n
+          <div class="mt-3 p-3 bg-yellow-100 rounded-lg">
+            \n
+            <p class="text-sm font-medium text-yellow-800">
+              \n          Remaining Balance: ${{\n          payment.invoice.amount_due|floatformat:2|intcomma }}\n
+            </p>
+            \n
+          </div>
+          \n
+        {% endif %}
+        \n
+      </div>
+      \n
+    </div>
+    \n\n  <!-- Duplicate Copy (Hidden by default, shown only in print) -->\n
+    <div class="page-break-before:always hidden print:block mt-8">
+      \n
+      <div class="receipt-container">
+        \n      <!-- Same content as above with "DUPLICATE" watermark -->\n
+        <div class="relative">
+          \n
+          <div\n class="absolute inset-0 flex items-center justify-center opacity-10"\n>
+            \n          <span class="text-6xl font-bold transform rotate-45 text-gray-400" \n>DUPLICATE</span\n>\n
+          </div>
+          \n        <!-- Copy of receipt content here -->\n
+        </div>
+        \n
+      </div>
+      \n
+    </div>
+    \n
+  </div>
+  \n
+{% endblock %}
+{% block extra_js %}
+  \n<script>
+  \
+  n // Auto-print if requested\n  const urlParams = new URLSearchParams(window.location.search);\n  if (urlParams.get('print') === 'true') {\n    window.onload = function () {\n      window.print();\n    };\n  }\n\n  // Show print dialog when pressing Ctrl+P or Cmd+P\n  document.addEventListener('keydown', function (e) {\n    if ((e.ctrlKey || e.metaKey) && e.key === 'p') {\n      e.preventDefault();\n      window.print();\n    }\n  });\n
+</script>
+  \n
+{% endblock %}
+\n

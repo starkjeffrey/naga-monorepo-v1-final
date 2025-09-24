@@ -1,0 +1,433 @@
+{% extends "base_new.html" %}
+
+{% load static i18n humanize %}
+
+{% block title %}Finance Dashboard - {{ block.super }}{% endblock %}
+{% block extra_css %}
+  <style>
+    .metric-card {
+      @apply bg-white rounded-lg shadow-md p-6 relative overflow-hidden;
+    }
+
+    .metric-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: currentColor;
+    }
+
+    .metric-card.success::before {
+      background-color: #10b981;
+    }
+
+    .metric-card.warning::before {
+      background-color: #f59e0b;
+    }
+
+    .metric-card.danger::before {
+      background-color: #ef4444;
+    }
+
+    .metric-card.info::before {
+      background-color: #3b82f6;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 300px;
+      width: 100%;
+    }
+
+    .progress-ring {
+      transform: rotate(-90deg);
+    }
+
+    .activity-item {
+      @apply py-3 border-b border-gray-100 last:border-0;
+    }
+  </style>
+{% endblock %}
+{% block content %}
+  <div class="container mx-auto px-4 py-6">
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-800 mb-2">Finance Dashboard</h1>
+      <p class="text-gray-600">{{ current_term }} • {{ today|date:"l, F j, Y" }}</p>
+    </div>
+    <!-- Quick Actions -->
+    <div class="mb-8 flex flex-wrap gap-3">
+      <a href="{% url 'finance:cashier-dashboard' %}" class="btn btn-primary">
+        <svg class="w-5 h-5 mr-2"
+             fill="none"
+             stroke="currentColor"
+             viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z">
+          </path>
+        </svg>
+        Cashier Interface
+      </a>
+      <a href="{% url 'finance:revenue-analysis' %}"
+         class="btn btn-outline-secondary">
+        <svg class="w-5 h-5 mr-2"
+             fill="none"
+             stroke="currentColor"
+             viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+          </path>
+        </svg>
+        Revenue Analysis
+      </a>
+      <a href="{% url 'finance:outstanding-balances' %}"
+         class="btn btn-outline-secondary">
+        <svg class="w-5 h-5 mr-2"
+             fill="none"
+             stroke="currentColor"
+             viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+          </path>
+        </svg>
+        Outstanding Balances
+      </a>
+      <a href="{% url 'finance:reports-hub' %}"
+         class="btn btn-outline-secondary">
+        <svg class="w-5 h-5 mr-2"
+             fill="none"
+             stroke="currentColor"
+             viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+          </path>
+        </svg>
+        Reports Hub
+      </a>
+    </div>
+    <!-- Revenue Metrics -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div class="metric-card success">
+        <h3 class="text-sm font-medium text-gray-600 mb-2">Today's Revenue</h3>
+        <p class="text-3xl font-bold text-gray-900">${{ today_revenue|floatformat:2|intcomma }}</p>
+        <p class="text-sm text-gray-500 mt-2">
+          <span class="text-green-600">↑ 12%</span> vs yesterday
+        </p>
+      </div>
+      <div class="metric-card info">
+        <h3 class="text-sm font-medium text-gray-600 mb-2">Week Revenue</h3>
+        <p class="text-3xl font-bold text-gray-900">${{ week_revenue|floatformat:2|intcomma }}</p>
+        <p class="text-sm text-gray-500 mt-2">{{ week_start|date:"M d" }} - {{ today|date:"M d" }}</p>
+      </div>
+      <div class="metric-card info">
+        <h3 class="text-sm font-medium text-gray-600 mb-2">Month Revenue</h3>
+        <p class="text-3xl font-bold text-gray-900">${{ month_revenue|floatformat:2|intcomma }}</p>
+        <p class="text-sm text-gray-500 mt-2">{{ today|date:"F Y" }}</p>
+      </div>
+      <div class="metric-card info">
+        <h3 class="text-sm font-medium text-gray-600 mb-2">Term Revenue</h3>
+        <p class="text-3xl font-bold text-gray-900">${{ term_revenue.total|floatformat:2|intcomma }}</p>
+        <p class="text-sm text-gray-500 mt-2">Tuition: ${{ term_revenue.tuition|floatformat:0|intcomma }}</p>
+      </div>
+    </div>
+    <!-- Outstanding Balance Metrics -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div class="metric-card warning">
+        <h3 class="text-sm font-medium text-gray-600 mb-2">Total Outstanding</h3>
+        <p class="text-3xl font-bold text-gray-900">${{ total_outstanding|floatformat:2|intcomma }}</p>
+        <p class="text-sm text-gray-500 mt-2">{{ students_with_balance }} students with balance</p>
+      </div>
+      <div class="metric-card danger">
+        <h3 class="text-sm font-medium text-gray-600 mb-2">Overdue Amount</h3>
+        <p class="text-3xl font-bold text-red-600">${{ overdue_amount|floatformat:2|intcomma }}</p>
+        <p class="text-sm text-gray-500 mt-2">Requires immediate attention</p>
+      </div>
+      <div class="metric-card success">
+        <h3 class="text-sm font-medium text-gray-600 mb-2">Collection Rate</h3>
+        <div class="flex items-center">
+          <svg class="w-20 h-20 mr-4">
+            <circle cx="40" cy="40" r="36" stroke="#e5e7eb" stroke-width="8" fill="none"></circle>
+            <circle cx="40" cy="40" r="36" stroke="#10b981" stroke-width="8" fill="none" class="progress-ring" stroke-dasharray="{{ enrollment_payment_stats.payment_rate }} {{ 100|add:"-"|add:enrollment_payment_stats.payment_rate }}" stroke-dashoffset="25"></circle>
+          </svg>
+          <div>
+            <p class="text-3xl font-bold text-gray-900">{{ enrollment_payment_stats.payment_rate|floatformat:0 }}%</p>
+            <p class="text-sm text-gray-500">Fully paid</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Revenue Trend Chart -->
+      <div class="lg:col-span-2 bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">30-Day Revenue Trend</h2>
+        <div class="chart-container">
+          <canvas id="revenueTrendChart"></canvas>
+        </div>
+      </div>
+      <!-- Payment Method Breakdown -->
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Payment Methods (Month)</h2>
+        <div class="space-y-3">
+          {% for method in payment_method_breakdown %}
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="font-medium text-gray-900">{{ method.display_name }}</p>
+                <p class="text-sm text-gray-500">{{ method.count }} payment{{ method.count|pluralize }}</p>
+              </div>
+              <p class="text-lg font-bold text-gray-900">${{ method.total|floatformat:2|intcomma }}</p>
+            </div>
+          {% empty %}
+            <p class="text-gray-500">No payments this month</p>
+          {% endfor %}
+        </div>
+        {% if payment_method_breakdown %}
+          <div class="mt-4 pt-4 border-t">
+            <canvas id="paymentMethodChart" height="200"></canvas>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+      <!-- Enrollment vs Payment Status -->
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Student Payment Status</h2>
+        <div class="space-y-3">
+          <div class="flex justify-between items-center">
+            <span class="text-gray-700">Total Enrolled</span>
+            <span class="font-bold">{{ enrollment_payment_stats.total_enrolled }}</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-green-700">Fully Paid</span>
+            <span class="font-bold text-green-600">{{ enrollment_payment_stats.fully_paid }}</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-yellow-700">Partially Paid</span>
+            <span class="font-bold text-yellow-600">{{ enrollment_payment_stats.partially_paid }}</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-red-700">Unpaid</span>
+            <span class="font-bold text-red-600">{{ enrollment_payment_stats.unpaid }}</span>
+          </div>
+        </div>
+        <div class="mt-4">
+          <canvas id="paymentStatusChart" height="200"></canvas>
+        </div>
+      </div>
+      <!-- Scholarship Statistics -->
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Scholarship Overview</h2>
+        <div class="space-y-3">
+          <div class="flex justify-between items-center">
+            <span class="text-gray-700">Active Awards</span>
+            <span class="font-bold">{{ scholarship_stats.total_awards }}</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-700">Total Amount</span>
+            <span class="font-bold">${{ scholarship_stats.total_amount|floatformat:0|intcomma }}</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-700">Students</span>
+            <span class="font-bold">{{ scholarship_stats.students_count }}</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-700">Sponsor Payments</span>
+            <span class="font-bold text-green-600">${{ scholarship_stats.sponsor_payments|floatformat:0|intcomma }}</span>
+          </div>
+        </div>
+        <div class="mt-4 pt-4 border-t">
+          <a href="{% url 'finance:scholarship-overview' %}"
+             class="text-blue-600 hover:text-blue-800">View Details →</a>
+        </div>
+      </div>
+      <!-- Recent Activity -->
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Recent Activity</h2>
+        <div class="space-y-1 max-h-96 overflow-y-auto">
+          {% for payment in recent_payments %}
+            <div class="activity-item">
+              <div class="flex justify-between items-start">
+                <div class="flex-1">
+                  <p class="text-sm font-medium text-gray-900">Payment from {{ payment.invoice.student }}</p>
+                  <p class="text-xs text-gray-500">
+                    {{ payment.processed_date|timesince }} ago • {{ payment.get_payment_method_display }}
+                  </p>
+                </div>
+                <p class="text-sm font-bold text-green-600">+${{ payment.amount|floatformat:2 }}</p>
+              </div>
+            </div>
+          {% empty %}
+            <p class="text-gray-500 text-sm">No recent payments</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block extra_js %}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+  <script>
+    // Revenue Trend Chart
+    const revenueTrendCtx = document.getElementById('revenueTrendChart').getContext('2d');
+    const revenueTrendData = {
+      {
+        daily_revenue_trend | safe
+      }
+    };
+
+    new Chart(revenueTrendCtx, {
+      type: 'line',
+      data: {
+        labels: revenueTrendData.map(d => d.date),
+        datasets: [{
+          label: 'Daily Revenue',
+          data: revenueTrendData.map(d => d.total),
+          borderColor: 'rgb(59, 130, 246)',
+          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          tension: 0.4,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return '$' + context.parsed.y.toFixed(2);
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            display: false
+          },
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                return '$' + value.toLocaleString();
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // Payment Method Chart
+    {
+      %
+      if payment_method_breakdown %
+    }
+    const paymentMethodCtx = document.getElementById('paymentMethodChart').getContext('2d');
+    new Chart(paymentMethodCtx, {
+      type: 'doughnut',
+      data: {
+        labels: [{
+            %
+            for method in payment_method_breakdown %
+          }
+          '{{ method.display_name }}' {
+            %
+            if not forloop.last %
+          }, {
+            %
+            endif %
+          } {
+            %
+            endfor %
+          }
+        ],
+        datasets: [{
+          data: [{
+            %
+            for method in payment_method_breakdown %
+          } {
+            {
+              method.total
+            }
+          } {
+            %
+            if not forloop.last %
+          }, {
+            %
+            endif %
+          } {
+            %
+            endfor %
+          }],
+          backgroundColor: [
+            'rgb(34, 197, 94)',
+            'rgb(59, 130, 246)',
+            'rgb(251, 146, 60)',
+            'rgb(163, 163, 163)'
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              padding: 10,
+              font: {
+                size: 11
+              }
+            }
+          }
+        }
+      }
+    });
+    {
+      %
+      endif %
+    }
+
+    // Payment Status Chart
+    const paymentStatusCtx = document.getElementById('paymentStatusChart').getContext('2d');
+    new Chart(paymentStatusCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Fully Paid', 'Partial', 'Unpaid'],
+        datasets: [{
+          data: [{
+            {
+              enrollment_payment_stats.fully_paid
+            }
+          }, {
+            {
+              enrollment_payment_stats.partially_paid
+            }
+          }, {
+            {
+              enrollment_payment_stats.unpaid
+            }
+          }],
+          backgroundColor: [
+            'rgb(34, 197, 94)',
+            'rgb(251, 146, 60)',
+            'rgb(239, 68, 68)'
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  </script>
+{% endblock %}

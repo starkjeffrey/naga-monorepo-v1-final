@@ -1,0 +1,228 @@
+<!-- Finance Tab Content -->
+<div class="space-y-6">
+  <!-- Account Summary Card -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <i class="fas fa-dollar-sign mr-2 text-gray-400"></i>
+      Account Summary
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <div class="text-center p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
+        <p class="text-3xl font-bold text-red-600 dark:text-red-400">${{ current_balance|floatformat:2|default:"0.00" }}</p>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Current Balance</p>
+      </div>
+      <div class="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+        <p class="text-3xl font-bold text-blue-600 dark:text-blue-400">${{ total_charges|floatformat:2|default:"0.00" }}</p>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Total Charges</p>
+      </div>
+      <div class="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+        <p class="text-3xl font-bold text-green-600 dark:text-green-400">
+          ${{ total_payments|floatformat:2|default:"0.00" }}
+        </p>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Total Payments</p>
+      </div>
+      <div class="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+        <p class="text-3xl font-bold text-purple-600 dark:text-purple-400">
+          ${{ financial_aid|floatformat:2|default:"0.00" }}
+        </p>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Financial Aid</p>
+      </div>
+    </div>
+    <!-- Payment Due Alert -->
+    {% if has_balance_due %}
+      <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+        <div class="flex items-start">
+          <i class="fas fa-exclamation-circle text-red-600 dark:text-red-400 mt-0.5 mr-3"></i>
+          <div class="flex-grow">
+            <h3 class="font-medium text-red-900 dark:text-red-200 mb-1">Payment Due</h3>
+            <p class="text-sm text-red-700 dark:text-red-300">
+              Balance of ${{ current_balance|floatformat:2 }} is due by {{ payment_due_date|date:"F d, Y" }}
+            </p>
+            <a href="{% url 'finance:make-payment' student.pk %}"
+               class="inline-flex items-center mt-2 text-sm font-medium text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
+              <i class="fas fa-credit-card mr-1"></i> Make Payment
+            </a>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+  <!-- Finance Categories Navigation -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <i class="fas fa-th-large mr-2 text-gray-400"></i>
+      Finance Categories
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <!-- Billing & Charges -->
+      <a href="{% url 'finance:student-charges' student.pk %}"
+         class="block p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:shadow-md transition-shadow group">
+        <div class="flex items-center justify-between mb-2">
+          <i class="fas fa-file-invoice-dollar text-2xl text-blue-500 group-hover:text-blue-600"></i>
+          <i class="fas fa-chevron-right text-gray-400 group-hover:text-gray-600"></i>
+        </div>
+        <h3 class="font-medium text-gray-900 dark:text-gray-100 mb-1">Billing & Charges</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">View tuition, fees, and other charges</p>
+        <p class="text-xs text-gray-500 dark:text-gray-500 mt-2">{{ pending_charges_count }} pending charges</p>
+      </a>
+      <!-- Payment History -->
+      <a href="{% url 'finance:payment-history' student.pk %}"
+         class="block p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:shadow-md transition-shadow group">
+        <div class="flex items-center justify-between mb-2">
+          <i class="fas fa-history text-2xl text-green-500 group-hover:text-green-600"></i>
+          <i class="fas fa-chevron-right text-gray-400 group-hover:text-gray-600"></i>
+        </div>
+        <h3 class="font-medium text-gray-900 dark:text-gray-100 mb-1">Payment History</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">View all payments and receipts</p>
+        <p class="text-xs text-gray-500 dark:text-gray-500 mt-2">{{ total_payments_count }} total payments</p>
+      </a>
+      <!-- Financial Aid -->
+      <a href="{% url 'finance:financial-aid' student.pk %}"
+         class="block p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:shadow-md transition-shadow group">
+        <div class="flex items-center justify-between mb-2">
+          <i class="fas fa-hand-holding-usd text-2xl text-purple-500 group-hover:text-purple-600"></i>
+          <i class="fas fa-chevron-right text-gray-400 group-hover:text-gray-600"></i>
+        </div>
+        <h3 class="font-medium text-gray-900 dark:text-gray-100 mb-1">Financial Aid</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">Scholarships, grants, and aid</p>
+        <p class="text-xs text-gray-500 dark:text-gray-500 mt-2">{{ active_aid_count }} active awards</p>
+      </a>
+      <!-- Payment Plans -->
+      <a href="{% url 'finance:payment-plans' student.pk %}"
+         class="block p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:shadow-md transition-shadow group">
+        <div class="flex items-center justify-between mb-2">
+          <i class="fas fa-calendar-alt text-2xl text-orange-500 group-hover:text-orange-600"></i>
+          <i class="fas fa-chevron-right text-gray-400 group-hover:text-gray-600"></i>
+        </div>
+        <h3 class="font-medium text-gray-900 dark:text-gray-100 mb-1">Payment Plans</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">Installment and payment options</p>
+        <p class="text-xs text-gray-500 dark:text-gray-500 mt-2">
+          {% if active_payment_plan %}
+            Active plan
+          {% else %}
+            No active plan
+          {% endif %}
+        </p>
+      </a>
+      <!-- Tax Documents -->
+      <a href="{% url 'finance:tax-documents' student.pk %}"
+         class="block p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:shadow-md transition-shadow group">
+        <div class="flex items-center justify-between mb-2">
+          <i class="fas fa-file-alt text-2xl text-indigo-500 group-hover:text-indigo-600"></i>
+          <i class="fas fa-chevron-right text-gray-400 group-hover:text-gray-600"></i>
+        </div>
+        <h3 class="font-medium text-gray-900 dark:text-gray-100 mb-1">Tax Documents</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">1098-T forms and tax info</p>
+        <p class="text-xs text-gray-500 dark:text-gray-500 mt-2">{{ tax_documents_count }} documents</p>
+      </a>
+      <!-- Refunds -->
+      <a href="{% url 'finance:refunds' student.pk %}"
+         class="block p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:shadow-md transition-shadow group">
+        <div class="flex items-center justify-between mb-2">
+          <i class="fas fa-undo text-2xl text-teal-500 group-hover:text-teal-600"></i>
+          <i class="fas fa-chevron-right text-gray-400 group-hover:text-gray-600"></i>
+        </div>
+        <h3 class="font-medium text-gray-900 dark:text-gray-100 mb-1">Refunds</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">Refund requests and status</p>
+        <p class="text-xs text-gray-500 dark:text-gray-500 mt-2">
+          {% if pending_refunds %}
+            {{ pending_refunds }} pending
+          {% else %}
+            No pending refunds
+          {% endif %}
+        </p>
+      </a>
+    </div>
+  </div>
+  <!-- Recent Transactions -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+        <i class="fas fa-exchange-alt mr-2 text-gray-400"></i>
+        Recent Transactions
+      </h2>
+      <a href="{% url 'finance:all-transactions' student.pk %}"
+         class="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
+        View All <i class="fas fa-arrow-right ml-1"></i>
+      </a>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+        <thead>
+          <tr>
+            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+              Date
+            </th>
+            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+              Description
+            </th>
+            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+              Type
+            </th>
+            <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+              Amount
+            </th>
+            <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+              Balance
+            </th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+          {% for transaction in recent_transactions %}
+            <tr>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                {{ transaction.date|date:"M d, Y" }}
+              </td>
+              <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">{{ transaction.description }}</td>
+              <td class="px-4 py-3 text-sm">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {% if transaction.type == 'CHARGE' %}bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400 {% elif transaction.type == 'PAYMENT' %}bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400 {% elif transaction.type == 'AID' %}bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400 {% else %}bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400{% endif %}">
+                  {{ transaction.get_type_display }}
+                </span>
+              </td>
+              <td class="px-4 py-3 text-sm text-right font-medium {% if transaction.type == 'CHARGE' %}text-red-600 dark:text-red-400 {% else %}text-green-600 dark:text-green-400{% endif %}">
+                {% if transaction.type == 'CHARGE' %}
+                  +
+                {% else %}
+                  -
+                {% endif %}
+                ${{ transaction.amount|floatformat:2 }}
+              </td>
+              <td class="px-4 py-3 text-sm text-right font-medium text-gray-900 dark:text-gray-100">
+                ${{ transaction.balance|floatformat:2 }}
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="5"
+                  class="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">No recent transactions</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- Term Charges Summary -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <i class="fas fa-receipt mr-2 text-gray-400"></i>
+      Current Term Charges - {{ current_term.name|default:"Spring 2024" }}
+    </h2>
+    <div class="space-y-3">
+      {% for charge in term_charges %}
+        <div class="flex justify-between items-center py-2 border-b border-gray-100 dark:border-gray-700 last:border-0">
+          <div>
+            <p class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ charge.description }}</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">{{ charge.category }}</p>
+          </div>
+          <p class="text-sm font-medium text-gray-900 dark:text-gray-100">${{ charge.amount|floatformat:2 }}</p>
+        </div>
+      {% endfor %}
+      <div class="pt-3 border-t-2 border-gray-200 dark:border-gray-700">
+        <div class="flex justify-between items-center">
+          <p class="font-medium text-gray-900 dark:text-gray-100">Total Term Charges</p>
+          <p class="text-lg font-bold text-gray-900 dark:text-gray-100">${{ term_total|floatformat:2 }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

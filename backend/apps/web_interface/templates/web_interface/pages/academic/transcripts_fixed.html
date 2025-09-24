@@ -1,0 +1,43 @@
+{% extends "web_interface/base/base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}Academic Transcripts - {{ block.super }}{% endblock %}
+
+{% block body_class %}transcripts-page{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="page-title mb-4">{% trans "Academic Transcripts" %}</h1>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">{% trans "Transcript Management" %}</h3>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">
+                        {% trans "The academic transcripts feature is currently under development." %}
+                    </p>
+                    <p>
+                        {% trans "This page will allow authorized users to:" %}
+                    </p>
+                    <ul>
+                        <li>{% trans "Generate official academic transcripts" %}</li>
+                        <li>{% trans "View student academic records" %}</li>
+                        <li>{% trans "Print transcript reports" %}</li>
+                        <li>{% trans "Export transcript data" %}</li>
+                    </ul>
+                    
+                    <div class="mt-4">
+                        <a href="{% url 'web_interface:dashboard' %}" class="btn btn-primary">
+                            {% trans "Return to Dashboard" %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

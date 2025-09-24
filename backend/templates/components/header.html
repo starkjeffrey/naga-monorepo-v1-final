@@ -1,0 +1,133 @@
+{% load static i18n %}
+
+<!-- Top Navigation Header -->
+<nav id="top-nav" class="flex items-center justify-between px-4">
+  <!-- Left side -->
+  <div class="flex items-center gap-4">
+    <!-- Hamburger Menu with SVG -->
+    <button id="sidebar-toggle"
+            aria-label="{% trans 'Toggle sidebar' %}"
+            class="w-10 h-10 bg-white border-2 border-gray-700 rounded-lg flex items-center justify-center shadow-sm transition-all duration-200 hover:bg-gray-50 hover:shadow-md focus-ring">
+      <svg width="24"
+           height="24"
+           viewBox="0 0 24 24"
+           fill="none"
+           xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 12H21" stroke="#374151" stroke-width="2" stroke-linecap="round" />
+        <path d="M3 6H21" stroke="#374151" stroke-width="2" stroke-linecap="round" />
+        <path d="M3 18H21" stroke="#374151" stroke-width="2" stroke-linecap="round" />
+      </svg>
+    </button>
+    <!-- Logo and Institution -->
+    <div class="flex items-center gap-3">
+      <i class="fas fa-graduation-cap text-2xl text-blue-600"
+         aria-hidden="true"></i>
+      <div>
+        <div class="font-semibold text-gray-900 text-sm">{{ institution_name|default:"PUCSR" }}</div>
+        <div class="text-xs text-gray-600">{{ system_name|default:"Student Information System" }}</div>
+      </div>
+    </div>
+  </div>
+  <!-- Right side -->
+  <div class="flex items-center gap-3">
+    <!-- Language Toggle -->
+    <div class="relative">
+      <button id="language-toggle"
+              aria-label="{% trans 'Change language' %}"
+              aria-haspopup="true"
+              aria-expanded="false"
+              class="flex items-center px-3 py-2 rounded-lg bg-gray-50 border border-gray-200 text-gray-600 text-sm cursor-pointer transition-all duration-200 hover:bg-gray-100 focus-ring">
+        <i class="fas fa-language mr-2" aria-hidden="true"></i>
+        <span>
+          {% if LANGUAGE_CODE == 'km' %}
+            ខ្មែរ
+          {% else %}
+            English
+          {% endif %}
+        </span>
+        <i class="fas fa-chevron-down ml-2 text-xs transition-transform duration-200"
+           aria-hidden="true"></i>
+      </button>
+      <!-- Language Dropdown -->
+      <div id="language-dropdown"
+           role="menu"
+           aria-labelledby="language-toggle"
+           class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg border border-gray-200 hidden z-50">
+        <button onclick="switchDashboardLanguage('en')"
+                role="menuitem"
+                class="w-full flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-t-lg text-left transition-colors duration-200">
+          <span class="mr-2" aria-hidden="true">🇺🇸</span>
+          English
+        </button>
+        <button onclick="switchDashboardLanguage('km')"
+                role="menuitem"
+                class="w-full flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-b-lg text-left transition-colors duration-200">
+          <span class="mr-2" aria-hidden="true">🇰🇭</span>
+          ភាសាខ្មែរ
+        </button>
+      </div>
+    </div>
+    <!-- Dark/Light Mode Toggle -->
+    <button id="theme-toggle"
+            aria-label="{% trans 'Toggle dark mode' %}"
+            class="px-3 py-2 rounded-lg bg-gray-50 border border-gray-200 text-gray-600 cursor-pointer transition-all duration-200 hover:bg-gray-100 focus-ring">
+      <i class="fas fa-sun sun-icon hidden" aria-hidden="true"></i>
+      <i class="fas fa-moon moon-icon" aria-hidden="true"></i>
+    </button>
+    <!-- Notifications -->
+    <div class="relative">
+      <button id="notifications-toggle"
+              aria-label="{% trans 'View notifications' %} ({{ notification_count|default:0 }})"
+              class="px-3 py-2 rounded-lg bg-gray-50 border border-gray-200 text-gray-600 relative cursor-pointer transition-all duration-200 hover:bg-gray-100 focus-ring">
+        <i class="fas fa-bell" aria-hidden="true"></i>
+        {% if notification_count|default:0 > 0 %}
+          <span class="notification-badge">{{ notification_count|default:0 }}</span>
+        {% endif %}
+      </button>
+    </div>
+    <!-- User Menu -->
+    <div class="relative">
+      <button id="user-menu-toggle"
+              aria-label="{% trans 'User menu' %}"
+              aria-haspopup="true"
+              aria-expanded="false"
+              class="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-50 border border-gray-200 cursor-pointer transition-all duration-200 hover:bg-gray-100 focus-ring">
+        <div class="h-8 w-8 rounded-full user-avatar flex items-center justify-center text-white font-semibold text-sm">
+          {% if request.user.name %}
+            {{ request.user.name|first|upper }}
+          {% else %}
+            {{ request.user.email|first|upper }}
+          {% endif %}
+        </div>
+        <i class="fas fa-chevron-down text-xs text-gray-400 transition-transform duration-200"
+           aria-hidden="true"></i>
+      </button>
+      <!-- User Dropdown (placeholder for future implementation) -->
+      <div id="user-dropdown"
+           role="menu"
+           aria-labelledby="user-menu-toggle"
+           class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 hidden z-50">
+        <!-- User menu items will be added here -->
+      </div>
+    </div>
+  </div>
+</nav>
+
+<script>
+function switchDashboardLanguage(langCode) {
+    // Close the dropdown
+    document.getElementById('language-dropdown').classList.add('hidden');
+    
+    // Submit language change via fetch (same as login page)
+    fetch('{% url "set_language" %}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value || '{{ csrf_token }}',
+        },
+        body: 'language=' + langCode
+    }).then(() => {
+        window.location.reload();
+    });
+}
+</script>

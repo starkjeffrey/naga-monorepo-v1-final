@@ -1,0 +1,150 @@
+{% load i18n %}
+
+<div class="p-6">
+    <!-- Receipt Header -->
+    <div class="text-center mb-6 border-b pb-4">
+        <h2 class="text-xl font-bold">{{ institution_name }}</h2>
+        <p class="text-gray-600">{{ institution_address }}</p>
+        <p class="text-sm text-gray-500 mt-2">{% trans "Payment Receipt" %}</p>
+    </div>
+
+    <!-- Receipt Details -->
+    <div class="space-y-4 mb-6">
+        <!-- Receipt Info -->
+        <div class="grid grid-cols-2 gap-4 text-sm">
+            <div>
+                <span class="text-gray-600">{% trans "Receipt #" %}:</span>
+                <span class="font-medium">{{ payment.payment_reference }}</span>
+            </div>
+            <div>
+                <span class="text-gray-600">{% trans "Date" %}:</span>
+                <span class="font-medium">{{ payment.payment_date|date:"M d, Y g:i A" }}</span>
+            </div>
+            <div>
+                <span class="text-gray-600">{% trans "Cashier" %}:</span>
+                <span class="font-medium">{{ payment.processed_by.get_full_name|default:payment.processed_by.username }}</span>
+            </div>
+            <div>
+                <span class="text-gray-600">{% trans "Payment Method" %}:</span>
+                <span class="font-medium">{{ payment.get_payment_method_display }}</span>
+            </div>
+        </div>
+
+        <!-- Student Info -->
+        <div class="bg-gray-50 rounded-lg p-3">
+            <h4 class="font-medium mb-2">{% trans "Student Information" %}</h4>
+            <div class="text-sm space-y-1">
+                <div>
+                    <span class="text-gray-600">{% trans "Name" %}:</span>
+                    <span class="font-medium">{{ student.person.full_name }}</span>
+                </div>
+                <div>
+                    <span class="text-gray-600">{% trans "Student ID" %}:</span>
+                    <span class="font-medium">{{ student.student_id }}</span>
+                </div>
+                {% if student.person.khmer_name %}
+                    <div>
+                        <span class="text-gray-600">{% trans "Khmer Name" %}:</span>
+                        <span class="font-medium">{{ student.person.khmer_name }}</span>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Payment Details -->
+        <div class="bg-blue-50 rounded-lg p-3">
+            <h4 class="font-medium mb-2">{% trans "Payment Details" %}</h4>
+            <div class="text-sm space-y-1">
+                <div>
+                    <span class="text-gray-600">{% trans "Invoice" %}:</span>
+                    <span class="font-medium">{{ invoice.invoice_number }}</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-600">{% trans "Amount Paid" %}:</span>
+                    <span class="font-bold text-lg">${{ payment.amount|floatformat:2 }} {{ payment.currency }}</span>
+                </div>
+                {% if payment.notes %}
+                    <div>
+                        <span class="text-gray-600">{% trans "Notes" %}:</span>
+                        <span class="font-medium">{{ payment.notes }}</span>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Invoice Summary -->
+        <div class="border-t pt-3">
+            <div class="text-sm space-y-1">
+                <div class="flex justify-between">
+                    <span>{% trans "Invoice Total" %}:</span>
+                    <span>${{ invoice.total_amount|floatformat:2 }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>{% trans "Total Paid" %}:</span>
+                    <span>${{ invoice.paid_amount|floatformat:2 }}</span>
+                </div>
+                <div class="flex justify-between font-bold border-t pt-1">
+                    <span>{% trans "Remaining Balance" %}:</span>
+                    <span class="{% if invoice.amount_due > 0 %}text-orange-600{% else %}text-green-600{% endif %}">
+                        ${{ invoice.amount_due|floatformat:2 }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="text-center text-xs text-gray-500 border-t pt-4">
+        <p>{% trans "Thank you for your payment!" %}</p>
+        <p class="mt-1">{% trans "Printed on" %} {{ print_time|date:"M d, Y g:i A" }}</p>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex space-x-3 mt-6">
+        <button onclick="printReceipt()" class="sis-btn sis-btn-primary flex-1">
+            <i class="fas fa-print mr-2"></i>
+            {% trans "Print" %}
+        </button>
+        <button onclick="closeReceipt()" class="sis-btn sis-btn-secondary">
+            {% trans "Close" %}
+        </button>
+    </div>
+</div>
+
+<script>
+function printReceipt() {
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank');
+    const receiptContent = document.querySelector('#receipt-content').innerHTML;
+    
+    printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Payment Receipt - {{ payment.payment_reference }}</title>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 20px; }
+                .text-center { text-align: center; }
+                .font-bold { font-weight: bold; }
+                .text-gray-600 { color: #666; }
+                .bg-gray-50 { background-color: #f9f9f9; padding: 10px; margin: 10px 0; }
+                .border-t { border-top: 1px solid #ccc; padding-top: 10px; }
+                .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+                .space-y-1 > * { margin-bottom: 5px; }
+                .space-y-4 > * { margin-bottom: 15px; }
+                @media print {
+                    .no-print { display: none; }
+                }
+            </style>
+        </head>
+        <body>
+            ${receiptContent.replace(/class="sis-btn[^"]*"/g, 'class="no-print"')}
+        </body>
+        </html>
+    `);
+    
+    printWindow.document.close();
+    printWindow.print();
+    printWindow.close();
+}
+</script>

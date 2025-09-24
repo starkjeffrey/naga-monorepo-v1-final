@@ -1,0 +1,293 @@
+{% extends "web_interface/base/base.html" %}
+
+{% load i18n %}
+{% load static %}
+
+{% block title %}Invoice #{{ invoice.id }} - {{ block.super }}{% endblock %}
+{% block content %}
+  <div class="page-content">
+    <div class="page-header">
+      <div class="page-header-left">
+        <h1>Invoice #{{ invoice.id }}</h1>
+        <div class="page-breadcrumb">
+          <a href="{% url 'web_interface:billing' %}">Billing</a>
+          <span class="separator">›</span>
+          <span>Invoice #{{ invoice.id }}</span>
+        </div>
+      </div>
+      <div class="page-header-actions">
+        <a href="{% url 'web_interface:billing' %}" class="btn btn-secondary">
+          <i class="fas fa-arrow-left"></i> Back to Billing
+        </a>
+      </div>
+    </div>
+    <div class="invoice-detail">
+      <div class="row">
+        <div class="col-md-8">
+          <!-- Invoice Information -->
+          <div class="card">
+            <div class="card-header">
+              <h5>
+                <i class="fas fa-file-invoice"></i> Invoice Details
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <table class="table table-borderless">
+                    <tr>
+                      <td>
+                        <strong>Invoice ID:</strong>
+                      </td>
+                      <td>{{ invoice.id }}</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <strong>Student:</strong>
+                      </td>
+                      <td>
+                        {% if invoice.student %}
+                          {{ invoice.student.person.full_name }}
+                          {% if invoice.student.person.khmer_name %}
+                            <br />
+                            <small class="text-muted">{{ invoice.student.person.khmer_name }}</small>
+                          {% endif %}
+                          <br />
+                          <small class="text-muted">ID: {{ invoice.student.student_id }}</small>
+                        {% else %}
+                          <span class="text-muted">N/A</span>
+                        {% endif %}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <strong>Issue Date:</strong>
+                      </td>
+                      <td>{{ invoice.issue_date|date:"M d, Y" }}</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <strong>Due Date:</strong>
+                      </td>
+                      <td>{{ invoice.due_date|date:"M d, Y" }}</td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="col-md-6">
+                  <table class="table table-borderless">
+                    <tr>
+                      <td>
+                        <strong>Status:</strong>
+                      </td>
+                      <td>
+                        <span class="badge badge-{{ invoice.status|lower }}">{{ invoice.get_status_display }}</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <strong>Amount:</strong>
+                      </td>
+                      <td>
+                        <strong>${{ invoice.total_amount|floatformat:2 }}</strong>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <strong>Total Paid:</strong>
+                      </td>
+                      <td>${{ total_paid|floatformat:2 }}</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <strong>Balance Due:</strong>
+                      </td>
+                      <td>
+                        <strong class="{% if balance_due > 0 %}text-danger{% else %}text-success{% endif %}">
+                          ${{ balance_due|floatformat:2 }}
+                        </strong>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+              {% if invoice.notes %}
+                <div class="invoice-notes mt-3">
+                  <strong>Notes:</strong>
+                  <p>{{ invoice.notes|linebreaks }}</p>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+          <!-- Invoice Line Items -->
+          <div class="card mt-3">
+            <div class="card-header">
+              <h5>
+                <i class="fas fa-list"></i> Line Items
+              </h5>
+            </div>
+            <div class="card-body">
+              {% if line_items %}
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Unit Price</th>
+                        <th>Quantity</th>
+                        <th>Discount</th>
+                        <th>Line Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for item in line_items %}
+                        <tr>
+                          <td>
+                            <span class="badge badge-{{ item.line_item_type|lower }}">{{ item.line_item_type }}</span>
+                          </td>
+                          <td>
+                            <div>{{ item.description }}</div>
+                            {% if item.legacy_program_code %}
+                              <small class="text-muted">Program: {{ item.legacy_program_code }}</small>
+                              <br />
+                            {% endif %}
+                            {% if item.legacy_course_level %}
+                              <small class="text-muted">Level: {{ item.legacy_course_level }}</small>
+                              <br />
+                            {% endif %}
+                          </td>
+                          <td>${{ item.unit_price|floatformat:2 }}</td>
+                          <td>{{ item.quantity|floatformat:0 }}</td>
+                          <td>
+                            {% if item.discount_amount > 0 %}
+                              <span class="text-success">-${{ item.discount_amount|floatformat:2 }}</span>
+                              {% if item.discount_reason %}
+                                <br />
+                                <small class="text-muted">{{ item.discount_reason }}</small>
+                              {% endif %}
+                            {% else %}
+                              <span class="text-muted">-</span>
+                            {% endif %}
+                          </td>
+                          <td>
+                            <strong>${{ item.line_total|floatformat:2 }}</strong>
+                          </td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <th colspan="4">Subtotal:</th>
+                        <th>${{ invoice.subtotal|floatformat:2 }}</th>
+                        <th></th>
+                      </tr>
+                      {% if invoice.discount_applied > 0 %}
+                        <tr>
+                          <th colspan="4">Total Discount:</th>
+                          <th class="text-success">-${{ invoice.discount_applied|floatformat:2 }}</th>
+                          <th></th>
+                        </tr>
+                      {% endif %}
+                      <tr class="table-primary">
+                        <th colspan="4">Final Total:</th>
+                        <th colspan="2">
+                          <strong>${{ invoice.total_amount|floatformat:2 }}</strong>
+                        </th>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+                {% if invoice.legacy_notes %}
+                  <div class="alert alert-info mt-3">
+                    <h6>
+                      <i class="fas fa-info-circle"></i> Course Details from Legacy System:
+                    </h6>
+                    <div class="legacy-notes">{{ invoice.legacy_notes|linebreaks }}</div>
+                    <small class="text-muted">
+                      <strong>Note:</strong> The legacy reconstruction system stored course details in notes.
+                      Individual course line items were not preserved during data migration.
+                    </small>
+                  </div>
+                {% endif %}
+              {% else %}
+                <p class="text-muted">No line items found.</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <!-- Payment History -->
+          <div class="card">
+            <div class="card-header">
+              <h5>
+                <i class="fas fa-credit-card"></i> Payment History
+              </h5>
+            </div>
+            <div class="card-body">
+              {% if payments %}
+                {% for payment in payments %}
+                  <div class="payment-entry mb-2 p-2 border-left border-success">
+                    <div class="d-flex justify-content-between">
+                      <strong>${{ payment.amount|floatformat:2 }}</strong>
+                      <small>{{ payment.payment_date|date:"M d, Y" }}</small>
+                    </div>
+                    <div class="text-muted">
+                      {{ payment.get_payment_method_display }}
+                      {% if payment.payment_reference %}- Ref: {{ payment.payment_reference }}{% endif %}
+                    </div>
+                  </div>
+                {% endfor %}
+              {% else %}
+                <p class="text-muted">No payments recorded.</p>
+              {% endif %}
+            </div>
+          </div>
+          <!-- Quick Actions -->
+          {% if balance_due > 0 %}
+            <div class="card mt-3">
+              <div class="card-header">
+                <h5>
+                  <i class="fas fa-bolt"></i> Quick Actions
+                </h5>
+              </div>
+              <div class="card-body">
+                <button class="btn btn-success btn-block mb-2"
+                        data-modal-url="{% url 'web_interface:modal-payment-process' %}?invoice_id={{ invoice.id }}">
+                  <i class="fas fa-dollar-sign"></i>
+                  Record Payment
+                </button>
+                <button class="btn btn-info btn-block">
+                  <i class="fas fa-print"></i>
+                  Print Invoice
+                </button>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <style>
+    .invoice-detail .card {
+      border: 1px solid #dee2e6;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+
+    .invoice-detail .payment-entry {
+      background-color: #f8f9fa;
+      border-radius: 0.25rem;
+    }
+
+    .badge-paid {
+      background-color: #28a745;
+    }
+
+    .badge-partial {
+      background-color: #ffc107;
+    }
+
+    .badge-unpaid {
+      background-color: #dc3545;
+    }
+  </style>
+{% endblock %}

@@ -1,0 +1,1141 @@
+{
+  "graph": {
+    "nodes": {
+      "api-types": {
+        "name": "api-types",
+        "type": "lib",
+        "data": {
+          "root": "web-interface-scheduling/libs/shared/api-types",
+          "targets": {
+            "lint": {
+              "executor": "@nx/eslint:lint",
+              "outputs": [
+                "{options.outputFile}"
+              ],
+              "options": {
+                "lintFilePatterns": [
+                  "libs/shared/api-types/**/*.ts"
+                ]
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true,
+              "inputs": [
+                "default",
+                "{workspaceRoot}/.eslintrc.json",
+                "{workspaceRoot}/.eslintignore"
+              ]
+            },
+            "test": {
+              "executor": "@nx/jest:jest",
+              "outputs": [
+                "{workspaceRoot}/coverage/{projectRoot}"
+              ],
+              "options": {
+                "jestConfig": "libs/shared/api-types/jest.config.ts"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true,
+              "inputs": [
+                "default",
+                "^production",
+                "{workspaceRoot}/jest.preset.js"
+              ]
+            },
+            "build": {
+              "executor": "@nx/js:tsc",
+              "outputs": [
+                "{options.outputPath}"
+              ],
+              "options": {
+                "outputPath": "dist/libs/shared/api-types",
+                "main": "libs/shared/api-types/src/index.ts",
+                "tsConfig": "libs/shared/api-types/tsconfig.lib.json",
+                "assets": [
+                  "libs/shared/api-types/*.md"
+                ]
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true,
+              "dependsOn": [
+                "^build"
+              ],
+              "inputs": [
+                "production",
+                "^production"
+              ]
+            }
+          },
+          "name": "api-types",
+          "tags": [
+            "npm:private"
+          ],
+          "metadata": {
+            "targetGroups": {},
+            "js": {
+              "packageName": "api-types",
+              "packageMain": "./src/index.js",
+              "isInPackageManagerWorkspaces": false
+            }
+          },
+          "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/shared/api-types/src",
+          "projectType": "library",
+          "implicitDependencies": []
+        }
+      },
+      "frontend": {
+        "name": "frontend",
+        "type": "app",
+        "data": {
+          "root": "web-interface-scheduling/frontend",
+          "targets": {
+            "lint": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npm run lint",
+                "cwd": "frontend"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true,
+              "inputs": [
+                "default",
+                "{workspaceRoot}/.eslintrc.json",
+                "{workspaceRoot}/.eslintignore"
+              ]
+            },
+            "preview": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "preview"
+              },
+              "metadata": {
+                "scriptContent": "vite preview",
+                "runCommand": "npm run preview"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "mobile:build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "mobile:build"
+              },
+              "metadata": {
+                "scriptContent": "vite build --mode mobile",
+                "runCommand": "npm run mobile:build"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "mobile:prepare": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "mobile:prepare"
+              },
+              "metadata": {
+                "scriptContent": "npx cap sync",
+                "runCommand": "npm run mobile:prepare"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "mobile:run:android": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "mobile:run:android"
+              },
+              "metadata": {
+                "scriptContent": "npx cap run android",
+                "runCommand": "npm run mobile:run:android"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "mobile:run:ios": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "mobile:run:ios"
+              },
+              "metadata": {
+                "scriptContent": "npx cap run ios",
+                "runCommand": "npm run mobile:run:ios"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:ui": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:ui"
+              },
+              "metadata": {
+                "scriptContent": "vitest --ui",
+                "runCommand": "npm run test:ui"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:run": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:run"
+              },
+              "metadata": {
+                "scriptContent": "vitest run",
+                "runCommand": "npm run test:run"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:verification": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:verification"
+              },
+              "metadata": {
+                "scriptContent": "vitest run --grep verification",
+                "runCommand": "npm run test:verification"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:watch"
+              },
+              "metadata": {
+                "scriptContent": "vitest --watch",
+                "runCommand": "npm run test:watch"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint:check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint:check"
+              },
+              "metadata": {
+                "scriptContent": "eslint . --ext .vue,.js,.jsx,.ts,.tsx",
+                "runCommand": "npm run lint:check"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "format": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format"
+              },
+              "metadata": {
+                "scriptContent": "prettier --write src/**/*.{js,jsx,ts,tsx,vue,json,css,scss,md}",
+                "runCommand": "npm run format"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "format:check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format:check"
+              },
+              "metadata": {
+                "scriptContent": "prettier --check src/**/*.{js,jsx,ts,tsx,vue,json,css,scss,md}",
+                "runCommand": "npm run format:check"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npm run build",
+                "cwd": "frontend"
+              },
+              "dependsOn": [
+                "^build"
+              ],
+              "configurations": {},
+              "parallelism": true,
+              "cache": true,
+              "inputs": [
+                "production",
+                "^production"
+              ]
+            },
+            "dev": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npm run dev",
+                "cwd": "frontend"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": false
+            },
+            "mobile:dev": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npm run mobile:dev",
+                "cwd": "frontend"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npm run test",
+                "cwd": "frontend"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true,
+              "inputs": [
+                "default",
+                "^production",
+                "{workspaceRoot}/jest.preset.js"
+              ]
+            },
+            "test:coverage": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npm run test:coverage",
+                "cwd": "frontend"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "name": "frontend",
+          "tags": [
+            "npm:private",
+            "type:app",
+            "scope:frontend",
+            "platform:web",
+            "platform:mobile"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "preview",
+                "mobile:build",
+                "mobile:prepare",
+                "mobile:run:android",
+                "mobile:run:ios",
+                "test:ui",
+                "test:run",
+                "test:verification",
+                "test:watch",
+                "lint:check",
+                "format",
+                "format:check"
+              ]
+            },
+            "js": {
+              "packageName": "naga-frontend",
+              "isInPackageManagerWorkspaces": false
+            }
+          },
+          "$schema": "../node_modules/nx/schemas/project-schema.json",
+          "projectType": "application",
+          "sourceRoot": "frontend/src",
+          "implicitDependencies": [
+            "api-types"
+          ]
+        }
+      },
+      "backend": {
+        "name": "backend",
+        "type": "app",
+        "data": {
+          "root": "backend",
+          "targets": {
+            "lint": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "uv run ruff check apps/ config/ --exclude=scratchpad/ --exclude=tests/test_merge_production_dotenvs_in_dotenv.py",
+                "cwd": "backend"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true,
+              "inputs": [
+                "default",
+                "{workspaceRoot}/.eslintrc.json",
+                "{workspaceRoot}/.eslintignore"
+              ]
+            },
+            "nx-release-publish": {
+              "executor": "@nx/js:release-publish",
+              "dependsOn": [
+                "^nx-release-publish"
+              ],
+              "options": {},
+              "configurations": {},
+              "parallelism": true
+            },
+            "dev": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "docker compose -f docker-compose.local.yml up django",
+                "cwd": "backend"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": false
+            },
+            "serve": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "docker compose -f docker-compose.local.yml up django",
+                "cwd": "backend"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "serve:all": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "docker compose -f docker-compose.local.yml up",
+                "cwd": "backend"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "uv run pytest --cov=apps --cov-report=xml --cov-report=html --ignore=tests/test_merge_production_dotenvs_in_dotenv.py --ignore=.venv --ignore=venv --ignore=staticfiles apps/ -v --tb=short --maxfail=5",
+                "cwd": "backend",
+                "env": {
+                  "DJANGO_SETTINGS_MODULE": "config.settings.ci"
+                }
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true,
+              "inputs": [
+                "default",
+                "^production",
+                "{workspaceRoot}/jest.preset.js"
+              ]
+            },
+            "test:docker": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "docker compose -f docker-compose.local.yml run --rm -e DJANGO_SETTINGS_MODULE=config.settings.test django pytest",
+                "cwd": "backend"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:unit": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "docker compose -f docker-compose.local.yml run --rm -e DJANGO_SETTINGS_MODULE=config.settings.test django pytest --lf",
+                "cwd": "backend"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint:docker": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "docker compose -f docker-compose.local.yml run --rm django ruff check",
+                "cwd": "backend"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "format": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "uv run black apps/ --line-length 119 --target-version py313 && uv run ruff format .",
+                "cwd": "backend"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "format:black": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "uv run black apps/ --line-length 119 --target-version py313",
+                "cwd": "backend"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "format:docker": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "docker compose -f docker-compose.local.yml run --rm django ruff format",
+                "cwd": "backend"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "typecheck": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "uv run mypy .",
+                "cwd": "backend"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "typecheck:docker": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "docker compose -f docker-compose.local.yml run --rm django mypy .",
+                "cwd": "backend"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "migrate": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "docker compose -f docker-compose.local.yml run --rm django python manage.py migrate",
+                "cwd": "backend"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "migrate:both": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "just migrate-both",
+                "cwd": "backend"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "shell": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "docker compose -f docker-compose.local.yml run --rm django python manage.py shell",
+                "cwd": "backend"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "generate-schema": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "docker compose -f docker-compose.local.yml run --rm django python manage.py generate_openapi_schema --file openapi-schema.json",
+                "cwd": "backend"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "claude": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "docker compose -f docker-compose.local.yml --env-file .envs/.local/.claude -p naga_local_claude run --rm --service-ports -p 8001:8000 django /start",
+                "cwd": "backend"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "name": "backend",
+          "tags": [
+            "npm:public",
+            "type:app",
+            "scope:backend",
+            "platform:server"
+          ],
+          "metadata": {
+            "targetGroups": {},
+            "js": {
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "$schema": "../node_modules/nx/schemas/project-schema.json",
+          "projectType": "application",
+          "sourceRoot": "backend",
+          "implicitDependencies": [
+            "api-types"
+          ]
+        }
+      },
+      "naga-monorepo": {
+        "name": "naga-monorepo",
+        "type": "app",
+        "data": {
+          "root": ".",
+          "name": "naga-monorepo",
+          "tags": [
+            "npm:private",
+            "npm:student-information-system",
+            "npm:django",
+            "npm:vue",
+            "npm:pwa",
+            "npm:education",
+            "npm:monorepo"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "dev:frontend",
+                "dev:backend",
+                "dev:both",
+                "dev:worktree:backend",
+                "dev:worktree:frontend",
+                "dev:worktree:both",
+                "build:frontend",
+                "test:frontend",
+                "test:backend",
+                "test:backend:unit",
+                "lint:frontend",
+                "lint:backend",
+                "format",
+                "format:check",
+                "format:backend",
+                "format:backend:black",
+                "format:backend:ruff",
+                "format:backend:all",
+                "typecheck",
+                "migrate",
+                "migrate:both",
+                "shell",
+                "schema:generate",
+                "schema:update",
+                "api:build-types",
+                "api:update",
+                "api:watch",
+                "up",
+                "down",
+                "logs",
+                "clean",
+                "graph",
+                "affected:test",
+                "affected:lint",
+                "affected:build"
+              ]
+            },
+            "description": "Naga Student Information System - Monorepo with Django backend and Vue.js frontend",
+            "js": {
+              "packageName": "naga-monorepo",
+              "isInPackageManagerWorkspaces": false
+            }
+          },
+          "targets": {
+            "dev:frontend": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev:frontend"
+              },
+              "metadata": {
+                "scriptContent": "nx run frontend:dev",
+                "runCommand": "npm run dev:frontend"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "dev:backend": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev:backend"
+              },
+              "metadata": {
+                "scriptContent": "nx run backend:serve",
+                "runCommand": "npm run dev:backend"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "dev:both": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev:both"
+              },
+              "metadata": {
+                "scriptContent": "nx run-many --target=dev --projects=backend,frontend --parallel=true",
+                "runCommand": "npm run dev:both"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "dev:worktree:backend": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev:worktree:backend"
+              },
+              "metadata": {
+                "scriptContent": "chmod +x scripts/worktree-backend.sh && scripts/worktree-backend.sh",
+                "runCommand": "npm run dev:worktree:backend"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "dev:worktree:frontend": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev:worktree:frontend"
+              },
+              "metadata": {
+                "scriptContent": "chmod +x scripts/worktree-frontend.sh && scripts/worktree-frontend.sh",
+                "runCommand": "npm run dev:worktree:frontend"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "dev:worktree:both": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev:worktree:both"
+              },
+              "metadata": {
+                "scriptContent": "concurrently \"npm run dev:worktree:backend\" \"npm run dev:worktree:frontend\"",
+                "runCommand": "npm run dev:worktree:both"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build:frontend": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:frontend"
+              },
+              "metadata": {
+                "scriptContent": "nx run frontend:build",
+                "runCommand": "npm run build:frontend"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:frontend": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:frontend"
+              },
+              "metadata": {
+                "scriptContent": "nx run frontend:test",
+                "runCommand": "npm run test:frontend"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:backend": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:backend"
+              },
+              "metadata": {
+                "scriptContent": "nx run backend:test",
+                "runCommand": "npm run test:backend"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:backend:unit": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:backend:unit"
+              },
+              "metadata": {
+                "scriptContent": "nx run backend:test:unit",
+                "runCommand": "npm run test:backend:unit"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint:frontend": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint:frontend"
+              },
+              "metadata": {
+                "scriptContent": "nx run frontend:lint",
+                "runCommand": "npm run lint:frontend"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint:backend": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "lint:backend"
+              },
+              "metadata": {
+                "scriptContent": "nx run backend:lint",
+                "runCommand": "npm run lint:backend"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "format": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format"
+              },
+              "metadata": {
+                "scriptContent": "nx format:write --all",
+                "runCommand": "npm run format"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "format:check": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format:check"
+              },
+              "metadata": {
+                "scriptContent": "nx format:check --all",
+                "runCommand": "npm run format:check"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "format:backend": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format:backend"
+              },
+              "metadata": {
+                "scriptContent": "nx run backend:format",
+                "runCommand": "npm run format:backend"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "format:backend:black": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format:backend:black"
+              },
+              "metadata": {
+                "scriptContent": "cd backend && uv run black apps/ --line-length 119 --target-version py313",
+                "runCommand": "npm run format:backend:black"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "format:backend:ruff": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format:backend:ruff"
+              },
+              "metadata": {
+                "scriptContent": "cd backend && uv run ruff format apps/",
+                "runCommand": "npm run format:backend:ruff"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "format:backend:all": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "format:backend:all"
+              },
+              "metadata": {
+                "scriptContent": "npm run format:backend:black && npm run format:backend:ruff",
+                "runCommand": "npm run format:backend:all"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "typecheck": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "typecheck"
+              },
+              "metadata": {
+                "scriptContent": "nx run backend:typecheck",
+                "runCommand": "npm run typecheck"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "migrate": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "migrate"
+              },
+              "metadata": {
+                "scriptContent": "nx run backend:migrate",
+                "runCommand": "npm run migrate"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "migrate:both": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "migrate:both"
+              },
+              "metadata": {
+                "scriptContent": "nx run backend:migrate:both",
+                "runCommand": "npm run migrate:both"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "shell": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "shell"
+              },
+              "metadata": {
+                "scriptContent": "nx run backend:shell",
+                "runCommand": "npm run shell"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "schema:generate": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "schema:generate"
+              },
+              "metadata": {
+                "scriptContent": "nx run backend:generate-schema",
+                "runCommand": "npm run schema:generate"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "schema:update": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "schema:update"
+              },
+              "metadata": {
+                "scriptContent": "npm run schema:generate && npx openapi-typescript backend/openapi-schema.json -o libs/shared/api-types/src/lib/generated-types.ts",
+                "runCommand": "npm run schema:update"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "api:build-types": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "api:build-types"
+              },
+              "metadata": {
+                "scriptContent": "nx run api-types:build",
+                "runCommand": "npm run api:build-types"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "api:update": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "api:update"
+              },
+              "metadata": {
+                "scriptContent": "npm run schema:generate && npm run schema:update && npm run api:build-types",
+                "runCommand": "npm run api:update"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "api:watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "api:watch"
+              },
+              "metadata": {
+                "scriptContent": "nodemon --watch backend/apps --ext py --exec 'npm run api:update'",
+                "runCommand": "npm run api:watch"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "up": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "up"
+              },
+              "metadata": {
+                "scriptContent": "docker compose -f backend/docker-compose.local.yml up -d",
+                "runCommand": "npm run up"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "down": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "down"
+              },
+              "metadata": {
+                "scriptContent": "docker compose -f backend/docker-compose.local.yml down",
+                "runCommand": "npm run down"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "logs": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "logs"
+              },
+              "metadata": {
+                "scriptContent": "docker compose -f backend/docker-compose.local.yml logs -f",
+                "runCommand": "npm run logs"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "docker compose -f backend/docker-compose.local.yml down -v && docker system prune -f",
+                "runCommand": "npm run clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "graph": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "graph"
+              },
+              "metadata": {
+                "scriptContent": "nx graph",
+                "runCommand": "npm run graph"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "affected:test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "affected:test"
+              },
+              "metadata": {
+                "scriptContent": "nx affected --target=test",
+                "runCommand": "npm run affected:test"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "affected:lint": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "affected:lint"
+              },
+              "metadata": {
+                "scriptContent": "nx affected --target=lint",
+                "runCommand": "npm run affected:lint"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "affected:build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "affected:build"
+              },
+              "metadata": {
+                "scriptContent": "nx affected --target=build",
+                "runCommand": "npm run affected:build"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-commands",
+              "options": {
+                "commands": [
+                  "npm run build:frontend"
+                ],
+                "parallel": false
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true,
+              "dependsOn": [
+                "^build"
+              ],
+              "inputs": [
+                "production",
+                "^production"
+              ]
+            },
+            "dev": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npm run dev:both"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": false
+            },
+            "test": {
+              "executor": "nx:run-commands",
+              "options": {
+                "commands": [
+                  "npm run test:backend",
+                  "npm run test:frontend"
+                ],
+                "parallel": true
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true,
+              "inputs": [
+                "default",
+                "^production",
+                "{workspaceRoot}/jest.preset.js"
+              ]
+            },
+            "lint": {
+              "executor": "nx:run-commands",
+              "options": {
+                "commands": [
+                  "npm run lint:backend",
+                  "npm run lint:frontend"
+                ],
+                "parallel": true
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true,
+              "inputs": [
+                "default",
+                "{workspaceRoot}/.eslintrc.json",
+                "{workspaceRoot}/.eslintignore"
+              ]
+            }
+          },
+          "$schema": "node_modules/nx/schemas/project-schema.json",
+          "projectType": "application",
+          "sourceRoot": ".",
+          "implicitDependencies": []
+        }
+      }
+    },
+    "dependencies": {
+      "api-types": [],
+      "frontend": [
+        {
+          "source": "frontend",
+          "target": "api-types",
+          "type": "implicit"
+        }
+      ],
+      "backend": [
+        {
+          "source": "backend",
+          "target": "api-types",
+          "type": "implicit"
+        }
+      ],
+      "naga-monorepo": []
+    }
+  }
+}

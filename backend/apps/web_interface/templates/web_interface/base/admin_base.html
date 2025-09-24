@@ -1,0 +1,249 @@
+{% extends "web_interface/base/base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block body_class %}admin-layout bg-gray-50{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex">
+    <!-- Sidebar Navigation -->
+    <aside class="fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg border-r border-gray-200 transform transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static lg:inset-0">
+        <!-- Logo/Brand -->
+        <div class="flex items-center justify-center h-16 px-4 border-b border-gray-200">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-gray-900">Naga SIS</h1>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Menu -->
+        <nav class="mt-8 px-4">
+            <div class="space-y-2">
+                <!-- Dashboard -->
+                <a href="{% url 'web_interface:dashboard' %}" 
+                   class="nav-item group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50">
+                    <i class="fas fa-tachometer-alt mr-3 w-5 h-5"></i>
+                    {% trans "Dashboard" %}
+                </a>
+
+                <!-- Students -->
+                <a href="{% url 'web_interface:student-list' %}" 
+                   class="nav-item group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50">
+                    <i class="fas fa-users mr-3 w-5 h-5"></i>
+                    {% trans "Students" %}
+                </a>
+
+                <!-- Finance -->
+                <div class="space-y-1">
+                    <a href="{% url 'web_interface:finance-dashboard' %}" 
+                       class="nav-item group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50">
+                        <i class="fas fa-money-bill-wave mr-3 w-5 h-5"></i>
+                        {% trans "Finance" %}
+                    </a>
+                    <a href="{% url 'web_interface:reports-dashboard' %}" 
+                       class="nav-sub-item group flex items-center px-6 py-2 text-sm font-medium text-gray-500 rounded-md hover:text-gray-700 hover:bg-gray-50">
+                        <i class="fas fa-chart-bar mr-3 w-4 h-4"></i>
+                        {% trans "Reports" %}
+                    </a>
+                </div>
+
+                <!-- Academic -->
+                <a href="{% url 'web_interface:academic-dashboard' %}" 
+                   class="nav-item group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50">
+                    <i class="fas fa-graduation-cap mr-3 w-5 h-5"></i>
+                    {% trans "Academic" %}
+                </a>
+
+                <!-- Administration -->
+                <details class="group">
+                    <summary class="nav-item flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50 cursor-pointer">
+                        <i class="fas fa-cog mr-3 w-5 h-5"></i>
+                        {% trans "Administration" %}
+                        <i class="fas fa-chevron-down ml-auto w-4 h-4 transition-transform group-open:rotate-180"></i>
+                    </summary>
+                    <div class="mt-1 space-y-1 pl-6">
+                        <a href="#" class="nav-sub-item block px-3 py-2 text-sm font-medium text-gray-500 rounded-md hover:text-gray-700 hover:bg-gray-50">
+                            {% trans "Users" %}
+                        </a>
+                        <a href="#" class="nav-sub-item block px-3 py-2 text-sm font-medium text-gray-500 rounded-md hover:text-gray-700 hover:bg-gray-50">
+                            {% trans "Settings" %}
+                        </a>
+                    </div>
+                </details>
+            </div>
+        </nav>
+
+        <!-- User Menu -->
+        <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center">
+                        <span class="text-sm font-medium text-white">
+                            {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+                        </span>
+                    </div>
+                </div>
+                <div class="ml-3 flex-1 min-w-0">
+                    <p class="text-sm font-medium text-gray-900 truncate">
+                        {{ user.get_full_name|default:user.username }}
+                    </p>
+                    <p class="text-xs text-gray-500">
+                        {% trans "Administrator" %}
+                    </p>
+                </div>
+                <div class="flex-shrink-0">
+                    <a href="{% url 'admin:logout' %}" 
+                       class="text-gray-400 hover:text-gray-600"
+                       title="{% trans 'Logout' %}">
+                        <i class="fas fa-sign-out-alt w-4 h-4"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 lg:pl-64">
+        <!-- Top Bar -->
+        <header class="bg-white shadow-sm border-b border-gray-200 lg:fixed lg:top-0 lg:right-0 lg:left-64 lg:z-40">
+            <div class="px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <!-- Mobile menu button -->
+                        <button type="button" 
+                                class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 lg:hidden"
+                                onclick="toggleSidebar()">
+                            <i class="fas fa-bars w-6 h-6"></i>
+                        </button>
+                        
+                        <!-- Breadcrumb -->
+                        <nav class="flex items-center space-x-4 ml-4 lg:ml-0" aria-label="Breadcrumb">
+                            <ol class="flex items-center space-x-2">
+                                <li>
+                                    <a href="{% url 'web_interface:dashboard' %}" class="text-gray-400 hover:text-gray-500">
+                                        <i class="fas fa-home w-4 h-4"></i>
+                                    </a>
+                                </li>
+                                {% block breadcrumbs %}{% endblock %}
+                            </ol>
+                        </nav>
+                    </div>
+
+                    <div class="flex items-center space-x-4">
+                        <!-- Notifications -->
+                        <button type="button" class="p-2 text-gray-400 hover:text-gray-500">
+                            <i class="fas fa-bell w-5 h-5"></i>
+                        </button>
+
+                        <!-- User menu -->
+                        <div class="relative">
+                            <button type="button" class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500" onclick="toggleUserMenu()">
+                                <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center">
+                                    <span class="text-sm font-medium text-white">
+                                        {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+                                    </span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Page Content -->
+        <main class="flex-1 pb-8 lg:pt-16">
+            <!-- Page Header -->
+            <div class="bg-white shadow-sm border-b border-gray-200">
+                <div class="px-4 sm:px-6 lg:px-8 py-6">
+                    {% block page_header %}
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h1 class="text-2xl font-bold text-gray-900">{% block page_title %}Page Title{% endblock %}</h1>
+                            {% block page_description %}{% endblock %}
+                        </div>
+                        {% block page_actions %}{% endblock %}
+                    </div>
+                    {% endblock %}
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="px-4 sm:px-6 lg:px-8 py-8">
+                {% block content %}
+                <div class="text-center text-gray-500">
+                    Content goes here
+                </div>
+                {% endblock %}
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Mobile sidebar overlay -->
+<div id="sidebar-overlay" class="fixed inset-0 bg-gray-600 bg-opacity-75 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
+
+<style>
+/* Admin layout specific styles */
+.admin-layout .nav-item {
+    transition: all 0.2s ease-in-out;
+}
+
+.admin-layout .nav-item.active,
+.admin-layout .nav-item[aria-current="page"] {
+    @apply bg-indigo-50 text-indigo-700;
+}
+
+.admin-layout .nav-item.active i,
+.admin-layout .nav-item[aria-current="page"] i {
+    @apply text-indigo-500;
+}
+
+.admin-layout .nav-sub-item.active,
+.admin-layout .nav-sub-item[aria-current="page"] {
+    @apply bg-gray-100 text-gray-900;
+}
+
+/* Page content spacing */
+@media (min-width: 1024px) {
+    .admin-layout main {
+        margin-top: 0;
+    }
+}
+</style>
+
+<script>
+// Mobile sidebar toggle
+function toggleSidebar() {
+    const sidebar = document.querySelector('aside');
+    const overlay = document.getElementById('sidebar-overlay');
+    
+    sidebar.classList.toggle('-translate-x-full');
+    overlay.classList.toggle('hidden');
+}
+
+// User menu toggle  
+function toggleUserMenu() {
+    // TODO: Implement user menu dropdown
+    console.log('User menu clicked');
+}
+
+// Close sidebar when clicking on main content on mobile
+document.addEventListener('DOMContentLoaded', function() {
+    const main = document.querySelector('main');
+    if (main) {
+        main.addEventListener('click', function() {
+            if (window.innerWidth < 1024) {
+                const sidebar = document.querySelector('aside');
+                const overlay = document.getElementById('sidebar-overlay');
+                
+                if (!sidebar.classList.contains('-translate-x-full')) {
+                    sidebar.classList.add('-translate-x-full');
+                    overlay.classList.add('hidden');
+                }
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

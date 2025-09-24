@@ -1,0 +1,218 @@
+# Naga SIS Development Commands
+
+# Default command to list all available commands
+default:
+    @just --list
+
+# build: Build python image
+build:
+    @echo "Building python image..."
+    docker compose build
+
+# up: Start up containers
+up:
+    @echo "Starting up containers..."
+    docker compose up -d
+
+# down: Stop containers
+down:
+    @echo "Stopping containers..."
+    docker compose down
+
+# logs: View container logs
+logs *args:
+    docker compose logs -f {{args}}
+
+# manage: Executes Django management command
+manage +args:
+    docker compose run django python manage.py {{args}}
+
+# migrate-both: Run migrations on both databases
+migrate-both app="":
+    @echo "🔄 Running migrations on both databases..."
+    @echo "📊 Migrating MIGRATION database..."
+    just _migrate-migration {{app}}
+    @echo "🧪 Migrating DEFAULT database..."
+    docker compose run django python manage.py migrate {{app}}
+    @echo "🎉 Both databases are now in sync!"
+
+# Internal command for migration database
+_migrate-migration app="":
+    #!/usr/bin/env bash
+    COMPOSE_FILE=docker-compose.migration.yml docker compose run django python manage.py migrate {{app}}
+
+# migrate-migration: Migrate only the migration database
+migrate-migration app="":
+    @echo "📊 Migrating MIGRATION database only..."
+    just _migrate-migration {{app}}
+
+# migrate-default: Migrate only the default database
+migrate-default app="":
+    @echo "🧪 Migrating DEFAULT database only..."
+    docker compose run django python manage.py migrate {{app}}
+
+# makemigrations: Create new migration
+makemigrations app="" name="":
+    @echo "📝 Creating migration for {{app}}..."
+    docker compose run django python manage.py makemigrations {{app}} {{if name != "" { "--name " + name } else { "" }}}
+
+# test: Run tests
+test path="":
+    @echo "🧪 Running tests..."
+    docker compose run django pytest {{path}}
+
+# showmigrations: Show migration status for both databases
+showmigrations:
+    @echo "📋 Migration status - MIGRATION database:"
+    just _showmigrations-migration
+    @echo "📋 Migration status - DEFAULT database:"
+    docker compose run django python manage.py showmigrations
+
+# Internal command for migration showmigrations
+_showmigrations-migration:
+    #!/usr/bin/env bash
+    COMPOSE_FILE=docker-compose.migration.yml docker compose run django python manage.py showmigrations
+
+# shell: Open Django shell
+shell:
+    @echo "🐍 Opening Django shell..."
+    docker compose run django python manage.py shell
+
+# runserver: Start development server
+runserver:
+    @echo "🚀 Starting development server..."
+    docker compose up
+
+# format: Format code with ruff
+format:
+    @echo "🎨 Formatting code with ruff..."
+    uv run ruff format .
+
+# lint: Lint code with ruff
+lint:
+    @echo "🔍 Linting code with ruff..."
+    uv run ruff check .
+
+# typecheck: Run mypy type checking
+typecheck:
+    @echo "🔧 Running type checks..."
+    uv run mypy naga
+
+# backup: Create database backup
+backup:
+    @echo "💾 Creating database backup..."
+    docker compose exec postgres backup
+
+# restore: Restore from backup
+restore backup_name:
+    @echo "📥 Restoring from backup: {{backup_name}}"
+    docker compose exec postgres restore {{backup_name}}
+
+# comprehensive-backup: Create comprehensive backup (Postgres + fixtures + verification)
+comprehensive-backup env="local":
+    @echo "🚀 Creating comprehensive backup for {{env}} environment..."
+    ./scripts/comprehensive-backup.sh {{env}}
+
+# backup-fixtures: Generate all Django fixtures for reference data
+backup-fixtures:
+    @echo "📦 Backing up Django fixtures..."
+    just _backup-fixtures
+
+# Internal fixture backup command
+_backup-fixtures:
+    #!/usr/bin/env bash
+    echo "📦 Generating Django fixtures..."
+    timestamp=$(date +'%Y%m%d_%H%M%S')
+    
+    # Create timestamped backup directory
+    backup_dir="data/fixtures_backup_${timestamp}"
+    mkdir -p "${backup_dir}"
+    
+    # Generate each fixture set
+    echo "🏢 Generating rooms fixture..."
+    docker compose run --rm django python manage.py dumpdata common.Room --indent 2 --output data/rooms_fixture.json
+    
+    echo "🎉 Generating holidays fixture..."
+    docker compose run --rm django python manage.py dumpdata common.Holiday --indent 2 --output data/holidays_fixtures.json
+    
+    echo "🎓 Generating curriculum foundation fixtures..."
+    docker compose run --rm django python manage.py dumpdata curriculum.Division curriculum.Cycle curriculum.Major --indent 2 --output data/curriculum_foundation_fixtures.json
+    
+    echo "📅 Generating terms fixtures..."
+    docker compose run --rm django python manage.py dumpdata curriculum.Term --indent 2 --output data/curriculum_terms_fixtures.json
+    
+    echo "📚 Generating courses fixtures..."
+    docker compose run --rm django python manage.py dumpdata curriculum.Course --indent 2 --output data/curriculum_courses_fixtures.json
+    
+    echo "📋 Generating academic requirements fixtures..."
+    docker compose run --rm django python manage.py dumpdata academic.CanonicalRequirement --indent 2 --output data/academic_canonical_requirements_fixtures.json
+    
+    echo "🎯 Generating sponsors fixtures..."
+    docker compose run --rm django python manage.py dumpdata scholarships.Sponsor --indent 2 --output data/scholarships_sponsors_fixtures.json
+    
+    echo "💰 Generating finance fixtures..."
+    docker compose run --rm django python manage.py dumpdata finance.DefaultPricing finance.CourseFixedPricing finance.SeniorProjectPricing finance.SeniorProjectCourse finance.ReadingClassPricing finance.CashierSession --indent 2 --output data/finance_fixtures.json
+    
+    # Copy all fixtures to backup directory
+    cp data/*fixtures*.json "${backup_dir}/" 2>/dev/null || true
+    echo "✅ Fixtures backed up to ${backup_dir}"
+
+# verify-backup: Verify backup integrity
+verify-backup backup_file env="local":
+    @echo "🔍 Verifying backup: {{backup_file}}"
+    ./scripts/comprehensive-backup.sh verify {{backup_file}} {{env}}
+
+# monitoring-up: Start monitoring stack
+monitoring-up:
+    @echo "📊 Starting monitoring stack..."
+    just _monitoring-up
+
+# Internal monitoring up command
+_monitoring-up:
+    #!/usr/bin/env bash
+    COMPOSE_FILE=docker-compose.monitoring.yml docker compose up -d
+
+# monitoring-down: Stop monitoring stack
+monitoring-down:
+    @echo "📊 Stopping monitoring stack..."
+    just _monitoring-down
+
+# Internal monitoring down command
+_monitoring-down:
+    #!/usr/bin/env bash
+    COMPOSE_FILE=docker-compose.monitoring.yml docker compose down
+
+# docs-build: Build documentation
+docs-build:
+    @echo "📚 Building documentation..."
+    just _docs-build
+
+# Internal docs build command
+_docs-build:
+    #!/usr/bin/env bash
+    COMPOSE_FILE=docker-compose.docs.yml docker compose run docs make html
+
+# docs-pdf: Build PDF documentation
+docs-pdf:
+    @echo "📄 Building PDF documentation..."
+    just _docs-pdf
+
+# Internal docs PDF command
+_docs-pdf:
+    #!/usr/bin/env bash
+    COMPOSE_FILE=docker-compose.docs.yml docker compose run docs make pdf
+
+# docs-live: Start live documentation server
+docs-live:
+    @echo "📚 Starting live documentation server..."
+    just _docs-live
+
+# Internal docs live command
+_docs-live:
+    #!/usr/bin/env bash
+    COMPOSE_FILE=docker-compose.docs.yml docker compose up docs
+
+# ruffstat: Show ruff error statistics
+ruffstat:
+    @echo "Ruff error statistics:"
+    uv run ruff check . --statistics || true

@@ -1,0 +1,13 @@
+tls:
+  stores:
+    default:
+      defaultCertificate:
+        certFile: /certs/wildcard.pucsr.edu.kh.crt
+        keyFile: /certs/wildcard.pucsr.edu.kh.key
+  
+  certificates:
+    # Wildcard certificate for *.pucsr.edu.kh
+    - certFile: /certs/wildcard.pucsr.edu.kh.crt
+      keyFile: /certs/wildcard.pucsr.edu.kh.key
+      stores:
+        - default

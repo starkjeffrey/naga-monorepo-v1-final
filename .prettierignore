@@ -1,0 +1,38 @@
+# Add files here to ignore them from prettier formatting
+/dist
+/coverage
+/.nx/cache
+/.nx/workspace-data
+
+# Python/Django specific
+**/.venv
+**/venv
+**/__pycache__
+**/*.pyc
+**/staticfiles
+**/static
+**/media
+**/htmlcov
+**/.mypy_cache
+**/.pytest_cache
+**/.ruff_cache
+
+# Backend directories
+/backend/.venv
+/backend/venv
+/backend/staticfiles
+/backend/static
+/backend/media
+/backend/templates
+/backend/**/*.html
+
+# Frontend build
+/frontend/dist
+/frontend/.quasar
+
+# Other
+**/node_modules
+**/.git
+**/migrations
+*.min.js
+*.min.css

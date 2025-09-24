@@ -1,0 +1,43 @@
+{% load static %}
+
+<header class="fixed top-0 left-0 right-0 z-50 h-16 px-4 flex items-center justify-between bg-white/95 dark:bg-gray-900/95 border-b border-gray-200 dark:border-gray-700 backdrop-blur-sm">
+  <!-- Left Section -->
+  <div class="flex items-center space-x-4">
+    <button id="sidebar-toggle"
+            class="p-2 rounded-lg lg:hidden text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-800">
+      <i data-lucide="menu" class="sidebar-open-icon"></i>
+      <i data-lucide="x" class="sidebar-close-icon hidden"></i>
+    </button>
+    <a href="{% url 'home' %}" class="flex items-center space-x-3">
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-white bg-gradient-to-br from-blue-500 to-purple-600 shadow-lg">
+        <i data-lucide="shield"></i>
+      </div>
+      <span class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Naga</span>
+    </a>
+  </div>
+  <!-- Right Section -->
+  <div class="flex items-center space-x-2">
+    <button id="theme-toggle"
+            class="p-2 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-gray-100 dark:text-yellow-400 dark:hover:text-yellow-300 dark:hover:bg-gray-800">
+      <i data-lucide="sun" class="sun-icon hidden"></i>
+      <i data-lucide="moon" class="moon-icon"></i>
+    </button>
+    {% if request.user.is_authenticated %}
+      <a href="{% url 'users:detail' request.user.pk %}"
+         class="w-9 h-9 rounded-full flex items-center justify-center font-semibold text-sm text-white bg-gradient-to-br from-blue-500 to-purple-500 dark:from-blue-600 dark:to-purple-600 shadow-lg cursor-pointer hover:shadow-xl transition-shadow duration-200">
+        {{ request.user.username.0|upper }}
+      </a>
+      <a href="{% url 'account_logout' %}"
+         class="p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-800">
+        <i data-lucide="log-out"></i>
+      </a>
+    {% else %}
+      <a href="{% url 'account_login' %}"
+         class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">Sign In</a>
+      {% if ACCOUNT_ALLOW_REGISTRATION %}
+        <a href="{% url 'account_signup' %}"
+           class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg">Sign Up</a>
+      {% endif %}
+    {% endif %}
+  </div>
+</header>

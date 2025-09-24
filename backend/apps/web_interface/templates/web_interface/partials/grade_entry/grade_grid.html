@@ -1,0 +1,199 @@
+{% load i18n %}
+
+<div class="overflow-x-auto">
+    <table class="grade-grid">
+        <thead>
+            <tr>
+                <th class="student-name">
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" id="select-all" class="sis-checkbox">
+                        <span>{% trans "Student" %}</span>
+                    </div>
+                </th>
+                {% for part in class_parts %}
+                    <th class="text-xs">
+                        <div class="transform -rotate-45 origin-center whitespace-nowrap">
+                            {{ part.part_name }}
+                        </div>
+                        <div class="text-xs text-gray-500 mt-1">
+                            {{ part.class_session.session_name }}
+                        </div>
+                    </th>
+                {% endfor %}
+                <th>{% trans "Actions" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for enrollment in enrollments %}
+                <tr>
+                    <td class="student-name">
+                        <div class="flex items-center space-x-2">
+                            <input type="checkbox" class="sis-checkbox grade-checkbox" value="{{ enrollment.id }}">
+                            <div>
+                                <div class="font-medium">{{ enrollment.student.person.full_name }}</div>
+                                <div class="text-xs text-gray-500">{{ enrollment.student.student_id }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    {% for part in class_parts %}
+                        {% for grade in enrollment.class_part_grades.all %}
+                            {% if grade.class_part.id == part.id %}
+                                <td class="grade-cell">
+                                    <input type="text" 
+                                           class="grade-input" 
+                                           value="{{ grade.get_grade_display }}"
+                                           data-enrollment-id="{{ enrollment.id }}"
+                                           data-class-part-id="{{ part.id }}"
+                                           data-grade-id="{{ grade.id }}"
+                                           maxlength="5">
+                                    <div class="grade-status {{ grade.grade_status|lower }}" 
+                                         title="Status: {{ grade.get_grade_status_display }}"></div>
+                                </td>
+                                {% break %}
+                            {% endif %}
+                        {% empty %}
+                            <td class="grade-cell">
+                                <input type="text" 
+                                       class="grade-input" 
+                                       value=""
+                                       data-enrollment-id="{{ enrollment.id }}"
+                                       data-class-part-id="{{ part.id }}"
+                                       maxlength="5">
+                                <div class="grade-status draft"></div>
+                            </td>
+                        {% endfor %}
+                        {% if not enrollment.class_part_grades.all|length %}
+                            <td class="grade-cell">
+                                <input type="text" 
+                                       class="grade-input" 
+                                       value=""
+                                       data-enrollment-id="{{ enrollment.id }}"
+                                       data-class-part-id="{{ part.id }}"
+                                       maxlength="5">
+                                <div class="grade-status draft"></div>
+                            </td>
+                        {% endif %}
+                    {% endfor %}
+                    <td>
+                        <div class="flex space-x-1">
+                            <button class="sis-btn sis-btn-sm sis-btn-outline" 
+                                    onclick="viewStudentGrades({{ enrollment.student.id }})"
+                                    title="{% trans 'View all grades' %}">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="sis-btn sis-btn-sm sis-btn-outline" 
+                                    onclick="emailGradeReport({{ enrollment.student.id }})"
+                                    title="{% trans 'Email grade report' %}">
+                                <i class="fas fa-envelope"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="{{ class_parts|length|add:2 }}" class="text-center text-gray-500 py-8">
+                        {% trans "No students enrolled in this class." %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% if enrollments %}
+    <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+        <div class="flex items-center justify-between">
+            <div class="text-sm text-gray-600">
+                <strong>{{ enrollments|length }}</strong> {% trans "students enrolled" %}
+                {% if grading_scale %}
+                    | {% trans "Grading Scale" %}: {{ grading_scale.name }}
+                {% endif %}
+            </div>
+            <div class="flex space-x-2">
+                <button class="sis-btn sis-btn-sm sis-btn-outline" onclick="exportGrades()">
+                    <i class="fas fa-download mr-1"></i>
+                    {% trans "Export" %}
+                </button>
+                <button class="sis-btn sis-btn-sm sis-btn-outline" onclick="importGrades()">
+                    <i class="fas fa-upload mr-1"></i>
+                    {% trans "Import" %}
+                </button>
+                <button class="sis-btn sis-btn-sm sis-btn-primary" onclick="calculateFinalGrades()">
+                    <i class="fas fa-calculator mr-1"></i>
+                    {% trans "Calculate Final" %}
+                </button>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+{% if grade_conversions %}
+    <div class="mt-4 p-4 bg-blue-50 rounded-lg">
+        <h4 class="font-medium text-blue-900 mb-2">{% trans "Grading Scale Reference" %}</h4>
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 text-sm">
+            {% for conversion in grade_conversions %}
+                <div class="bg-white p-2 rounded border">
+                    <div class="font-bold text-center">{{ conversion.letter_grade }}</div>
+                    <div class="text-xs text-gray-600 text-center">
+                        {{ conversion.min_percentage }}%-{{ conversion.max_percentage }}%
+                    </div>
+                    <div class="text-xs text-gray-500 text-center">
+                        {{ conversion.gpa_points }} GPA
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+
+<script>
+// Additional functions for grade grid
+function viewStudentGrades(studentId) {
+    // Open modal or navigate to student grade view
+    window.open(`{% url "web_interface:student-detail" pk=0 %}`.replace('0', studentId), '_blank');
+}
+
+function emailGradeReport(studentId) {
+    // Implement grade report email functionality
+    alert('Grade report email feature coming soon');
+}
+
+function exportGrades() {
+    // Export grades to CSV/Excel
+    const classId = document.getElementById('class-selector').value;
+    window.location.href = `{% url "web_interface:export-grades" %}?class_id=${classId}`;
+}
+
+function importGrades() {
+    // Import grades from CSV/Excel
+    alert('Grade import feature coming soon');
+}
+
+function calculateFinalGrades() {
+    // Calculate and populate final grades
+    if (confirm('This will calculate final grades based on class part weights. Continue?')) {
+        // Implement final grade calculation
+        alert('Final grade calculation feature coming soon');
+    }
+}
+
+// Select all checkbox functionality
+document.getElementById('select-all')?.addEventListener('change', function() {
+    const checkboxes = document.querySelectorAll('.grade-checkbox');
+    checkboxes.forEach(cb => cb.checked = this.checked);
+});
+
+// Update select all when individual checkboxes change
+document.addEventListener('change', function(e) {
+    if (e.target.classList.contains('grade-checkbox')) {
+        const allCheckboxes = document.querySelectorAll('.grade-checkbox');
+        const checkedBoxes = document.querySelectorAll('.grade-checkbox:checked');
+        const selectAll = document.getElementById('select-all');
+        
+        if (selectAll) {
+            selectAll.checked = allCheckboxes.length === checkedBoxes.length;
+            selectAll.indeterminate = checkedBoxes.length > 0 && checkedBoxes.length < allCheckboxes.length;
+        }
+    }
+});
+</script>

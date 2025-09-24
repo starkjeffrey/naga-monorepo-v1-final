@@ -1,0 +1,78 @@
+{% extends "base_new.html" %}
+
+{% load static i18n %}
+
+{% block title %}Test Adaptive Navigation{% endblock %}
+{% block content %}
+  <div class="h-full flex flex-col">
+    <!-- Test Header -->
+    <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4">
+      <div class="flex items-start justify-between">
+        <div>
+          <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">Test Adaptive Navigation</h1>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">This is a test page to verify CSS loading</p>
+        </div>
+        <div class="flex items-center space-x-2">
+          <button class="px-3 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+            <i class="fas fa-check mr-1"></i>Test Button
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Test Content -->
+    <div class="flex-1 overflow-y-auto bg-gray-50 p-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Card 1 -->
+        <div class="bg-white rounded-lg shadow-sm p-6">
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">CSS Test Card</h2>
+          <p class="text-gray-600">
+            If you can see styled cards with proper spacing, shadows, and colors, then Tailwind CSS is loading correctly.
+          </p>
+        </div>
+        <!-- Card 2 -->
+        <div class="bg-white rounded-lg shadow-sm p-6">
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">Icon Test</h2>
+          <div class="flex items-center space-x-4 text-2xl">
+            <i class="fas fa-home text-blue-600"></i>
+            <i class="fas fa-user text-green-600"></i>
+            <i class="fas fa-cog text-gray-600"></i>
+          </div>
+          <p class="text-sm text-gray-600 mt-4">Icons should appear if Font Awesome is loading.</p>
+        </div>
+        <!-- Card 3 -->
+        <div class="bg-white rounded-lg shadow-sm p-6">
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">Sidebar Test</h2>
+          <p class="text-gray-600">
+            The sidebar should be visible on the left with navigation items. Try pressing Ctrl+B to toggle it.
+          </p>
+        </div>
+      </div>
+      <!-- Test Table -->
+      <div class="mt-6 bg-white rounded-lg shadow-sm p-6">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Table Test</h2>
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Feature</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Tailwind CSS</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600">✓ Working</td>
+            </tr>
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Font Awesome Icons</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600">✓ Working</td>
+            </tr>
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Alpine.js Interactivity</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600">✓ Working</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}

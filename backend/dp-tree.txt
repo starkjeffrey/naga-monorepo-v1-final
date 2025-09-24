@@ -1,0 +1,60 @@
+apps/data_pipeline
+├── __init__.py
+├── admin.py
+├── API_REFERENCE.md
+├── apps.py
+├── cleaners
+│   ├── __init__.py
+│   └── engine.py
+├── configs
+│   ├── __init__.py
+│   ├── academicclasses.py
+│   ├── academiccoursetakers.py
+│   ├── base.py
+│   ├── receipt_headers.py
+│   ├── receipt_items.py
+│   ├── students.py
+│   └── terms.py
+├── core
+│   ├── __init__.py
+│   ├── pipeline.py
+│   ├── registry.py
+│   ├── stages.py
+│   └── transformations
+│       ├── base.py
+│       ├── education.py
+│       ├── registry.py
+│       └── text_encodings.py
+├── management
+│   ├── __init__.py
+│   └── commands
+│       ├── __init__.py
+│       ├── profile_raw_data.py
+│       ├── run_pipeline.py
+│       └── validate_configs.py
+├── migrations
+│   └── __init__.py
+├── models.py
+├── QUICK_START.md
+├── README.md
+├── static
+│   └── admin
+│       └── css
+├── tests
+│   ├── __init__.py
+│   ├── test_commands.py
+│   ├── test_configurations.py
+│   ├── test_models.py
+│   ├── test_pipeline.py
+│   └── test_stage5_transformations.py
+├── USAGE_GUIDE.md
+└── validators
+    ├── __init__.py
+    ├── academicclasses.py
+    ├── academiccoursetakers.py
+    ├── receipt_headers.py
+    ├── receipt_items.py
+    ├── students.py
+    └── terms.py
+
+13 directories, 45 files

@@ -1,0 +1,3 @@
+# Translation tools - not included in main project dependencies
+argostranslate
+polib  # For working with .po files programmatically

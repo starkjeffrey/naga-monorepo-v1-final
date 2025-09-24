@@ -1,0 +1,291 @@
+name: Django Backend Quality Check
+
+on:
+  pull_request:
+    branches: [ main, develop, staging ]
+    paths: 
+      - 'backend/**'
+      - '.github/workflows/**'
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'backend/**'
+
+env:
+  PYTHON_VERSION: '3.13'
+  UV_VERSION: 'latest'
+
+jobs:
+  # Fast smoke tests that run first
+  smoke-tests:
+    name: "🚀 Smoke Tests"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    
+    defaults:
+      run:
+        working-directory: ./backend
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+    
+    - name: Install dependencies
+      run: uv sync --dev
+    
+    - name: Django system check
+      run: uv run python manage.py check --deploy
+      env:
+        DJANGO_SETTINGS_MODULE: config.settings.ci
+    
+    - name: Check for missing migrations
+      run: uv run python manage.py makemigrations --check --dry-run
+      env:
+        DJANGO_SETTINGS_MODULE: config.settings.ci
+    
+    - name: Python syntax check
+      run: uv run python -m py_compile $(find . -name '*.py' -not -path './.*' -not -path '*/migrations/*' | head -20)
+  
+  # Code quality checks
+  code-quality:
+    name: "🔍 Code Quality"
+    runs-on: ubuntu-latest
+    needs: smoke-tests
+    timeout-minutes: 10
+    
+    defaults:
+      run:
+        working-directory: ./backend
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+    
+    - name: Install dependencies
+      run: uv sync --dev
+    
+    # MyPy - only modified files (realistic approach)
+    - name: MyPy check (modified files only)
+      run: ./scripts/mypy-new-files-ci.sh
+      env:
+        MAIN_BRANCH: ${{ github.base_ref || 'main' }}
+      continue-on-error: false  # Fail if new files have type errors
+    
+    # Ruff linting - focus on modified files
+    - name: Ruff lint (modified files)
+      run: |
+        CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref || 'main' }}...HEAD | grep '\.py$' || echo "")
+        if [ -n "$CHANGED_FILES" ]; then
+          echo "Linting modified files:"
+          echo "$CHANGED_FILES"
+          echo "$CHANGED_FILES" | xargs uv run ruff check --output-format=github
+        else
+          echo "No Python files changed"
+        fi
+    
+    # Ruff formatting - full check (fast)
+    - name: Ruff format check
+      run: uv run ruff format --check --diff .
+    
+    # Security scan - only show new issues
+    - name: Bandit security scan (modified files)
+      run: |
+        CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref || 'main' }}...HEAD | grep '\.py$' || echo "")
+        if [ -n "$CHANGED_FILES" ]; then
+          echo "$CHANGED_FILES" | xargs uv run bandit -r -f json || echo "Some security warnings found"
+        fi
+      continue-on-error: true  # Don't fail CI for security warnings
+  
+  # Tests
+  tests:
+    name: "🧪 Tests"
+    runs-on: ubuntu-latest
+    needs: smoke-tests
+    timeout-minutes: 15
+    
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_naga
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      
+      redis:
+        image: redis:7
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+    
+    defaults:
+      run:
+        working-directory: ./backend
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+    
+    - name: Install dependencies
+      run: uv sync --dev
+    
+    # Run fast smoke tests first
+    - name: Fast smoke tests
+      run: uv run pytest -m "smoke" --maxfail=3 -x -v
+      env:
+        DJANGO_SETTINGS_MODULE: config.settings.test
+        DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_naga
+        REDIS_URL: redis://localhost:6379/0
+    
+    # Run unit tests (exclude slow ones)
+    - name: Unit tests
+      run: uv run pytest -m "not slow and not e2e" --maxfail=5 --tb=short --durations=10
+      env:
+        DJANGO_SETTINGS_MODULE: config.settings.test
+        DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_naga
+        REDIS_URL: redis://localhost:6379/0
+    
+    # Upload coverage if tests pass
+    - name: Upload coverage to Codecov
+      if: success()
+      uses: codecov/codecov-action@v4
+      with:
+        file: ./backend/coverage.xml
+        flags: backend
+        name: backend-coverage
+        fail_ci_if_error: false  # Don't fail CI if codecov fails
+  
+  # Optional slow tests (only on main branch or when specifically requested)
+  integration-tests:
+    name: "🔗 Integration Tests"
+    runs-on: ubuntu-latest
+    needs: [smoke-tests, code-quality]
+    timeout-minutes: 20
+    if: github.ref == 'refs/heads/main' || contains(github.event.pull_request.labels.*.name, 'run-integration-tests')
+    
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_naga
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      
+      redis:
+        image: redis:7
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+    
+    defaults:
+      run:
+        working-directory: ./backend
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+    
+    - name: Install dependencies
+      run: uv sync --dev
+    
+    - name: Integration tests
+      run: uv run pytest -m "integration or api" --maxfail=3 --tb=short
+      env:
+        DJANGO_SETTINGS_MODULE: config.settings.test
+        DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_naga
+        REDIS_URL: redis://localhost:6379/0
+  
+  # Security and dependency checks
+  security:
+    name: "🔒 Security"
+    runs-on: ubuntu-latest
+    needs: smoke-tests
+    timeout-minutes: 5
+    
+    defaults:
+      run:
+        working-directory: ./backend
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+    
+    - name: Install dependencies
+      run: uv sync --dev
+    
+    # Dependency vulnerability scanning
+    - name: Safety check (dependency vulnerabilities)
+      run: uv run safety check --ignore=70612
+      continue-on-error: true  # Don't fail CI - just warn
+    
+    # Secret scanning
+    - name: TruffleHog secret scan
+      uses: trufflesecurity/trufflehog@main
+      with:
+        path: ./backend
+        base: ${{ github.event.repository.default_branch }}
+        head: HEAD
+        extra_args: --debug --only-verified

@@ -1,0 +1,121 @@
+{% extends "base_fixed_topnav.html" %}
+
+{% load i18n %}
+
+{% block title %}
+  {%
+  trans "Test Fixed Top Navigation" %} - {{ block.super }}
+{% endblock %}
+{% block
+  content %}
+  <div style="padding: 2rem">
+    <div style="max-width: 80rem; margin: 0 auto">
+      <!-- Welcome Header -->
+      <div style="background-color: white;
+                  border-radius: 0.5rem;
+                  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+                  border: 1px solid #e2e8f0;
+                  padding: 2rem;
+                  margin-bottom: 2rem">
+        <h1 style="font-size: 1.875rem;
+                   font-weight: bold;
+                   color: #1e293b;
+                   margin-bottom: 0.5rem">{% trans "Fixed Top Navigation Layout" %}</h1>
+        <p style="color: #64748b; line-height: 1.5">{% trans "This template has been completely rebuilt to ensure:" %}</p>
+        <ul style="margin-top: 1rem; color: #475569; list-style-position: inside">
+          <li style="margin-bottom: 0.5rem">✅ {% trans "Sidebar starts expanded (visible) by default" %}</li>
+          <li style="margin-bottom: 0.5rem">
+            ✅ {% trans "Hamburger menu is clearly visible with white background"
+            %}
+          </li>
+          <li style="margin-bottom: 0.5rem">✅ {% trans "All sidebar text is light colored on dark background" %}</li>
+          <li style="margin-bottom: 0.5rem">✅ {% trans "No black-on-black text issues" %}</li>
+          <li style="margin-bottom: 0.5rem">✅ {% trans "Clean, professional appearance" %}</li>
+        </ul>
+      </div>
+      <!-- Visual Check Grid -->
+      <div style="display: grid;
+                  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+                  gap: 1.5rem;
+                  margin-bottom: 2rem">
+        <!-- Hamburger Menu Check -->
+        <div style="background-color: #dbeafe;
+                    border: 1px solid #3b82f6;
+                    border-radius: 0.5rem;
+                    padding: 1.5rem">
+          <h3 style="font-weight: 600; color: #1e40af; margin-bottom: 0.75rem">
+            <i class="fas fa-bars" style="margin-right: 0.5rem"></i>
+            {% trans "Hamburger Menu" %}
+          </h3>
+          <p style="color: #1e3a8a; font-size: 0.875rem">
+            {% trans "Look at the top-left corner. You should see a white button
+            with three dark lines (hamburger icon). It should have a shadow to
+            make it stand out." %}
+          </p>
+        </div>
+        <!-- Sidebar Visibility Check -->
+        <div style="background-color: #dcfce7;
+                    border: 1px solid #16a34a;
+                    border-radius: 0.5rem;
+                    padding: 1.5rem">
+          <h3 style="font-weight: 600; color: #14532d; margin-bottom: 0.75rem">
+            <i class="fas fa-check-circle" style="margin-right: 0.5rem"></i>
+            {% trans "Sidebar Visibility" %}
+          </h3>
+          <p style="color: #166534; font-size: 0.875rem">
+            {% trans "The sidebar should be dark blue/gray with light gray text.
+            All menu items should be clearly readable. The sidebar should be
+            expanded (showing text) by default." %}
+          </p>
+        </div>
+        <!-- Interactive Features -->
+        <div style="background-color: #fef3c7;
+                    border: 1px solid #f59e0b;
+                    border-radius: 0.5rem;
+                    padding: 1.5rem">
+          <h3 style="font-weight: 600; color: #78350f; margin-bottom: 0.75rem">
+            <i class="fas fa-hand-pointer" style="margin-right: 0.5rem"></i>
+            {% trans "Interactive Features" %}
+          </h3>
+          <p style="color: #92400e; font-size: 0.875rem">
+            {% trans "Click the hamburger menu to collapse/expand the sidebar.
+            Your preference is saved. All top navigation buttons should work
+            properly." %}
+          </p>
+        </div>
+      </div>
+      <!-- Current Status -->
+      <div style="background-color: #f8fafc;
+                  border: 1px solid #e2e8f0;
+                  border-radius: 0.5rem;
+                  padding: 1.5rem">
+        <h2 style="font-size: 1.25rem;
+                   font-weight: 600;
+                   color: #334155;
+                   margin-bottom: 1rem">{% trans "System Status" %}</h2>
+        <div style="display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+                    gap: 1rem">
+          <div>
+            <span style="color: #64748b; font-size: 0.875rem">{% trans "User:" %}</span>
+            <strong style="color: #1e293b; margin-left: 0.5rem">{{ request.user.name|default:request.user.email }}</strong>
+          </div>
+          <div>
+            <span style="color: #64748b; font-size: 0.875rem">{% trans "Language:" %}</span>
+            <strong style="color: #1e293b; margin-left: 0.5rem">
+              {% if LANGUAGE_CODE == 'km' %}
+                🇰🇭 ភាសាខ្មែរ
+              {% else %}
+                🇺🇸 English{%
+                endif %}
+              </strong>
+            </div>
+            <div>
+              <span style="color: #64748b; font-size: 0.875rem">{% trans "Term:" %}</span>
+              <strong style="color: #1e293b; margin-left: 0.5rem">{{ current_term|default:"No Active Term" }}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endblock %}

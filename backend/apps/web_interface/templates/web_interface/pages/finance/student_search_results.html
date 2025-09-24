@@ -1,0 +1,28 @@
+{% load i18n %}
+{% load web_interface_tags %}
+
+{% for student in students %}
+  <div class="student-search-result"
+       data-student-id="{{ student.id }}"
+       data-student-name="{{ student.person.full_name }}">
+    <div class="student-result-info">
+      <div class="student-name">{{ student.person.full_name }}</div>
+      <div class="student-details">
+        <span class="student-id">ID: {{ student.student_id }}</span>
+        {% if student.outstanding_balance %}
+          <span class="outstanding-balance text-warning">Outstanding: {{ student.outstanding_balance|format_currency }}</span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% empty %}
+  <div class="no-results">
+    <p class="text-gray-500">
+      {% if search_query %}
+        {% trans "No students found matching" %} "{{ search_query }}"
+      {% else %}
+        {% trans "Start typing to search for students..." %}
+      {% endif %}
+    </p>
+  </div>
+{% endfor %}

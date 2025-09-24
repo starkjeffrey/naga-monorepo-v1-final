@@ -1,0 +1,126 @@
+{% load i18n %}
+
+<div class="p-6">
+    <!-- Current Session Info -->
+    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+        <h4 class="font-bold text-blue-800 mb-2">{% trans "Current Session" %}</h4>
+        <div class="text-sm space-y-1">
+            <div>
+                <span class="text-gray-600">{% trans "Session" %}:</span>
+                <span class="font-medium">{{ session.session_number }}</span>
+            </div>
+            <div>
+                <span class="text-gray-600">{% trans "Opened" %}:</span>
+                <span class="font-medium">{{ session.opened_at|date:"M d, Y g:i A" }}</span>
+            </div>
+            <div>
+                <span class="text-gray-600">{% trans "Opening Balance" %}:</span>
+                <span class="font-bold text-blue-600">${{ session.opening_balance|floatformat:2 }}</span>
+            </div>
+            <div>
+                <span class="text-gray-600">{% trans "Current Cash" %}:</span>
+                <span class="font-bold text-green-600">${{ current_cash|floatformat:2 }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cash Count Form -->
+    <form hx-post="{% url 'web_interface:cash-drawer-management' %}"
+          hx-target="#cash-drawer-result"
+          hx-swap="innerHTML">
+        
+        <div class="mb-4">
+            <label class="sis-label">{% trans "Action" %}</label>
+            <select name="action" class="sis-input" onchange="toggleCashCount(this.value)" required>
+                <option value="">{% trans "Select Action" %}</option>
+                <option value="open">{% trans "Open Drawer" %}</option>
+                <option value="close">{% trans "Close Drawer" %}</option>
+            </select>
+        </div>
+
+        <!-- Opening Cash Count -->
+        <div id="opening-section" class="hidden mb-4">
+            <label class="sis-label">{% trans "Opening Cash Amount" %}</label>
+            <input type="number" 
+                   name="opening_amount" 
+                   step="0.01" 
+                   min="0"
+                   class="sis-input" 
+                   placeholder="0.00">
+        </div>
+
+        <!-- Closing Cash Count -->
+        <div id="closing-section" class="hidden mb-4">
+            <label class="sis-label">{% trans "Physical Cash Count" %}</label>
+            
+            <!-- Denominations -->
+            <div class="grid grid-cols-2 gap-3 mb-3">
+                {% for denom in denominations %}
+                    <div class="flex items-center space-x-2">
+                        <span class="text-sm font-medium w-12">{{ denom.label }}:</span>
+                        <input type="number" 
+                               class="sis-input text-sm denomination-count" 
+                               data-value="{{ denom.value }}"
+                               min="0" 
+                               placeholder="0"
+                               onchange="calculateTotal()">
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Total -->
+            <div class="bg-gray-50 p-3 rounded">
+                <div class="flex justify-between items-center">
+                    <span class="font-medium">{% trans "Total Count" %}:</span>
+                    <span id="total-count" class="font-bold text-lg">$0.00</span>
+                </div>
+            </div>
+            
+            <input type="hidden" name="closing_amount" id="closing-amount-input">
+        </div>
+
+        <div class="flex space-x-3 mt-6">
+            <button type="submit" class="sis-btn sis-btn-primary flex-1">
+                {% trans "Process" %}
+            </button>
+            <button type="button" onclick="closeCashDrawer()" class="sis-btn sis-btn-secondary">
+                {% trans "Cancel" %}
+            </button>
+        </div>
+    </form>
+
+    <!-- Result Area -->
+    <div id="cash-drawer-result" class="mt-4"></div>
+</div>
+
+<script>
+function toggleCashCount(action) {
+    const openingSection = document.getElementById('opening-section');
+    const closingSection = document.getElementById('closing-section');
+    
+    if (action === 'open') {
+        openingSection.classList.remove('hidden');
+        closingSection.classList.add('hidden');
+    } else if (action === 'close') {
+        openingSection.classList.add('hidden');
+        closingSection.classList.remove('hidden');
+    } else {
+        openingSection.classList.add('hidden');
+        closingSection.classList.add('hidden');
+    }
+}
+
+function calculateTotal() {
+    let total = 0;
+    const counts = document.querySelectorAll('.denomination-count');
+    
+    counts.forEach(input => {
+        const value = parseFloat(input.dataset.value) || 0;
+        const count = parseInt(input.value) || 0;
+        total += value * count;
+    });
+    
+    document.getElementById('total-count').textContent = `$${total.toFixed(2)}`;
+    document.getElementById('closing-amount-input').value = total.toFixed(2);
+}
+</script>

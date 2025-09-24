@@ -1,0 +1,12 @@
+# Translations for the New Naga SIS Backend project
+# Copyright (C) 2025 Jeffrey STARK
+# Jeffrey STARK <stark.jeffrey@pucsr.edu.kh>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.1.1\n"
+"Language: en-US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"

@@ -1,0 +1,89 @@
+name: Test Suite
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      
+      redis:
+        image: redis:8.2
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      
+      - name: Install uv
+        run: pip install uv
+      
+      - name: Install dependencies
+        run: |
+          cd backend
+          uv pip install -e .[test]
+      
+      - name: Lint
+        run: |
+          cd backend
+          uv run ruff check
+          uv run ruff format --check
+      
+      - name: Type Check
+        run: |
+          cd backend
+          uv run mypy apps/ api/
+      
+      - name: Unit Tests
+        run: |
+          cd backend
+          uv run pytest tests/unit -n auto \
+            --cov=apps --cov=api \
+            --cov-report=xml \
+            --cov-report=term-missing
+        env:
+          DJANGO_SETTINGS_MODULE: config.settings.test
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/naga_test
+      
+      - name: Integration Tests
+        run: |
+          cd backend
+          uv run pytest tests/integration -n auto
+        env:
+          DJANGO_SETTINGS_MODULE: config.settings.test
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/naga_test
+      
+      - name: Contract Tests
+        run: |
+          cd backend
+          uv run pytest tests/contract
+        env:
+          DJANGO_SETTINGS_MODULE: config.settings.test
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/naga_test
+      
+      - name: Coverage Gate
+        run: |
+          cd backend
+          coverage report --fail-under=85
+      
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./backend/coverage.xml

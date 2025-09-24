@@ -1,0 +1,91 @@
+{
+  "name": "naga-monorepo",
+  "$schema": "node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": ".",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "npm run build:frontend"
+        ],
+        "parallel": false
+      }
+    },
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run dev"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "npm run test:backend",
+          "npm run test:frontend"
+        ],
+        "parallel": true
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "npm run lint:backend",
+          "npm run lint:frontend"
+        ],
+        "parallel": true
+      }
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run format"
+      }
+    },
+    "format:check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run format:check"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run typecheck"
+      }
+    },
+    "migrate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run migrate"
+      }
+    },
+    "schema:generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run schema:generate"
+      }
+    },
+    "schema:update": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run schema:update"
+      }
+    },
+    "up": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run up"
+      }
+    },
+    "down": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run down"
+      }
+    }
+  }
+}

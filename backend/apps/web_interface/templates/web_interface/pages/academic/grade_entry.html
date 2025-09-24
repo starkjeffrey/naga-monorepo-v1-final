@@ -1,0 +1,708 @@
+{% extends "web_interface/base/admin_base.html" %}
+{% load i18n %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Grade Entry Specific Styles */
+    .grade-grid {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 0.875rem;
+    }
+    
+    .grade-grid th,
+    .grade-grid td {
+        border: 1px solid #e2e8f0;
+        padding: 0.375rem 0.5rem;
+        text-align: center;
+        position: relative;
+    }
+    
+    .grade-grid th {
+        background-color: #f8fafc;
+        font-weight: 600;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+    
+    .grade-grid .student-name {
+        text-align: left;
+        font-weight: 500;
+        background-color: #f8fafc;
+        position: sticky;
+        left: 0;
+        z-index: 5;
+        min-width: 150px;
+    }
+    
+    .grade-input {
+        width: 100%;
+        border: none;
+        background: transparent;
+        text-align: center;
+        padding: 0.25rem;
+        font-size: 0.875rem;
+        transition: all 0.15s ease;
+    }
+    
+    .grade-input:focus {
+        outline: 2px solid #3b82f6;
+        outline-offset: -2px;
+        background-color: #eff6ff;
+    }
+    
+    .grade-cell {
+        position: relative;
+        min-width: 80px;
+    }
+    
+    .grade-cell.modified {
+        background-color: #fef3c7;
+    }
+    
+    .grade-cell.saved {
+        background-color: #d1fae5;
+    }
+    
+    .grade-cell.error {
+        background-color: #fee2e2;
+    }
+    
+    .grade-status {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+    }
+    
+    .grade-status.draft {
+        background-color: #fbbf24;
+    }
+    
+    .grade-status.submitted {
+        background-color: #60a5fa;
+    }
+    
+    .grade-status.approved {
+        background-color: #34d399;
+    }
+    
+    .grade-status.finalized {
+        background-color: #10b981;
+    }
+    
+    .loading-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 20;
+    }
+    
+    .class-selector {
+        background: #ffffff;
+        border: 1px solid #d1d5db;
+        border-radius: 0.375rem;
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .keyboard-shortcuts {
+        position: fixed;
+        bottom: 1rem;
+        right: 1rem;
+        background: #1f2937;
+        color: white;
+        padding: 0.75rem;
+        border-radius: 0.375rem;
+        font-size: 0.75rem;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 30;
+    }
+    
+    .keyboard-shortcuts.show {
+        opacity: 1;
+    }
+    
+    .shortcut-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.25rem;
+        gap: 1rem;
+    }
+    
+    .shortcut-key {
+        background: #374151;
+        padding: 0.125rem 0.25rem;
+        border-radius: 0.25rem;
+        font-family: monospace;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Grade Entry JavaScript
+class GradeEntry {
+    constructor() {
+        this.currentCell = null;
+        this.isLoading = false;
+        this.unsavedChanges = new Set();
+        this.autoSaveTimeout = null;
+        this.shortcuts = null;
+        
+        this.init();
+    }
+    
+    init() {
+        this.bindEvents();
+        this.setupKeyboardNavigation();
+        this.setupKeyboardShortcuts();
+        this.loadClassData();
+    }
+    
+    bindEvents() {
+        // Class selection
+        document.getElementById('class-selector').addEventListener('change', (e) => {
+            this.loadClassData(e.target.value);
+        });
+        
+        // Grade input events
+        document.addEventListener('input', (e) => {
+            if (e.target.classList.contains('grade-input')) {
+                this.onGradeInput(e);
+            }
+        });
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.target.classList.contains('grade-input')) {
+                this.onGradeKeyDown(e);
+            }
+        });
+        
+        document.addEventListener('focus', (e) => {
+            if (e.target.classList.contains('grade-input')) {
+                this.onGradeFocus(e);
+            }
+        }, true);
+        
+        document.addEventListener('blur', (e) => {
+            if (e.target.classList.contains('grade-input')) {
+                this.onGradeBlur(e);
+            }
+        }, true);
+        
+        // Bulk operations
+        document.getElementById('bulk-submit')?.addEventListener('click', () => {
+            this.bulkOperation('submit');
+        });
+        
+        document.getElementById('bulk-approve')?.addEventListener('click', () => {
+            this.bulkOperation('approve');
+        });
+        
+        // Auto-save on page unload
+        window.addEventListener('beforeunload', (e) => {
+            if (this.unsavedChanges.size > 0) {
+                e.preventDefault();
+                e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
+            }
+        });
+    }
+    
+    setupKeyboardNavigation() {
+        document.addEventListener('keydown', (e) => {
+            if (!e.target.classList.contains('grade-input')) return;
+            
+            const cell = e.target.closest('.grade-cell');
+            const row = cell?.parentElement;
+            const table = row?.closest('table');
+            
+            if (!table) return;
+            
+            let targetCell = null;
+            
+            switch (e.key) {
+                case 'ArrowUp':
+                    e.preventDefault();
+                    targetCell = this.getAdjacentCell(cell, 'up');
+                    break;
+                case 'ArrowDown':
+                case 'Enter':
+                    e.preventDefault();
+                    targetCell = this.getAdjacentCell(cell, 'down');
+                    break;
+                case 'ArrowLeft':
+                    if (e.target.selectionStart === 0) {
+                        e.preventDefault();
+                        targetCell = this.getAdjacentCell(cell, 'left');
+                    }
+                    break;
+                case 'ArrowRight':
+                case 'Tab':
+                    if (e.key === 'ArrowRight' && e.target.selectionEnd !== e.target.value.length) {
+                        return;
+                    }
+                    e.preventDefault();
+                    targetCell = this.getAdjacentCell(cell, 'right');
+                    break;
+                case 'Escape':
+                    e.preventDefault();
+                    e.target.value = e.target.dataset.originalValue || '';
+                    e.target.blur();
+                    break;
+            }
+            
+            if (targetCell) {
+                const input = targetCell.querySelector('.grade-input');
+                if (input) {
+                    input.focus();
+                    input.select();
+                }
+            }
+        });
+    }
+    
+    setupKeyboardShortcuts() {
+        this.shortcuts = document.getElementById('keyboard-shortcuts');
+        
+        document.addEventListener('keydown', (e) => {
+            // Show shortcuts on Ctrl+?
+            if (e.ctrlKey && e.key === '/') {
+                e.preventDefault();
+                this.toggleShortcuts();
+            }
+            
+            // Global shortcuts
+            if (e.ctrlKey) {
+                switch (e.key) {
+                    case 's':
+                        e.preventDefault();
+                        this.saveAllChanges();
+                        break;
+                    case 'z':
+                        if (e.shiftKey) {
+                            e.preventDefault();
+                            this.redo();
+                        } else {
+                            e.preventDefault();
+                            this.undo();
+                        }
+                        break;
+                }
+            }
+        });
+        
+        // Hide shortcuts on outside click
+        document.addEventListener('click', (e) => {
+            if (!this.shortcuts.contains(e.target)) {
+                this.shortcuts.classList.remove('show');
+            }
+        });
+    }
+    
+    getAdjacentCell(currentCell, direction) {
+        const row = currentCell.parentElement;
+        const cellIndex = Array.from(row.children).indexOf(currentCell);
+        
+        switch (direction) {
+            case 'up':
+                const prevRow = row.previousElementSibling;
+                return prevRow?.children[cellIndex];
+            case 'down':
+                const nextRow = row.nextElementSibling;
+                return nextRow?.children[cellIndex];
+            case 'left':
+                return currentCell.previousElementSibling;
+            case 'right':
+                return currentCell.nextElementSibling;
+        }
+        return null;
+    }
+    
+    onGradeInput(e) {
+        const input = e.target;
+        const cell = input.closest('.grade-cell');
+        
+        // Mark as modified
+        cell.classList.add('modified');
+        cell.classList.remove('saved', 'error');
+        
+        // Track unsaved changes
+        this.unsavedChanges.add(input);
+        
+        // Auto-save after delay
+        clearTimeout(this.autoSaveTimeout);
+        this.autoSaveTimeout = setTimeout(() => {
+            this.saveGrade(input);
+        }, 1000);
+    }
+    
+    onGradeKeyDown(e) {
+        const input = e.target;
+        
+        // Quick grade entry shortcuts
+        if (e.altKey) {
+            e.preventDefault();
+            switch (e.key) {
+                case 'a':
+                case 'A':
+                    input.value = 'A';
+                    this.saveGrade(input);
+                    break;
+                case 'b':
+                case 'B':
+                    input.value = 'B';
+                    this.saveGrade(input);
+                    break;
+                case 'c':
+                case 'C':
+                    input.value = 'C';
+                    this.saveGrade(input);
+                    break;
+                case 'd':
+                case 'D':
+                    input.value = 'D';
+                    this.saveGrade(input);
+                    break;
+                case 'f':
+                case 'F':
+                    input.value = 'F';
+                    this.saveGrade(input);
+                    break;
+                case 'Delete':
+                case 'Backspace':
+                    input.value = '';
+                    this.saveGrade(input);
+                    break;
+            }
+        }
+    }
+    
+    onGradeFocus(e) {
+        const input = e.target;
+        this.currentCell = input.closest('.grade-cell');
+        
+        // Store original value
+        input.dataset.originalValue = input.value;
+        
+        // Select all text
+        setTimeout(() => input.select(), 0);
+    }
+    
+    onGradeBlur(e) {
+        const input = e.target;
+        
+        // Save if value changed
+        if (input.value !== input.dataset.originalValue) {
+            this.saveGrade(input);
+        }
+    }
+    
+    async saveGrade(input) {
+        if (this.isLoading) return;
+        
+        const cell = input.closest('.grade-cell');
+        const enrollmentId = input.dataset.enrollmentId;
+        const classPartId = input.dataset.classPartId;
+        const gradeValue = input.value.trim();
+        
+        try {
+            this.isLoading = true;
+            this.showCellLoading(cell);
+            
+            const formData = new FormData();
+            formData.append('enrollment_id', enrollmentId);
+            formData.append('class_part_id', classPartId);
+            formData.append('grade_value', gradeValue);
+            formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+            
+            const response = await fetch('{% url "web_interface:save-grade" %}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                }
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                cell.classList.remove('modified', 'error');
+                cell.classList.add('saved');
+                this.unsavedChanges.delete(input);
+                
+                // Update display value
+                if (data.grade_display) {
+                    input.value = data.grade_display;
+                }
+                
+                // Update status indicator
+                this.updateGradeStatus(cell, 'draft');
+                
+                this.showToast(data.message, 'success');
+            } else {
+                cell.classList.add('error');
+                this.showToast(data.error, 'error');
+            }
+        } catch (error) {
+            cell.classList.add('error');
+            this.showToast('Network error occurred', 'error');
+        } finally {
+            this.isLoading = false;
+            this.hideCellLoading(cell);
+        }
+    }
+    
+    async loadClassData(classId = null) {
+        const selector = document.getElementById('class-selector');
+        const container = document.getElementById('grade-grid-container');
+        
+        if (!classId) {
+            classId = selector.value;
+        }
+        
+        if (!classId) {
+            container.innerHTML = '<p class="text-center text-gray-500 py-8">Please select a class to view grades.</p>';
+            return;
+        }
+        
+        try {
+            this.showLoading(container);
+            
+            const response = await fetch(`{% url "web_interface:grade-entry-class-data" class_id=0 %}`.replace('0', classId), {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                }
+            });
+            
+            if (response.ok) {
+                container.innerHTML = await response.text();
+                this.bindGridEvents();
+            } else {
+                throw new Error('Failed to load class data');
+            }
+        } catch (error) {
+            container.innerHTML = '<p class="text-center text-red-500 py-8">Error loading class data. Please try again.</p>';
+        }
+    }
+    
+    bindGridEvents() {
+        // Re-bind events for new grade inputs
+        document.querySelectorAll('.grade-input').forEach(input => {
+            input.addEventListener('input', (e) => this.onGradeInput(e));
+            input.addEventListener('keydown', (e) => this.onGradeKeyDown(e));
+        });
+    }
+    
+    async bulkOperation(operation) {
+        const selectedGrades = Array.from(document.querySelectorAll('.grade-checkbox:checked'));
+        
+        if (selectedGrades.length === 0) {
+            this.showToast('Please select grades to ' + operation, 'warning');
+            return;
+        }
+        
+        const gradeIds = selectedGrades.map(cb => cb.value);
+        
+        try {
+            const response = await fetch('{% url "web_interface:bulk-grade-update" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                body: JSON.stringify({
+                    operation: operation,
+                    grade_ids: gradeIds
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                this.showToast(data.message, 'success');
+                // Update status indicators
+                selectedGrades.forEach(cb => {
+                    const cell = cb.closest('.grade-cell');
+                    this.updateGradeStatus(cell, operation);
+                });
+            } else {
+                this.showToast(data.error, 'error');
+            }
+        } catch (error) {
+            this.showToast('Network error occurred', 'error');
+        }
+    }
+    
+    updateGradeStatus(cell, status) {
+        const statusIndicator = cell.querySelector('.grade-status');
+        if (statusIndicator) {
+            statusIndicator.className = `grade-status ${status}`;
+        }
+    }
+    
+    showCellLoading(cell) {
+        const overlay = document.createElement('div');
+        overlay.className = 'loading-overlay';
+        overlay.innerHTML = '<div class="sis-spinner"></div>';
+        cell.appendChild(overlay);
+    }
+    
+    hideCellLoading(cell) {
+        const overlay = cell.querySelector('.loading-overlay');
+        if (overlay) {
+            overlay.remove();
+        }
+    }
+    
+    showLoading(container) {
+        container.innerHTML = '<div class="text-center py-8"><div class="sis-spinner mx-auto"></div><p class="mt-2 text-gray-500">Loading...</p></div>';
+    }
+    
+    toggleShortcuts() {
+        this.shortcuts.classList.toggle('show');
+    }
+    
+    showToast(message, type = 'info') {
+        // Create toast notification
+        const toast = document.createElement('div');
+        toast.className = `sis-alert sis-alert-${type} fixed top-4 right-4 z-50 max-w-sm`;
+        toast.innerHTML = `
+            <div class="flex items-center">
+                <span>${message}</span>
+                <button onclick="this.parentElement.parentElement.remove()" class="ml-2 text-current opacity-70 hover:opacity-100">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        `;
+        
+        document.body.appendChild(toast);
+        
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+            if (toast.parentElement) {
+                toast.remove();
+            }
+        }, 5000);
+    }
+    
+    saveAllChanges() {
+        Array.from(this.unsavedChanges).forEach(input => {
+            this.saveGrade(input);
+        });
+    }
+}
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    new GradeEntry();
+});
+</script>
+{% endblock %}
+
+{% block page_header %}
+<div class="page-header">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="page-title">{{ page_title }}</h1>
+            <p class="page-description">Enter and manage student grades with Excel-like navigation</p>
+        </div>
+        <div class="flex space-x-2">
+            <button id="bulk-submit" class="sis-btn sis-btn-primary">
+                <i class="fas fa-paper-plane mr-2"></i>
+                {% trans "Submit Selected" %}
+            </button>
+            <button id="bulk-approve" class="sis-btn sis-btn-success">
+                <i class="fas fa-check-circle mr-2"></i>
+                {% trans "Approve Selected" %}
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">{% trans "Class Selection" %}</h3>
+    </div>
+    <div class="card-body">
+        <div class="class-selector">
+            <label for="class-selector" class="block text-sm font-medium text-gray-700 mb-2">
+                {% trans "Select Class" %}
+            </label>
+            <select id="class-selector" class="sis-select w-full max-w-md">
+                <option value="">{% trans "Choose a class..." %}</option>
+                {% for class_header in user_classes %}
+                    <option value="{{ class_header.id }}">
+                        {{ class_header.course.course_code }} - {{ class_header.course.course_name }}
+                        ({{ class_header.term }})
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-6">
+    <div class="card-header">
+        <h3 class="card-title">{% trans "Grade Entry Grid" %}</h3>
+        <div class="text-sm text-gray-500">
+            Press <kbd class="px-1 py-0.5 bg-gray-100 border rounded">Ctrl+/</kbd> for keyboard shortcuts
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div id="grade-grid-container" class="overflow-auto max-h-96">
+            <p class="text-center text-gray-500 py-8">Please select a class to view grades.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Keyboard Shortcuts Panel -->
+<div id="keyboard-shortcuts" class="keyboard-shortcuts">
+    <div class="font-bold mb-2">Keyboard Shortcuts</div>
+    <div class="shortcut-item">
+        <span>Navigation</span>
+        <span class="shortcut-key">Arrow Keys</span>
+    </div>
+    <div class="shortcut-item">
+        <span>Next Cell</span>
+        <span class="shortcut-key">Tab / Enter</span>
+    </div>
+    <div class="shortcut-item">
+        <span>Cancel Edit</span>
+        <span class="shortcut-key">Esc</span>
+    </div>
+    <div class="shortcut-item">
+        <span>Quick Grade A</span>
+        <span class="shortcut-key">Alt+A</span>
+    </div>
+    <div class="shortcut-item">
+        <span>Quick Grade B</span>
+        <span class="shortcut-key">Alt+B</span>
+    </div>
+    <div class="shortcut-item">
+        <span>Save All</span>
+        <span class="shortcut-key">Ctrl+S</span>
+    </div>
+    <div class="shortcut-item">
+        <span>Show Shortcuts</span>
+        <span class="shortcut-key">Ctrl+/</span>
+    </div>
+</div>
+
+{% csrf_token %}
+{% endblock %}

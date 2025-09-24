@@ -1,0 +1,34 @@
+# .coderabbit.yml
+reviews:
+  # Enable auto-reviews for all PRs
+  auto_review: true
+  
+  # Configure for monorepo structure
+  path_filters:
+    - "**/*.js"
+    - "**/*.ts"
+    - "**/*.jsx"
+    - "**/*.tsx"
+    - "**/*.py"
+    - "**/*.go"
+    - "**/*.java"
+    - "**/*.rb"
+    - "**/*.php"
+    - "**/*.cs"
+    - "**/*.cpp"
+    - "**/*.c"
+
+  # Ignore common monorepo directories
+  ignore_paths:
+    - "node_modules/**"
+    - "dist/**"
+    - "build/**"
+    - ".next/**"
+    - "coverage/**"
+    - "*.log"
+
+# Configure for monorepo packages
+monorepo:
+  enabled: true
+  # If using specific monorepo tools
+  tool: "nx" # or "lerna", "rush", "yarn-workspaces", etc.

@@ -1,0 +1,111 @@
+{% extends "web_interface/modals/base_modal.html" %}
+
+{% load i18n %}
+{% load web_interface_tags %}
+
+{% block modal_content %}
+  <form id="student-create-form"
+        hx-post="{% url 'web_interface:student-create' %}"
+        hx-target="#modal-overlay"
+        hx-swap="outerHTML"
+        hx-indicator="#student-create-loading">
+    {% csrf_token %}
+    <div class="form-sections">
+      <div class="form-section">
+        <h4 class="form-section-title">
+          <i class="fas fa-user"></i>
+          {% trans "Personal Information" %}
+        </h4>
+        <div class="form-group">
+          <label for="{{ person_form.personal_name.id_for_label }}"
+                 class="form-label required">{{ person_form.personal_name.label }}</label>
+          {{ person_form.personal_name }}
+          {% if person_form.personal_name.errors %}
+            <div class="form-error">{{ person_form.personal_name.errors.0 }}</div>
+          {% endif %}
+        </div>
+        <div class="form-group">
+          <label for="{{ person_form.family_name.id_for_label }}"
+                 class="form-label required">{{ person_form.family_name.label }}</label>
+          {{ person_form.family_name }}
+          {% if person_form.family_name.errors %}
+            <div class="form-error">{{ person_form.family_name.errors.0 }}</div>
+          {% endif %}
+        </div>
+        <div class="form-group">
+          <label for="{{ person_form.khmer_name.id_for_label }}" class="form-label">{{ person_form.khmer_name.label }}</label>
+          {{ person_form.khmer_name }}
+          {% if person_form.khmer_name.errors %}<div class="form-error">{{ person_form.khmer_name.errors.0 }}</div>{% endif %}
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="{{ person_form.gender.id_for_label }}"
+                   class="form-label required">{{ person_form.gender.label }}</label>
+            {{ person_form.gender }}
+            {% if person_form.gender.errors %}<div class="form-error">{{ person_form.gender.errors.0 }}</div>{% endif %}
+          </div>
+          <div class="form-group">
+            <label for="{{ person_form.date_of_birth.id_for_label }}"
+                   class="form-label required">{{ person_form.date_of_birth.label }}</label>
+            {{ person_form.date_of_birth }}
+            {% if person_form.date_of_birth.errors %}
+              <div class="form-error">{{ person_form.date_of_birth.errors.0 }}</div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="form-section">
+        <h4 class="form-section-title">
+          <i class="fas fa-graduation-cap"></i>
+          {% trans "Student Information" %}
+        </h4>
+        <div class="form-group">
+          <label for="{{ student_form.student_id.id_for_label }}" class="form-label">{{ student_form.student_id.label }}</label>
+          {{ student_form.student_id }}
+          {% if student_form.student_id.errors %}
+            <div class="form-error">{{ student_form.student_id.errors.0 }}</div>
+          {% endif %}
+          <div class="form-help">{% trans "Leave blank to auto-generate" %}</div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="{{ student_form.current_status.id_for_label }}"
+                   class="form-label required">{{ student_form.current_status.label }}</label>
+            {{ student_form.current_status }}
+            {% if student_form.current_status.errors %}
+              <div class="form-error">{{ student_form.current_status.errors.0 }}</div>
+            {% endif %}
+          </div>
+          <div class="form-group">
+            <label for="{{ student_form.study_time_preference.id_for_label }}"
+                   class="form-label">{{ student_form.study_time_preference.label }}</label>
+            {{ student_form.study_time_preference }}
+            {% if student_form.study_time_preference.errors %}
+              <div class="form-error">{{ student_form.study_time_preference.errors.0 }}</div>
+            {% endif %}
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="{{ student_form.notes.id_for_label }}" class="form-label">{{ student_form.notes.label }}</label>
+          {{ student_form.notes }}
+          {% if student_form.notes.errors %}<div class="form-error">{{ student_form.notes.errors.0 }}</div>{% endif %}
+        </div>
+      </div>
+    </div>
+    <div id="student-create-loading" class="htmx-indicator">
+      <div class="loading-spinner">
+        <i class="fas fa-spinner fa-spin"></i>
+        {% trans "Creating student..." %}
+      </div>
+    </div>
+  </form>
+{% endblock %}
+{% block modal_footer %}
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" onclick="closeModal()">{% trans "Cancel" %}</button>
+    <button type="submit" class="btn btn-primary" form="student-create-form">
+      <i class="fas fa-plus"></i>
+      {% trans "Create Student" %}
+    </button>
+  </div>
+{% endblock %}

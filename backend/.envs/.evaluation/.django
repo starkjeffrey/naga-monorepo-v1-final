@@ -1,0 +1,92 @@
+# General
+# ------------------------------------------------------------------------------
+DJANGO_SETTINGS_MODULE=config.settings.evaluation
+DJANGO_SECRET_KEY=2eba89b722362ef8b2cc6080ff17071818da2ee8740b9198803c39f79f8856b4
+DJANGO_ADMIN_URL=admin-evaluation/
+DJANGO_ALLOWED_HOSTS=sis-eval.pucsr.edu.kh,evaluation.pucsr.edu.kh,localhost,127.0.0.1,0.0.0.0,django,172.236.157.147
+
+# Security
+# ------------------------------------------------------------------------------
+DJANGO_SECURE_SSL_REDIRECT=False
+DJANGO_SECURE_HSTS_SECONDS=60
+DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS=True
+DJANGO_SECURE_HSTS_PRELOAD=True
+DJANGO_SECURE_CONTENT_TYPE_NOSNIFF=True
+SESSION_COOKIE_SECURE=True
+CSRF_COOKIE_SECURE=True
+CSRF_TRUSTED_ORIGINS=https://sis-eval.pucsr.edu.kh,http://sis-eval.pucsr.edu.kh,https://evaluation.pucsr.edu.kh,http://evaluation.pucsr.edu.kh,http://localhost:8005,http://172.236.157.147:8005,https://172.236.157.147:8005
+
+# Email
+# ------------------------------------------------------------------------------
+# For evaluation demos - choose one:
+# Option 1: Use Mailpit for testing (recommended for demos)
+USE_MAILPIT=True
+EMAIL_HOST=mailpit
+EMAIL_PORT=1025
+
+# Option 2: Use real email service (uncomment and configure)
+# USE_MAILPIT=False
+# MAILGUN_API_KEY=!!!SET MAILGUN_API_KEY!!!
+# MAILGUN_DOMAIN=evaluation.pucsr.edu.kh
+# MAILGUN_API_URL=https://api.mailgun.net/v3
+
+DJANGO_DEFAULT_FROM_EMAIL=Naga SIS Evaluation <noreply@evaluation.pucsr.edu.kh>
+DJANGO_SERVER_EMAIL=Naga SIS Evaluation <server@evaluation.pucsr.edu.kh>
+DJANGO_EMAIL_SUBJECT_PREFIX=[Naga SIS Evaluation]
+
+# Superuser for evaluation
+# ------------------------------------------------------------------------------
+DJANGO_SUPERUSER_USERNAME=admin
+DJANGO_SUPERUSER_EMAIL=admin@evaluation.pucsr.edu.kh
+DJANGO_SUPERUSER_PASSWORD=evaluation2024
+
+# Debugging and Performance (adjust as needed for troubleshooting)
+# ------------------------------------------------------------------------------
+DJANGO_DEBUG=False
+DJANGO_LOG_LEVEL=INFO
+ENABLE_DEBUG_TOOLBAR=False
+ENABLE_PERFORMANCE_LOGGING=False
+LOG_SQL_QUERIES=False
+
+# Demo Configuration
+# ------------------------------------------------------------------------------
+DEMO_MODE=True
+LANGUAGE_CODE=en-us
+TIME_ZONE=Asia/Phnom_Penh
+
+# Session Configuration
+# ------------------------------------------------------------------------------
+SESSION_COOKIE_AGE=604800  # 7 days
+CACHE_TTL=300  # 5 minutes
+
+# File Upload Limits
+# ------------------------------------------------------------------------------
+FILE_UPLOAD_MAX_MEMORY_SIZE=10485760  # 10MB
+DATA_UPLOAD_MAX_MEMORY_SIZE=10485760  # 10MB
+
+# CORS (for frontend integration)
+# ------------------------------------------------------------------------------
+CORS_ALLOW_ALL_ORIGINS=False
+CORS_ALLOWED_ORIGINS=https://sis-eval.pucsr.edu.kh,https://evaluation.pucsr.edu.kh,http://localhost:3000,http://127.0.0.1:3000
+
+# Redis
+# ------------------------------------------------------------------------------
+REDIS_URL=redis://redis:6379/0
+
+# Database Connection
+# ------------------------------------------------------------------------------
+CONN_MAX_AGE=300
+DATABASE_URL=postgres://naga_evaluation_user:b9f01768a149c15f@postgres:5432/naga_evaluation
+
+# Monitoring and Error Tracking (optional)
+# ------------------------------------------------------------------------------
+SENTRY_DSN=
+SENTRY_ENVIRONMENT=evaluation
+SENTRY_TRACES_SAMPLE_RATE=0.1
+SENTRY_PROFILES_SAMPLE_RATE=0.1
+
+# External Service Tokens (optional)
+# ------------------------------------------------------------------------------
+NETDATA_CLAIM_TOKEN=
+NETDATA_CLAIM_URL=https://app.netdata.cloud
+NETDATA_CLAIM_ROOMS=

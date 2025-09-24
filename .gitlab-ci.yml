@@ -1,0 +1,38 @@
+# GitLab CI with Django Tests
+# Focus on testing - the most valuable and likely to succeed
+
+stages:
+  - test
+
+variables:
+  # PostgreSQL test database
+  POSTGRES_DB: naga_ci_test
+  POSTGRES_USER: ci_test_user
+  POSTGRES_PASSWORD: ci_test_password
+  POSTGRES_HOST_AUTH_METHOD: trust
+
+  # Django settings
+  DJANGO_SETTINGS_MODULE: config.settings.test
+  DATABASE_URL: "postgresql://ci_test_user:ci_test_password@postgres:5432/naga_ci_test"
+  USE_DOCKER: "no"
+
+test:django:
+  stage: test
+  image: python:3.13.7-slim
+  services:
+    - postgres:15-alpine
+  before_script:
+    - cd backend
+    - apt-get update && apt-get install -y libpq-dev gcc
+    - pip install uv
+    - uv sync --frozen
+  script:
+    - echo "🧪 Running Django tests..."
+    - echo "Database URL:" $DATABASE_URL
+    - uv run python manage.py check --deploy
+    - echo "Running tests without API test discovery conflicts..."
+    - uv run pytest apps/ --tb=short -v --ignore=apps/*/api.py --ignore=tests/api/ --ignore=api/
+    - echo "✅ Tests completed!"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"

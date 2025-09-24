@@ -1,0 +1,254 @@
+# Alertmanager configuration for Naga SIS
+global:
+  smtp_smarthost: 'localhost:587'
+  smtp_from: 'naga-alerts@pucsr.edu.kh'
+  smtp_auth_username: 'naga-alerts@pucsr.edu.kh'
+  smtp_auth_password: '${SMTP_PASSWORD}'
+  slack_api_url: '${SLACK_WEBHOOK_URL}'
+
+# Templates for notifications
+templates:
+  - '/etc/alertmanager/templates/*.tmpl'
+
+# Route tree for alerts
+route:
+  group_by: ['alertname', 'cluster', 'service']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 12h
+  receiver: 'default'
+  routes:
+    # Critical alerts - immediate notification
+    - match:
+        severity: critical
+      receiver: 'critical-alerts'
+      group_wait: 0s
+      repeat_interval: 5m
+      routes:
+        # Backend critical alerts
+        - match:
+            service: backend
+          receiver: 'backend-critical'
+        # Database critical alerts
+        - match:
+            service: database
+          receiver: 'database-critical'
+        # Frontend critical alerts
+        - match:
+            service: frontend
+          receiver: 'frontend-critical'
+
+    # Warning alerts - standard notification
+    - match:
+        severity: warning
+      receiver: 'warning-alerts'
+      repeat_interval: 30m
+
+    # Infrastructure alerts
+    - match:
+        service: infrastructure
+      receiver: 'infrastructure-alerts'
+      repeat_interval: 1h
+
+    # Business/academic alerts
+    - match:
+        service: academic
+      receiver: 'academic-team'
+      repeat_interval: 24h
+
+    # Enrollment system alerts
+    - match:
+        service: enrollment
+      receiver: 'enrollment-team'
+      repeat_interval: 15m
+
+    # Financial system alerts
+    - match:
+        service: finance
+      receiver: 'finance-team'
+      repeat_interval: 15m
+
+# Inhibit rules to prevent spam
+inhibit_rules:
+  # Inhibit warning alerts if critical alert is firing
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'cluster', 'service']
+
+  # Inhibit infrastructure alerts if service is down
+  - source_match:
+      alertname: 'BackendServiceDown'
+    target_match_re:
+      alertname: 'Backend.*'
+    equal: ['instance']
+
+# Receivers define notification destinations
+receivers:
+  # Default receiver
+  - name: 'default'
+    email_configs:
+      - to: 'admin@pucsr.edu.kh'
+        subject: '[NAGA] {{ .GroupLabels.alertname }}'
+        body: |
+          {{ range .Alerts }}
+          Alert: {{ .Annotations.summary }}
+          Description: {{ .Annotations.description }}
+          {{ end }}
+
+  # Critical alerts - multiple channels
+  - name: 'critical-alerts'
+    email_configs:
+      - to: 'admin@pucsr.edu.kh'
+        subject: '[CRITICAL] Naga SIS Alert: {{ .GroupLabels.alertname }}'
+        html: |
+          <h2>🚨 CRITICAL ALERT</h2>
+          <table border="1">
+          {{ range .Alerts }}
+          <tr><td>Alert</td><td>{{ .Annotations.summary }}</td></tr>
+          <tr><td>Description</td><td>{{ .Annotations.description }}</td></tr>
+          <tr><td>Service</td><td>{{ .Labels.service }}</td></tr>
+          <tr><td>Time</td><td>{{ .StartsAt }}</td></tr>
+          {{ end }}
+          </table>
+    slack_configs:
+      - api_url: '${SLACK_WEBHOOK_URL}'
+        channel: '#naga-critical-alerts'
+        title: '🚨 CRITICAL: {{ .GroupLabels.alertname }}'
+        text: |
+          {{ range .Alerts }}
+          *Alert:* {{ .Annotations.summary }}
+          *Description:* {{ .Annotations.description }}
+          *Service:* {{ .Labels.service }}
+          {{ end }}
+        color: 'danger'
+
+  # Backend critical alerts
+  - name: 'backend-critical'
+    email_configs:
+      - to: 'backend-team@pucsr.edu.kh'
+        subject: '[CRITICAL] Backend Alert: {{ .GroupLabels.alertname }}'
+        body: |
+          CRITICAL Backend Alert
+          
+          {{ range .Alerts }}
+          Alert: {{ .Annotations.summary }}
+          Description: {{ .Annotations.description }}
+          Service: {{ .Labels.service }}
+          Time: {{ .StartsAt }}
+          {{ end }}
+          
+          Please investigate immediately.
+    slack_configs:
+      - api_url: '${SLACK_WEBHOOK_URL}'
+        channel: '#backend-alerts'
+        title: '🚨 Backend Critical: {{ .GroupLabels.alertname }}'
+        color: 'danger'
+
+  # Database critical alerts
+  - name: 'database-critical'
+    email_configs:
+      - to: 'dba@pucsr.edu.kh'
+        subject: '[CRITICAL] Database Alert: {{ .GroupLabels.alertname }}'
+        body: |
+          CRITICAL Database Alert
+          
+          {{ range .Alerts }}
+          Alert: {{ .Annotations.summary }}
+          Description: {{ .Annotations.description }}
+          {{ end }}
+          
+          Immediate DBA attention required.
+    slack_configs:
+      - api_url: '${SLACK_WEBHOOK_URL}'
+        channel: '#database-alerts'
+        title: '🚨 Database Critical: {{ .GroupLabels.alertname }}'
+        color: 'danger'
+
+  # Frontend critical alerts
+  - name: 'frontend-critical'
+    email_configs:
+      - to: 'frontend-team@pucsr.edu.kh'
+        subject: '[CRITICAL] Frontend Alert: {{ .GroupLabels.alertname }}'
+    slack_configs:
+      - api_url: '${SLACK_WEBHOOK_URL}'
+        channel: '#frontend-alerts'
+        title: '🚨 Frontend Critical: {{ .GroupLabels.alertname }}'
+        color: 'danger'
+
+  # Warning alerts
+  - name: 'warning-alerts'
+    email_configs:
+      - to: 'admin@pucsr.edu.kh'
+        subject: '[WARNING] {{ .GroupLabels.alertname }}'
+        body: |
+          Warning Alert
+          
+          {{ range .Alerts }}
+          Alert: {{ .Annotations.summary }}
+          Description: {{ .Annotations.description }}
+          Service: {{ .Labels.service }}
+          {{ end }}
+    slack_configs:
+      - api_url: '${SLACK_WEBHOOK_URL}'
+        channel: '#naga-alerts'
+        title: '⚠️ Warning: {{ .GroupLabels.alertname }}'
+        color: 'warning'
+
+  # Infrastructure alerts
+  - name: 'infrastructure-alerts'
+    email_configs:
+      - to: 'infrastructure@pucsr.edu.kh'
+        subject: '[INFRA] {{ .GroupLabels.alertname }}'
+    slack_configs:
+      - api_url: '${SLACK_WEBHOOK_URL}'
+        channel: '#infrastructure'
+        title: '🔧 Infrastructure: {{ .GroupLabels.alertname }}'
+
+  # Academic team alerts
+  - name: 'academic-team'
+    email_configs:
+      - to: 'academic@pucsr.edu.kh'
+        subject: '[ACADEMIC] {{ .GroupLabels.alertname }}'
+        body: |
+          Academic System Alert
+          
+          {{ range .Alerts }}
+          Alert: {{ .Annotations.summary }}
+          Description: {{ .Annotations.description }}
+          {{ end }}
+
+  # Enrollment team alerts
+  - name: 'enrollment-team'
+    email_configs:
+      - to: 'enrollment@pucsr.edu.kh'
+        subject: '[ENROLLMENT] {{ .GroupLabels.alertname }}'
+        body: |
+          Enrollment System Alert
+          
+          {{ range .Alerts }}
+          Alert: {{ .Annotations.summary }}
+          Description: {{ .Annotations.description }}
+          {{ end }}
+    slack_configs:
+      - api_url: '${SLACK_WEBHOOK_URL}'
+        channel: '#enrollment-alerts'
+        title: '📚 Enrollment: {{ .GroupLabels.alertname }}'
+
+  # Finance team alerts
+  - name: 'finance-team'
+    email_configs:
+      - to: 'finance@pucsr.edu.kh'
+        subject: '[FINANCE] {{ .GroupLabels.alertname }}'
+        body: |
+          Finance System Alert
+          
+          {{ range .Alerts }}
+          Alert: {{ .Annotations.summary }}
+          Description: {{ .Annotations.description }}
+          {{ end }}
+    slack_configs:
+      - api_url: '${SLACK_WEBHOOK_URL}'
+        channel: '#finance-alerts'
+        title: '💰 Finance: {{ .GroupLabels.alertname }}'

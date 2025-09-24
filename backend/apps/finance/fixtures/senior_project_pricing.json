@@ -1,0 +1,182 @@
+[
+{
+  "model": "finance.seniorprojectpricing",
+  "pk": 2,
+  "fields": {
+    "created_at": "2025-07-31T00:13:00.827Z",
+    "updated_at": "2025-07-31T09:34:24.229Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "created_by": 1,
+    "updated_by": 1,
+    "effective_date": "2010-09-01",
+    "end_date": "2017-01-31",
+    "notes": "",
+    "tier": "1",
+    "individual_price": "100.00",
+    "foreign_individual_price": "100.00",
+    "advisor_payment": "50.00",
+    "committee_payment": "25.00"
+  }
+},
+{
+  "model": "finance.seniorprojectpricing",
+  "pk": 3,
+  "fields": {
+    "created_at": "2025-07-31T00:14:02.312Z",
+    "updated_at": "2025-07-31T09:38:01.344Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "created_by": 1,
+    "updated_by": 1,
+    "effective_date": "2010-09-01",
+    "end_date": "2018-10-15",
+    "notes": "",
+    "tier": "2",
+    "individual_price": "100.00",
+    "foreign_individual_price": "100.00",
+    "advisor_payment": "150.00",
+    "committee_payment": "25.00"
+  }
+},
+{
+  "model": "finance.seniorprojectpricing",
+  "pk": 4,
+  "fields": {
+    "created_at": "2025-07-31T00:14:54.060Z",
+    "updated_at": "2025-07-31T00:14:54.060Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "created_by": 1,
+    "updated_by": 1,
+    "effective_date": "2010-09-01",
+    "end_date": "2015-10-15",
+    "notes": "",
+    "tier": "3-4",
+    "individual_price": "54.00",
+    "foreign_individual_price": "54.00",
+    "advisor_payment": "150.00",
+    "committee_payment": "25.00"
+  }
+},
+{
+  "model": "finance.seniorprojectpricing",
+  "pk": 5,
+  "fields": {
+    "created_at": "2025-07-31T00:15:25.377Z",
+    "updated_at": "2025-07-31T00:15:25.377Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "created_by": 1,
+    "updated_by": 1,
+    "effective_date": "2010-09-01",
+    "end_date": "2015-10-15",
+    "notes": "",
+    "tier": "5",
+    "individual_price": "54.00",
+    "foreign_individual_price": "54.00",
+    "advisor_payment": "150.00",
+    "committee_payment": "25.00"
+  }
+},
+{
+  "model": "finance.seniorprojectpricing",
+  "pk": 6,
+  "fields": {
+    "created_at": "2025-07-31T00:16:28.973Z",
+    "updated_at": "2025-07-31T00:18:09.416Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "created_by": 1,
+    "updated_by": 1,
+    "effective_date": "2018-10-16",
+    "end_date": null,
+    "notes": "",
+    "tier": "1",
+    "individual_price": "300.00",
+    "foreign_individual_price": "500.00",
+    "advisor_payment": "100.00",
+    "committee_payment": "25.00"
+  }
+},
+{
+  "model": "finance.seniorprojectpricing",
+  "pk": 7,
+  "fields": {
+    "created_at": "2025-07-31T00:17:10.801Z",
+    "updated_at": "2025-07-31T00:17:10.801Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "created_by": 1,
+    "updated_by": 1,
+    "effective_date": "2018-10-16",
+    "end_date": null,
+    "notes": "",
+    "tier": "2",
+    "individual_price": "150.00",
+    "foreign_individual_price": "250.00",
+    "advisor_payment": "100.00",
+    "committee_payment": "25.00"
+  }
+},
+{
+  "model": "finance.seniorprojectpricing",
+  "pk": 8,
+  "fields": {
+    "created_at": "2025-07-31T00:18:55.346Z",
+    "updated_at": "2025-07-31T00:18:55.346Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "created_by": 1,
+    "updated_by": 1,
+    "effective_date": "2018-10-16",
+    "end_date": null,
+    "notes": "",
+    "tier": "3-4",
+    "individual_price": "120.00",
+    "foreign_individual_price": "170.00",
+    "advisor_payment": "100.00",
+    "committee_payment": "25.00"
+  }
+},
+{
+  "model": "finance.seniorprojectpricing",
+  "pk": 9,
+  "fields": {
+    "created_at": "2025-07-31T00:19:49.930Z",
+    "updated_at": "2025-07-31T00:19:49.930Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "created_by": 1,
+    "updated_by": 1,
+    "effective_date": "2018-10-16",
+    "end_date": null,
+    "notes": "",
+    "tier": "5",
+    "individual_price": "100.00",
+    "foreign_individual_price": "150.00",
+    "advisor_payment": "100.00",
+    "committee_payment": "25.00"
+  }
+},
+{
+  "model": "finance.seniorprojectpricing",
+  "pk": 11,
+  "fields": {
+    "created_at": "2025-07-31T09:35:08.570Z",
+    "updated_at": "2025-07-31T09:35:08.570Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "created_by": 1,
+    "updated_by": 1,
+    "effective_date": "2017-02-01",
+    "end_date": "2018-10-15",
+    "notes": "",
+    "tier": "1",
+    "individual_price": "150.00",
+    "foreign_individual_price": "150.00",
+    "advisor_payment": "100.00",
+    "committee_payment": "25.00"
+  }
+}
+]

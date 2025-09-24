@@ -1,0 +1,41 @@
+# Django-specific environment variables for local development
+DEBUG=1
+USE_DOCKER=yes
+SECRET_KEY=django-insecure-development-key-change-in-production
+ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0
+
+# Email configuration
+EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
+
+# Cache configuration
+CACHE_BACKEND=redis
+
+# Session configuration
+SESSION_COOKIE_SECURE=False
+CSRF_COOKIE_SECURE=False
+
+# File storage
+MEDIA_URL=/media/
+STATIC_URL=/static/
+
+# Logging
+LOG_LEVEL=DEBUG
+
+# Development tools
+DEBUG_TOOLBAR_ENABLED=1
+INTERNAL_IPS=127.0.0.1,localhost
+
+# School configuration
+SCHOOL_NAME=Pannasastra University of Cambodia, Siem Reap Campus
+SCHOOL_SHORT_NAME=PUCSR
+SCHOOL_CODE=PUCSR
+SCHOOL_TIMEZONE=Asia/Phnom_Penh
+
+# Academic configuration
+CURRENT_ACADEMIC_YEAR=2024-2025
+DEFAULT_LANGUAGE=en
+SUPPORTED_LANGUAGES=en,km
+
+# Moodle integration
+MOODLE_ENABLED=False
+MOODLE_URL=pucsr.school

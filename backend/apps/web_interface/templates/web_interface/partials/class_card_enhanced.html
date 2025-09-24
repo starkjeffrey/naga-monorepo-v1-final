@@ -1,0 +1,93 @@
+<!-- templates/web_interface/partials/class_card_enhanced.html -->
+<!-- INSTRUCTION FOR SONNET: Enhanced class card with inline actions -->
+
+<div id="class-{{ class.id }}" 
+     class="sis-card hover:shadow-md transition-shadow"
+     hx-get="{% url 'web_interface:class-card-status' class.id %}"
+     hx-trigger="sse:enrollment-update-{{ class.id }}">
+  
+  <!-- Header with status indicator -->
+  <div class="sis-card-header flex justify-between items-start">
+    <div>
+      <h4 class="font-semibold text-gray-900">
+        {{ class.course.code }} - {{ class.course.title|default:class.course.name }}
+      </h4>
+      <p class="text-sm text-gray-600 mt-1">
+        {% with primary_teacher=class.get_primary_teacher %}
+          {% if primary_teacher %}
+            {{ primary_teacher.person.full_name }}
+          {% else %}
+            {% trans "TBD" %}
+          {% endif %}
+        {% endwith %}
+      </p>
+    </div>
+    
+    <!-- Seat indicator -->
+    <div class="text-right">
+      <div class="text-2xl font-bold 
+                  {% if class.seats_available > 10 %}text-green-600
+                  {% elif class.seats_available > 0 %}text-yellow-600
+                  {% else %}text-red-600{% endif %}">
+        {% if class.seats_available %}{{ class.seats_available }}{% else %}0{% endif %}
+      </div>
+      <div class="text-xs text-gray-500">{% trans "seats left" %}</div>
+    </div>
+  </div>
+  
+  <!-- Class Details -->
+  <div class="px-6 py-3 border-b border-gray-100">
+    <div class="grid grid-cols-2 gap-2 text-sm">
+      <div>
+        <span class="text-gray-500">{% trans "Schedule:" %}</span>
+        <span class="font-medium">
+          {% if class.time_designation %}
+            {{ class.time_designation }}
+          {% else %}
+            {% trans "TBD" %}
+          {% endif %}
+        </span>
+      </div>
+      <div>
+        <span class="text-gray-500">{% trans "Room:" %}</span>
+        <span class="font-medium">
+          {% with primary_room=class.get_primary_room %}
+            {% if primary_room %}
+              {{ primary_room.code }}
+            {% else %}
+              {% trans "TBD" %}
+            {% endif %}
+          {% endwith %}
+        </span>
+      </div>
+      <div>
+        <span class="text-gray-500">{% trans "Credits:" %}</span>
+        <span class="font-medium">{{ class.course.credits|default:"3" }}</span>
+      </div>
+      <div>
+        <span class="text-gray-500">{% trans "Enrolled:" %}</span>
+        <span class="font-medium">{{ class.enrolled_count|default:0 }}/{{ class.max_enrollment|default:30 }}</span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Action Buttons -->
+  <div class="px-6 py-3 bg-gray-50 flex justify-between">
+    <button class="text-sm text-indigo-600 hover:text-indigo-900"
+            hx-get="{% url 'web_interface:class-roster-modal' class.id %}"
+            hx-target="#modal-content"
+            hx-trigger="click"
+            onclick="openModal()">
+      {% trans "View Roster" %}
+    </button>
+    
+    <button class="btn btn-sm btn-primary"
+            hx-get="{% url 'web_interface:quick-enrollment-form' class.id %}"
+            hx-target="#modal-content"
+            hx-trigger="click"
+            onclick="openModal()"
+            {% if class.seats_available <= 0 %}disabled{% endif %}>
+      {% trans "Quick Enroll" %}
+    </button>
+  </div>
+</div>

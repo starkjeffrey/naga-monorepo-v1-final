@@ -1,0 +1,2025 @@
+[
+  {
+    "model": "finance.defaultpricing",
+    "pk": 2,
+    "fields": {
+      "created_at": "2025-07-25T05:04:53.327Z",
+      "updated_at": "2025-07-25T05:11:19.370Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": 1,
+      "updated_by": 1,
+      "effective_date": "2010-06-01",
+      "end_date": "2010-08-31",
+      "notes": "",
+      "cycle": 2,
+      "domestic_price": "53.33",
+      "foreign_price": "81.00"
+    }
+  },
+  {
+    "model": "finance.defaultpricing",
+    "pk": 3,
+    "fields": {
+      "created_at": "2025-07-25T05:11:07.502Z",
+      "updated_at": "2025-07-25T05:11:07.502Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": 1,
+      "updated_by": 1,
+      "effective_date": "2010-09-01",
+      "end_date": "2018-12-19",
+      "notes": "",
+      "cycle": 2,
+      "domestic_price": "54.00",
+      "foreign_price": "81.00"
+    }
+  },
+  {
+    "model": "finance.defaultpricing",
+    "pk": 4,
+    "fields": {
+      "created_at": "2025-07-25T05:12:29.754Z",
+      "updated_at": "2025-07-25T05:18:27.184Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": 1,
+      "updated_by": 1,
+      "effective_date": "2018-12-20",
+      "end_date": "2024-02-03",
+      "notes": "",
+      "cycle": 2,
+      "domestic_price": "65.00",
+      "foreign_price": "120.00"
+    }
+  },
+  {
+    "model": "finance.defaultpricing",
+    "pk": 5,
+    "fields": {
+      "created_at": "2025-07-25T05:14:14.214Z",
+      "updated_at": "2025-07-25T05:21:49.215Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": 1,
+      "updated_by": 1,
+      "effective_date": "2024-02-04",
+      "end_date": null,
+      "notes": "",
+      "cycle": 2,
+      "domestic_price": "75.00",
+      "foreign_price": "130.00"
+    }
+  },
+  {
+    "model": "finance.defaultpricing",
+    "pk": 6,
+    "fields": {
+      "created_at": "2025-07-25T05:33:12.448Z",
+      "updated_at": "2025-07-25T05:44:03.448Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": 1,
+      "updated_by": 1,
+      "effective_date": "2017-08-08",
+      "end_date": "2024-02-03",
+      "notes": "",
+      "cycle": 3,
+      "domestic_price": "174.00",
+      "foreign_price": "390.00"
+    }
+  },
+  {
+    "model": "finance.defaultpricing",
+    "pk": 7,
+    "fields": {
+      "created_at": "2025-07-25T05:38:55.449Z",
+      "updated_at": "2025-07-25T05:43:41.170Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": 1,
+      "updated_by": 1,
+      "effective_date": "2024-02-04",
+      "end_date": null,
+      "notes": "",
+      "cycle": 3,
+      "domestic_price": "185.00",
+      "foreign_price": "400.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 1,
+    "fields": {
+      "created_at": "2025-07-25T05:57:24.262Z",
+      "updated_at": "2025-07-25T06:00:51.419Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": 1,
+      "updated_by": 1,
+      "effective_date": "2016-08-08",
+      "end_date": "2018-10-15",
+      "notes": "",
+      "course": 285,
+      "domestic_price": "72.00",
+      "foreign_price": "72.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 2,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.471Z",
+      "updated_at": "2025-07-26T12:55:34.471Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2009-04-27",
+      "end_date": "2018-12-10",
+      "notes": "",
+      "course": 209,
+      "domestic_price": "60.00",
+      "foreign_price": "60.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 3,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.484Z",
+      "updated_at": "2025-07-26T12:55:34.484Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2009-04-27",
+      "end_date": "2018-12-10",
+      "notes": "",
+      "course": 210,
+      "domestic_price": "65.00",
+      "foreign_price": "65.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 4,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.485Z",
+      "updated_at": "2025-07-26T12:55:34.485Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2009-04-27",
+      "end_date": "2018-12-10",
+      "notes": "",
+      "course": 211,
+      "domestic_price": "70.00",
+      "foreign_price": "70.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 5,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.486Z",
+      "updated_at": "2025-07-26T12:55:34.486Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2009-04-27",
+      "end_date": "2018-12-10",
+      "notes": "",
+      "course": 212,
+      "domestic_price": "75.00",
+      "foreign_price": "75.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 6,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.487Z",
+      "updated_at": "2025-07-26T12:55:34.487Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2009-04-27",
+      "end_date": "2018-12-10",
+      "notes": "",
+      "course": 213,
+      "domestic_price": "80.00",
+      "foreign_price": "80.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 7,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.488Z",
+      "updated_at": "2025-07-26T12:55:34.488Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2009-04-27",
+      "end_date": "2018-12-10",
+      "notes": "",
+      "course": 214,
+      "domestic_price": "85.00",
+      "foreign_price": "85.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 8,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.489Z",
+      "updated_at": "2025-07-26T12:55:34.489Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2009-04-27",
+      "end_date": "2018-12-10",
+      "notes": "",
+      "course": 215,
+      "domestic_price": "90.00",
+      "foreign_price": "90.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 9,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.489Z",
+      "updated_at": "2025-07-26T12:55:34.489Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2009-04-27",
+      "end_date": "2018-12-10",
+      "notes": "",
+      "course": 216,
+      "domestic_price": "95.00",
+      "foreign_price": "95.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 10,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.490Z",
+      "updated_at": "2025-07-26T12:55:34.490Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2009-04-27",
+      "end_date": "2018-12-10",
+      "notes": "",
+      "course": 217,
+      "domestic_price": "100.00",
+      "foreign_price": "100.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 11,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.491Z",
+      "updated_at": "2025-07-26T12:55:34.491Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2009-04-27",
+      "end_date": "2018-12-10",
+      "notes": "",
+      "course": 218,
+      "domestic_price": "105.00",
+      "foreign_price": "105.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 12,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.492Z",
+      "updated_at": "2025-07-26T12:55:34.492Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2009-04-27",
+      "end_date": "2018-12-10",
+      "notes": "",
+      "course": 219,
+      "domestic_price": "110.00",
+      "foreign_price": "110.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 13,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.493Z",
+      "updated_at": "2025-07-26T12:55:34.493Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2009-04-27",
+      "end_date": "2018-12-10",
+      "notes": "",
+      "course": 220,
+      "domestic_price": "115.00",
+      "foreign_price": "115.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 14,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.494Z",
+      "updated_at": "2025-07-26T12:55:34.494Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2018-12-11",
+      "end_date": "2024-01-08",
+      "notes": "",
+      "course": 209,
+      "domestic_price": "70.00",
+      "foreign_price": "70.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 15,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.495Z",
+      "updated_at": "2025-07-26T12:55:34.495Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2018-12-11",
+      "end_date": "2024-01-08",
+      "notes": "",
+      "course": 210,
+      "domestic_price": "75.00",
+      "foreign_price": "75.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 16,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.495Z",
+      "updated_at": "2025-07-26T12:55:34.495Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2018-12-11",
+      "end_date": "2024-01-08",
+      "notes": "",
+      "course": 211,
+      "domestic_price": "80.00",
+      "foreign_price": "80.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 17,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.496Z",
+      "updated_at": "2025-07-26T12:55:34.496Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2018-12-11",
+      "end_date": "2024-01-08",
+      "notes": "",
+      "course": 212,
+      "domestic_price": "85.00",
+      "foreign_price": "85.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 18,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.497Z",
+      "updated_at": "2025-07-26T12:55:34.497Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2018-12-11",
+      "end_date": "2024-01-08",
+      "notes": "",
+      "course": 213,
+      "domestic_price": "90.00",
+      "foreign_price": "90.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 19,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.498Z",
+      "updated_at": "2025-07-26T12:55:34.498Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2018-12-11",
+      "end_date": "2024-01-08",
+      "notes": "",
+      "course": 214,
+      "domestic_price": "95.00",
+      "foreign_price": "95.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 20,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.499Z",
+      "updated_at": "2025-07-26T12:55:34.499Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2018-12-11",
+      "end_date": "2024-01-08",
+      "notes": "",
+      "course": 215,
+      "domestic_price": "100.00",
+      "foreign_price": "100.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 21,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.499Z",
+      "updated_at": "2025-07-26T12:55:34.499Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2018-12-11",
+      "end_date": "2024-01-08",
+      "notes": "",
+      "course": 216,
+      "domestic_price": "105.00",
+      "foreign_price": "105.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 22,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.500Z",
+      "updated_at": "2025-07-26T12:55:34.500Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2018-12-11",
+      "end_date": "2024-01-08",
+      "notes": "",
+      "course": 217,
+      "domestic_price": "110.00",
+      "foreign_price": "110.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 23,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.501Z",
+      "updated_at": "2025-07-26T12:55:34.501Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2018-12-11",
+      "end_date": "2024-01-08",
+      "notes": "",
+      "course": 218,
+      "domestic_price": "115.00",
+      "foreign_price": "115.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 24,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.502Z",
+      "updated_at": "2025-07-26T12:55:34.502Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2018-12-11",
+      "end_date": "2024-01-08",
+      "notes": "",
+      "course": 219,
+      "domestic_price": "120.00",
+      "foreign_price": "120.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 25,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.502Z",
+      "updated_at": "2025-07-26T12:55:34.502Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2018-12-11",
+      "end_date": "2024-01-08",
+      "notes": "",
+      "course": 220,
+      "domestic_price": "125.00",
+      "foreign_price": "125.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 26,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.503Z",
+      "updated_at": "2025-07-26T12:55:34.503Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 209,
+      "domestic_price": "80.00",
+      "foreign_price": "80.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 27,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.504Z",
+      "updated_at": "2025-07-26T12:55:34.504Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 210,
+      "domestic_price": "85.00",
+      "foreign_price": "85.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 28,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.505Z",
+      "updated_at": "2025-07-26T12:55:34.505Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 211,
+      "domestic_price": "90.00",
+      "foreign_price": "90.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 29,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.505Z",
+      "updated_at": "2025-07-26T12:55:34.505Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 212,
+      "domestic_price": "95.00",
+      "foreign_price": "95.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 30,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.506Z",
+      "updated_at": "2025-07-26T12:55:34.506Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 213,
+      "domestic_price": "100.00",
+      "foreign_price": "100.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 31,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.507Z",
+      "updated_at": "2025-07-26T12:55:34.507Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 214,
+      "domestic_price": "105.00",
+      "foreign_price": "105.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 32,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.507Z",
+      "updated_at": "2025-07-26T12:55:34.507Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 215,
+      "domestic_price": "110.00",
+      "foreign_price": "110.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 33,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.508Z",
+      "updated_at": "2025-07-26T12:55:34.508Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 216,
+      "domestic_price": "115.00",
+      "foreign_price": "115.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 34,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.509Z",
+      "updated_at": "2025-07-26T12:55:34.509Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 217,
+      "domestic_price": "120.00",
+      "foreign_price": "120.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 35,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.510Z",
+      "updated_at": "2025-07-26T12:55:34.510Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 218,
+      "domestic_price": "125.00",
+      "foreign_price": "125.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 36,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.510Z",
+      "updated_at": "2025-07-26T12:55:34.510Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 219,
+      "domestic_price": "130.00",
+      "foreign_price": "130.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 37,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.511Z",
+      "updated_at": "2025-07-26T12:55:34.511Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 220,
+      "domestic_price": "135.00",
+      "foreign_price": "135.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 38,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.512Z",
+      "updated_at": "2025-07-26T12:55:34.512Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2009-04-27",
+      "end_date": "2018-12-10",
+      "notes": "",
+      "course": 238,
+      "domestic_price": "110.00",
+      "foreign_price": "110.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 39,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.513Z",
+      "updated_at": "2025-07-26T12:55:34.513Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2009-04-27",
+      "end_date": "2018-12-10",
+      "notes": "",
+      "course": 237,
+      "domestic_price": "160.00",
+      "foreign_price": "160.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 40,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.514Z",
+      "updated_at": "2025-07-26T12:55:34.514Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2009-04-27",
+      "end_date": "2018-12-10",
+      "notes": "",
+      "course": 233,
+      "domestic_price": "160.00",
+      "foreign_price": "160.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 41,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.514Z",
+      "updated_at": "2025-07-26T12:55:34.514Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2009-04-27",
+      "end_date": "2018-12-10",
+      "notes": "",
+      "course": 234,
+      "domestic_price": "160.00",
+      "foreign_price": "160.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 42,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.515Z",
+      "updated_at": "2025-07-26T12:55:34.515Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2009-04-27",
+      "end_date": "2018-12-10",
+      "notes": "",
+      "course": 235,
+      "domestic_price": "160.00",
+      "foreign_price": "160.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 43,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.516Z",
+      "updated_at": "2025-07-26T12:55:34.516Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2009-04-27",
+      "end_date": "2018-12-10",
+      "notes": "",
+      "course": 236,
+      "domestic_price": "180.00",
+      "foreign_price": "180.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 44,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.516Z",
+      "updated_at": "2025-07-26T12:55:34.516Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2018-12-11",
+      "end_date": "2024-01-08",
+      "notes": "",
+      "course": 238,
+      "domestic_price": "135.00",
+      "foreign_price": "135.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 45,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.517Z",
+      "updated_at": "2025-07-26T12:55:34.517Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2018-12-11",
+      "end_date": "2024-01-08",
+      "notes": "",
+      "course": 237,
+      "domestic_price": "180.00",
+      "foreign_price": "180.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 46,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.518Z",
+      "updated_at": "2025-07-26T12:55:34.518Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2018-12-11",
+      "end_date": "2024-01-08",
+      "notes": "",
+      "course": 233,
+      "domestic_price": "180.00",
+      "foreign_price": "180.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 47,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.519Z",
+      "updated_at": "2025-07-26T12:55:34.519Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2018-12-11",
+      "end_date": "2024-01-08",
+      "notes": "",
+      "course": 234,
+      "domestic_price": "180.00",
+      "foreign_price": "180.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 48,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.520Z",
+      "updated_at": "2025-07-26T12:55:34.520Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2018-12-11",
+      "end_date": "2024-01-08",
+      "notes": "",
+      "course": 235,
+      "domestic_price": "180.00",
+      "foreign_price": "180.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 49,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.521Z",
+      "updated_at": "2025-07-26T12:55:34.521Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2018-12-11",
+      "end_date": "2024-01-08",
+      "notes": "",
+      "course": 236,
+      "domestic_price": "200.00",
+      "foreign_price": "200.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 50,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.521Z",
+      "updated_at": "2025-07-26T12:55:34.521Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 238,
+      "domestic_price": "135.00",
+      "foreign_price": "135.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 51,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.522Z",
+      "updated_at": "2025-07-26T12:55:34.522Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 237,
+      "domestic_price": "190.00",
+      "foreign_price": "190.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 52,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.523Z",
+      "updated_at": "2025-07-26T12:55:34.523Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 233,
+      "domestic_price": "190.00",
+      "foreign_price": "190.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 53,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.524Z",
+      "updated_at": "2025-07-26T12:55:34.524Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 234,
+      "domestic_price": "190.00",
+      "foreign_price": "190.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 54,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.525Z",
+      "updated_at": "2025-07-26T12:55:34.525Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 235,
+      "domestic_price": "190.00",
+      "foreign_price": "190.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 55,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.525Z",
+      "updated_at": "2025-07-26T12:55:34.525Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 236,
+      "domestic_price": "210.00",
+      "foreign_price": "210.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 56,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.526Z",
+      "updated_at": "2025-07-26T12:55:34.526Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2009-04-27",
+      "end_date": "2018-12-10",
+      "notes": "",
+      "course": 221,
+      "domestic_price": "60.00",
+      "foreign_price": "60.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 57,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.527Z",
+      "updated_at": "2025-07-26T12:55:34.527Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2009-04-27",
+      "end_date": "2018-12-10",
+      "notes": "",
+      "course": 222,
+      "domestic_price": "65.00",
+      "foreign_price": "65.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 58,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.527Z",
+      "updated_at": "2025-07-26T12:55:34.527Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2009-04-27",
+      "end_date": "2018-12-10",
+      "notes": "",
+      "course": 223,
+      "domestic_price": "70.00",
+      "foreign_price": "70.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 59,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.529Z",
+      "updated_at": "2025-07-26T12:55:34.529Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2009-04-27",
+      "end_date": "2018-12-10",
+      "notes": "",
+      "course": 224,
+      "domestic_price": "75.00",
+      "foreign_price": "75.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 60,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.529Z",
+      "updated_at": "2025-07-26T12:55:34.529Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2009-04-27",
+      "end_date": "2018-12-10",
+      "notes": "",
+      "course": 225,
+      "domestic_price": "80.00",
+      "foreign_price": "80.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 61,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.530Z",
+      "updated_at": "2025-07-26T12:55:34.530Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2009-04-27",
+      "end_date": "2018-12-10",
+      "notes": "",
+      "course": 226,
+      "domestic_price": "85.00",
+      "foreign_price": "85.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 62,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.531Z",
+      "updated_at": "2025-07-26T12:55:34.531Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2009-04-27",
+      "end_date": "2018-12-10",
+      "notes": "",
+      "course": 227,
+      "domestic_price": "90.00",
+      "foreign_price": "90.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 63,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.532Z",
+      "updated_at": "2025-07-26T12:55:34.532Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2009-04-27",
+      "end_date": "2018-12-10",
+      "notes": "",
+      "course": 228,
+      "domestic_price": "95.00",
+      "foreign_price": "95.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 64,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.532Z",
+      "updated_at": "2025-07-26T12:55:34.532Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2009-04-27",
+      "end_date": "2018-12-10",
+      "notes": "",
+      "course": 229,
+      "domestic_price": "100.00",
+      "foreign_price": "100.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 65,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.533Z",
+      "updated_at": "2025-07-26T12:55:34.533Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2009-04-27",
+      "end_date": "2018-12-10",
+      "notes": "",
+      "course": 230,
+      "domestic_price": "105.00",
+      "foreign_price": "105.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 66,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.534Z",
+      "updated_at": "2025-07-26T12:55:34.534Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2009-04-27",
+      "end_date": "2018-12-10",
+      "notes": "",
+      "course": 231,
+      "domestic_price": "110.00",
+      "foreign_price": "110.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 67,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.535Z",
+      "updated_at": "2025-07-26T12:55:34.535Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2009-04-27",
+      "end_date": "2018-12-10",
+      "notes": "",
+      "course": 232,
+      "domestic_price": "115.00",
+      "foreign_price": "115.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 68,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.536Z",
+      "updated_at": "2025-07-26T12:55:34.536Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2018-12-11",
+      "end_date": "2024-01-08",
+      "notes": "",
+      "course": 221,
+      "domestic_price": "70.00",
+      "foreign_price": "70.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 69,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.536Z",
+      "updated_at": "2025-07-26T12:55:34.536Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2018-12-11",
+      "end_date": "2024-01-08",
+      "notes": "",
+      "course": 222,
+      "domestic_price": "75.00",
+      "foreign_price": "75.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 70,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.537Z",
+      "updated_at": "2025-07-26T12:55:34.537Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2018-12-11",
+      "end_date": "2024-01-08",
+      "notes": "",
+      "course": 223,
+      "domestic_price": "80.00",
+      "foreign_price": "80.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 71,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.538Z",
+      "updated_at": "2025-07-26T12:55:34.538Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2018-12-11",
+      "end_date": "2024-01-08",
+      "notes": "",
+      "course": 224,
+      "domestic_price": "85.00",
+      "foreign_price": "85.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 72,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.538Z",
+      "updated_at": "2025-07-26T12:55:34.538Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2018-12-11",
+      "end_date": "2024-01-08",
+      "notes": "",
+      "course": 225,
+      "domestic_price": "90.00",
+      "foreign_price": "90.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 73,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.539Z",
+      "updated_at": "2025-07-26T12:55:34.539Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2018-12-11",
+      "end_date": "2024-01-08",
+      "notes": "",
+      "course": 226,
+      "domestic_price": "95.00",
+      "foreign_price": "95.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 74,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.540Z",
+      "updated_at": "2025-07-26T12:55:34.540Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2018-12-11",
+      "end_date": "2024-01-08",
+      "notes": "",
+      "course": 227,
+      "domestic_price": "100.00",
+      "foreign_price": "100.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 75,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.541Z",
+      "updated_at": "2025-07-26T12:55:34.541Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2018-12-11",
+      "end_date": "2024-01-08",
+      "notes": "",
+      "course": 228,
+      "domestic_price": "105.00",
+      "foreign_price": "105.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 76,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.541Z",
+      "updated_at": "2025-07-26T12:55:34.541Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2018-12-11",
+      "end_date": "2024-01-08",
+      "notes": "",
+      "course": 229,
+      "domestic_price": "110.00",
+      "foreign_price": "110.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 77,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.542Z",
+      "updated_at": "2025-07-26T12:55:34.542Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2018-12-11",
+      "end_date": "2024-01-08",
+      "notes": "",
+      "course": 230,
+      "domestic_price": "115.00",
+      "foreign_price": "115.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 78,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.543Z",
+      "updated_at": "2025-07-26T12:55:34.543Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2018-12-11",
+      "end_date": "2024-01-08",
+      "notes": "",
+      "course": 231,
+      "domestic_price": "120.00",
+      "foreign_price": "120.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 79,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.544Z",
+      "updated_at": "2025-07-26T12:55:34.544Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2018-12-11",
+      "end_date": "2024-01-08",
+      "notes": "",
+      "course": 232,
+      "domestic_price": "125.00",
+      "foreign_price": "125.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 80,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.545Z",
+      "updated_at": "2025-07-26T12:55:34.545Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 221,
+      "domestic_price": "80.00",
+      "foreign_price": "80.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 81,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.545Z",
+      "updated_at": "2025-07-26T12:55:34.545Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 222,
+      "domestic_price": "85.00",
+      "foreign_price": "85.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 82,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.546Z",
+      "updated_at": "2025-07-26T12:55:34.546Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 223,
+      "domestic_price": "90.00",
+      "foreign_price": "90.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 83,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.547Z",
+      "updated_at": "2025-07-26T12:55:34.547Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 224,
+      "domestic_price": "95.00",
+      "foreign_price": "95.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 84,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.548Z",
+      "updated_at": "2025-07-26T12:55:34.548Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 225,
+      "domestic_price": "100.00",
+      "foreign_price": "100.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 85,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.548Z",
+      "updated_at": "2025-07-26T12:55:34.548Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 226,
+      "domestic_price": "105.00",
+      "foreign_price": "105.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 86,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.549Z",
+      "updated_at": "2025-07-26T12:55:34.549Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 227,
+      "domestic_price": "110.00",
+      "foreign_price": "110.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 87,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.550Z",
+      "updated_at": "2025-07-26T12:55:34.550Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 228,
+      "domestic_price": "115.00",
+      "foreign_price": "115.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 88,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.550Z",
+      "updated_at": "2025-07-26T12:55:34.550Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 229,
+      "domestic_price": "120.00",
+      "foreign_price": "120.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 89,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.551Z",
+      "updated_at": "2025-07-26T12:55:34.551Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 230,
+      "domestic_price": "125.00",
+      "foreign_price": "125.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 90,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.552Z",
+      "updated_at": "2025-07-26T12:55:34.552Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 231,
+      "domestic_price": "130.00",
+      "foreign_price": "130.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 91,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.553Z",
+      "updated_at": "2025-07-26T12:55:34.553Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 232,
+      "domestic_price": "135.00",
+      "foreign_price": "135.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 92,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.553Z",
+      "updated_at": "2025-07-26T12:55:34.553Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 288,
+      "domestic_price": "90.00",
+      "foreign_price": "90.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 93,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.554Z",
+      "updated_at": "2025-07-26T12:55:34.554Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 289,
+      "domestic_price": "90.00",
+      "foreign_price": "90.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 94,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.555Z",
+      "updated_at": "2025-07-26T12:55:34.555Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 290,
+      "domestic_price": "90.00",
+      "foreign_price": "90.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 95,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.555Z",
+      "updated_at": "2025-07-26T12:55:34.555Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 291,
+      "domestic_price": "120.00",
+      "foreign_price": "120.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 96,
+    "fields": {
+      "created_at": "2025-07-26T12:55:34.556Z",
+      "updated_at": "2025-07-26T12:55:34.556Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2024-01-09",
+      "end_date": null,
+      "notes": "",
+      "course": 292,
+      "domestic_price": "140.00",
+      "foreign_price": "140.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 97,
+    "fields": {
+      "created_at": "2025-07-27T06:58:40.783Z",
+      "updated_at": "2025-07-27T07:00:00.326Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": 1,
+      "updated_by": 1,
+      "effective_date": "2018-10-16",
+      "end_date": "2024-02-03",
+      "notes": "",
+      "course": 285,
+      "domestic_price": "87.00",
+      "foreign_price": "87.00"
+    }
+  },
+  {
+    "model": "finance.coursefixedpricing",
+    "pk": 98,
+    "fields": {
+      "created_at": "2025-07-27T07:00:24.111Z",
+      "updated_at": "2025-07-27T07:00:24.111Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": 1,
+      "updated_by": 1,
+      "effective_date": "2024-02-04",
+      "end_date": null,
+      "notes": "",
+      "course": 285,
+      "domestic_price": "100.00",
+      "foreign_price": "100.00"
+    }
+  },
+  {
+    "model": "finance.seniorprojectpricing",
+    "pk": 1,
+    "fields": {
+      "created_at": "2025-07-24T14:08:50.769Z",
+      "updated_at": "2025-07-24T14:08:50.769Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "effective_date": "2025-01-01",
+      "end_date": null,
+      "notes": "",
+      "tier": "1-2",
+      "individual_price": "500.00",
+      "foreign_individual_price": "800.00",
+      "advisor_payment": "100.00",
+      "committee_payment": "50.00"
+    }
+  },
+  {
+    "model": "finance.seniorprojectcourse",
+    "pk": 1,
+    "fields": {
+      "created_at": "2025-07-24T14:08:50.809Z",
+      "updated_at": "2025-07-24T14:08:50.809Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": null,
+      "updated_by": null,
+      "course": 10,
+      "project_code": "TEST-489",
+      "major_name": "Test Major",
+      "allows_groups": true,
+      "is_active": true
+    }
+  },
+  {
+    "model": "finance.readingclasspricing",
+    "pk": 2,
+    "fields": {
+      "created_at": "2025-07-25T06:23:26.676Z",
+      "updated_at": "2025-07-25T06:23:26.676Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": 1,
+      "updated_by": 1,
+      "effective_date": "2015-12-28",
+      "end_date": "2018-10-15",
+      "notes": "",
+      "cycle": 2,
+      "tier": "1-2",
+      "domestic_price": "100.00",
+      "foreign_price": "100.00"
+    }
+  },
+  {
+    "model": "finance.readingclasspricing",
+    "pk": 3,
+    "fields": {
+      "created_at": "2025-07-25T06:24:43.331Z",
+      "updated_at": "2025-07-25T06:24:43.331Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": 1,
+      "updated_by": 1,
+      "effective_date": "2015-12-28",
+      "end_date": "2018-10-15",
+      "notes": "",
+      "cycle": 2,
+      "tier": "3-5",
+      "domestic_price": "72.00",
+      "foreign_price": "72.00"
+    }
+  },
+  {
+    "model": "finance.readingclasspricing",
+    "pk": 4,
+    "fields": {
+      "created_at": "2025-07-25T06:25:42.626Z",
+      "updated_at": "2025-07-25T06:25:53.349Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": 1,
+      "updated_by": 1,
+      "effective_date": "2015-12-28",
+      "end_date": "2018-10-15",
+      "notes": "",
+      "cycle": 2,
+      "tier": "6-15",
+      "domestic_price": "54.00",
+      "foreign_price": "54.00"
+    }
+  },
+  {
+    "model": "finance.readingclasspricing",
+    "pk": 5,
+    "fields": {
+      "created_at": "2025-07-25T06:27:38.216Z",
+      "updated_at": "2025-07-25T06:27:38.216Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": 1,
+      "updated_by": 1,
+      "effective_date": "2024-02-14",
+      "end_date": null,
+      "notes": "",
+      "cycle": 2,
+      "tier": "1-2",
+      "domestic_price": "150.00",
+      "foreign_price": "150.00"
+    }
+  },
+  {
+    "model": "finance.readingclasspricing",
+    "pk": 6,
+    "fields": {
+      "created_at": "2025-07-25T06:28:13.529Z",
+      "updated_at": "2025-07-25T06:28:13.529Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": 1,
+      "updated_by": 1,
+      "effective_date": "2024-02-14",
+      "end_date": null,
+      "notes": "",
+      "cycle": 2,
+      "tier": "3-5",
+      "domestic_price": "100.00",
+      "foreign_price": "100.00"
+    }
+  },
+  {
+    "model": "finance.readingclasspricing",
+    "pk": 7,
+    "fields": {
+      "created_at": "2025-07-25T06:28:47.146Z",
+      "updated_at": "2025-07-25T06:28:47.146Z",
+      "is_deleted": false,
+      "deleted_at": null,
+      "created_by": 1,
+      "updated_by": 1,
+      "effective_date": "2024-02-14",
+      "end_date": null,
+      "notes": "",
+      "cycle": 2,
+      "tier": "6-15",
+      "domestic_price": "85.00",
+      "foreign_price": "85.00"
+    }
+  }
+]

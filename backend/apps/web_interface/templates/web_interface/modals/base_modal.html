@@ -1,0 +1,82 @@
+{% comment %}
+Base modal template for HTMX integration.
+Provides consistent modal structure across the application.
+{% endcomment %}
+{% load i18n %}
+
+<div id="modal-overlay"
+     class="modal-overlay"
+     onclick="closeModal()"
+     hx-on:click="closeModal()">
+  <div class="modal-container" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <h3 class="modal-title">{{ modal_title|default:_("Modal") }}</h3>
+      <button type="button"
+              class="modal-close-btn"
+              onclick="closeModal()"
+              aria-label="{% trans 'Close' %}">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      {% block modal_content %}
+        <p>{% trans "No content provided." %}</p>
+      {% endblock %}
+    </div>
+    {% block modal_footer %}
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal()">{% trans "Cancel" %}</button>
+        {% if modal_save_text %}
+          <button type="submit"
+                  class="btn btn-primary"
+                  form="{{ modal_form_id|default:'modal-form' }}">{{ modal_save_text|default:_("Save") }}</button>
+        {% endif %}
+      </div>
+    {% endblock %}
+  </div>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Auto-focus first input in modal
+    const firstInput = document.querySelector('#modal-overlay input:not([type="hidden"]), #modal-overlay select, #modal-overlay textarea');
+    if (firstInput) {
+      setTimeout(() => firstInput.focus(), 100);
+    }
+
+    // Handle Escape key to close modal
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeModal();
+      }
+    });
+  });
+
+  function closeModal() {
+    const modal = document.getElementById('modal-overlay');
+    if (modal) {
+      modal.remove();
+    }
+  }
+
+  // HTMX modal form handling
+  document.body.addEventListener('htmx:afterSwap', function(evt) {
+    if (evt.detail.target.id === 'modal-container') {
+      // Modal content has been swapped, focus first input
+      const firstInput = evt.detail.target.querySelector('input:not([type="hidden"]), select, textarea');
+      if (firstInput) {
+        setTimeout(() => firstInput.focus(), 100);
+      }
+    }
+  });
+
+  // Handle successful form submissions
+  document.body.addEventListener('htmx:responseError', function(evt) {
+    if (evt.detail.xhr.status === 400) {
+      // Form validation errors - update modal content
+      const response = JSON.parse(evt.detail.xhr.responseText);
+      if (response.form_html) {
+        evt.detail.target.innerHTML = response.form_html;
+      }
+    }
+  });
+</script>

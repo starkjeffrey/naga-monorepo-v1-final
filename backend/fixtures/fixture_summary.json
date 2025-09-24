@@ -1,0 +1,183 @@
+{
+  "generation_timestamp": "2025-08-21T00:30:44.575272+00:00",
+  "total_fixtures_created": 17,
+  "fixtures": [
+    {
+      "app": "auth",
+      "filename": "fixtures/auth_data.json",
+      "models": 1,
+      "records": 632,
+      "size_bytes": 108822
+    },
+    {
+      "app": "contenttypes",
+      "filename": "fixtures/contenttypes_data.json",
+      "models": 1,
+      "records": 152,
+      "size_bytes": 20512
+    },
+    {
+      "app": "sessions",
+      "filename": "fixtures/sessions_data.json",
+      "models": 1,
+      "records": 22,
+      "size_bytes": 10082
+    },
+    {
+      "app": "sites",
+      "filename": "fixtures/sites_data.json",
+      "models": 1,
+      "records": 1,
+      "size_bytes": 132
+    },
+    {
+      "app": "admin",
+      "filename": "fixtures/admin_data.json",
+      "models": 1,
+      "records": 215,
+      "size_bytes": 66301
+    },
+    {
+      "app": "account",
+      "filename": "fixtures/account_data.json",
+      "models": 1,
+      "records": 2,
+      "size_bytes": 331
+    },
+    {
+      "app": "users",
+      "filename": "fixtures/users_data.json",
+      "models": 1,
+      "records": 134,
+      "size_bytes": 56864
+    },
+    {
+      "app": "accounts",
+      "filename": "fixtures/accounts_data.json",
+      "models": 1,
+      "records": 15,
+      "size_bytes": 5009
+    },
+    {
+      "app": "common",
+      "filename": "fixtures/common_data.json",
+      "models": 2,
+      "records": 107,
+      "size_bytes": 48629
+    },
+    {
+      "app": "people",
+      "filename": "fixtures/people_data.json",
+      "models": 2,
+      "records": 138,
+      "size_bytes": 47337
+    },
+    {
+      "app": "curriculum",
+      "filename": "fixtures/curriculum_data.json",
+      "models": 5,
+      "records": 412,
+      "size_bytes": 255620
+    },
+    {
+      "app": "academic",
+      "filename": "fixtures/academic_data.json",
+      "models": 2,
+      "records": 222,
+      "size_bytes": 114512
+    },
+    {
+      "app": "enrollment",
+      "filename": "fixtures/enrollment_data.json",
+      "models": 3,
+      "records": 1773,
+      "size_bytes": 1270029
+    },
+    {
+      "app": "scheduling",
+      "filename": "fixtures/scheduling_data.json",
+      "models": 5,
+      "records": 335,
+      "size_bytes": 188785
+    },
+    {
+      "app": "finance",
+      "filename": "fixtures/finance_data.json",
+      "models": 16,
+      "records": 5409,
+      "size_bytes": 5455835
+    },
+    {
+      "app": "scholarships",
+      "filename": "fixtures/scholarships_data.json",
+      "models": 2,
+      "records": 384,
+      "size_bytes": 290288
+    },
+    {
+      "app": "level_testing",
+      "filename": "fixtures/level_testing_data.json",
+      "models": 3,
+      "records": 3,
+      "size_bytes": 3161
+    }
+  ],
+  "excluded_tables": [
+    {
+      "app": "people",
+      "model": "Person",
+      "table": "people_person",
+      "count": 18274
+    },
+    {
+      "app": "people",
+      "model": "StudentProfile",
+      "table": "people_studentprofile",
+      "count": 18202
+    },
+    {
+      "app": "people",
+      "model": "EmergencyContact",
+      "table": "people_emergencycontact",
+      "count": 18030
+    },
+    {
+      "app": "people",
+      "model": "StudentPhoto",
+      "table": "people_studentphoto",
+      "count": 10234
+    },
+    {
+      "app": "enrollment",
+      "model": "ProgramEnrollment",
+      "table": "enrollment_programenrollment",
+      "count": 8274
+    },
+    {
+      "app": "enrollment",
+      "model": "MajorDeclaration",
+      "table": "enrollment_majordeclaration",
+      "count": 2402
+    },
+    {
+      "app": "enrollment",
+      "model": "AcademicJourney",
+      "table": "enrollment_academicjourney",
+      "count": 17650
+    },
+    {
+      "app": "enrollment",
+      "model": "ProgramMilestone",
+      "table": "enrollment_programmilestone",
+      "count": 19596
+    },
+    {
+      "app": "enrollment",
+      "model": "AcademicProgression",
+      "table": "enrollment_academicprogression",
+      "count": 15910
+    }
+  ],
+  "total_records_exported": 9956,
+  "total_size_bytes": 7942249
+}

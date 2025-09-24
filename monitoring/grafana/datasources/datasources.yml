@@ -1,0 +1,125 @@
+# Grafana datasources configuration for Naga SIS
+apiVersion: 1
+
+datasources:
+  # Prometheus for metrics
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+    editable: true
+    jsonData:
+      httpMethod: POST
+      queryTimeout: 60s
+      timeInterval: 15s
+      exemplarTraceIdDestinations:
+        - name: trace_id
+          datasourceUid: jaeger
+
+  # Loki for logs
+  - name: Loki
+    type: loki
+    access: proxy
+    url: http://loki:3100
+    editable: true
+    jsonData:
+      maxLines: 1000
+      derivedFields:
+        - matcherRegex: "trace_id=(\\w+)"
+          name: TraceID
+          url: "$${__value.raw}"
+          datasourceUid: jaeger
+
+  # Jaeger for distributed tracing
+  - name: Jaeger
+    type: jaeger
+    access: proxy
+    url: http://jaeger:16686
+    uid: jaeger
+    editable: true
+    jsonData:
+      tracesToLogsV2:
+        datasourceUid: loki
+        spanStartTimeShift: '-1h'
+        spanEndTimeShift: '1h'
+        tags: ['job', 'instance', 'pod', 'namespace']
+        filterByTraceID: false
+        filterBySpanID: false
+        customQuery: true
+        query: 'method="${__span.tags.method}"'
+      tracesToMetrics:
+        datasourceUid: prometheus
+        spanStartTimeShift: '-1h'
+        spanEndTimeShift: '1h'
+        tags: [
+          { key: 'service.name', value: 'service' },
+          { key: 'service.namespace', value: 'namespace' }
+        ]
+        queries:
+          - name: 'Sample query'
+            query: 'sum(rate(tempo_spanmetrics_latency_bucket{$__tags}[5m]))'
+      nodeGraph:
+        enabled: true
+      search:
+        hide: false
+      spanBar:
+        type: 'Tag'
+        tag: 'http.path'
+
+  # PostgreSQL for direct database queries (read-only)
+  - name: PostgreSQL
+    type: postgres
+    url: postgres:5432
+    database: naga
+    user: grafana_readonly
+    secureJsonData:
+      password: '${GRAFANA_DB_PASSWORD}'
+    jsonData:
+      sslmode: disable
+      maxOpenConns: 5
+      maxIdleConns: 2
+      connMaxLifetime: 14400
+    editable: false
+
+  # Redis for cache metrics
+  - name: Redis
+    type: redis-datasource
+    access: proxy
+    url: redis://redis:6379
+    editable: true
+    jsonData:
+      client: standalone
+      poolSize: 5
+      timeout: 10
+      pingInterval: 0
+      pipelineWindow: 0
+
+# Notification channels
+notifiers:
+  - name: email-admin
+    type: email
+    uid: email-admin
+    org_id: 1
+    settings:
+      addresses: admin@pucsr.edu.kh
+      autoResolve: true
+      httpMethod: POST
+      severity: critical
+      uploadImage: false
+
+  - name: slack-alerts
+    type: slack
+    uid: slack-alerts
+    org_id: 1
+    settings:
+      url: '${SLACK_WEBHOOK_URL}'
+      channel: '#naga-alerts'
+      username: Grafana
+      iconEmoji: ':exclamation:'
+      title: 'Grafana Alert'
+      text: |
+        {{ range .Alerts }}
+        Alert: {{ .Name }}
+        Message: {{ .Message }}
+        {{ end }}

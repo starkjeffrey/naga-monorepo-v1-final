@@ -1,0 +1,178 @@
+{% load i18n %}
+{% load web_interface_tags %}
+
+<div class="page-content">
+  <!-- Statistics Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon bg-info">
+        <i class="fas fa-file-invoice"></i>
+      </div>
+      <div class="stat-details">
+        <div class="stat-value">{{ billing_stats.total_invoices }}</div>
+        <div class="stat-label">{% trans "Total Invoices" %}</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon bg-warning">
+        <i class="fas fa-clock"></i>
+      </div>
+      <div class="stat-details">
+        <div class="stat-value">{{ billing_stats.pending_invoices }}</div>
+        <div class="stat-label">{% trans "Pending" %}</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon bg-danger">
+        <i class="fas fa-exclamation-triangle"></i>
+      </div>
+      <div class="stat-details">
+        <div class="stat-value">{{ billing_stats.overdue_invoices }}</div>
+        <div class="stat-label">{% trans "Overdue" %}</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon bg-success">
+        <i class="fas fa-dollar-sign"></i>
+      </div>
+      <div class="stat-details">
+        <div class="stat-value">{{ billing_stats.total_amount|format_currency }}</div>
+        <div class="stat-label">{% trans "Total Amount" %}</div>
+      </div>
+    </div>
+  </div>
+  <!-- Action Bar -->
+  <div class="action-bar">
+    <div class="search-filters">
+      <div class="search-group">
+        <input type="text"
+               class="form-input"
+               placeholder="{% trans 'Search invoices...' %}"
+               value="{{ search_query }}"
+               hx-get="{% url 'web_interface:billing' %}"
+               hx-target="#invoice-table-container"
+               hx-trigger="keyup changed delay:500ms"
+               name="search" />
+      </div>
+      <div class="filter-group">
+        <select class="form-select"
+                hx-get="{% url 'web_interface:billing' %}"
+                hx-target="#invoice-table-container"
+                hx-trigger="change"
+                name="status">
+          <option value="">{% trans "All Status" %}</option>
+          {% for value, label in status_choices %}
+            <option value="{{ value }}"
+                    {% if value == selected_status %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+        <input type="date"
+               class="form-input"
+               name="date_from"
+               value="{{ date_from }}"
+               hx-get="{% url 'web_interface:billing' %}"
+               hx-target="#invoice-table-container"
+               hx-trigger="change" />
+        <input type="date"
+               class="form-input"
+               name="date_to"
+               value="{{ date_to }}"
+               hx-get="{% url 'web_interface:billing' %}"
+               hx-target="#invoice-table-container"
+               hx-trigger="change" />
+      </div>
+    </div>
+    <div class="action-buttons">
+      <button class="btn btn-primary"
+              data-modal-url="{% url 'web_interface:modal-invoice-create' %}">
+        <i class="fas fa-plus"></i>
+        {% trans "New Invoice" %}
+      </button>
+    </div>
+  </div>
+  <!-- Invoice Table -->
+  <div id="invoice-table-container" class="table-container">
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>{% trans "Invoice #" %}</th>
+            <th>{% trans "Student" %}</th>
+            <th>{% trans "Issue Date" %}</th>
+            <th>{% trans "Due Date" %}</th>
+            <th>{% trans "Amount" %}</th>
+            <th>{% trans "Status" %}</th>
+            <th>{% trans "Actions" %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for invoice in invoices %}
+            <tr>
+              <td>
+                <a href="{% url 'web_interface:invoice-detail' pk=invoice.pk %}"
+                   class="text-primary">{{ invoice.invoice_number }}</a>
+              </td>
+              <td>
+                <div class="student-info">
+                  <div class="student-name">{{ invoice.student.person.full_name }}</div>
+                  <div class="student-id">{{ invoice.student.student_id }}</div>
+                </div>
+              </td>
+              <td>{{ invoice.issue_date|date:"M d, Y" }}</td>
+              <td>
+                {% if invoice.is_overdue %}
+                  <span class="text-danger">{{ invoice.due_date|date:"M d, Y" }}</span>
+                {% else %}
+                  {{ invoice.due_date|date:"M d, Y" }}
+                {% endif %}
+              </td>
+              <td>
+                <div class="amount-info">
+                  <div class="total-amount">{{ invoice.total_amount|format_currency }}</div>
+                  {% if invoice.amount_due > 0 %}
+                    <div class="amount-due text-warning">Due: {{ invoice.amount_due|format_currency }}</div>
+                  {% endif %}
+                </div>
+              </td>
+              <td>
+                <span class="badge {% status_badge invoice.status %}">{{ invoice.get_status_display }}</span>
+              </td>
+              <td>
+                <div class="action-buttons">
+                  <a href="{% url 'web_interface:invoice-detail' pk=invoice.pk %}"
+                     class="btn btn-sm btn-outline-primary"
+                     title="{% trans 'View Invoice' %}">
+                    <i class="fas fa-eye"></i>
+                  </a>
+                  {% if invoice.amount_due > 0 %}
+                    <button class="btn btn-sm btn-outline-success"
+                            data-modal-url="{% url 'web_interface:modal-payment-process' %}?invoice_id={{ invoice.pk }}"
+                            title="{% trans 'Process Payment' %}">
+                      <i class="fas fa-credit-card"></i>
+                    </button>
+                  {% endif %}
+                  <a href="{% url 'web_interface:student-account' student_id=invoice.student.pk %}"
+                     class="btn btn-sm btn-outline-info"
+                     title="{% trans 'Student Account' %}">
+                    <i class="fas fa-user"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="7" class="text-center text-muted py-4">
+                <i class="fas fa-file-invoice fa-3x mb-3"></i>
+                <p>{% trans "No invoices found" %}</p>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <!-- Pagination -->
+    {% if is_paginated %}
+      {% pagination page_obj %}
+    {% endif %}
+  </div>
+</div>

@@ -1,0 +1,212 @@
+<!-- Overview Tab Content (Default) -->
+<div class="space-y-6">
+  <!-- Current Enrollment Card -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <i class="fas fa-book-open mr-2 text-gray-400"></i>
+      Current Enrollment
+    </h2>
+    <div class="grid gap-4">
+      {% for enrollment in current_enrollments %}
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow">
+          <div class="flex justify-between items-start">
+            <div>
+              <h3 class="font-medium text-gray-900 dark:text-gray-100">
+                {{ enrollment.class_section.course.course_code }} - {{ enrollment.class_section.course.title }}
+              </h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                {{ enrollment.class_section.meeting_pattern|default:"Schedule TBA" }} |
+                Room: {{ enrollment.class_section.room.full_name|default:"TBA" }} |
+                {{ enrollment.class_section.primary_instructor.person.full_name|default:"Instructor TBA" }}
+              </p>
+              <div class="flex items-center mt-2 space-x-4 text-sm">
+                <span class="text-gray-500 dark:text-gray-400">
+                  <i class="fas fa-users mr-1"></i>
+                  {{ enrollment.class_section.current_enrollment }}/{{ enrollment.class_section.capacity }} students
+                </span>
+                <span class="text-gray-500 dark:text-gray-400">
+                  <i class="fas fa-book mr-1"></i> {{ enrollment.class_section.credits }} credits
+                </span>
+              </div>
+            </div>
+            <div class="text-right">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400">
+                Enrolled
+              </span>
+              {% if enrollment.current_grade %}
+                <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Grade: {{ enrollment.current_grade }}</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <div class="text-center py-8">
+          <i class="fas fa-book-open text-4xl text-gray-300 dark:text-gray-600 mb-3"></i>
+          <p class="text-gray-500 dark:text-gray-400">No current enrollments</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  <!-- Academic Progress Card -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <i class="fas fa-chart-line mr-2 text-gray-400"></i>
+      Academic Progress
+    </h2>
+    <!-- Degree Progress Bar -->
+    <div class="mb-6">
+      <div class="flex justify-between text-sm mb-2">
+        <span class="text-gray-600 dark:text-gray-400">Degree Progress</span>
+        <span class="font-medium text-gray-900 dark:text-gray-100">
+          {{ student.total_credits_earned|default:0 }} of {{ degree_credits_required|default:120 }} credits
+          ({{ degree_progress_percentage|floatformat:1|default:0 }}%)
+        </span>
+      </div>
+      <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+        <div class="bg-blue-600 h-2 rounded-full"
+             style="width: {{ degree_progress_percentage|default:0 }}%"></div>
+      </div>
+    </div>
+    <!-- Progress Summary -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+        <p class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+          {{ student.cumulative_gpa|floatformat:2|default:"0.00" }}
+        </p>
+        <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">Cumulative GPA</p>
+      </div>
+      <div class="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+        <p class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+          {{ current_term_gpa|floatformat:2|default:"0.00" }}
+        </p>
+        <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">Term GPA</p>
+      </div>
+      <div class="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+        <p class="text-2xl font-semibold text-gray-900 dark:text-gray-100">{{ current_term_credits|default:0 }}</p>
+        <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">Current Credits</p>
+      </div>
+      <div class="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+        <p class="text-2xl font-semibold text-gray-900 dark:text-gray-100">{{ expected_graduation_year|default:"TBD" }}</p>
+        <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">Expected Grad</p>
+      </div>
+    </div>
+  </div>
+  <!-- Quick Stats Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Financial Summary -->
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <h3 class="text-md font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <i class="fas fa-dollar-sign mr-2 text-gray-400"></i>
+        Financial Summary
+      </h3>
+      <dl class="space-y-2">
+        <div class="flex justify-between">
+          <dt class="text-sm text-gray-500 dark:text-gray-400">Current Balance:</dt>
+          <dd class="text-sm font-medium {% if current_balance > 0 %}text-red-600 dark:text-red-400{% else %}text-green-600 dark:text-green-400{% endif %}">
+            ${{ current_balance|floatformat:2|default:"0.00" }}
+          </dd>
+        </div>
+        <div class="flex justify-between">
+          <dt class="text-sm text-gray-500 dark:text-gray-400">Term Charges:</dt>
+          <dd class="text-sm font-medium text-gray-900 dark:text-gray-100">
+            ${{ term_charges|floatformat:2|default:"0.00" }}
+          </dd>
+        </div>
+        <div class="flex justify-between">
+          <dt class="text-sm text-gray-500 dark:text-gray-400">Financial Aid:</dt>
+          <dd class="text-sm font-medium text-gray-900 dark:text-gray-100">
+            ${{ financial_aid_total|floatformat:2|default:"0.00" }}
+          </dd>
+        </div>
+        {% if payment_due_date %}
+          <div class="pt-2 border-t border-gray-200 dark:border-gray-700">
+            <p class="text-xs text-red-600 dark:text-red-400">
+              <i class="fas fa-exclamation-circle mr-1"></i>
+              Payment due by {{ payment_due_date|date:"M d, Y" }}
+            </p>
+          </div>
+        {% endif %}
+      </dl>
+    </div>
+    <!-- Attendance Summary -->
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <h3 class="text-md font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <i class="fas fa-calendar-check mr-2 text-gray-400"></i>
+        Attendance Summary
+      </h3>
+      <dl class="space-y-2">
+        <div class="flex justify-between">
+          <dt class="text-sm text-gray-500 dark:text-gray-400">Overall Rate:</dt>
+          <dd class="text-sm font-medium text-gray-900 dark:text-gray-100">
+            {{ overall_attendance_rate|floatformat:1|default:"0.0" }}%
+          </dd>
+        </div>
+        <div class="flex justify-between">
+          <dt class="text-sm text-gray-500 dark:text-gray-400">Classes Attended:</dt>
+          <dd class="text-sm font-medium text-gray-900 dark:text-gray-100">
+            {{ classes_attended|default:0 }}
+          </dd>
+        </div>
+        <div class="flex justify-between">
+          <dt class="text-sm text-gray-500 dark:text-gray-400">Total Absences:</dt>
+          <dd class="text-sm font-medium text-gray-900 dark:text-gray-100">
+            {{ total_absences|default:0 }}
+          </dd>
+        </div>
+        {% if attendance_warnings %}
+          <div class="pt-2 border-t border-gray-200 dark:border-gray-700">
+            <p class="text-xs text-orange-600 dark:text-orange-400">
+              <i class="fas fa-exclamation-triangle mr-1"></i>
+              {{ attendance_warnings }} courses with low attendance
+            </p>
+          </div>
+        {% endif %}
+      </dl>
+    </div>
+  </div>
+  <!-- Recent Activity Card -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <i class="fas fa-clock mr-2 text-gray-400"></i>
+      Recent Activity
+    </h2>
+    <div class="space-y-3">
+      {% for activity in recent_activities %}
+        <div class="flex items-start space-x-3">
+          <div class="flex-shrink-0 w-2 h-2 bg-{{ activity.color }}-600 rounded-full mt-1.5"></div>
+          <div class="flex-grow">
+            <p class="text-sm text-gray-900 dark:text-gray-100">{{ activity.description }}</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">{{ activity.timestamp|timesince }} ago</p>
+          </div>
+        </div>
+      {% empty %}
+        <p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4">No recent activity</p>
+      {% endfor %}
+    </div>
+  </div>
+  <!-- Upcoming Events/Deadlines -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <i class="fas fa-calendar-alt mr-2 text-gray-400"></i>
+      Upcoming Events & Deadlines
+    </h2>
+    <div class="space-y-3">
+      {% for event in upcoming_events %}
+        <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+          <div class="flex items-center space-x-3">
+            <div class="flex-shrink-0">
+              <i class="fas {{ event.icon }} text-{{ event.color }}-500"></i>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ event.title }}</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">{{ event.description }}</p>
+            </div>
+          </div>
+          <span class="text-sm text-gray-600 dark:text-gray-400">{{ event.date|date:"M d" }}</span>
+        </div>
+      {% empty %}
+        <p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4">No upcoming events</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>

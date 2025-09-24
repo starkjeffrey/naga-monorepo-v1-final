@@ -1,0 +1,116 @@
+{% load i18n %}
+
+<div class="max-w-2xl">
+  <div class="flex items-center justify-between mb-6">
+    <h3 class="text-lg font-semibold text-gray-900">{% trans "Create New Role" %}</h3>
+    <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
+  <form hx-post="{% url 'users:create_role' %}" 
+        hx-target="#form-response"
+        hx-swap="innerHTML">
+    
+    <!-- Role Basic Info -->
+    <div class="space-y-4 mb-6">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+          {% trans "Role Name" %} <span class="text-red-500">*</span>
+        </label>
+        <input type="text" 
+               name="role_name"
+               required
+               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+               placeholder="{% trans 'Enter role name...' %}">
+      </div>
+      
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+          {% trans "Description" %}
+        </label>
+        <textarea name="role_description"
+                  rows="3"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="{% trans 'Optional description for this role...' %}"></textarea>
+      </div>
+    </div>
+
+    <!-- Permissions Selection -->
+    <div class="mb-6">
+      <h4 class="text-sm font-medium text-gray-700 mb-3">{% trans "Permissions" %}</h4>
+      <div class="max-h-64 overflow-y-auto border border-gray-200 rounded-lg p-4">
+        {% for app_label, permissions in permissions_by_app.items %}
+          <div class="mb-4">
+            <h5 class="font-medium text-gray-800 mb-2 capitalize">
+              <i class="fas fa-cube mr-1"></i>
+              {{ app_label|title }}
+            </h5>
+            <div class="grid grid-cols-1 gap-2 ml-4">
+              {% for permission in permissions %}
+                <label class="flex items-center">
+                  <input type="checkbox" 
+                         name="permissions" 
+                         value="{{ permission.id }}"
+                         class="rounded text-blue-600 focus:ring-blue-500">
+                  <span class="ml-2 text-sm text-gray-700">
+                    {{ permission.name }}
+                  </span>
+                  <span class="ml-auto text-xs text-gray-500">
+                    {{ permission.codename }}
+                  </span>
+                </label>
+              {% endfor %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Form Response Area -->
+    <div id="form-response" class="mb-4"></div>
+
+    <!-- Form Actions -->
+    <div class="flex justify-end space-x-3">
+      <button type="button" 
+              onclick="closeModal()"
+              class="btn btn-secondary">
+        {% trans "Cancel" %}
+      </button>
+      <button type="submit" 
+              class="btn btn-primary">
+        <i class="fas fa-plus mr-2"></i>
+        {% trans "Create Role" %}
+      </button>
+    </div>
+  </form>
+</div>
+
+<script>
+// Handle form submission response
+document.addEventListener('htmx:afterRequest', function(evt) {
+  if (evt.detail.target.id === 'form-response') {
+    const response = JSON.parse(evt.detail.xhr.response);
+    
+    if (response.success) {
+      showToast(response.message, 'success');
+      closeModal();
+      // Reload page to show new role
+      setTimeout(() => window.location.reload(), 1000);
+    } else {
+      evt.detail.target.innerHTML = `
+        <div class="bg-red-50 border border-red-200 rounded-md p-3">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <i class="fas fa-exclamation-circle text-red-400"></i>
+            </div>
+            <div class="ml-3">
+              <p class="text-sm text-red-800">${response.error}</p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+  }
+});
+</script>

@@ -1,0 +1,128 @@
+{# Term Selector Component with HTMX #}
+{# Usage: {% include 'scheduling/components/term_selector.html' with current_term=current_term %} #}
+{% load i18n %}
+
+<div class="relative inline-block text-left">
+  <div>
+    <button type="button"
+            class="inline-flex w-full justify-between rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            id="term-selector-button"
+            aria-expanded="false"
+            aria-haspopup="true"
+            onclick="toggleTermDropdown()">
+      <span class="flex items-center">
+        <svg class="mr-2 h-5 w-5 text-gray-400"
+             fill="none"
+             stroke="currentColor"
+             viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        <span id="selected-term-text">
+          {% if current_term %}
+            {{ current_term.name }} ({{ current_term.start_date|date:"M d" }} - {{ current_term.end_date|date:"M d, Y" }})
+          {% else %}
+            {% trans "Select Term" %}
+          {% endif %}
+        </span>
+      </span>
+      <svg class="ml-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+      </svg>
+    </button>
+  </div>
+  <div class="absolute right-0 z-10 mt-2 w-96 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden"
+       id="term-dropdown"
+       role="menu"
+       aria-orientation="vertical"
+       aria-labelledby="term-selector-button">
+    <div class="py-1" role="none">
+      <!-- Current Terms -->
+      <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">{% trans "Current Terms" %}</div>
+      {% for term in current_terms %}
+        <a href="#"
+           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 {% if term.id == current_term.id %}bg-blue-50 text-blue-700{% endif %}"
+           role="menuitem"
+           hx-get="{% url 'scheduling:set_term' term.id %}"
+           hx-target="#main-content"
+           hx-swap="innerHTML"
+           hx-push-url="true"
+           onclick="selectTerm('{{ term.name }} ({{ term.start_date|date:"M d" }} - {{ term.end_date|date:"M d, Y" }})')">
+          <div class="flex justify-between items-center">
+            <div>
+              <div class="font-medium">{{ term.name }}</div>
+              <div class="text-xs text-gray-500">{{ term.start_date|date:"M d" }} - {{ term.end_date|date:"M d, Y" }}</div>
+            </div>
+            {% if term.id == current_term.id %}
+              <svg class="h-5 w-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+              </svg>
+            {% endif %}
+          </div>
+        </a>
+      {% empty %}
+        <div class="px-4 py-2 text-sm text-gray-500">{% trans "No current terms available" %}</div>
+      {% endfor %}
+      <!-- Future Terms -->
+      {% if future_terms %}
+        <div class="border-t border-gray-100"></div>
+        <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">{% trans "Future Terms" %}</div>
+        {% for term in future_terms %}
+          <a href="#"
+             class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+             role="menuitem"
+             hx-get="{% url 'scheduling:set_term' term.id %}"
+             hx-target="#main-content"
+             hx-swap="innerHTML"
+             hx-push-url="true"
+             onclick="selectTerm('{{ term.name }} ({{ term.start_date|date:"M d" }} - {{ term.end_date|date:"M d, Y" }})')">
+            <div>
+              <div class="font-medium">{{ term.name }}</div>
+              <div class="text-xs text-gray-500">{{ term.start_date|date:"M d" }} - {{ term.end_date|date:"M d, Y" }}</div>
+            </div>
+          </a>
+        {% endfor %}
+      {% endif %}
+      <!-- Past Terms Link -->
+      <div class="border-t border-gray-100"></div>
+      <a href="{% url 'scheduling:archive' %}"
+         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+         role="menuitem">
+        <div class="flex items-center">
+          <svg class="mr-2 h-4 w-4 text-gray-400"
+               fill="none"
+               stroke="currentColor"
+               viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          {% trans "View Past Terms" %}
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+<script>
+  function toggleTermDropdown() {
+    const dropdown = document.getElementById('term-dropdown');
+    const button = document.getElementById('term-selector-button');
+    const isHidden = dropdown.classList.contains('hidden');
+
+    dropdown.classList.toggle('hidden');
+    button.setAttribute('aria-expanded', !isHidden);
+  }
+
+  function selectTerm(termText) {
+    document.getElementById('selected-term-text').textContent = termText;
+    toggleTermDropdown();
+  }
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(event) {
+    const dropdown = document.getElementById('term-dropdown');
+    const button = document.getElementById('term-selector-button');
+
+    if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+      dropdown.classList.add('hidden');
+      button.setAttribute('aria-expanded', 'false');
+    }
+  });
+</script>

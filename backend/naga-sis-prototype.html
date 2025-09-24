@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Naga SIS - Student Information System</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --primary: #1e40af;
+        --primary-dark: #1e3a8a;
+        --secondary: #dc2626;
+        --success: #16a34a;
+        --warning: #eab308;
+        --danger: #dc2626;
+        --light: #f8fafc;
+        --dark: #1e293b;
+        --border: #e2e8f0;
+        --shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+        --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+          sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .login-container {
+        background: white;
+        border-radius: 16px;
+        box-shadow: var(--shadow-lg);
+        width: 100%;
+        max-width: 420px;
+        padding: 40px;
+        animation: slideIn 0.5s ease-out;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .login-header {
+        text-align: center;
+        margin-bottom: 32px;
+      }
+
+      .logo {
+        width: 120px;
+        height: 120px;
+        background: white;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        padding: 6px;
+      }
+
+      .logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      h1 {
+        color: var(--dark);
+        font-size: 24px;
+        margin-bottom: 8px;
+      }
+
+      .subtitle {
+        color: #64748b;
+        font-size: 14px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 6px;
+        color: var(--dark);
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+      }
+
+      input:focus,
+      select:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+      }
+
+      .btn {
+        width: 100%;
+        padding: 12px;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .btn:hover {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow);
+      }
+
+      .language-switch {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 20px;
+      }
+
+      .lang-btn {
+        padding: 6px 12px;
+        background: var(--light);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .lang-btn.active {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+      }
+
+      /* Dashboard Styles */
+      .dashboard {
+        display: none;
+        width: 100vw;
+        height: 100vh;
+        background: #f1f5f9;
+      }
+
+      .sidebar {
+        width: 260px;
+        background: white;
+        height: 100vh;
+        position: fixed;
+        left: 0;
+        top: 0;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+        overflow-y: auto;
+      }
+
+      .sidebar-header {
+        padding: 24px;
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        color: white;
+      }
+
+      .sidebar-logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 8px;
+      }
+
+      .sidebar-logo-icon {
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        font-weight: bold;
+      }
+
+      .sidebar-title {
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .user-info {
+        font-size: 12px;
+        opacity: 0.9;
+        margin-top: 4px;
+      }
+
+      .nav-menu {
+        padding: 16px 0;
+      }
+
+      .nav-section {
+        margin-bottom: 24px;
+      }
+
+      .nav-section-title {
+        padding: 8px 24px;
+        font-size: 11px;
+        font-weight: 600;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .nav-item {
+        padding: 12px 24px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: #475569;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .nav-item:hover {
+        background: #f8fafc;
+        color: var(--primary);
+      }
+
+      .nav-item.active {
+        background: #eff6ff;
+        color: var(--primary);
+      }
+
+      .nav-item.active::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: var(--primary);
+      }
+
+      .nav-icon {
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .main-content {
+        margin-left: 260px;
+        padding: 24px;
+        min-height: 100vh;
+      }
+
+      .header {
+        background: white;
+        border-radius: 12px;
+        padding: 20px 24px;
+        margin-bottom: 24px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .page-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--dark);
+      }
+
+      .header-actions {
+        display: flex;
+        gap: 12px;
+      }
+
+      .header-btn {
+        padding: 8px 16px;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .header-btn:hover {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 24px;
+      }
+
+      .stat-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .stat-label {
+        font-size: 13px;
+        color: #64748b;
+        margin-bottom: 8px;
+      }
+
+      .stat-value {
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 8px;
+      }
+
+      .stat-change {
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .stat-change.positive {
+        color: var(--success);
+      }
+
+      .stat-change.negative {
+        color: var(--danger);
+      }
+
+      .content-card {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        margin-bottom: 24px;
+      }
+
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .card-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--dark);
+      }
+
+      .table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .table th {
+        text-align: left;
+        padding: 12px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .table td {
+        padding: 12px;
+        font-size: 14px;
+        color: var(--dark);
+        border-bottom: 1px solid #f1f5f9;
+      }
+
+      .table tr:hover {
+        background: #f8fafc;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .badge-success {
+        background: #dcfce7;
+        color: #14532d;
+      }
+
+      .badge-warning {
+        background: #fef3c7;
+        color: #713f12;
+      }
+
+      .badge-danger {
+        background: #fee2e2;
+        color: #7f1d1d;
+      }
+
+      .badge-info {
+        background: #dbeafe;
+        color: #1e3a8a;
+      }
+
+      .action-btn {
+        padding: 6px 12px;
+        background: transparent;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .action-btn:hover {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+      }
+
+      .tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 24px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .tab {
+        padding: 12px 20px;
+        background: transparent;
+        border: none;
+        color: #64748b;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        position: relative;
+        transition: all 0.3s ease;
+      }
+
+      .tab:hover {
+        color: var(--primary);
+      }
+
+      .tab.active {
+        color: var(--primary);
+      }
+
+      .tab.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--primary);
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal-content {
+        background: white;
+        border-radius: 12px;
+        padding: 32px;
+        max-width: 500px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        animation: modalSlideIn 0.3s ease-out;
+      }
+
+      @keyframes modalSlideIn {
+        from {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .modal-header {
+        margin-bottom: 24px;
+      }
+
+      .modal-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--dark);
+      }
+
+      .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 24px;
+      }
+
+      .btn-secondary {
+        background: transparent;
+        color: var(--dark);
+        border: 1px solid var(--border);
+      }
+
+      .btn-secondary:hover {
+        background: var(--light);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Login Screen -->
+    <div class="login-container" id="loginScreen">
+      <div class="login-header">
+        <div class="logo">
+          <img src="static/images/naga-trans.png" alt="Naga Logo">
+        </div>
+        <h1>Naga SIS</h1>
+        <p class="subtitle">Pannasastra University of Cambodia, Siem Reap Campus</p>
+      </div>
+      <form onsubmit="login(event)">
+        <div class="form-group">
+          <label for="username">Username / Email</label>
+          <input type="text" id="username" placeholder="Enter your username" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password"
+                 id="password"
+                 placeholder="Enter your password"
+                 required />
+        </div>
+        <div class="form-group">
+          <label for="role">Login As</label>
+          <select id="role" required>
+            <option value="student">Student</option>
+            <option value="teacher">Teacher</option>
+            <option value="staff">Academic Staff</option>
+            <option value="finance">Financial Staff</option>
+            <option value="admin">Administrator</option>
+          </select>
+        </div>
+        <button type="submit" class="btn">Sign In</button>
+      </form>
+      <div class="language-switch">
+        <button class="lang-btn active">English</button>
+        <button class="lang-btn">ខ្មែរ (Khmer)</button>
+      </div>
+    </div>
+    <!-- Dashboard -->
+    <div class="dashboard" id="dashboard">
+      <div class="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">N</div>
+            <div>
+              <div class="sidebar-title">Naga SIS</div>
+              <div class="user-info" id="userRole">Administrator</div>
+            </div>
+          </div>
+        </div>
+        <nav class="nav-menu" id="navMenu">
+          <!-- Navigation will be populated based on user role -->
+        </nav>
+      </div>
+      <div class="main-content">
+        <div class="header">
+          <h2 class="page-title" id="pageTitle">Dashboard</h2>
+          <div class="header-actions">
+            <button class="header-btn" onclick="showModal('newStudent')">+ New Student</button>
+            <button class="header-btn" onclick="logout()">Logout</button>
+          </div>
+        </div>
+        <div id="contentArea">
+          <!-- Content will be loaded dynamically -->
+        </div>
+      </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal" id="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="modalTitle">New Student Registration</h3>
+        </div>
+        <div id="modalBody">
+          <!-- Modal content will be loaded dynamically -->
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+          <button class="btn" onclick="saveModal()">Save</button>
+        </div>
+      </div>
+    </div>
+    <script>
+      // Navigation structure based on user roles
+      const navigationStructure = {
+        admin: [{
+          title: 'Main',
+          items: [{
+            name: 'Dashboard',
+            icon: '📊',
+            page: 'dashboard'
+          }, {
+            name: 'Students',
+            icon: '👥',
+            page: 'students'
+          }, {
+            name: 'Teachers',
+            icon: '👨‍🏫',
+            page: 'teachers'
+          }, {
+            name: 'Courses',
+            icon: '📚',
+            page: 'courses'
+          }, {
+            name: 'Classes',
+            icon: '🏫',
+            page: 'classes'
+          }, ],
+        }, {
+          title: 'Academic',
+          items: [{
+            name: 'Enrollment',
+            icon: '📝',
+            page: 'enrollment'
+          }, {
+            name: 'Grades',
+            icon: '📊',
+            page: 'grades'
+          }, {
+            name: 'Transcripts',
+            icon: '📄',
+            page: 'transcripts'
+          }, {
+            name: 'Schedules',
+            icon: '📅',
+            page: 'schedules'
+          }, ],
+        }, {
+          title: 'Financial',
+          items: [{
+            name: 'Billing',
+            icon: '💰',
+            page: 'billing'
+          }, {
+            name: 'Payments',
+            icon: '💳',
+            page: 'payments'
+          }, {
+            name: 'Scholarships',
+            icon: '🎓',
+            page: 'scholarships'
+          }, {
+            name: 'Reports',
+            icon: '📈',
+            page: 'reports'
+          }, ],
+        }, {
+          title: 'Settings',
+          items: [{
+            name: 'System Config',
+            icon: '⚙️',
+            page: 'config'
+          }, {
+            name: 'Users',
+            icon: '👤',
+            page: 'users'
+          }, {
+            name: 'Backup',
+            icon: '💾',
+            page: 'backup'
+          }, ],
+        }, ],
+        student: [{
+          title: 'My Academic',
+          items: [{
+            name: 'Dashboard',
+            icon: '📊',
+            page: 'dashboard'
+          }, {
+            name: 'My Courses',
+            icon: '📚',
+            page: 'mycourses'
+          }, {
+            name: 'Schedule',
+            icon: '📅',
+            page: 'schedule'
+          }, {
+            name: 'Grades',
+            icon: '📊',
+            page: 'grades'
+          }, {
+            name: 'Transcript',
+            icon: '📄',
+            page: 'transcript'
+          }, ],
+        }, {
+          title: 'Registration',
+          items: [{
+            name: 'Course Registration',
+            icon: '📝',
+            page: 'registration'
+          }, {
+            name: 'Drop/Add',
+            icon: '🔄',
+            page: 'dropadd'
+          }, ],
+        }, {
+          title: 'Financial',
+          items: [{
+            name: 'Account Balance',
+            icon: '💰',
+            page: 'balance'
+          }, {
+            name: 'Make Payment',
+            icon: '💳',
+            page: 'payment'
+          }, {
+            name: 'Payment History',
+            icon: '📜',
+            page: 'history'
+          }, ],
+        }, ],
+        teacher: [{
+          title: 'Teaching',
+          items: [{
+            name: 'Dashboard',
+            icon: '📊',
+            page: 'dashboard'
+          }, {
+            name: 'My Classes',
+            icon: '🏫',
+            page: 'myclasses'
+          }, {
+            name: 'Attendance',
+            icon: '✅',
+            page: 'attendance'
+          }, {
+            name: 'Grade Entry',
+            icon: '📝',
+            page: 'grading'
+          }, ],
+        }, {
+          title: 'Academic',
+          items: [{
+            name: 'Student Lists',
+            icon: '👥',
+            page: 'students'
+          }, {
+            name: 'Schedule',
+            icon: '📅',
+            page: 'schedule'
+          }, {
+            name: 'Reports',
+            icon: '📈',
+            page: 'reports'
+          }, ],
+        }, ],
+        staff: [{
+          title: 'Student Services',
+          items: [{
+            name: 'Dashboard',
+            icon: '📊',
+            page: 'dashboard'
+          }, {
+            name: 'Student Records',
+            icon: '👥',
+            page: 'students'
+          }, {
+            name: 'Enrollment',
+            icon: '📝',
+            page: 'enrollment'
+          }, {
+            name: 'Transcripts',
+            icon: '📄',
+            page: 'transcripts'
+          }, ],
+        }, {
+          title: 'Academic',
+          items: [{
+            name: 'Course Management',
+            icon: '📚',
+            page: 'courses'
+          }, {
+            name: 'Class Scheduling',
+            icon: '📅',
+            page: 'scheduling'
+          }, {
+            name: 'Grade Management',
+            icon: '📊',
+            page: 'grades'
+          }, ],
+        }, ],
+        finance: [{
+          title: 'Financial',
+          items: [{
+            name: 'Dashboard',
+            icon: '📊',
+            page: 'dashboard'
+          }, {
+            name: 'Student Accounts',
+            icon: '👥',
+            page: 'accounts'
+          }, {
+            name: 'Billing',
+            icon: '💰',
+            page: 'billing'
+          }, {
+            name: 'Payments',
+            icon: '💳',
+            page: 'payments'
+          }, {
+            name: 'Cashier Session',
+            icon: '🏧',
+            page: 'cashier'
+          }, ],
+        }, {
+          title: 'Reports',
+          items: [{
+            name: 'Daily Reconciliation',
+            icon: '📋',
+            page: 'reconciliation'
+          }, {
+            name: 'Financial Reports',
+            icon: '📈',
+            page: 'reports'
+          }, {
+            name: 'Scholarship Reports',
+            icon: '🎓',
+            page: 'scholarships'
+          }, ],
+        }, ],
+      }
+
+      // Content templates for different pages
+      const pageContent = {
+        dashboard: `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Students</div>
+                        <div class="stat-value">2,847</div>
+                        <div class="stat-change positive">↑ 12% from last term</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Active Classes</div>
+                        <div class="stat-value">156</div>
+                        <div class="stat-change positive">↑ 8% from last term</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Pending Payments</div>
+                        <div class="stat-value">$45,320</div>
+                        <div class="stat-change negative">↓ 5% from last month</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Graduation Rate</div>
+                        <div class="stat-value">87.3%</div>
+                        <div class="stat-change positive">↑ 2.1% from last year</div>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Recent Enrollments</h3>
+                        <button class="action-btn">View All</button>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Student ID</th>
+                                <th>Name</th>
+                                <th>Program</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>STU-2025-001</td>
+                                <td>Sokha Dara</td>
+                                <td>BA Business Admin</td>
+                                <td><span class="badge badge-success">Active</span></td>
+                                <td><button class="action-btn">View</button></td>
+                            </tr>
+                            <tr>
+                                <td>STU-2025-002</td>
+                                <td>Chenda Sophea</td>
+                                <td>IEAP Level 3</td>
+                                <td><span class="badge badge-warning">Pending</span></td>
+                                <td><button class="action-btn">View</button></td>
+                            </tr>
+                            <tr>
+                                <td>STU-2025-003</td>
+                                <td>Vuthea Kosal</td>
+                                <td>MBA Program</td>
+                                <td><span class="badge badge-success">Active</span></td>
+                                <td><button class="action-btn">View</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            `,
+        students: `
+                <div class="content-card">
+                    <div class="tabs">
+                        <button class="tab active">All Students</button>
+                        <button class="tab">Language Division</button>
+                        <button class="tab">Academic Division</button>
+                        <button class="tab">Graduated</button>
+                        <button class="tab">Dropped</button>
+                    </div>
+
+                    <div class="card-header">
+                        <h3 class="card-title">Student Management</h3>
+                        <button class="header-btn" onclick="showModal('newStudent')">+ Add Student</button>
+                    </div>
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Student ID</th>
+                                <th>Name (English/Khmer)</th>
+                                <th>Program</th>
+                                <th>Level/Year</th>
+                                <th>Status</th>
+                                <th>Monk Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>STU-2025-001</td>
+                                <td>Sokha Dara / សុខា ដារា</td>
+                                <td>BA Business Admin</td>
+                                <td>Year 2</td>
+                                <td><span class="badge badge-success">Active</span></td>
+                                <td>No</td>
+                                <td>
+                                    <button class="action-btn">Edit</button>
+                                    <button class="action-btn">View</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>STU-2024-156</td>
+                                <td>Venerable Soma / ព្រះ សូម៉ា</td>
+                                <td>IEAP Program</td>
+                                <td>Level 4</td>
+                                <td><span class="badge badge-success">Active</span></td>
+                                <td><span class="badge badge-info">Monk</span></td>
+                                <td>
+                                    <button class="action-btn">Edit</button>
+                                    <button class="action-btn">View</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>STU-2024-089</td>
+                                <td>Pisey Chan / ពិសី ចាន់</td>
+                                <td>MEd TESOL</td>
+                                <td>Year 1</td>
+                                <td><span class="badge badge-success">Active</span></td>
+                                <td>No</td>
+                                <td>
+                                    <button class="action-btn">Edit</button>
+                                    <button class="action-btn">View</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            `,
+        enrollment: `
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Course Enrollment</h3>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Student ID / Name</label>
+                            <input type="text" placeholder="Search student..." />
+                        </div>
+                        <div class="form-group">
+                            <label>Term</label>
+                            <select>
+                                <option>Fall 2025</option>
+                                <option>Spring 2025</option>
+                                <option>Summer 2025</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Program</label>
+                            <select>
+                                <option>All Programs</option>
+                                <option>IEAP</option>
+                                <option>GESL</option>
+                                <option>BA Business</option>
+                                <option>MBA</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Course Code</th>
+                                <th>Course Name</th>
+                                <th>Section</th>
+                                <th>Schedule</th>
+                                <th>Credits</th>
+                                <th>Available</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>BUS-101</td>
+                                <td>Introduction to Business</td>
+                                <td>A</td>
+                                <td>MWF 9:00-10:30</td>
+                                <td>3</td>
+                                <td>12/30</td>
+                                <td><button class="action-btn">Enroll</button></td>
+                            </tr>
+                            <tr>
+                                <td>IEAP-04</td>
+                                <td>Academic English Level 4</td>
+                                <td>B</td>
+                                <td>MTWThF 8:00-12:00</td>
+                                <td>12</td>
+                                <td>5/20</td>
+                                <td><button class="action-btn">Enroll</button></td>
+                            </tr>
+                            <tr>
+                                <td>MGT-301</td>
+                                <td>Strategic Management</td>
+                                <td>A</td>
+                                <td>TTh 14:00-15:30</td>
+                                <td>3</td>
+                                <td>8/25</td>
+                                <td><button class="action-btn">Enroll</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            `,
+        billing: `
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Student Billing</h3>
+                        <button class="header-btn" onclick="showModal('newInvoice')">Generate Invoice</button>
+                    </div>
+
+                    <div class="tabs">
+                        <button class="tab active">Pending Invoices</button>
+                        <button class="tab">Paid</button>
+                        <button class="tab">Overdue</button>
+                        <button class="tab">Scholarships</button>
+                    </div>
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Invoice #</th>
+                                <th>Student</th>
+                                <th>Program</th>
+                                <th>Amount (USD)</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>INV-2025-0156</td>
+                                <td>Sokha Dara</td>
+                                <td>BA Business</td>
+                                <td>$1,250.00</td>
+                                <td>2025-02-15</td>
+                                <td><span class="badge badge-warning">Pending</span></td>
+                                <td>
+                                    <button class="action-btn">View</button>
+                                    <button class="action-btn">Pay</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>INV-2025-0157</td>
+                                <td>Venerable Soma</td>
+                                <td>IEAP Level 4</td>
+                                <td>$450.00</td>
+                                <td>2025-02-15</td>
+                                <td><span class="badge badge-info">Scholarship</span></td>
+                                <td>
+                                    <button class="action-btn">View</button>
+                                    <button class="action-btn">Process</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>INV-2025-0158</td>
+                                <td>Pisey Chan</td>
+                                <td>MEd TESOL</td>
+                                <td>$2,100.00</td>
+                                <td>2025-02-10</td>
+                                <td><span class="badge badge-danger">Overdue</span></td>
+                                <td>
+                                    <button class="action-btn">View</button>
+                                    <button class="action-btn">Remind</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            `,
+      }
+
+      // Modal content templates
+      const modalContent = {
+        newStudent: `
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>First Name (English) *</label>
+                        <input type="text" placeholder="Enter first name" />
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name (English) *</label>
+                        <input type="text" placeholder="Enter last name" />
+                    </div>
+                    <div class="form-group">
+                        <label>First Name (Khmer)</label>
+                        <input type="text" placeholder="នាមត្រកូល" />
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name (Khmer)</label>
+                        <input type="text" placeholder="នាមខ្លួន" />
+                    </div>
+                    <div class="form-group">
+                        <label>Date of Birth *</label>
+                        <input type="date" />
+                    </div>
+                    <div class="form-group">
+                        <label>Gender *</label>
+                        <select>
+                            <option>Male</option>
+                            <option>Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Monk Status</label>
+                        <select>
+                            <option>No</option>
+                            <option>Yes - Full Monk</option>
+                            <option>Yes - Novice</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Program *</label>
+                        <select>
+                            <option>IEAP - Intensive English</option>
+                            <option>GESL - General English</option>
+                            <option>BA - Business Administration</option>
+                            <option>BA - Computer Science</option>
+                            <option>MBA - Master of Business</option>
+                            <option>MEd - TESOL</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Entry Level/Year</label>
+                        <select>
+                            <option>Level 1 / Year 1</option>
+                            <option>Level 2 / Year 2</option>
+                            <option>Level 3 / Year 3</option>
+                            <option>Level 4 / Year 4</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Study Time</label>
+                        <select>
+                            <option>Morning (8:00-12:00)</option>
+                            <option>Afternoon (13:00-17:00)</option>
+                            <option>Evening (17:30-20:30)</option>
+                            <option>Weekend</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" placeholder="student@email.com" />
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" placeholder="+855 12 345 678" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Address</label>
+                    <input type="text" placeholder="Enter full address" />
+                </div>
+                <div class="form-group">
+                    <label>Emergency Contact Name</label>
+                    <input type="text" placeholder="Parent/Guardian name" />
+                </div>
+                <div class="form-group">
+                    <label>Emergency Contact Phone</label>
+                    <input type="tel" placeholder="+855 12 345 678" />
+                </div>
+            `,
+        newInvoice: `
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Student *</label>
+                        <input type="text" placeholder="Search student by ID or name..." />
+                    </div>
+                    <div class="form-group">
+                        <label>Term *</label>
+                        <select>
+                            <option>Fall 2025</option>
+                            <option>Spring 2025</option>
+                            <option>Summer 2025</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Invoice Items</label>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Quantity</th>
+                                <th>Unit Price</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Tuition Fee - BA Program</td>
+                                <td>1</td>
+                                <td>$1,200.00</td>
+                                <td>$1,200.00</td>
+                            </tr>
+                            <tr>
+                                <td>Registration Fee</td>
+                                <td>1</td>
+                                <td>$50.00</td>
+                                <td>$50.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Discount Type</label>
+                        <select>
+                            <option>None</option>
+                            <option>Early Registration (10%)</option>
+                            <option>Academic Excellence (20%)</option>
+                            <option>Monk Discount (50%)</option>
+                            <option>Full Scholarship (100%)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Due Date *</label>
+                        <input type="date" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Notes</label>
+                    <textarea placeholder="Additional notes..." style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; min-height: 80px;"></textarea>
+                </div>
+            `,
+      }
+
+      // Login function
+      function login(event) {
+        event.preventDefault()
+        const role = document.getElementById('role').value
+        const username = document.getElementById('username').value
+
+        // Show dashboard
+        document.getElementById('loginScreen').style.display = 'none'
+        document.getElementById('dashboard').style.display = 'block'
+
+        // Update user info
+        const roleDisplay = role.charAt(0).toUpperCase() + role.slice(1)
+        document.getElementById('userRole').textContent = `${roleDisplay} - ${username}`
+
+        // Load navigation based on role
+        loadNavigation(role)
+
+        // Load default content
+        loadContent('dashboard')
+      }
+
+      // Logout function
+      function logout() {
+        document.getElementById('dashboard').style.display = 'none'
+        document.getElementById('loginScreen').style.display = 'flex'
+        document.getElementById('username').value = ''
+        document.getElementById('password').value = ''
+      }
+
+      // Load navigation based on user role
+      function loadNavigation(role) {
+        const navMenu = document.getElementById('navMenu')
+        const navigation = navigationStructure[role] || navigationStructure['student']
+
+        navMenu.innerHTML = ''
+
+        navigation.forEach(section => {
+          const sectionHtml = `
+                    <div class="nav-section">
+                        <div class="nav-section-title">${section.title}</div>
+                        ${section.items
+                          .map(
+                            item => `
+                            <div class="nav-item ${ item.page === 'dashboard' ? 'active' : '' }" onclick="loadContent('${item.page}')">
+                                <span class="nav-icon">${item.icon}</span>
+                                <span>${item.name}</span>
+                            </div>
+                        `
+                          )
+                          .join('')}
+                    </div>
+                `
+          navMenu.innerHTML += sectionHtml
+        })
+      }
+
+      // Load content based on page
+      function loadContent(page) {
+        const contentArea = document.getElementById('contentArea')
+        const pageTitle = document.getElementById('pageTitle')
+
+        // Update active navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+          item.classList.remove('active')
+        })
+        event.target?.closest('.nav-item')?.classList.add('active')
+
+        // Update page title
+        const pageTitles = {
+          dashboard: 'Dashboard',
+          students: 'Student Management',
+          teachers: 'Teacher Management',
+          courses: 'Course Management',
+          classes: 'Class Management',
+          enrollment: 'Enrollment Management',
+          grades: 'Grade Management',
+          billing: 'Billing & Invoices',
+          payments: 'Payment Processing',
+        }
+
+        pageTitle.textContent = pageTitles[page] || 'Dashboard'
+
+        // Load content
+        contentArea.innerHTML = pageContent[page] || pageContent['dashboard']
+      }
+
+      // Modal functions
+      function showModal(type) {
+        const modal = document.getElementById('modal')
+        const modalTitle = document.getElementById('modalTitle')
+        const modalBody = document.getElementById('modalBody')
+
+        const titles = {
+          newStudent: 'New Student Registration',
+          newInvoice: 'Generate Invoice',
+        }
+
+        modalTitle.textContent = titles[type] || 'Modal'
+        modalBody.innerHTML = modalContent[type] || '<p>Content not available</p>'
+
+        modal.style.display = 'flex'
+      }
+
+      function closeModal() {
+        document.getElementById('modal').style.display = 'none'
+      }
+
+      function saveModal() {
+        alert('Data saved successfully!')
+        closeModal()
+      }
+
+      // Close modal when clicking outside
+      document.getElementById('modal').addEventListener('click', function(e) {
+        if (e.target === this) {
+          closeModal()
+        }
+      })
+    </script>
+  </body>
+</html>

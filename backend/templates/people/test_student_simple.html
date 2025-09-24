@@ -1,0 +1,156 @@
+{% extends "base_new.html" %}
+
+{% load static i18n %}
+
+{% block title %}CSS Test - Student Profile{% endblock %}
+{% block content %}
+  <div class="h-full flex flex-col">
+    <!-- Simple Header to Test CSS -->
+    <div class="bg-white border-b border-gray-200 px-6 py-4">
+      <div class="flex items-start justify-between">
+        <div class="flex items-center space-x-4">
+          <div class="h-20 w-20 rounded-full bg-gray-200 flex items-center justify-center">
+            <i class="fas fa-user text-2xl text-gray-400"></i>
+          </div>
+          <div>
+            <h1 class="text-2xl font-semibold text-gray-900">John Doe (CSS Test)</h1>
+            <div class="flex items-center space-x-4 mt-1 text-sm text-gray-600">
+              <span><i class="fas fa-id-card mr-1"></i>TEST123</span>
+              <span><i class="fas fa-graduation-cap mr-1"></i>Computer Science</span>
+              <span><i class="fas fa-calendar mr-1"></i>Class of 2024</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center space-x-2">
+          <button class="px-3 py-1.5 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+            <i class="fas fa-envelope mr-1"></i>Email
+          </button>
+          <button class="px-3 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+            <i class="fas fa-edit mr-1"></i>Edit
+          </button>
+        </div>
+      </div>
+      <!-- Key Metrics Bar -->
+      <div class="grid grid-cols-6 gap-4 mt-4 pt-4 border-t border-gray-200">
+        <div class="text-center">
+          <p class="text-2xl font-semibold text-gray-900">3.85</p>
+          <p class="text-xs text-gray-600">Cumulative GPA</p>
+        </div>
+        <div class="text-center">
+          <p class="text-2xl font-semibold text-gray-900">75</p>
+          <p class="text-xs text-gray-600">Credits Earned</p>
+        </div>
+        <div class="text-center">
+          <p class="text-2xl font-semibold text-gray-900">15</p>
+          <p class="text-xs text-gray-600">Current Credits</p>
+        </div>
+        <div class="text-center">
+          <p class="text-2xl font-semibold text-red-600">-$1250</p>
+          <p class="text-xs text-gray-600">Balance</p>
+        </div>
+        <div class="text-center">
+          <p class="text-2xl font-semibold text-gray-900">94%</p>
+          <p class="text-xs text-gray-600">Attendance</p>
+        </div>
+        <div class="text-center">
+          <p class="text-2xl font-semibold text-gray-900">
+            <i class="fas fa-check-circle text-green-500"></i>
+          </p>
+          <p class="text-xs text-gray-600">Registration</p>
+        </div>
+      </div>
+    </div>
+    <!-- Simple Tab Navigation -->
+    <div class="bg-white border-b border-gray-200">
+      <nav class="flex space-x-8 px-6" aria-label="Profile sections">
+        <button class="py-3 px-1 border-b-2 border-blue-500 text-sm font-medium text-blue-600">Overview</button>
+        <button class="py-3 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
+          Academic
+        </button>
+        <button class="py-3 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
+          Enrollment
+          <span class="ml-1 bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full text-xs">2</span>
+        </button>
+      </nav>
+    </div>
+    <!-- Simple Content -->
+    <div class="flex-1 overflow-y-auto bg-gray-50 p-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Test Card -->
+        <div class="lg:col-span-2">
+          <div class="bg-white rounded-lg shadow-sm p-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">CSS Test Card</h2>
+            <div class="space-y-3">
+              <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                <div class="flex-1">
+                  <p class="font-medium text-gray-900">ENG101 - English Composition</p>
+                  <p class="text-sm text-gray-600">MWF 9:00-10:30</p>
+                </div>
+                <div class="ml-4 text-right flex-shrink-0">
+                  <p class="text-sm font-medium text-gray-900">3 credits</p>
+                  <p class="text-sm text-gray-600">Grade: A-</p>
+                </div>
+              </div>
+              <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                <div class="flex-1">
+                  <p class="font-medium text-gray-900">MATH201 - Calculus I</p>
+                  <p class="text-sm text-gray-600">TTh 11:00-12:30</p>
+                </div>
+                <div class="ml-4 text-right flex-shrink-0">
+                  <p class="text-sm font-medium text-gray-900">3 credits</p>
+                  <p class="text-sm text-gray-600">Grade: B+</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Side Panel -->
+        <div class="space-y-6">
+          <div class="bg-white rounded-lg shadow-sm p-6">
+            <h3 class="text-sm font-semibold text-gray-900 mb-3">CSS Formatting Test</h3>
+            <div class="space-y-2 text-sm">
+              <div>
+                <p class="text-gray-600">This should be styled</p>
+                <p class="font-medium">With proper CSS formatting</p>
+              </div>
+            </div>
+          </div>
+          <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
+            <h3 class="text-sm font-semibold text-amber-900 mb-2">
+              <i class="fas fa-exclamation-triangle mr-1"></i>CSS Test Alert
+            </h3>
+            <p class="text-sm text-amber-800">
+              If you can see proper colors, fonts, spacing, and icons, CSS is loading correctly!
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- CSS Test Results -->
+      <div class="mt-6 bg-white rounded-lg shadow-sm p-6">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">CSS Loading Test Results</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="text-center p-4 border rounded-lg">
+            <i class="fas fa-palette text-3xl text-blue-600 mb-2"></i>
+            <p class="text-sm font-medium">Colors</p>
+            <p class="text-xs text-gray-600">Blue, red, green visible?</p>
+          </div>
+          <div class="text-center p-4 border rounded-lg">
+            <i class="fas fa-font text-3xl text-purple-600 mb-2"></i>
+            <p class="text-sm font-medium">Typography</p>
+            <p class="text-xs text-gray-600">Font weights working?</p>
+          </div>
+          <div class="text-center p-4 border rounded-lg">
+            <i class="fas fa-th-large text-3xl text-green-600 mb-2"></i>
+            <p class="text-sm font-medium">Layout</p>
+            <p class="text-xs text-gray-600">Grid & spacing OK?</p>
+          </div>
+          <div class="text-center p-4 border rounded-lg">
+            <i class="fas fa-icons text-3xl text-orange-600 mb-2"></i>
+            <p class="text-sm font-medium">Icons</p>
+            <p class="text-xs text-gray-600">Font Awesome loaded?</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

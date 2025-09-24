@@ -1,0 +1,407 @@
+{% extends "base.html" %}
+
+{% load static i18n %}
+
+{% block title %}Student Profile - {{ student.person.full_name }}{% endblock %}
+{% block content %}
+  <div class="container mx-auto px-4 py-6 max-w-7xl">
+    <!-- Student Header Card -->
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
+      <div class="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-6">
+        <!-- Student Photo -->
+        <div class="flex-shrink-0">
+          <div class="relative">
+            {% if student.person.current_photo_url %}
+              <img src="{{ student.person.current_photo_url }}"
+                   alt="{{ student.person.full_name }}"
+                   class="h-24 w-24 rounded-full object-cover border-4 border-gray-200 dark:border-gray-700" />
+            {% else %}
+              <div class="h-24 w-24 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center border-4 border-gray-200 dark:border-gray-700">
+                <i class="fas fa-user text-3xl text-gray-400 dark:text-gray-500"></i>
+              </div>
+            {% endif %}
+            <!-- Photo Update Indicator -->
+            {% with current_photo=student.person.get_current_photo %}
+              {% if current_photo and current_photo.needs_update %}
+                <div class="absolute -bottom-1 -right-1 bg-orange-500 rounded-full p-1.5"
+                     title="Photo needs update ({{ current_photo.age_in_months }} months old)">
+                  <i class="fas fa-camera text-white text-xs"></i>
+                </div>
+              {% endif %}
+            {% endwith %}
+          </div>
+        </div>
+        <!-- Student Basic Info -->
+        <div class="flex-grow">
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+            <div>
+              <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">{{ student.person.full_name }}</h1>
+              <div class="flex items-center space-x-4 mt-2 text-sm text-gray-600 dark:text-gray-400">
+                <span>
+                  <i class="fas fa-id-card mr-1"></i>
+                  ID: {{ student.formatted_student_id }}
+                </span>
+                <span>
+                  <i class="fas fa-envelope mr-1"></i>
+                  {{ student.person.school_email|default:"No email" }}
+                </span>
+                <span>
+                  <i class="fas fa-phone mr-1"></i>
+                  {{ student.person.phone_numbers.first.number|default:"No phone" }}
+                </span>
+              </div>
+            </div>
+            <!-- Status Badges -->
+            <div class="flex items-center space-x-2 mt-4 md:mt-0">
+              <!-- Student Status -->
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium {% if student.current_status == 'ACTIVE' %}bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400 {% elif student.current_status == 'GRADUATED' %}bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400 {% else %}bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400{% endif %}">
+                <i class="fas fa-circle text-xs mr-1"></i>
+                {{ student.get_current_status_display }}
+              </span>
+              <!-- Special Badges -->
+              {% if student.is_monk %}
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400">
+                  <i class="fas fa-dharmachakra mr-1"></i>
+                  Monk
+                </span>
+              {% endif %}
+              {% if student.is_transfer_student %}
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400">
+                  <i class="fas fa-exchange-alt mr-1"></i>
+                  Transfer
+                </span>
+              {% endif %}
+            </div>
+          </div>
+          <!-- Quick Stats -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <div>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Current GPA</p>
+              <p class="text-lg font-semibold text-gray-900 dark:text-gray-100">3.85</p>
+            </div>
+            <div>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Credits Earned</p>
+              <p class="text-lg font-semibold text-gray-900 dark:text-gray-100">75</p>
+            </div>
+            <div>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Current Term</p>
+              <p class="text-lg font-semibold text-gray-900 dark:text-gray-100">Fall 2024</p>
+            </div>
+            <div>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Major</p>
+              <p class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                {{ student.declared_major.name|default:"Undeclared" }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Main Content Area with Vertical Tabs -->
+    <div class="flex flex-col lg:flex-row gap-6">
+      <!-- Vertical Tab Navigation -->
+      <nav class="w-full lg:w-64 flex-shrink-0">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-2">
+          <ul class="space-y-1">
+            <!-- Overview Tab -->
+            <li>
+              <button hx-get="{% url 'people:student-profile-tab' student.pk 'overview' %}"
+                      hx-target="#tab-content"
+                      hx-indicator="#loading-indicator"
+                      class="tab-button w-full flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-gray-700"
+                      data-tab="overview">
+                <i class="fas fa-home text-gray-400 mr-3 w-5"></i>
+                <span>Overview</span>
+              </button>
+            </li>
+            <!-- Demographics Tab -->
+            <li>
+              <button hx-get="{% url 'people:student-profile-tab' student.pk 'demographics' %}"
+                      hx-target="#tab-content"
+                      hx-indicator="#loading-indicator"
+                      class="tab-button w-full flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700"
+                      data-tab="demographics">
+                <i class="fas fa-user text-gray-400 mr-3 w-5"></i>
+                <span>Demographics</span>
+              </button>
+            </li>
+            <!-- Academic Tab -->
+            <li>
+              <button hx-get="{% url 'people:student-profile-tab' student.pk 'academic' %}"
+                      hx-target="#tab-content"
+                      hx-indicator="#loading-indicator"
+                      class="tab-button w-full flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700"
+                      data-tab="academic">
+                <i class="fas fa-graduation-cap text-gray-400 mr-3 w-5"></i>
+                <span>Academic</span>
+              </button>
+            </li>
+            <!-- Enrollment Tab -->
+            <li>
+              <button hx-get="{% url 'people:student-profile-tab' student.pk 'enrollment' %}"
+                      hx-target="#tab-content"
+                      hx-indicator="#loading-indicator"
+                      class="tab-button w-full flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700"
+                      data-tab="enrollment">
+                <i class="fas fa-book text-gray-400 mr-3 w-5"></i>
+                <span>Enrollment</span>
+                <span class="ml-auto bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full">3</span>
+              </button>
+            </li>
+            <!-- Grades Tab -->
+            <li>
+              <button hx-get="{% url 'people:student-profile-tab' student.pk 'grades' %}"
+                      hx-target="#tab-content"
+                      hx-indicator="#loading-indicator"
+                      class="tab-button w-full flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700"
+                      data-tab="grades">
+                <i class="fas fa-chart-line text-gray-400 mr-3 w-5"></i>
+                <span>Grades</span>
+              </button>
+            </li>
+            <!-- Attendance Tab -->
+            <li>
+              <button hx-get="{% url 'people:student-profile-tab' student.pk 'attendance' %}"
+                      hx-target="#tab-content"
+                      hx-indicator="#loading-indicator"
+                      class="tab-button w-full flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700"
+                      data-tab="attendance">
+                <i class="fas fa-calendar-check text-gray-400 mr-3 w-5"></i>
+                <span>Attendance</span>
+              </button>
+            </li>
+            <!-- Finance Tab -->
+            <li>
+              <button hx-get="{% url 'people:student-profile-tab' student.pk 'finance' %}"
+                      hx-target="#tab-content"
+                      hx-indicator="#loading-indicator"
+                      class="tab-button w-full flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700"
+                      data-tab="finance">
+                <i class="fas fa-dollar-sign text-gray-400 mr-3 w-5"></i>
+                <span>Finance</span>
+                <span class="ml-auto bg-red-600 text-white text-xs px-2 py-0.5 rounded-full">!</span>
+              </button>
+            </li>
+            <!-- Documents Tab -->
+            <li>
+              <button hx-get="{% url 'people:student-profile-tab' student.pk 'documents' %}"
+                      hx-target="#tab-content"
+                      hx-indicator="#loading-indicator"
+                      class="tab-button w-full flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700"
+                      data-tab="documents">
+                <i class="fas fa-file-alt text-gray-400 mr-3 w-5"></i>
+                <span>Documents</span>
+              </button>
+            </li>
+            <!-- Activity Log Tab -->
+            <li>
+              <button hx-get="{% url 'people:student-profile-tab' student.pk 'activity' %}"
+                      hx-target="#tab-content"
+                      hx-indicator="#loading-indicator"
+                      class="tab-button w-full flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700"
+                      data-tab="activity">
+                <i class="fas fa-history text-gray-400 mr-3 w-5"></i>
+                <span>Activity Log</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+        <!-- Quick Actions -->
+        <div class="mt-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
+          <h3 class="text-sm font-medium text-gray-900 dark:text-gray-100 mb-3">Quick Actions</h3>
+          <div class="space-y-2">
+            <button class="w-full text-left text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 py-1">
+              <i class="fas fa-print mr-2"></i> Print Profile
+            </button>
+            <button class="w-full text-left text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 py-1">
+              <i class="fas fa-envelope mr-2"></i> Send Email
+            </button>
+            <button class="w-full text-left text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 py-1">
+              <i class="fas fa-comment mr-2"></i> Add Note
+            </button>
+            <a href="{% url 'admin:people_studentprofile_change' student.pk %}"
+               class="block w-full text-left text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 py-1">
+              <i class="fas fa-edit mr-2"></i> Edit Profile
+            </a>
+          </div>
+        </div>
+      </nav>
+      <!-- Tab Content Area -->
+      <div class="flex-grow">
+        <!-- Loading Indicator -->
+        <div id="loading-indicator" class="htmx-indicator">
+          <div class="flex justify-center items-center h-64">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          </div>
+        </div>
+        <!-- Dynamic Content Container -->
+        <div id="tab-content">
+          <!-- Overview Tab Content (Default) -->
+          <div class="space-y-6">
+            <!-- Current Enrollment Card -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+              <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+                <i class="fas fa-book-open mr-2 text-gray-400"></i>
+                Current Enrollment
+              </h2>
+              <div class="grid gap-4">
+                <!-- Sample Course Card -->
+                <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow">
+                  <div class="flex justify-between items-start">
+                    <div>
+                      <h3 class="font-medium text-gray-900 dark:text-gray-100">CS101 - Introduction to Computer Science</h3>
+                      <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">MWF 10:00-11:00 AM | Room: A-201 | Dr. Smith</p>
+                      <div class="flex items-center mt-2 space-x-4 text-sm">
+                        <span class="text-gray-500 dark:text-gray-400">
+                          <i class="fas fa-users mr-1"></i> 25/30 students
+                        </span>
+                        <span class="text-gray-500 dark:text-gray-400">
+                          <i class="fas fa-book mr-1"></i> 3 credits
+                        </span>
+                      </div>
+                    </div>
+                    <div class="text-right">
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400">
+                        Enrolled
+                      </span>
+                      <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Grade: A-</p>
+                    </div>
+                  </div>
+                </div>
+                <!-- Add more course cards here -->
+              </div>
+            </div>
+            <!-- Academic Progress Card -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+              <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+                <i class="fas fa-chart-line mr-2 text-gray-400"></i>
+                Academic Progress
+              </h2>
+              <!-- Degree Progress Bar -->
+              <div class="mb-6">
+                <div class="flex justify-between text-sm mb-2">
+                  <span class="text-gray-600 dark:text-gray-400">Degree Progress</span>
+                  <span class="font-medium text-gray-900 dark:text-gray-100">75 of 120 credits (62.5%)</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                  <div class="bg-blue-600 h-2 rounded-full" style="width: 62.5%"></div>
+                </div>
+              </div>
+              <!-- Progress Summary -->
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                  <p class="text-2xl font-semibold text-gray-900 dark:text-gray-100">3.85</p>
+                  <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">Cumulative GPA</p>
+                </div>
+                <div class="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                  <p class="text-2xl font-semibold text-gray-900 dark:text-gray-100">3.90</p>
+                  <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">Term GPA</p>
+                </div>
+                <div class="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                  <p class="text-2xl font-semibold text-gray-900 dark:text-gray-100">15</p>
+                  <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">Current Credits</p>
+                </div>
+                <div class="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                  <p class="text-2xl font-semibold text-gray-900 dark:text-gray-100">2025</p>
+                  <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">Expected Grad</p>
+                </div>
+              </div>
+            </div>
+            <!-- Recent Activity Card -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+              <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+                <i class="fas fa-clock mr-2 text-gray-400"></i>
+                Recent Activity
+              </h2>
+              <div class="space-y-3">
+                <div class="flex items-start space-x-3">
+                  <div class="flex-shrink-0 w-2 h-2 bg-blue-600 rounded-full mt-1.5"></div>
+                  <div class="flex-grow">
+                    <p class="text-sm text-gray-900 dark:text-gray-100">Grade posted for CS101 Midterm: A-</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">2 hours ago</p>
+                  </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                  <div class="flex-shrink-0 w-2 h-2 bg-green-600 rounded-full mt-1.5"></div>
+                  <div class="flex-grow">
+                    <p class="text-sm text-gray-900 dark:text-gray-100">Payment received: $500.00</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Yesterday at 3:45 PM</p>
+                  </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                  <div class="flex-shrink-0 w-2 h-2 bg-purple-600 rounded-full mt-1.5"></div>
+                  <div class="flex-grow">
+                    <p class="text-sm text-gray-900 dark:text-gray-100">Enrolled in MATH201 for Spring 2024</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">3 days ago</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- HTMX Configuration and Tab Management -->
+  <script>
+    // HTMX configuration
+    document.body.addEventListener('htmx:configRequest', (event) => {
+      event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+    });
+
+    // Tab management
+    document.addEventListener('DOMContentLoaded', function() {
+      const tabButtons = document.querySelectorAll('.tab-button');
+
+      // Handle tab switching
+      tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          // Update active states
+          tabButtons.forEach(btn => {
+            btn.classList.remove('text-gray-900', 'dark:text-gray-100', 'bg-gray-100', 'dark:bg-gray-700');
+            btn.classList.add('text-gray-600', 'dark:text-gray-400', 'hover:text-gray-900', 'dark:hover:text-gray-100', 'hover:bg-gray-50', 'dark:hover:bg-gray-700');
+          });
+
+          this.classList.add('text-gray-900', 'dark:text-gray-100', 'bg-gray-100', 'dark:bg-gray-700');
+          this.classList.remove('text-gray-600', 'dark:text-gray-400', 'hover:text-gray-900', 'dark:hover:text-gray-100', 'hover:bg-gray-50', 'dark:hover:bg-gray-700');
+
+          // Update URL without page reload
+          const tab = this.dataset.tab;
+          const newUrl = window.location.pathname + '#' + tab;
+          history.pushState(null, '', newUrl);
+        });
+      });
+
+      // Handle back/forward navigation
+      window.addEventListener('popstate', function() {
+        const hash = window.location.hash.slice(1) || 'overview';
+        const button = document.querySelector(`[data-tab="${hash}"]`);
+        if (button) {
+          button.click();
+        }
+      });
+
+      // Load initial tab based on URL hash
+      const initialHash = window.location.hash.slice(1) || 'overview';
+      const initialButton = document.querySelector(`[data-tab="${initialHash}"]`);
+      if (initialButton) {
+        initialButton.click();
+      }
+    });
+
+    // Add loading state styles
+    const style = document.createElement('style');
+    style.textContent = `
+    .htmx-request .htmx-indicator {
+      display: block;
+    }
+    .htmx-request#tab-content {
+      display: none;
+    }
+    .htmx-indicator {
+      display: none;
+    }
+  `;
+    document.head.appendChild(style);
+  </script>
+{% endblock %}

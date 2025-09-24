@@ -1,0 +1,285 @@
+{% extends "common/crud/detail.html" %}
+
+{% load i18n common_tags %}
+
+{% block
+  content %}
+  {{ block.super }}
+  <!-- Additional Student Information Tabs -->
+  <div class="mt-8">
+    <!-- Tab Navigation -->
+    <div class="border-b border-gray-200 dark:border-gray-700">
+      <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+        <a href="#emergency-contacts"
+           class="tab-link border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
+           data-tab="emergency-contacts">
+          <i class="fas fa-phone-alt mr-2"></i>
+          {% trans "Emergency Contacts" %}
+        </a>
+        <a href="#major-history"
+           class="tab-link border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
+           data-tab="major-history">
+          <i class="fas fa-graduation-cap mr-2"></i>
+          {% trans "Major History" %}
+        </a>
+        <a href="#enrollments"
+           class="tab-link border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
+           data-tab="enrollments">
+          <i class="fas fa-book mr-2"></i>
+          {% trans "Course Enrollments" %}
+        </a>
+        <a href="#audit-log"
+           class="tab-link border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
+           data-tab="audit-log">
+          <i class="fas fa-history mr-2"></i>
+          {% trans "Audit Log" %}
+        </a>
+      </nav>
+    </div>
+    <!-- Tab Content -->
+    <div class="mt-6">
+      <!-- Emergency Contacts Tab -->
+      <div id="emergency-contacts" class="tab-content hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">{% trans "Emergency Contacts" %}</h3>
+          {% if emergency_contacts %}
+            <div class="space-y-4">
+              {% for contact in emergency_contacts %}
+                <div class="border-l-4 {% if contact.is_primary %}border-blue-500{% else %}border-gray-300{% endif %} pl-4">
+                  <div class="flex justify-between items-start">
+                    <div>
+                      <h4 class="font-medium text-gray-900 dark:text-gray-100">
+                        {{ contact.name }}
+                        {% if contact.is_primary %}
+                          <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            {% trans "Primary" %}
+                          </span>
+                        {% endif %}
+                      </h4>
+                      <p class="text-sm text-gray-600 dark:text-gray-400">{{ contact.relationship }}</p>
+                      <div class="mt-2 space-y-1">
+                        <p class="text-sm">
+                          <i class="fas fa-phone text-gray-400 mr-2"></i>
+                          {{ contact.phone_primary }}
+                          {% if contact.phone_secondary %}/ {{ contact.phone_secondary }}{% endif %}
+                        </p>
+                        {% if contact.email %}
+                          <p class="text-sm">
+                            <i class="fas fa-envelope text-gray-400 mr-2"></i>
+                            {{ contact.email }}
+                          </p>
+                        {% endif %}
+                        {% if contact.address %}
+                          <p class="text-sm">
+                            <i class="fas fa-map-marker-alt text-gray-400 mr-2"></i>
+                            {{ contact.address }}
+                          </p>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p class="text-gray-500 dark:text-gray-400">{% trans "No emergency contacts on file." %}</p>
+          {% endif %}
+        </div>
+      </div>
+      <!-- Major History Tab -->
+      <div id="major-history" class="tab-content hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">{% trans "Major Declaration History" %}</h3>
+          {% if major_declarations %}
+            <div class="overflow-x-auto">
+              <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead>
+                  <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                      {% trans "Major" %}
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                      {% trans "Declaration Date" %}
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                      {% trans "Status" %}
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                      {% trans "Declared By" %}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                  {% for declaration in major_declarations %}
+                    <tr>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
+                        {{ declaration.major.name }}
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                        {{ declaration.declaration_date|date:"SHORT_DATE_FORMAT" }}
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        {% if declaration.is_active %}
+                          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            {% trans "Active" %}
+                          </span>
+                        {% else %}
+                          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                            {% trans "Inactive" %}
+                          </span>
+                        {% endif %}
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                        {{
+                        declaration.declared_by.get_full_name|default:declaration.declared_by.username
+                        }}
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% else %}
+            <p class="text-gray-500 dark:text-gray-400">{% trans "No major declarations found." %}</p>
+          {% endif %}
+          {% if object.has_major_conflict %}
+            <div class="mt-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md">
+              <div class="flex">
+                <i class="fas fa-exclamation-triangle text-yellow-400 mt-0.5"></i>
+                <div class="ml-3">
+                  <h3 class="text-sm font-medium text-yellow-800 dark:text-yellow-200">{% trans "Major Conflict Detected" %}</h3>
+                  <p class="mt-1 text-sm text-yellow-700 dark:text-yellow-300">
+                    {% trans "The declared major differs from the enrollment history
+                    major. Review needed." %}
+                  </p>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+      <!-- Enrollments Tab -->
+      <div id="enrollments" class="tab-content hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">{% trans "Enrollment Summary" %}</h3>
+          <!-- Summary Stats -->
+          <div class="grid grid-cols-3 gap-4 mb-6">
+            <div class="text-center">
+              <p class="text-2xl font-semibold text-gray-900 dark:text-gray-100">{{ enrollment_summary.total_courses }}</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400">{% trans "Total Courses" %}</p>
+            </div>
+            <div class="text-center">
+              <p class="text-2xl font-semibold text-green-600 dark:text-green-400">{{ enrollment_summary.completed_courses }}</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400">{% trans "Completed" %}</p>
+            </div>
+            <div class="text-center">
+              <p class="text-2xl font-semibold text-blue-600 dark:text-blue-400">{{ enrollment_summary.current_courses }}</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400">{% trans "Current" %}</p>
+            </div>
+          </div>
+          <!-- Recent Enrollments -->
+          <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-3">{% trans "Recent Enrollments" %}</h4>
+          {% if enrollment_summary.recent_enrollments %}
+            <div class="space-y-2">
+              {% for enrollment in enrollment_summary.recent_enrollments %}
+                <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700 rounded">
+                  <div>
+                    <p class="font-medium text-gray-900 dark:text-gray-100">
+                      {{ enrollment.class_section.course.code }} - {{
+                      enrollment.class_section.course.name }}
+                    </p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ enrollment.class_section.get_display_name }}</p>
+                  </div>
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {% if enrollment.status == 'ENROLLED' %}bg-blue-100 text-blue-800 {% elif enrollment.status == 'COMPLETED' %}bg-green-100 text-green-800 {% else %}bg-gray-100 text-gray-800{% endif %}">
+                    {{ enrollment.get_status_display }}
+                  </span>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p class="text-gray-500 dark:text-gray-400">{% trans "No enrollments found." %}</p>
+          {% endif %}
+        </div>
+      </div>
+      <!-- Audit Log Tab -->
+      <div id="audit-log" class="tab-content hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">{% trans "Recent Activity" %}</h3>
+          {% if audit_logs %}
+            <div class="flow-root">
+              <ul class="-mb-8">
+                {% for log in audit_logs %}
+                  <li>
+                    <div class="relative pb-8">
+                      {% if not forloop.last %}
+                        <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200 dark:bg-gray-700"
+                              aria-hidden="true"></span>
+                      {% endif %}
+                      <div class="relative flex space-x-3">
+                        <div>
+                          <span class="h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white dark:ring-gray-800 {% if log.action == 'STATUS_CHANGE' %}bg-yellow-500 {% elif log.action == 'CREATED' %}bg-green-500 {% elif log.action == 'UPDATED' %}bg-blue-500 {% else %}bg-gray-400{% endif %}">
+                            <i class="fas fa-{% if log.action == 'STATUS_CHANGE' %}exchange-alt{% elif log.action == 'CREATED' %}plus{% elif log.action == 'UPDATED' %}edit{% else %}info{% endif %} text-white text-xs"></i>
+                          </span>
+                        </div>
+                        <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                          <div>
+                            <p class="text-sm text-gray-900 dark:text-gray-100">{{ log.description }}</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                              by {{
+                              log.performed_by.get_full_name|default:log.performed_by.username
+                              }}
+                            </p>
+                          </div>
+                          <div class="text-right text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
+                            <time datetime="{{ log.created_at|date:'c' }}">
+                              {{ log.created_at|date:"SHORT_DATETIME_FORMAT" }}
+                            </time>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% else %}
+            <p class="text-gray-500 dark:text-gray-400">{% trans "No audit log entries found." %}</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Tab functionality
+      const tabLinks = document.querySelectorAll('.tab-link');
+      const tabContents = document.querySelectorAll('.tab-content');
+
+      tabLinks.forEach((link) => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+
+          // Remove active state from all tabs
+          tabLinks.forEach((l) => {
+            l.classList.remove('border-blue-500', 'text-blue-600');
+            l.classList.add('border-transparent', 'text-gray-500');
+          });
+          tabContents.forEach((content) => content.classList.add('hidden'));
+
+          // Add active state to clicked tab
+          this.classList.remove('border-transparent', 'text-gray-500');
+          this.classList.add('border-blue-500', 'text-blue-600');
+
+          // Show corresponding content
+          const tabId = this.dataset.tab;
+          document.getElementById(tabId).classList.remove('hidden');
+        });
+      });
+
+      // Show first tab by default
+      if (tabLinks.length > 0) {
+        tabLinks[0].click();
+      }
+    });
+  </script>
+{% endblock %}

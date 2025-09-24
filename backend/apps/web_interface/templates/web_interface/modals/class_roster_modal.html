@@ -1,0 +1,104 @@
+<!-- templates/web_interface/modals/class_roster_modal.html -->
+<!-- INSTRUCTION FOR SONNET: Class roster modal -->
+
+<div class="bg-white rounded-lg shadow-xl">
+  <!-- Header -->
+  <div class="px-6 py-4 border-b border-gray-200">
+    <div class="flex justify-between items-center">
+      <h3 class="text-lg font-semibold text-gray-900">
+        {% trans "Class Roster" %} - {{ class.course.code }}
+      </h3>
+      <button type="button" 
+              class="text-gray-400 hover:text-gray-600"
+              onclick="closeModal()">
+        <span class="sr-only">{% trans "Close" %}</span>
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="px-6 py-4">
+    <!-- Class Info -->
+    <div class="mb-4 p-4 bg-gray-50 rounded-lg">
+      <h4 class="font-medium text-gray-900">{{ class.course.title|default:class.course.name }}</h4>
+      <div class="mt-2 text-sm text-gray-600 space-y-1">
+        <div>
+          <span class="font-medium">{% trans "Instructor:" %}</span>
+          {% if class.teacher %}
+            {{ class.teacher.person.full_name }}
+          {% elif class.instructor %}
+            {{ class.instructor.person.full_name }}
+          {% else %}
+            {% trans "TBD" %}
+          {% endif %}
+        </div>
+        <div>
+          <span class="font-medium">{% trans "Capacity:" %}</span>
+          {{ enrolled_students|length }}/{{ class.capacity|default:30 }}
+        </div>
+        <div>
+          <span class="font-medium">{% trans "Credits:" %}</span>
+          {{ class.course.credits|default:"3" }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Student List -->
+    {% if enrolled_students %}
+    <div class="max-h-96 overflow-y-auto">
+      <table class="sis-table">
+        <thead>
+          <tr>
+            <th>{% trans "Student ID" %}</th>
+            <th>{% trans "Name" %}</th>
+            <th>{% trans "Email" %}</th>
+            <th>{% trans "Enrolled Date" %}</th>
+            <th>{% trans "Status" %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for enrollment in enrolled_students %}
+          <tr>
+            <td class="font-medium">{{ enrollment.student.student_id }}</td>
+            <td>
+              <div>{{ enrollment.student.person.full_name }}</div>
+              {% if enrollment.student.person.khmer_name %}
+              <div class="text-xs text-gray-500">{{ enrollment.student.person.khmer_name }}</div>
+              {% endif %}
+            </td>
+            <td class="text-sm">{{ enrollment.student.person.email|default:"—" }}</td>
+            <td class="text-sm">{{ enrollment.created_at|date:"M d, Y" }}</td>
+            <td>
+              <span class="badge badge-success">
+                {{ enrollment.get_status_display }}
+              </span>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="text-center py-8">
+      <div class="text-gray-400 mb-2">
+        <i class="fas fa-users text-3xl"></i>
+      </div>
+      <p class="text-gray-500">{% trans "No students enrolled yet." %}</p>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Footer -->
+  <div class="px-6 py-4 border-t border-gray-200 bg-gray-50">
+    <div class="flex justify-end">
+      <button type="button" 
+              class="btn btn-secondary"
+              onclick="closeModal()">
+        {% trans "Close" %}
+      </button>
+    </div>
+  </div>
+</div>

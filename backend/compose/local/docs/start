@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+cd /app/docs
+
+# Build initial documentation
+echo "Building initial documentation..."
+make html
+
+# Start live reload server
+echo "Starting sphinx-autobuild server on 0.0.0.0:9000..."
+exec sphinx-autobuild . _build/html --host 0.0.0.0 --port 9000

@@ -1,0 +1,413 @@
+{
+  "app": {
+    "title": "Naga SIS - PUCSR",
+    "welcome": "Welcome",
+    "loading": "Loading..."
+  },
+  "nav": {
+    "home": "Home",
+    "alerts": "Alerts",
+    "messages": "Messages",
+    "profile": "Profile",
+    "teacher": {
+      "dashboard": "Dashboard",
+      "attendance": "Attendance",
+      "grades": "Grades",
+      "courses": "Courses"
+    }
+  },
+  "roles": {
+    "student": {
+      "name": "Student",
+      "description": "Access student features"
+    },
+    "teacher": {
+      "name": "Teacher",
+      "description": "Access teacher features"
+    },
+    "admin": {
+      "name": "Admin",
+      "description": "System administration"
+    }
+  },
+  "common": {
+    "ok": "OK",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "inDevelopment": "In Development",
+    "switchLanguage": "Switch Language",
+    "switchTheme": "Switch Theme"
+  },
+  "dashboard": {
+    "greeting": "Good evening",
+    "subtitle": "What would you like to do today?",
+    "attendance": {
+      "title": "Attendance",
+      "description": "Mark attendance & view records"
+    },
+    "grades": {
+      "title": "Grades",
+      "description": "View your academic performance"
+    },
+    "schedule": {
+      "title": "Schedule",
+      "description": "View your class schedule"
+    },
+    "announcements": {
+      "title": "Announcements",
+      "description": "School announcements & updates"
+    },
+    "idCard": {
+      "title": "ID Card",
+      "description": "View your digital ID"
+    },
+    "permission": {
+      "title": "Permission",
+      "description": "Request absence permission"
+    },
+    "profilePhoto": {
+      "title": "Profile Photo",
+      "description": "Update your photo"
+    },
+    "finances": {
+      "title": "Financial Balance",
+      "description": "View your financial status"
+    }
+  },
+  "attendance": {
+    "title": "Attendance",
+    "subtitle": "Track your class attendance",
+    "developmentMessage": "Attendance tracking functionality will be available soon.",
+    "checkIn": {
+      "title": "Quick Check-in",
+      "instructions": "Enter the 6-digit code displayed by your teacher to mark attendance",
+      "codeLabel": "Attendance Code",
+      "codePlaceholder": "Enter 6-digit code",
+      "codeRequired": "Please enter attendance code",
+      "codeLength": "Code must be exactly 6 characters",
+      "submit": "Check In",
+      "success": "Attendance marked successfully!",
+      "error": "Failed to mark attendance. Please try again."
+    },
+    "recent": {
+      "title": "Recent Check-ins",
+      "unknownClass": "Unknown Class"
+    },
+    "status": {
+      "confirmed": "Confirmed",
+      "pending": "Pending",
+      "failed": "Failed"
+    },
+    "actions": {
+      "title": "Quick Actions",
+      "viewHistory": "View History",
+      "requestPermission": "Request Permission"
+    },
+    "offline": {
+      "title": "Offline Check-ins",
+      "description": "{count} check-ins waiting to sync",
+      "retry": "Retry Sync",
+      "retrySuccess": "Offline check-ins synced successfully",
+      "retryError": "Failed to sync offline check-ins"
+    }
+  },
+  "grades": {
+    "title": "Grades",
+    "subtitle": "View your academic performance",
+    "developmentMessage": "Grade viewing functionality will be available soon."
+  },
+  "schedule": {
+    "title": "Class Schedule",
+    "subtitle": "View your class timetable",
+    "developmentMessage": "Schedule viewing functionality will be available soon."
+  },
+  "announcements": {
+    "title": "Announcements",
+    "subtitle": "Latest news and updates",
+    "developmentMessage": "Announcements functionality will be available soon."
+  },
+  "idCard": {
+    "title": "Student ID Card",
+    "subtitle": "Your digital student identification",
+    "loading": "Loading ID card...",
+    "incompleteInfo": "Incomplete Information",
+    "updateProfile": "Update Profile",
+    "addPhoto": "Add Photo",
+    "institutionName": "Pannasastra University - Siem Reap",
+    "studentId": "Student ID",
+    "teacherId": "Teacher ID",
+    "ids": "ID Numbers",
+    "schoolEmail": "School Email",
+    "studyLevel": "Study Level",
+    "department": "Department",
+    "academicYear": "Academic Year",
+    "qrInstructions": "Scan for verification",
+    "validFor": "Valid for",
+    "issued": "Issued",
+    "refresh": "Refresh Card",
+    "adjustBrightness": "Adjust Brightness",
+    "fullscreen": "Fullscreen View"
+  },
+  "permission": {
+    "title": "Absence Permission",
+    "subtitle": "Request permission for absence",
+    "developmentMessage": "Permission request functionality will be available soon.",
+    "class": {
+      "label": "Select Class",
+      "hint": "Choose the class you will be absent from",
+      "required": "Please select a class"
+    },
+    "reason": {
+      "label": "Reason for Absence",
+      "hint": "Select the primary reason for your absence",
+      "required": "Please select a reason for absence"
+    },
+    "reasons": {
+      "sick": "Sick",
+      "family": "Family Emergency",
+      "religious": "Religious Event",
+      "transport": "Transportation Problem",
+      "work": "Work Conflict",
+      "other": "Other"
+    },
+    "date": {
+      "label": "Date of Absence",
+      "hint": "Select the date you will be absent",
+      "required": "Please select a date",
+      "pastDate": "Date cannot be in the past"
+    },
+    "details": {
+      "label": "Additional Details",
+      "hint": "{count} characters",
+      "required": "Please provide additional details",
+      "minLength": "Please provide at least 10 characters"
+    },
+    "document": {
+      "checkbox": "I will provide supporting documentation",
+      "label": "Upload Document",
+      "hint": "PDF, JPG, PNG files up to 5MB",
+      "rejected": "File rejected: {reasons}"
+    },
+    "submit": "Submit Request",
+    "reset": "Reset Form",
+    "success": "Permission request submitted successfully",
+    "error": "Failed to submit request. Please try again.",
+    "recent": {
+      "title": "Recent Requests"
+    },
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "denied": "Denied"
+    }
+  },
+  "profilePhoto": {
+    "title": "Profile Photo",
+    "subtitle": "Update your profile picture",
+    "noPhoto": "No photo uploaded",
+    "recent": "Recent",
+    "outdated": "Outdated",
+    "takenOn": "Taken on",
+    "updatePhoto": "Update Photo",
+    "takePhoto": "Take Photo",
+    "deletePhoto": "Delete Photo",
+    "retryUpload": "Retry Upload",
+    "instructions": "Photo Requirements",
+    "instruction1": "Face should be clearly visible and centered",
+    "instruction2": "Use good lighting - avoid shadows",
+    "instruction3": "Photo will be cropped to passport size",
+    "instruction4": "Photo will be used for ID and attendance",
+    "uploading": "Uploading Photo...",
+    "confirmDelete": "Delete Photo?",
+    "deleteWarning": "This will permanently delete your profile photo.",
+    "photoSaved": "Photo saved successfully",
+    "uploadSuccess": "Photo uploaded successfully",
+    "uploadFailed": "Upload failed - will retry when online",
+    "saveFailed": "Failed to save photo",
+    "deleteSuccess": "Photo deleted successfully",
+    "deleteFailed": "Failed to delete photo",
+    "cameraNotSupported": "Camera not supported on this device"
+  },
+  "camera": {
+    "title": "Take Profile Photo",
+    "instructions": "Position your face in the oval and ensure good lighting",
+    "positionFace": "Position your face here",
+    "faceDetected": "Face detected",
+    "noFace": "No face detected",
+    "goodLighting": "Good lighting",
+    "poorLighting": "Poor lighting",
+    "takePhoto": "Take Photo",
+    "reviewPhoto": "Review Photo",
+    "reviewInstructions": "Adjust the crop area to focus on your face",
+    "retake": "Retake",
+    "acceptPhoto": "Accept Photo",
+    "processing": "Processing...",
+    "processingMessage": "Processing your photo for ID use",
+    "error": "Camera error occurred. Please try again."
+  },
+  "finances": {
+    "title": "Financial Balance",
+    "subtitle": "View your payment status",
+    "developmentMessage": "Financial information will be available soon."
+  },
+  "alerts": {
+    "title": "Alerts",
+    "subtitle": "Important notifications",
+    "developmentMessage": "Alerts functionality will be available soon."
+  },
+  "messages": {
+    "title": "Messages",
+    "subtitle": "Your communications",
+    "developmentMessage": "Messaging functionality will be available soon."
+  },
+  "profile": {
+    "title": "Profile",
+    "subtitle": "Manage your account information",
+    "studentId": "Student ID",
+    "personalInfo": "Personal Information",
+    "academicInfo": "Academic Information",
+    "email": "Email",
+    "phone": "Phone",
+    "department": "Department",
+    "academicYear": "Academic Year",
+    "address": "Address",
+    "program": "Program",
+    "gpa": "GPA",
+    "semester": "Current Semester",
+    "editProfile": "Edit Profile",
+    "logout": "Logout"
+  },
+  "signin": {
+    "welcome": "Welcome to",
+    "subtitle": "Student Information System",
+    "selectRole": "Select your role",
+    "emailLabel": "School Email",
+    "emailPlaceholder": "student email address",
+    "continue": "Continue",
+    "orSignInWith": "or sign in with",
+    "googleWorkspace": "Google Workspace",
+    "facebook": "Facebook",
+    "forgotPassword": "Forgot Password?"
+  },
+  "auth": {
+    "processing": "Signing you in...",
+    "pleaseWait": "Please wait while we authenticate your account"
+  },
+  "teacher": {
+    "dashboard": {
+      "title": "Teacher Dashboard",
+      "subtitle": "Manage your classes and students",
+      "students": "students",
+      "stats": {
+        "courses": "Active Courses",
+        "students": "Total Students",
+        "attendance": "Avg Attendance",
+        "pendingGrades": "Pending Grades"
+      },
+      "quickActions": {
+        "title": "Quick Actions",
+        "generateCode": "Generate Attendance Code",
+        "manualAttendance": "Manual Attendance",
+        "enterGrades": "Enter Grades"
+      },
+      "todaysClasses": {
+        "title": "Today's Classes",
+        "noClasses": "No classes scheduled for today"
+      },
+      "classStatus": {
+        "upcoming": "Upcoming",
+        "in-progress": "In Progress",
+        "completed": "Completed"
+      },
+      "recentActivity": {
+        "title": "Recent Activity",
+        "noActivity": "No recent activity"
+      }
+    },
+    "attendance": {
+      "title": "Attendance Management",
+      "subtitle": "Manage student attendance for your classes",
+      "methods": {
+        "generateCode": {
+          "title": "Generate Code",
+          "description": "Create a 6-digit code for students to enter",
+          "action": "Generate Code"
+        },
+        "manual": {
+          "title": "Manual Attendance",
+          "description": "Mark attendance manually from student list",
+          "action": "Take Attendance"
+        }
+      },
+      "todaysSummary": {
+        "title": "Today's Summary"
+      },
+      "stats": {
+        "present": "Present",
+        "absent": "Absent",
+        "late": "Late",
+        "excused": "Excused"
+      },
+      "recentActivity": {
+        "title": "Recent Activity",
+        "noActivity": "No recent attendance activity"
+      }
+    },
+    "generateCode": {
+      "title": "Generate Attendance Code",
+      "subtitle": "Create a time-limited code for student check-in",
+      "form": {
+        "title": "Code Settings",
+        "classLabel": "Select Class",
+        "classHint": "Choose the class for attendance",
+        "classRequired": "Please select a class",
+        "durationLabel": "Code Validity",
+        "durationHint": "How long the code will be active",
+        "durationRequired": "Please select duration",
+        "generate": "Generate Code"
+      },
+      "durations": {
+        "5min": "5 minutes",
+        "10min": "10 minutes",
+        "15min": "15 minutes",
+        "30min": "30 minutes",
+        "60min": "1 hour",
+        "120min": "2 hours"
+      },
+      "display": {
+        "title": "Active Attendance Code",
+        "qrPlaceholder": "QR Code (coming soon)",
+        "timeRemaining": "Time Remaining",
+        "expiresAt": "Expires at {time}",
+        "copyCode": "Copy Code",
+        "newCode": "New Code"
+      },
+      "instructions": {
+        "title": "How to Use",
+        "step1": "Select your class and set the code validity duration",
+        "step2": "Display the generated code to your students (on board/screen)",
+        "step3": "Students enter the code in their NAGA app to mark attendance",
+        "step4": "Monitor the timer - code expires automatically"
+      },
+      "success": "Attendance code generated successfully!",
+      "error": "Failed to generate code. Please try again.",
+      "expired": "Attendance code has expired",
+      "copied": "Code copied to clipboard!",
+      "copyFailed": "Failed to copy code"
+    }
+  },
+  "errorBoundary": {
+    "retry": "Retry",
+    "goBack": "Go Back",
+    "reportBug": "Report Bug",
+    "defaultTitle": "Something went wrong",
+    "defaultMessage": "An unexpected error occurred. Please try refreshing the page.",
+    "networkError": "Network connection problem. Please check your internet connection.",
+    "chunkLoadError": "Failed to load application resources. Please refresh the page.",
+    "permissionError": "Permission denied. Please check your browser settings.",
+    "maxRetriesReached": "Maximum retry attempts reached. Please refresh the page."
+  }
+}

@@ -1,0 +1,11 @@
+# Translation tools virtual environment
+.venv/
+__pycache__/
+*.pyc
+
+# Argos translation models (can be large)
+argos-translate/
+*.argosmodel
+
+# Translation cache
+.cache/

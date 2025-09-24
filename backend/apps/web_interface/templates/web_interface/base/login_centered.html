@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Naga SIS - Login{% endblock %}</title>
+    {% load static %}
+    {% load i18n %}
+    
+    <link rel="icon" href="{% static 'favicon.ico' %}" />
+    <link rel="apple-touch-icon" href="{% static 'images/naga-trans.png' %}" />
+    <link rel="stylesheet" href="{% static 'web_interface/css/naga-unified.css' %}">
+    
+    <!-- HTMX for form handling -->
+    <script src="https://unpkg.com/htmx.org@2.0.3"></script>
+    <script src="{% static 'web_interface/js/htmx-extensions.js' %}"></script>
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="login-page">
+    <div class="login-container" id="loginScreen">
+        <div class="login-header">
+            <div class="logo">
+                <img src="{% static 'images/naga-trans.png' %}" alt="Naga Logo" class="logo-image">
+            </div>
+            <h1>{% trans "Naga SIS" %}</h1>
+            <p class="subtitle">{% trans "Pannasastra University of Cambodia, Siem Reap Campus" %}</p>
+        </div>
+        
+        <form method="post"
+              id="loginForm"
+              hx-post="{% url 'web_interface:login' %}"
+              hx-ext="naga-forms"
+              hx-target="#loginScreen"
+              hx-swap="outerHTML">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="id_username">{% trans "Username / Email" %}</label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                    <div class="field-error">
+                        {% for error in form.username.errors %}{{ error }}{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="id_password">{% trans "Password" %}</label>
+                {{ form.password }}
+                {% if form.password.errors %}
+                    <div class="field-error">
+                        {% for error in form.password.errors %}{{ error }}{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="id_role">{% trans "Login As" %}</label>
+                {{ form.role }}
+                {% if form.role.errors %}
+                    <div class="field-error">
+                        {% for error in form.role.errors %}{{ error }}{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Non-field errors -->
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+                </div>
+            {% endif %}
+            
+            <button type="submit" class="btn">
+                <span class="htmx-indicator">{% trans "Signing in..." %}</span>
+                <span class="default-text">{% trans "Sign In" %}</span>
+            </button>
+        </form>
+        
+        <div class="language-switch">
+            <button class="lang-btn {% if LANGUAGE_CODE == 'en' %}active{% endif %}"
+                    onclick="switchLanguage('en')">English</button>
+            <button class="lang-btn {% if LANGUAGE_CODE == 'km' %}active{% endif %}"
+                    onclick="switchLanguage('km')">ខ្មែរ (Khmer)</button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize CSRF token for HTMX
+        window.DashboardApp = window.DashboardApp || {};
+        window.DashboardApp.csrfToken = '{{ csrf_token }}';
+
+        function switchLanguage(langCode) {
+            // Update active button
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Store preference and reload
+            fetch('{% url "set_language" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+                body: 'language=' + langCode
+            }).then(() => {
+                window.location.reload();
+            });
+        }
+
+        // Initialize login form specific functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Login form functionality is now handled by the naga-forms extension
+        });
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

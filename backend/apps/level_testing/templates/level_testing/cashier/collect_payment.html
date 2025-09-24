@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 max-w-2xl">
+    <div class="bg-white shadow-lg rounded-lg p-6">
+        <h1 class="text-2xl font-bold mb-6 text-gray-800">
+            <i class="fas fa-cash-register mr-2"></i>
+            {% trans "Collect Level Test Payment" %}
+        </h1>
+
+        <form method="post" id="payment-form" class="space-y-6">
+            {% csrf_token %}
+            
+            <!-- Test Fee Display -->
+            <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-info-circle text-blue-400"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-blue-700">
+                            {% trans "Standard Test Fee" %}: <strong>${{ test_fee }}</strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Student Information -->
+            <div class="border-b pb-4 mb-4">
+                <h2 class="text-lg font-semibold mb-3 text-gray-700">
+                    {% trans "Student Information" %}
+                </h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        {{ form.student_name.label_tag }}
+                        {{ form.student_name }}
+                        {% if form.student_name.help_text %}
+                            <p class="text-sm text-gray-600 mt-1">{{ form.student_name.help_text }}</p>
+                        {% endif %}
+                        {% if form.student_name.errors %}
+                            <p class="text-sm text-red-600 mt-1">{{ form.student_name.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        {{ form.student_phone.label_tag }}
+                        {{ form.student_phone }}
+                        {% if form.student_phone.help_text %}
+                            <p class="text-sm text-gray-600 mt-1">{{ form.student_phone.help_text }}</p>
+                        {% endif %}
+                        {% if form.student_phone.errors %}
+                            <p class="text-sm text-red-600 mt-1">{{ form.student_phone.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Details -->
+            <div class="border-b pb-4 mb-4">
+                <h2 class="text-lg font-semibold mb-3 text-gray-700">
+                    {% trans "Payment Details" %}
+                </h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        {{ form.amount.label_tag }}
+                        <div class="relative">
+                            <span class="absolute left-3 top-2 text-gray-500">$</span>
+                            {{ form.amount }}
+                        </div>
+                        {% if form.amount.errors %}
+                            <p class="text-sm text-red-600 mt-1">{{ form.amount.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        {{ form.payment_method.label_tag }}
+                        {{ form.payment_method }}
+                        {% if form.payment_method.errors %}
+                            <p class="text-sm text-red-600 mt-1">{{ form.payment_method.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div id="reference-field" style="display: none;">
+                        {{ form.payment_reference.label_tag }}
+                        {{ form.payment_reference }}
+                        {% if form.payment_reference.help_text %}
+                            <p class="text-sm text-gray-600 mt-1">{{ form.payment_reference.help_text }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Print Options -->
+            <div class="mb-6">
+                <label class="flex items-center">
+                    {{ form.print_receipt }}
+                    <span class="ml-2">
+                        <i class="fas fa-print mr-1"></i>
+                        {% trans "Print receipt with QR code" %}
+                    </span>
+                </label>
+                <p class="text-sm text-gray-600 mt-1 ml-6">
+                    {% trans "Receipt will be sent to thermal printer automatically" %}
+                </p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex justify-between">
+                <button type="button" 
+                        onclick="window.location.href='{% url 'level_testing:staff_dashboard' %}'"
+                        class="px-6 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    {% trans "Back to Dashboard" %}
+                </button>
+                
+                <button type="submit" 
+                        class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
+                    <i class="fas fa-check-circle mr-2"></i>
+                    {% trans "Process Payment" %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+// Show/hide payment reference field based on payment method
+document.getElementById('id_payment_method').addEventListener('change', function() {
+    const referenceField = document.getElementById('reference-field');
+    if (this.value !== 'CASH' && this.value !== 'WAIVED') {
+        referenceField.style.display = 'block';
+    } else {
+        referenceField.style.display = 'none';
+    }
+});
+
+// Trigger change event on page load
+document.getElementById('id_payment_method').dispatchEvent(new Event('change'));
+</script>
+{% endblock %}

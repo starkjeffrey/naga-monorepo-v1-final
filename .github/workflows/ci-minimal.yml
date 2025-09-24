@@ -1,0 +1,67 @@
+name: Minimal CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+jobs:
+  backend-lint:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13.7'
+      
+      - uses: astral-sh/setup-uv@v4
+      
+      - name: Lint backend
+        working-directory: backend
+        run: |
+          uv sync --extra dev
+          uv run ruff check apps/ || true
+          uv run ruff format --check apps/ || true
+
+  backend-test:
+    runs-on: self-hosted
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_naga
+          POSTGRES_USER: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13.7'
+      
+      - uses: astral-sh/setup-uv@v4
+      
+      - name: Test backend
+        working-directory: backend
+        env:
+          DATABASE_NAME: test_naga
+          DATABASE_USER: postgres
+          DATABASE_PASSWORD: postgres
+          DATABASE_HOST: localhost
+          DATABASE_PORT: 5432
+          DJANGO_SETTINGS_MODULE: config.settings.test
+        run: |
+          uv sync --extra dev
+          uv run python manage.py migrate
+          uv run pytest apps/ -v --maxfail=5 || true

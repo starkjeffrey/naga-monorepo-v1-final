@@ -1,0 +1,250 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load i18n %}
+{% load web_interface_tags %}
+
+{% block title %}{{ page_title|default:"Web Interface" }} - {{ block.super }}{% endblock %}
+{% block extra_css %}
+  {{ block.super }}
+  <!-- Unified Web Interface styles -->
+  <link rel="stylesheet" href="{% static 'web_interface/css/naga-unified.css' %}" />
+  <style>
+    /* App-specific overrides - minimal additional styles */
+    .web-interface-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .web-interface-title {
+      font-size: 1.875rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin: 0;
+    }
+
+    .web-interface-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .role-info {
+      background: var(--light);
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      font-size: var(--font-size-base);
+      color: var(--secondary);
+      font-weight: 500;
+      white-space: nowrap;
+      order: -1;
+      margin-right: auto;
+    }
+
+    /* Search Results Styles */
+    .search-results {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      max-height: 300px;
+      overflow-y: auto;
+      z-index: 1000;
+    }
+
+    .student-search-container {
+      position: relative;
+    }
+
+    .student-search-result {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background-color var(--transition);
+    }
+
+    .student-search-result:hover {
+      background-color: var(--light);
+    }
+
+    .student-search-result:last-child {
+      border-bottom: none;
+    }
+
+    .student-result-info .student-name {
+      font-weight: 500;
+      color: var(--dark);
+    }
+
+    .student-result-info .student-details {
+      font-size: var(--font-size-base);
+      color: var(--secondary);
+      margin-top: 0.25rem;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .student-result-info .outstanding-balance {
+      color: var(--warning);
+      font-weight: 500;
+    }
+
+    .no-results {
+      padding: 1rem;
+      text-align: center;
+      color: var(--secondary);
+    }
+  </style>
+{% endblock %}
+{% block content %}
+  <div class="web-interface-content">
+    <div class="web-interface-header">
+      <h1 class="web-interface-title">{{ page_title|default:"Web Interface Dashboard" }}</h1>
+      <div class="web-interface-actions">
+        {% if current_role %}
+          <div class="role-info">{% trans "Current Role" %}: {{ current_role|title }}</div>
+        {% endif %}
+        {% block header_actions %}
+          {% if user.is_authenticated %}
+            {% if current_role == 'admin' or current_role == 'staff' %}
+              <button class="btn btn-primary"
+                      data-modal-url="{% url 'web_interface:modal-student-create' %}"
+                      title="{% trans 'Add New Student' %}">
+                <i class="fas fa-plus"></i>
+                {% trans "New Student" %}
+              </button>
+            {% endif %}
+            {% if current_role == 'finance' or current_role == 'admin' %}
+              <button class="btn btn-success"
+                      data-modal-url="{% url 'web_interface:modal-invoice-create' %}"
+                      title="{% trans 'Generate Invoice' %}">
+                <i class="fas fa-file-invoice"></i>
+                {% trans "New Invoice" %}
+              </button>
+              <button class="btn btn-info"
+                      data-modal-url="{% url 'web_interface:modal-quick-payment' %}"
+                      title="{% trans 'Quick Payment Processing' %}">
+                <i class="fas fa-credit-card"></i>
+                {% trans "Quick Payment" %}
+              </button>
+            {% endif %}
+            <!-- Role Switch Dropdown (if user has multiple roles) -->
+            {% get_user_roles user as user_roles %}
+            {% if user_roles|length > 1 %}
+              <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">{% trans "Switch Role" %}</button>
+                <div class="dropdown-menu">
+                  {% for role in user_roles %}
+                    <a class="dropdown-item {% if role == current_role %}active{% endif %}"
+                       href="{% url 'web_interface:role-switch' %}?role={{ role }}">{{ role|title }}</a>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+          {% endif %}
+        {% endblock %}
+      </div>
+    </div>
+    <!-- Main Dashboard Content -->
+    <div id="webInterfaceContent">
+      {% block dashboard_content %}
+        {% include "web_interface/dashboards/dashboard_content.html" %}
+      {% endblock %}
+    </div>
+  </div>
+  <!-- Modal Container -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalTitle">{% trans "Modal" %}</h3>
+        <button type="button"
+                class="btn-close"
+                onclick="window.DashboardApp.closeModal()">&times;</button>
+      </div>
+      <div id="modalBody" class="modal-body">
+        <!-- Modal content will be loaded here -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="window.DashboardApp.closeModal()">{% trans "Cancel" %}</button>
+        <button class="btn btn-primary"
+                id="modalSaveBtn"
+                onclick="window.DashboardApp.saveModal()">{% trans "Save" %}</button>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block extra_js %}
+  {{ block.super }}
+  <!-- Web Interface JavaScript -->
+  <script src="{% static 'web_interface/js/dashboard.js' %}"></script>
+  <script src="{% static 'web_interface/js/htmx-extensions.js' %}"></script>
+  <script>
+    // Configure HTMX for web interface
+    htmx.config.defaultSwapStyle = 'innerHTML';
+    htmx.config.defaultSwapDelay = 0;
+    htmx.config.defaultSettleDelay = 100;
+
+    // Add global HTMX headers
+    document.addEventListener('htmx:configRequest', function(event) {
+      event.detail.headers['X-Requested-With'] = 'XMLHttpRequest';
+    });
+
+    // Dropdown functionality
+    document.addEventListener('click', function(event) {
+      const dropdown = event.target.closest('.dropdown');
+      if (dropdown) {
+        const dropdownToggle = dropdown.querySelector('.dropdown-toggle');
+        if (event.target === dropdownToggle) {
+          event.preventDefault();
+          dropdown.classList.toggle('open');
+        }
+      } else {
+        // Close all dropdowns when clicking outside
+        document.querySelectorAll('.dropdown').forEach(d => {
+          d.classList.remove('open');
+        });
+      }
+    });
+
+    // Modal button handlers
+    document.addEventListener('click', function(event) {
+      if (event.target.matches('[data-modal-url]')) {
+        event.preventDefault();
+        const url = event.target.getAttribute('data-modal-url');
+        if (window.DashboardApp && window.DashboardApp.loadModalContent) {
+          window.DashboardApp.loadModalContent(url);
+        }
+      }
+    });
+  </script>
+  <!-- Django Messages -->
+  {% if messages %}
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        {
+          %
+          for message in messages %
+        }
+        if (window.DashboardApp && window.DashboardApp.showAlert) {
+          window.DashboardApp.showAlert(
+            "{{ message|escapejs }}",
+            "{{ message.tags|default:'info' }}"
+          );
+        } {
+          %
+          endfor %
+        }
+      });
+    </script>
+  {% endif %}
+{% endblock %}

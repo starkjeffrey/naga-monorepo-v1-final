@@ -1,0 +1,29 @@
+# SIMPLEST GitLab CI/CD Job - Just One Job to Start
+# This is the most basic job that should work reliably
+
+stages:
+  - verify
+
+# Job 1: Just verify the environment and project structure
+verify_environment:
+  stage: verify
+  image: ubuntu:22.04
+  script:
+    - echo "=== GitLab CI/CD Environment Check ==="
+    - echo "Current directory:"
+    - pwd
+    - echo ""
+    - echo "Project structure:"
+    - ls -la
+    - echo ""
+    - echo "Backend directory check:"
+    - ls -la backend/ | head -10
+    - echo ""
+    - echo "System info:"
+    - uname -a
+    - echo ""
+    - echo "=== Environment check completed successfully ==="
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_COMMIT_BRANCH == "unified-api-migration"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'

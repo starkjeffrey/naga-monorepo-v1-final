@@ -1,0 +1,132 @@
+<!-- templates/web_interface/pages/academic/enrollment.html -->
+<!-- INSTRUCTION FOR SONNET: Enhanced enrollment dashboard -->
+
+{% extends "web_interface/base/dashboard_base.html" %}
+{% load i18n %}
+{% load web_interface_tags %}
+
+{% block title %}{% trans "Enrollment Management" %}{% endblock %}
+
+{% block dashboard_content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <!-- Header with filters -->
+  <div class="bg-white shadow-sm border-b">
+    <div class="px-4 py-4 sm:px-6">
+      <div class="flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-gray-900">{% trans "Enrollment Management" %}</h1>
+        
+        <!-- Term Selector -->
+        <div class="flex space-x-4">
+          <select hx-get="{% url 'web_interface:enrollment-management' %}"
+                  hx-target="#enrollment-content"
+                  name="term"
+                  class="rounded-md border-gray-300">
+            {% for t in available_terms %}
+            <option value="{{ t.id }}" {% if term and t.id == term.id %}selected{% endif %}>
+              {{ t.code }}
+            </option>
+            {% endfor %}
+          </select>
+          
+          <!-- View Toggle -->
+          <div class="bg-gray-100 p-1 rounded-lg flex">
+            <button onclick="setView('grid')" class="px-3 py-1 rounded bg-white shadow">{% trans "Grid" %}</button>
+            <button onclick="setView('list')" class="px-3 py-1 rounded hover:bg-white">{% trans "List" %}</button>
+            <button onclick="setView('calendar')" class="px-3 py-1 rounded hover:bg-white">{% trans "Calendar" %}</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Quick Stats -->
+      <div class="mt-4 grid grid-cols-4 gap-4">
+        <div class="bg-green-50 rounded-lg p-3">
+          <div class="text-green-600 text-sm font-medium">{% trans "Available" %}</div>
+          <div class="text-2xl font-bold text-green-900">{{ stats.available_seats }}</div>
+        </div>
+        <div class="bg-yellow-50 rounded-lg p-3">
+          <div class="text-yellow-600 text-sm font-medium">{% trans "Nearly Full" %}</div>
+          <div class="text-2xl font-bold text-yellow-900">{{ stats.nearly_full }}</div>
+        </div>
+        <div class="bg-red-50 rounded-lg p-3">
+          <div class="text-red-600 text-sm font-medium">{% trans "Full" %}</div>
+          <div class="text-2xl font-bold text-red-900">{{ stats.full_classes }}</div>
+        </div>
+        <div class="bg-blue-50 rounded-lg p-3">
+          <div class="text-blue-600 text-sm font-medium">{% trans "Total Enrolled" %}</div>
+          <div class="text-2xl font-bold text-blue-900">{{ stats.total_enrolled }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Main Content Area -->
+  <div id="enrollment-content" class="py-6">
+    <!-- Class Grid View -->
+    <div id="grid-view" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {% for class in classes %}
+      {% include 'web_interface/partials/class_card_enhanced.html' %}
+      {% endfor %}
+    </div>
+    
+    <!-- Empty state -->
+    {% if not classes %}
+    <div class="text-center py-12">
+      <div class="text-gray-400 mb-4">
+        <i class="fas fa-calendar-alt text-4xl"></i>
+      </div>
+      <h3 class="text-lg font-medium text-gray-900 mb-2">{% trans "No Classes Available" %}</h3>
+      <p class="text-gray-500">{% trans "No classes are currently available for the selected term." %}</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Modal Container -->
+<div id="modal-container" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+  <div id="modal-content" class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-screen overflow-y-auto mx-4">
+    <!-- Modal content loaded here -->
+  </div>
+</div>
+
+<!-- JavaScript for view switching and modal handling -->
+<script>
+// View switching functionality
+function setView(viewType) {
+  // Update button states
+  document.querySelectorAll('.bg-gray-100 button').forEach(btn => {
+    btn.className = 'px-3 py-1 rounded hover:bg-white';
+  });
+  event.target.className = 'px-3 py-1 rounded bg-white shadow';
+  
+  // Switch views (for now just grid - list and calendar would be implemented later)
+  console.log('Switching to view:', viewType);
+}
+
+// Modal functions
+function openModal() {
+  document.getElementById('modal-container').classList.remove('hidden');
+}
+
+function closeModal() {
+  document.getElementById('modal-container').classList.add('hidden');
+  document.getElementById('modal-content').innerHTML = '';
+}
+
+// Close modal when clicking outside
+document.getElementById('modal-container').addEventListener('click', function(e) {
+  if (e.target === this) {
+    closeModal();
+  }
+});
+
+// WebSocket for live updates (commented out for now - would need WebSocket server)
+/*
+const ws = new WebSocket('ws://localhost:8000/ws/enrollment/');
+ws.onmessage = function(e) {
+    const data = JSON.parse(e.data);
+    // Update specific class card
+    htmx.ajax('GET', `/enrollment/class/${data.class_id}/status/`, `#class-${data.class_id}`);
+};
+*/
+</script>
+{% endblock %}

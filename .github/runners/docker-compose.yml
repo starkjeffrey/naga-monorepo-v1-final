@@ -1,0 +1,113 @@
+version: '3.8'
+
+services:
+  github-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: naga-github-runner
+    restart: unless-stopped
+    environment:
+      # Required: Your GitHub personal access token with repo permissions
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      
+      # Required: Your repository (format: owner/repo)
+      - GITHUB_REPOSITORY=${GITHUB_REPOSITORY:-starkjeffrey/naga-monorepo}
+      
+      # Optional: Custom runner name (defaults to hostname + timestamp)
+      - RUNNER_NAME=${RUNNER_NAME:-naga-monorepo-runner}
+      
+      # Optional: Runner labels (comma-separated)
+      - RUNNER_LABELS=${RUNNER_LABELS:-self-hosted,linux,x64,naga-monorepo,docker}
+      
+      # Optional: Runner group
+      - RUNNER_GROUP=${RUNNER_GROUP:-default}
+      
+      # Database configuration for tests
+      - POSTGRES_HOST=${POSTGRES_HOST:-postgres}
+      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
+      - POSTGRES_DB=${POSTGRES_DB:-naga_local}
+      - POSTGRES_USER=${POSTGRES_USER:-debug}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-debug}
+      
+      # Test database configuration
+      - TEST_POSTGRES_HOST=${TEST_POSTGRES_HOST:-naga-runner-postgres}
+      - TEST_POSTGRES_PORT=${TEST_POSTGRES_PORT:-5432}
+      - TEST_POSTGRES_DB=${TEST_POSTGRES_DB:-test_runner_db}
+      - TEST_POSTGRES_USER=${TEST_POSTGRES_USER:-test_runner}
+      - TEST_POSTGRES_PASSWORD=${TEST_POSTGRES_PASSWORD:-test_runner_pass}
+    volumes:
+      # Mount Docker socket for Docker-in-Docker capability
+      - /var/run/docker.sock:/var/run/docker.sock
+      
+      # Persistent storage for runner work directory
+      - github-runner-work:/home/runner/_work
+      
+      # Optional: Mount your Docker daemon config
+      - /etc/docker/daemon.json:/etc/docker/daemon.json:ro
+      
+      # Optional: Cache directories for better performance
+      - npm-cache:/home/runner/.npm
+      - uv-cache:/home/runner/.cache/uv
+      - pip-cache:/home/runner/.cache/pip
+    
+    # Optional: Resource limits to prevent runner from consuming all resources
+    deploy:
+      resources:
+        limits:
+          cpus: '4.0'
+          memory: 8G
+        reservations:
+          cpus: '2.0'
+          memory: 4G
+    
+    # Optional: Network configuration
+    networks:
+      - runner-net
+
+  # Optional: PostgreSQL service for testing (if you don't want to use external DB)
+  postgres:
+    image: postgres:15-alpine
+    container_name: naga-runner-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=test_runner_db
+      - POSTGRES_USER=test_runner
+      - POSTGRES_PASSWORD=test_runner_pass
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - runner-net
+    ports:
+      - "5433:5432"  # Use different port to avoid conflicts
+
+  # Optional: Redis service for testing
+  redis:
+    image: redis:8.2-alpine
+    container_name: naga-runner-redis
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+    networks:
+      - runner-net
+    ports:
+      - "6380:6379"  # Use different port to avoid conflicts
+
+volumes:
+  github-runner-work:
+    driver: local
+  npm-cache:
+    driver: local
+  uv-cache:
+    driver: local
+  pip-cache:
+    driver: local
+  postgres-data:
+    driver: local
+  redis-data:
+    driver: local
+
+networks:
+  runner-net:
+    driver: bridge

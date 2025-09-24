@@ -1,0 +1,229 @@
+{% extends "base_with_topnav.html" %}
+
+{% load i18n %}
+
+{% block title %}
+  {% trans
+  "Test Top Navigation" %} - {{ block.super }}
+{% endblock %}
+{% block content %}
+  <div class="p-6 space-y-6">
+    <!-- Welcome Header -->
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">{% trans "Test Top Navigation Layout" %}</h1>
+      <p class="text-gray-600 dark:text-gray-400">
+        {% trans "This page demonstrates the new top navigation layout with
+        collapsible sidebar, dark/light mode toggle, language switching, and
+        notification system." %}
+      </p>
+    </div>
+    <!-- Feature Demonstration Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Dark/Light Mode -->
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <div class="flex items-center mb-4">
+          <div class="h-10 w-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
+            <i class="fas fa-moon text-blue-600 dark:text-blue-400"></i>
+          </div>
+          <h3 class="ml-3 text-lg font-semibold text-gray-900 dark:text-white">{% trans "Theme Toggle" %}</h3>
+        </div>
+        <p class="text-gray-600 dark:text-gray-400 text-sm">
+          {% trans "Click the sun/moon icon in the top navigation to switch
+          between light and dark themes. Your preference is saved automatically."
+          %}
+        </p>
+      </div>
+      <!-- Language Toggle -->
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <div class="flex items-center mb-4">
+          <div class="h-10 w-10 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
+            <i class="fas fa-language text-green-600 dark:text-green-400"></i>
+          </div>
+          <h3 class="ml-3 text-lg font-semibold text-gray-900 dark:text-white">{% trans "Language Switch" %}</h3>
+        </div>
+        <p class="text-gray-600 dark:text-gray-400 text-sm">
+          {% trans "Click the language dropdown in the top navigation to switch
+          between English and Khmer. The page will reload with your selected
+          language." %}
+        </p>
+      </div>
+      <!-- Notifications -->
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <div class="flex items-center mb-4">
+          <div class="h-10 w-10 bg-yellow-100 dark:bg-yellow-900 rounded-lg flex items-center justify-center">
+            <i class="fas fa-bell text-yellow-600 dark:text-yellow-400"></i>
+          </div>
+          <h3 class="ml-3 text-lg font-semibold text-gray-900 dark:text-white">{% trans "Notifications" %}</h3>
+        </div>
+        <p class="text-gray-600 dark:text-gray-400 text-sm">
+          {% trans "The bell icon shows a notification counter with animated
+          badge. Click it to see sample notifications dropdown." %}
+        </p>
+      </div>
+      <!-- Sidebar Collapse -->
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <div class="flex items-center mb-4">
+          <div class="h-10 w-10 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
+            <i class="fas fa-bars text-purple-600 dark:text-purple-400"></i>
+          </div>
+          <h3 class="ml-3 text-lg font-semibold text-gray-900 dark:text-white">{% trans "Collapsible Sidebar" %}</h3>
+        </div>
+        <p class="text-gray-600 dark:text-gray-400 text-sm">
+          {% trans "Click the hamburger menu icon next to the logo to collapse the
+          sidebar and gain more screen real estate. Your preference is
+          remembered." %}
+        </p>
+      </div>
+      <!-- User Menu -->
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <div class="flex items-center mb-4">
+          <div class="h-10 w-10 bg-red-100 dark:bg-red-900 rounded-lg flex items-center justify-center">
+            <i class="fas fa-user text-red-600 dark:text-red-400"></i>
+          </div>
+          <h3 class="ml-3 text-lg font-semibold text-gray-900 dark:text-white">{% trans "User Profile" %}</h3>
+        </div>
+        <p class="text-gray-600 dark:text-gray-400 text-sm">
+          {% trans "Click your avatar in the top-right corner to access profile
+          settings, admin panel (if applicable), and sign out options." %}
+        </p>
+      </div>
+      <!-- Responsive Design -->
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <div class="flex items-center mb-4">
+          <div class="h-10 w-10 bg-indigo-100 dark:bg-indigo-900 rounded-lg flex items-center justify-center">
+            <i class="fas fa-mobile-alt text-indigo-600 dark:text-indigo-400"></i>
+          </div>
+          <h3 class="ml-3 text-lg font-semibold text-gray-900 dark:text-white">{% trans "Mobile Responsive" %}</h3>
+        </div>
+        <p class="text-gray-600 dark:text-gray-400 text-sm">
+          {% trans "The layout adapts to mobile devices with an overlay sidebar
+          and optimized touch targets for easy navigation." %}
+        </p>
+      </div>
+    </div>
+    <!-- Current Status Display -->
+    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg border border-blue-200 dark:border-blue-800 p-6">
+      <h2 class="text-xl font-semibold text-blue-900 dark:text-blue-100 mb-4">{% trans "Current System Status" %}</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-4">
+          <div class="text-sm text-gray-500 dark:text-gray-400">{% trans "Current User" %}</div>
+          <div class="font-semibold text-gray-900 dark:text-white">{{ request.user.name|default:request.user.email }}</div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-4">
+          <div class="text-sm text-gray-500 dark:text-gray-400">{% trans "User Role" %}</div>
+          <div class="font-semibold text-gray-900 dark:text-white">{{ user_role_display|default:"Student" }}</div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-4">
+          <div class="text-sm text-gray-500 dark:text-gray-400">{% trans "Current Language" %}</div>
+          <div class="font-semibold text-gray-900 dark:text-white">
+            {% if LANGUAGE_CODE == 'km' %}
+              🇰🇭 ភាសាខ្មែរ
+            {% else %}
+              🇺🇸 English {%
+              endif %}
+            </div>
+          </div>
+          <div class="bg-white dark:bg-gray-800 rounded-lg p-4">
+            <div class="text-sm text-gray-500 dark:text-gray-400">{% trans "Current Term" %}</div>
+            <div class="font-semibold text-gray-900 dark:text-white">{{ current_term|default:"No Active Term" }}</div>
+          </div>
+        </div>
+      </div>
+      <!-- Sample Content Areas -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Sample Data Table -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+          <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{% trans "Sample Data Table" %}</h3>
+          </div>
+          <div class="p-4">
+            <div class="overflow-x-auto">
+              <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead>
+                  <tr>
+                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      {% trans "Student ID" %}
+                    </th>
+                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      {% trans "Name" %}
+                    </th>
+                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      {% trans "Status" %}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                  <tr>
+                    <td class="px-3 py-2 text-sm text-gray-900 dark:text-gray-300">00123</td>
+                    <td class="px-3 py-2 text-sm text-gray-900 dark:text-gray-300">{% trans "John Doe" %}</td>
+                    <td class="px-3 py-2">
+                      <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                        {% trans "Active" %}
+                      </span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="px-3 py-2 text-sm text-gray-900 dark:text-gray-300">00124</td>
+                    <td class="px-3 py-2 text-sm text-gray-900 dark:text-gray-300">{% trans "Jane Smith" %}</td>
+                    <td class="px-3 py-2">
+                      <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
+                        {% trans "Pending" %}
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- Sample Form -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+          <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{% trans "Sample Form" %}</h3>
+          </div>
+          <div class="p-4">
+            <form class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% trans "Student Name" %}</label>
+                <input type="text"
+                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                       placeholder="{% trans 'Enter student name' %}" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% trans "Program" %}</label>
+                <select class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                  <option>{% trans "Business Administration" %}</option>
+                  <option>{% trans "TESOL" %}</option>
+                  <option>{% trans "International Relations" %}</option>
+                </select>
+              </div>
+              <button type="submit"
+                      class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-colors">
+                {% trans "Save Student" %}
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <!-- Instructions -->
+      <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-6">
+        <div class="flex items-start">
+          <i class="fas fa-lightbulb text-amber-600 dark:text-amber-400 mt-1 mr-3"></i>
+          <div>
+            <h3 class="font-semibold text-amber-800 dark:text-amber-200 mb-2">{% trans "Testing Instructions" %}</h3>
+            <ul class="text-amber-700 dark:text-amber-300 text-sm space-y-1">
+              <li>• {% trans "Try collapsing the sidebar using the hamburger menu" %}</li>
+              <li>• {% trans "Toggle between light and dark themes" %}</li>
+              <li>• {% trans "Click the notification bell to see sample messages" %}</li>
+              <li>• {% trans "Test the language switcher dropdown" %}</li>
+              <li>• {% trans "Check your user profile dropdown" %}</li>
+              <li>
+                • {% trans "Resize the browser window to test mobile responsiveness"
+                %}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endblock %}

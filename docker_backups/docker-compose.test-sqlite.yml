@@ -1,0 +1,27 @@
+services:
+  django:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: backend_django_test_sqlite
+    container_name: naga_test_sqlite_django
+    env_file:
+      - ./.envs/.test-sqlite
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.test_sqlite
+      - DATABASE_URL=sqlite:///app/test_db.sqlite3
+    volumes:
+      - .:/app
+      - sqlite_test_data:/app/test_data  # Separate volume for SQLite files
+    ports:
+      - "8002:8000"  # Different port to avoid conflicts
+    command: /start
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "manage.py", "check"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  sqlite_test_data:  # Volume for SQLite database files

@@ -1,0 +1,93 @@
+{% extends "web_interface/base/dashboard_base.html" %}
+{% load i18n %}
+{% load static %}
+{% load web_interface_tags %}
+{% comment %}
+Base template for dashboard pages that shouldn't auto-load dashboard content.
+This removes the hx-trigger="load" from the contentArea div.
+{% endcomment %}
+
+{% block extra_css %}
+<style>
+.sidebar-logo-icon {
+    background: var(--primary) url('{% static "images/naga-trans.png" %}') center/28px no-repeat !important;
+    color: transparent !important;
+}
+</style>
+{{ block.super }}
+{% endblock %}
+
+{% block content %}
+  <div class="dashboard active" id="dashboard">
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">N</div>
+          <div>
+            <div class="sidebar-title">{% trans "Naga SIS" %}</div>
+            <div class="user-info" id="userRole">
+              {{ user.get_full_name|default:user.username }}
+              {% if current_role %}- {{ current_role|title }}{% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <nav class="nav-menu" id="navMenu">
+        {% get_user_navigation user as navigation %}
+        {% for section in navigation %}
+          <div class="nav-section">
+            <div class="nav-section-title">{{ section.title|trans }}</div>
+            {% for item in section.items %}
+              <a href="{% if item.url_name %}{% url item.url_name %}{% else %}#{% endif %}"
+                 class="nav-item {% if item.page == current_page %}active{% endif %}"
+                 data-page="{{ item.page }}"
+                 {% if item.url_name %} hx-get="{% url item.url_name %}" hx-target="#contentArea" hx-ext="naga-nav" hx-push-url="true" {% endif %}>
+                <span class="nav-icon">{{ item.icon }}</span>
+                <span>{{ item.name|trans }}</span>
+              </a>
+            {% endfor %}
+          </div>
+        {% endfor %}
+      </nav>
+    </div>
+    <!-- Main Content Area -->
+    <div class="main-content">
+      <!-- Header -->
+      <div class="header">
+        <h2 class="page-title" id="pageTitle">{% block page_title %}{{ page_title|default:"Dashboard" }}{% endblock %}</h2>
+        <div class="header-actions">
+          {% block header_actions %}
+            {{ block.super }}
+          {% endblock %}
+        </div>
+      </div>
+      <!-- Content Area - NO AUTO-LOAD -->
+      <div id="contentArea" class="content-area">
+        {% block dashboard_content %}
+          <!-- Page content goes here -->
+        {% endblock %}
+      </div>
+    </div>
+  </div>
+  <!-- Modal Container -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalTitle">{% trans "Modal" %}</h3>
+        <button type="button"
+                class="btn-close"
+                onclick="window.DashboardApp.closeModal()">&times;</button>
+      </div>
+      <div id="modalBody" class="modal-body">
+        <!-- Modal content will be loaded here -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="window.DashboardApp.closeModal()">{% trans "Cancel" %}</button>
+        <button class="btn"
+                id="modalSaveBtn"
+                onclick="window.DashboardApp.saveModal()">{% trans "Save" %}</button>
+      </div>
+    </div>
+  </div>
+{% endblock %}

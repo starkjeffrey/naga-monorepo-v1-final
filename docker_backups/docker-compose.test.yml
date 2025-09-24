@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: naga_test_postgres
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_DB=naga_test  # Different database name for testing
+      - POSTGRES_USER=debug
+      - POSTGRES_PASSWORD=debug
+    volumes:
+      - postgres_test_data:/var/lib/postgresql/data  # Separate volume for test data
+    ports:
+      - "5433:5432"  # Different port to avoid conflicts
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "debug", "-d", "naga_test"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:8.2-alpine
+    container_name: naga_test_redis
+    ports:
+      - "6380:6379"  # Different port to avoid conflicts
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  django:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: backend_django
+    container_name: naga_test_django
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file:
+      - ./.envs/.test  # Test-specific environment
+    environment:
+      - DATABASE_URL=postgres://debug:debug@postgres:5432/naga_test
+      - DJANGO_SETTINGS_MODULE=config.settings.test
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - .:/app
+    ports:
+      - "8001:8000"  # Different port to avoid conflicts
+    command: /start
+    restart: unless-stopped
+
+volumes:
+  postgres_test_data:  # Separate volume for test database

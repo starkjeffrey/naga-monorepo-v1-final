@@ -1,0 +1,151 @@
+{# Reusable Alert Component #} {# Usage: {% include 'components/alerts.html'
+with type="success" message="Your message" dismissible=True %} #} {# Types:
+success, info, warning, error #}
+{% load i18n %}
+
+<div
+  id="{{ alert_id|default:'alert' }}"
+  class="rounded-md p-4 mb-4 {{ extra_classes }}"
+  {%
+  if
+  auto_dismiss
+  %}data-auto-dismiss="{{ auto_dismiss }}"
+  {%
+  endif
+  %}
+  role="alert"
+  >
+  <div class="flex">
+    <div class="flex-shrink-0">
+      {% if type == 'success' %}
+        <svg class="h-5 w-5 text-green-400"
+             viewBox="0 0 20 20"
+             fill="currentColor">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+        </svg>
+      {% elif type == 'info' %}
+        <svg class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+        </svg>
+      {% elif type == 'warning' %}
+        <svg class="h-5 w-5 text-yellow-400"
+             viewBox="0 0 20 20"
+             fill="currentColor">
+          <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+        </svg>
+      {% else %}
+        <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+        </svg>
+      {% endif %}
+    </div>
+    <div class="ml-3 flex-1">
+      {% if title %}
+        <h3 class="text-sm font-medium {% if type == 'success' %}text-green-800{% elif type == 'info' %}text-blue-800{% elif type == 'warning' %}text-yellow-800{% else %}text-red-800{% endif %}">
+          {{ title }}
+        </h3>
+      {% endif %}
+      <div class="{% if title %}mt-2{% endif %} text-sm {% if type == 'success' %}text-green-700{% elif type == 'info' %}text-blue-700{% elif type == 'warning' %}text-yellow-700{% else %}text-red-700{% endif %}">
+        {{ message|safe }}
+        {% if details %}
+          <ul class="list-disc pl-5 space-y-1 mt-2">
+            {% for detail in details %}<li>{{ detail }}</li>{% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+      {% if actions %}
+        <div class="mt-4">
+          <div class="-mx-2 -my-1.5 flex">{{ actions|safe }}</div>
+        </div>
+      {% endif %}
+    </div>
+    {% if dismissible %}
+      <div class="ml-auto pl-3">
+        <div class="-mx-1.5 -my-1.5">
+          <button type="button"
+                  onclick="dismissAlert('{{ alert_id|default:'alert' }}')"
+                  class="inline-flex rounded-md p-1.5 {% if type == 'success' %}text-green-500 hover:bg-green-100{% elif type == 'info' %}text-blue-500 hover:bg-blue-100{% elif type == 'warning' %}text-yellow-500 hover:bg-yellow-100{% else %}text-red-500 hover:bg-red-100{% endif %} focus:outline-none focus:ring-2 focus:ring-offset-2 {% if type == 'success' %}focus:ring-green-500{% elif type == 'info' %}focus:ring-blue-500{% elif type == 'warning' %}focus:ring-yellow-500{% else %}focus:ring-red-500{% endif %}">
+            <span class="sr-only">{% trans "Dismiss" %}</span>
+            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% if type == 'success' %}
+  <style>
+    # {
+        {
+        alert_id|default: 'alert';
+      }
+    }
+
+      {
+      background-color: rgb(240 253 244);
+      border: 1px solid rgb(187 247 208);
+    }
+  </style>
+{% elif type == 'info' %}
+  <style>
+    # {
+        {
+        alert_id|default: 'alert';
+      }
+    }
+
+      {
+      background-color: rgb(239 246 255);
+      border: 1px solid rgb(191 219 254);
+    }
+  </style>
+{% elif type == 'warning' %}
+  <style>
+    # {
+        {
+        alert_id|default: 'alert';
+      }
+    }
+
+      {
+      background-color: rgb(254 252 232);
+      border: 1px solid rgb(254 240 138);
+    }
+  </style>
+{% else %}
+  <style>
+    # {
+        {
+        alert_id|default: 'alert';
+      }
+    }
+
+      {
+      background-color: rgb(254 242 242);
+      border: 1px solid rgb(254 202 202);
+    }
+  </style>
+{% endif %}
+<script>
+  function dismissAlert(alertId) {
+    const alert = document.getElementById(alertId);
+    if (alert) {
+      alert.style.transition = 'opacity 300ms';
+      alert.style.opacity = '0';
+      setTimeout(() => alert.remove(), 300);
+    }
+  }
+
+  // Auto-dismiss functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const alerts = document.querySelectorAll('[data-auto-dismiss]');
+    alerts.forEach((alert) => {
+      const timeout = parseInt(alert.dataset.autoDismiss) || 5000;
+      setTimeout(() => {
+        dismissAlert(alert.id);
+      }, timeout);
+    });
+  });
+</script>

@@ -1,0 +1,30 @@
+# Test Environment Variables
+
+# PostgreSQL
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=naga_test
+POSTGRES_USER=debug
+POSTGRES_PASSWORD=debug
+
+# Redis
+REDIS_URL=redis://redis:6379/0
+
+# Django
+DJANGO_DEBUG=False
+DJANGO_SECRET_KEY=test-secret-key-for-migration-squashing
+DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,django
+
+# Database URL
+DATABASE_URL=postgres://debug:debug@postgres:5432/naga_test
+
+# Email (test mode)
+EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
+
+# Celery/Dramatiq
+CELERY_BROKER_URL=redis://redis:6379/0
+DRAMATIQ_BROKER_URL=redis://redis:6379/0
+
+# Testing flags
+USE_DOCKER=yes
+IPYTHONDIR=/app/.ipython

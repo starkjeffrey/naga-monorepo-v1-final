@@ -1,0 +1,21 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "Naga SIS Evaluation DB",
+      "Group": "Evaluation",
+      "Host": "postgres",
+      "Port": 5432,
+      "MaintenanceDB": "naga_evaluation",
+      "Username": "naga_evaluation_user",
+      "PassFile": "/tmp/pgpassfile",
+      "SSLMode": "prefer",
+      "SSLCompression": 0,
+      "Timeout": 10,
+      "UseSSHTunnel": 0,
+      "TunnelHost": "",
+      "TunnelPort": "22",
+      "TunnelUsername": "",
+      "TunnelAuthentication": 0
+    }
+  }
+}

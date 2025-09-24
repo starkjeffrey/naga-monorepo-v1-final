@@ -1,0 +1,329 @@
+{% extends "base_new.html" %}
+
+{% load static i18n humanize %}
+
+{% block title %}
+  Daily\nCash Receipts - {{ report_date|date:"M d, Y" }} - {{ block.super }}
+{% endblock\n %}
+{% block extra_css %}
+  \n<style>
+  \n .report-header {
+    \n @apply bg-gray-50 rounded-lg p-6 mb-6;
+    \n
+  }
+
+  \n .summary-card {
+    \n @apply bg-white rounded-lg shadow-md p-6;
+    \n
+  }
+
+  \n .payment-table {
+    \n @apply min-w-full divide-y divide-gray-200;
+    \n
+  }
+
+  \n @media print {
+    \n .no-print {
+      \n display: none !important;
+      \n
+    }
+
+    \n .page-break {
+      \n page-break-after: always;
+      \n
+    }
+
+    \n
+  }
+
+  \n
+</style>
+  \n
+{% endblock %}
+{% block content %}
+  \n
+  <div class="container mx-auto px-4 py-6">
+    \n  <!-- Report Header -->\n
+    <div class="report-header">
+      \n
+      <div class="flex justify-between items-start">
+        \n
+        <div>
+          \n
+          <h1 class="text-3xl font-bold text-gray-800">\n          Daily Cash Receipts Report\n</h1>
+          \n
+          <p class="text-lg text-gray-600 mt-2">\n          {{ report_date|date:"l, F j, Y" }}\n</p>
+          \n
+        </div>
+        \n
+        <div class="flex space-x-3 no-print">
+          \n
+          <button onclick="window.print()" class="btn btn-outline-secondary">
+            \n
+            <svg\n class="w-5 h-5 mr-2"\n            fill="none"\n            stroke="currentColor"\n            viewBox="0 0 24 24"\n>
+              \n
+              <path\n stroke-linecap="round"\n              stroke-linejoin="round"\n              stroke-width="2"\n              d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2z"\n>
+              </path>
+              \n
+            </svg>
+            \n          Print Report\n
+          </button>
+          \n        <a\n href="{% url 'finance:daily-cash-receipts-pdf' %}?date={{ report_date|date:'Y-m-d' }}"\n          class="btn btn-outline-secondary"\n>\n
+          <svg\n class="w-5 h-5 mr-2"\n            fill="none"\n            stroke="currentColor"\n            viewBox="0 0 24 24"\n>
+            \n
+            <path\n stroke-linecap="round"\n              stroke-linejoin="round"\n              stroke-width="2"\n              d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"\n>
+            </path>
+            \n
+          </svg>
+          \n          Download PDF\n        </a>\n
+        </div>
+        \n
+      </div>
+      \n
+    </div>
+    \n\n  <!-- Summary Statistics -->\n
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      \n
+      <div class="summary-card">
+        \n
+        <h3 class="text-lg font-semibold text-gray-700 mb-2">Total Receipts</h3>
+        \n
+        <p class="text-3xl font-bold text-green-600">\n        ${{ total_amount|floatformat:2|intcomma }}\n</p>
+        \n
+        <p class="text-sm text-gray-500 mt-1">\n        {{ payment_count }} payment{{ payment_count|pluralize }}\n</p>
+        \n
+      </div>
+      \n\n
+      <div class="summary-card">
+        \n
+        <h3 class="text-lg font-semibold text-gray-700 mb-2">Average Payment</h3>
+        \n
+        <p class="text-3xl font-bold text-blue-600">
+          \n
+          {% if payment_count > 0 %}
+            ${{ total_amount|floatformat:2|intcomma }} {%\n        else %} $0.00
+          {% endif %}
+          \n
+        </p>
+        \n
+      </div>
+      \n\n
+      <div class="summary-card">
+        \n
+        <h3 class="text-lg font-semibold text-gray-700 mb-2">Active Cashiers</h3>
+        \n
+        <p class="text-3xl font-bold text-purple-600">{{ sessions.count }}</p>
+        \n
+      </div>
+      \n
+    </div>
+    \n\n  <!-- Payment Method Summary -->\n
+    <div class="bg-white rounded-lg shadow-md mb-8">
+      \n
+      <div class="px-6 py-4 border-b border-gray-200">
+        \n
+        <h2 class="text-xl font-semibold text-gray-800">\n        Payment Method Summary\n</h2>
+        \n
+      </div>
+      \n
+      <div class="p-6">
+        \n
+        <table class="payment-table">
+          \n
+          <thead class="bg-gray-50">
+            \n
+            <tr>
+              \n
+              <th\n class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"\n>
+                \n              Payment Method\n
+              </th>
+              \n
+              <th\n class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"\n>
+                \n              Count\n
+              </th>
+              \n
+              <th\n class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"\n>
+                \n              Total Amount\n
+              </th>
+              \n
+              <th\n class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"\n>
+                \n              Percentage\n
+              </th>
+              \n
+            </tr>
+            \n
+          </thead>
+          \n
+          <tbody class="bg-white divide-y divide-gray-200">
+            \n
+            {% for method in payment_summary %}
+              \n
+              <tr>
+                \n
+                <td\n class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"\n>
+                  \n              {{ method.payment_method }}\n
+                </td>
+                \n
+                <td\n class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right"\n>\n              {{ method.count }}\n</td>
+                \n
+                <td\n class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right"\n>
+                  \n              ${{ method.total|floatformat:2|intcomma }}\n
+                </td>
+                \n
+                <td\n class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right"\n>
+                  \n
+                  {% if total_amount > 0 %}
+                    {% widthratio method.total total_amount\n              100 %}%
+                  {% else %}
+                    0%
+                  {% endif %}
+                  \n
+                </td>
+                \n
+              </tr>
+              \n          {% empty %}\n
+              <tr>
+                \n
+                <td colspan="4" class="px-6 py-4 text-center text-gray-500">\n              No payments recorded for this date\n</td>
+                \n
+              </tr>
+              \n
+            {% endfor %}
+            \n
+          </tbody>
+          \n
+          {% if payment_summary %}
+            \n        <tfoot class="bg-gray-50">\n
+            <tr>
+              \n
+              <td class="px-6 py-3 text-sm font-bold text-gray-900">TOTAL</td>
+              \n
+              <td class="px-6 py-3 text-sm font-bold text-gray-900 text-right">\n              {{ payment_count }}\n</td>
+              \n
+              <td class="px-6 py-3 text-sm font-bold text-gray-900 text-right">
+                \n              ${{ total_amount|floatformat:2|intcomma }}\n
+              </td>
+              \n
+              <td class="px-6 py-3 text-sm font-bold text-gray-900 text-right">\n              100%\n</td>
+              \n
+            </tr>
+            \n        </tfoot>\n
+          {% endif %}
+          \n
+        </table>
+        \n
+      </div>
+      \n
+    </div>
+    \n\n  <!-- Detailed Payment List -->\n
+    <div class="bg-white rounded-lg shadow-md">
+      \n
+      <div class="px-6 py-4 border-b border-gray-200">
+        \n
+        <h2 class="text-xl font-semibold text-gray-800">Payment Details</h2>
+        \n
+      </div>
+      \n
+      <div class="overflow-x-auto">
+        \n
+        <table class="payment-table">
+          \n
+          <thead class="bg-gray-50">
+            \n
+            <tr>
+              \n
+              <th\n class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"\n>
+                \n              Time\n
+              </th>
+              \n
+              <th\n class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"\n>
+                \n              Receipt #\n
+              </th>
+              \n
+              <th\n class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"\n>
+                \n              Student\n
+              </th>
+              \n
+              <th\n class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"\n>
+                \n              Amount\n
+              </th>
+              \n
+              <th\n class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"\n>
+                \n              Method\n
+              </th>
+              \n
+              <th\n class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"\n>
+                \n              Cashier\n
+              </th>
+              \n
+            </tr>
+            \n
+          </thead>
+          \n
+          <tbody class="bg-white divide-y divide-gray-200">
+            \n
+            {% for payment in payments %}
+              \n
+              <tr>
+                \n
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  \n              {{ payment.processed_date|time:"g:i A" }}\n
+                </td>
+                \n
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  \n              {{ payment.reference_number|default:"-" }}\n
+                </td>
+                \n
+                <td class="px-6 py-4 whitespace-nowrap">
+                  \n
+                  <div class="text-sm font-medium text-gray-900">
+                    \n                {{ payment.invoice.student.person.full_name }}\n
+                  </div>
+                  \n
+                  <div class="text-sm text-gray-500">
+                    \n                ID: {{ payment.invoice.student.student_id|stringformat:"05d" }}\n
+                  </div>
+                  \n
+                </td>
+                \n
+                <td\n class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"\n>
+                  \n              ${{ payment.amount|floatformat:2|intcomma }}\n
+                </td>
+                \n
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  \n              {{ payment.get_payment_method_display }}\n
+                </td>
+                \n
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  \n              {{ payment.processed_by.get_full_name }}\n
+                </td>
+                \n
+              </tr>
+              \n          {% empty %}\n
+              <tr>
+                \n
+                <td colspan="6" class="px-6 py-4 text-center text-gray-500">\n              No payments recorded for this date\n</td>
+                \n
+              </tr>
+              \n
+            {% endfor %}
+            \n
+          </tbody>
+          \n
+        </table>
+        \n
+      </div>
+      \n
+    </div>
+    \n
+  </div>
+  \n
+{% endblock %}
+{% block extra_js %}
+  \n<script>
+  \
+  n // Date navigation\n  function changeDate(days) {\n    const currentDate = new Date('{{ report_date|date:"Y-m-d" }}');\n    currentDate.setDate(currentDate.getDate() + days);\n    const newDate = currentDate.toISOString().split('T')[0];\n    window.location.href = `?date=${newDate}`;\n  }\n
+</script>
+  \n
+{% endblock %}
+\n

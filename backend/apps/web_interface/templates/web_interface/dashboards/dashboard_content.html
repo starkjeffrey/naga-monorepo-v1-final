@@ -1,0 +1,402 @@
+{% load static %}
+{% load i18n %}
+{% load humanize %}
+{% load web_interface_tags %}
+
+<!-- Dashboard Content for {{ current_role|title }} Role -->
+<div class="dashboard-content" data-role="{{ current_role }}">
+  {% if current_role == 'admin' %}
+    <!-- Admin Dashboard -->
+    <div class="dashboard-header">
+      <h1>{% trans "System Administration" %}</h1>
+      <p class="text-muted">{% trans "Complete overview of the Naga SIS system" %}</p>
+    </div>
+    <!-- Admin Stats Grid -->
+    <div class="dashboard-grid">
+      <div class="stat-card primary">
+        <div class="stat-icon">👥</div>
+        <div class="stat-info">
+          <div class="stat-number">{{ stats.total_students|default:0|intcomma }}</div>
+          <div class="stat-label">{% trans "Total Students" %}</div>
+        </div>
+      </div>
+      <div class="stat-card success">
+        <div class="stat-icon">📚</div>
+        <div class="stat-info">
+          <div class="stat-number">{{ stats.active_classes|default:0|intcomma }}</div>
+          <div class="stat-label">{% trans "Active Classes" %}</div>
+        </div>
+      </div>
+      <div class="stat-card warning">
+        <div class="stat-icon">💰</div>
+        <div class="stat-info">
+          <div class="stat-number">${{ stats.pending_payments|default:0|floatformat:0|intcomma }}</div>
+          <div class="stat-label">{% trans "Pending Payments" %}</div>
+        </div>
+      </div>
+      <div class="stat-card info">
+        <div class="stat-icon">🎓</div>
+        <div class="stat-info">
+          <div class="stat-number">{{ stats.graduation_rate|default:0 }}%</div>
+          <div class="stat-label">{% trans "Graduation Rate" %}</div>
+        </div>
+      </div>
+    </div>
+    <!-- Recent Activity -->
+    <div class="dashboard-section">
+      <h3>{% trans "Recent Enrollments" %}</h3>
+      <div class="activity-list">
+        {% if recent_enrollments %}
+          {% for enrollment in recent_enrollments %}
+            <div class="activity-item">
+              <div class="activity-info">
+                <strong>{{ enrollment.student.person.full_name }}</strong>
+                {% trans "enrolled in" %} <em>{{ enrollment.course.title }}</em>
+              </div>
+              <div class="activity-time">{{ enrollment.created_at|timesince }} {% trans "ago" %}</div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="no-data">{% trans "No recent enrollments" %}</div>
+        {% endif %}
+      </div>
+    </div>
+  {% elif current_role == 'staff' %}
+    <!-- Staff Dashboard -->
+    <div class="dashboard-header">
+      <h1>{% trans "Academic Administration" %}</h1>
+      <p class="text-muted">{% trans "Manage student records and academic operations" %}</p>
+    </div>
+    <div class="dashboard-grid">
+      <div class="stat-card primary">
+        <div class="stat-icon">📋</div>
+        <div class="stat-info">
+          <div class="stat-number">{{ stats.student_records|default:0|intcomma }}</div>
+          <div class="stat-label">{% trans "Student Records" %}</div>
+        </div>
+      </div>
+      <div class="stat-card warning">
+        <div class="stat-icon">📝</div>
+        <div class="stat-info">
+          <div class="stat-number">{{ stats.pending_enrollments|default:0|intcomma }}</div>
+          <div class="stat-label">{% trans "Pending Enrollments" %}</div>
+        </div>
+      </div>
+      <div class="stat-card info">
+        <div class="stat-icon">🎓</div>
+        <div class="stat-info">
+          <div class="stat-number">{{ stats.pending_transcripts|default:0|intcomma }}</div>
+          <div class="stat-label">{% trans "Pending Transcripts" %}</div>
+        </div>
+      </div>
+    </div>
+    <!-- Quick Actions -->
+    <div class="dashboard-section">
+      <h3>{% trans "Quick Actions" %}</h3>
+      <div class="action-buttons">
+        <a href="{% url 'web_interface:student-list' %}" class="btn btn-primary">{% trans "Manage Students" %}</a>
+        <a href="{% url 'web_interface:enrollment-management' %}"
+           class="btn btn-success">{% trans "Process Enrollments" %}</a>
+        <a href="{% url 'web_interface:transcript-management' %}"
+           class="btn btn-info">{% trans "Generate Transcripts" %}</a>
+      </div>
+    </div>
+  {% elif current_role == 'teacher' %}
+    <!-- Teacher Dashboard -->
+    <div class="dashboard-header">
+      <h1>{% trans "Teaching Dashboard" %}</h1>
+      <p class="text-muted">{% trans "Manage your classes and students" %}</p>
+    </div>
+    <div class="dashboard-grid">
+      <div class="stat-card primary">
+        <div class="stat-icon">📚</div>
+        <div class="stat-info">
+          <div class="stat-number">{{ stats.my_classes|default:0 }}</div>
+          <div class="stat-label">{% trans "My Classes" %}</div>
+        </div>
+      </div>
+      <div class="stat-card success">
+        <div class="stat-icon">👨‍🎓</div>
+        <div class="stat-info">
+          <div class="stat-number">{{ stats.total_students|default:0|intcomma }}</div>
+          <div class="stat-label">{% trans "Total Students" %}</div>
+        </div>
+      </div>
+      <div class="stat-card warning">
+        <div class="stat-icon">📝</div>
+        <div class="stat-info">
+          <div class="stat-number">{{ stats.pending_grades|default:0|intcomma }}</div>
+          <div class="stat-label">{% trans "Pending Grades" %}</div>
+        </div>
+      </div>
+    </div>
+    <!-- Quick Actions -->
+    <div class="dashboard-section">
+      <h3>{% trans "Quick Actions" %}</h3>
+      <div class="action-buttons">
+        <a href="{% url 'web_interface:grade-management' %}"
+           class="btn btn-primary">{% trans "Enter Grades" %}</a>
+        <a href="{% url 'web_interface:schedule-view' %}"
+           class="btn btn-success">{% trans "View Schedule" %}</a>
+        <a href="{% url 'web_interface:attendance-management' %}"
+           class="btn btn-info">{% trans "Take Attendance" %}</a>
+      </div>
+    </div>
+  {% elif current_role == 'finance' %}
+    <!-- Finance Dashboard -->
+    <div class="dashboard-header">
+      <h1>{% trans "Financial Management" %}</h1>
+      <p class="text-muted">{% trans "Monitor payments, billing, and financial operations" %}</p>
+    </div>
+    <div class="dashboard-grid">
+      <div class="stat-card warning">
+        <div class="stat-icon">📄</div>
+        <div class="stat-info">
+          <div class="stat-number">{{ stats.pending_invoices|default:0|intcomma }}</div>
+          <div class="stat-label">{% trans "Pending Invoices" %}</div>
+        </div>
+      </div>
+      <div class="stat-card success">
+        <div class="stat-icon">💵</div>
+        <div class="stat-info">
+          <div class="stat-number">${{ stats.total_revenue|default:0|floatformat:0|intcomma }}</div>
+          <div class="stat-label">{% trans "Total Revenue" %}</div>
+        </div>
+      </div>
+      <div class="stat-card danger">
+        <div class="stat-icon">⚠️</div>
+        <div class="stat-info">
+          <div class="stat-number">{{ stats.overdue_payments|default:0|intcomma }}</div>
+          <div class="stat-label">{% trans "Overdue Payments" %}</div>
+        </div>
+      </div>
+    </div>
+    <!-- Quick Actions -->
+    <div class="dashboard-section">
+      <h3>{% trans "Quick Actions" %}</h3>
+      <div class="action-buttons">
+        <a href="{% url 'web_interface:billing-list' %}" class="btn btn-primary">{% trans "Manage Billing" %}</a>
+        <a href="{% url 'web_interface:payment-processing' %}"
+           class="btn btn-success">{% trans "Process Payments" %}</a>
+        <a href="{% url 'web_interface:cashier-session' %}" class="btn btn-info">{% trans "Cashier Session" %}</a>
+      </div>
+    </div>
+  {% else %}
+    <!-- Student Dashboard -->
+    <div class="dashboard-header">
+      <h1>{% trans "Student Portal" %}</h1>
+      <p class="text-muted">{% trans "Welcome back" %}, {{ user.get_full_name|default:user.username }}!</p>
+    </div>
+    <div class="dashboard-grid">
+      <div class="stat-card primary">
+        <div class="stat-icon">📚</div>
+        <div class="stat-info">
+          <div class="stat-number">{{ stats.current_courses|default:0|intcomma }}</div>
+          <div class="stat-label">{% trans "Current Courses" %}</div>
+        </div>
+      </div>
+      <div class="stat-card success">
+        <div class="stat-icon">🎯</div>
+        <div class="stat-info">
+          <div class="stat-number">{{ stats.gpa|default:"0.00" }}</div>
+          <div class="stat-label">{% trans "Current GPA" %}</div>
+        </div>
+      </div>
+      <div class="stat-card info">
+        <div class="stat-icon">⭐</div>
+        <div class="stat-info">
+          <div class="stat-number">{{ stats.credits_earned|default:0|intcomma }}</div>
+          <div class="stat-label">{% trans "Credits Earned" %}</div>
+        </div>
+      </div>
+      <div class="stat-card {% if stats.account_balance < 0 %}danger{% else %}success{% endif %}">
+        <div class="stat-icon">💰</div>
+        <div class="stat-info">
+          <div class="stat-number">${{ stats.account_balance|default:0|floatformat:0|intcomma }}</div>
+          <div class="stat-label">{% trans "Account Balance" %}</div>
+        </div>
+      </div>
+    </div>
+    <!-- Quick Actions -->
+    <div class="dashboard-section">
+      <h3>{% trans "Quick Actions" %}</h3>
+      <div class="action-buttons">
+        <a href="{% url 'web_interface:schedule-view' %}"
+           class="btn btn-primary">{% trans "View Schedule" %}</a>
+        <a href="{% url 'web_interface:grade-view' %}" class="btn btn-success">{% trans "Check Grades" %}</a>
+        <a href="{% url 'web_interface:account-balance' %}" class="btn btn-info">{% trans "Account Balance" %}</a>
+      </div>
+    </div>
+  {% endif %}
+</div>
+<!-- Dashboard Styles -->
+<style>
+  .dashboard-content {
+    padding: 0;
+  }
+
+  .dashboard-header {
+    margin-bottom: 2rem;
+  }
+
+  .dashboard-header h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .dashboard-header .text-muted {
+    color: var(--secondary);
+    font-size: 1.1rem;
+  }
+
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .stat-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+
+  .stat-card.primary {
+    border-left: 4px solid var(--primary);
+  }
+
+  .stat-card.success {
+    border-left: 4px solid var(--success);
+  }
+
+  .stat-card.warning {
+    border-left: 4px solid var(--warning);
+  }
+
+  .stat-card.info {
+    border-left: 4px solid var(--info);
+  }
+
+  .stat-card.danger {
+    border-left: 4px solid var(--danger);
+  }
+
+  .stat-icon {
+    font-size: 2.5rem;
+    margin-right: 1rem;
+    opacity: 0.8;
+  }
+
+  .stat-info {
+    flex: 1;
+  }
+
+  .stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--dark);
+    line-height: 1;
+  }
+
+  .stat-label {
+    color: var(--secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-top: 0.25rem;
+  }
+
+  .dashboard-section {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .dashboard-section h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .action-buttons .btn {
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+
+  .activity-list {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .activity-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--light);
+  }
+
+  .activity-item:last-child {
+    border-bottom: none;
+  }
+
+  .activity-time {
+    color: var(--secondary);
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+
+  .no-data {
+    text-align: center;
+    color: var(--secondary);
+    font-style: italic;
+    padding: 2rem;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .dashboard-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .action-buttons {
+      flex-direction: column;
+    }
+
+    .activity-item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .activity-time {
+      font-size: 0.8rem;
+    }
+  }
+</style>

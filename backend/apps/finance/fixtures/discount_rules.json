@@ -1,0 +1,115 @@
+[
+{
+  "model": "finance.discountrule",
+  "pk": 2,
+  "fields": {
+    "created_at": "2025-07-30T03:08:12.721Z",
+    "updated_at": "2025-07-30T03:08:12.721Z",
+    "created_by": null,
+    "updated_by": null,
+    "rule_name": "Early Bird Discount - English Programs 10%",
+    "rule_type": "EARLY_BIRD",
+    "pattern_text": "dis. 10% for all eng",
+    "discount_percentage": "10.00",
+    "fixed_amount": null,
+    "applies_to_terms": [],
+    "applies_to_programs": [
+      "582",
+      "632",
+      "688"
+    ],
+    "is_active": true,
+    "effective_date": "2023-01-01",
+    "times_applied": 0,
+    "last_applied_date": null
+  }
+},
+{
+  "model": "finance.discountrule",
+  "pk": 3,
+  "fields": {
+    "created_at": "2025-07-30T03:08:12.723Z",
+    "updated_at": "2025-07-30T03:08:12.723Z",
+    "created_by": null,
+    "updated_by": null,
+    "rule_name": "Early Bird Discount - BA Program 10%",
+    "rule_type": "EARLY_BIRD",
+    "pattern_text": "dis. 10% for ba",
+    "discount_percentage": "10.00",
+    "fixed_amount": null,
+    "applies_to_terms": [],
+    "applies_to_programs": [
+      "87"
+    ],
+    "is_active": true,
+    "effective_date": "2023-01-01",
+    "times_applied": 0,
+    "last_applied_date": null
+  }
+},
+{
+  "model": "finance.discountrule",
+  "pk": 4,
+  "fields": {
+    "created_at": "2025-07-30T03:08:12.724Z",
+    "updated_at": "2025-07-30T03:08:12.724Z",
+    "created_by": null,
+    "updated_by": null,
+    "rule_name": "Early Bird Discount - MA Program 10%",
+    "rule_type": "EARLY_BIRD",
+    "pattern_text": "dis. 10% for master",
+    "discount_percentage": "10.00",
+    "fixed_amount": null,
+    "applies_to_terms": [],
+    "applies_to_programs": [
+      "147"
+    ],
+    "is_active": true,
+    "effective_date": "2023-01-01",
+    "times_applied": 0,
+    "last_applied_date": null
+  }
+},
+{
+  "model": "finance.discountrule",
+  "pk": 5,
+  "fields": {
+    "created_at": "2025-07-30T03:08:12.726Z",
+    "updated_at": "2025-07-30T03:08:12.726Z",
+    "created_by": null,
+    "updated_by": null,
+    "rule_name": "Early Bird Discount - Higher Rate 15%",
+    "rule_type": "EARLY_BIRD",
+    "pattern_text": "dis. 15%",
+    "discount_percentage": "15.00",
+    "fixed_amount": null,
+    "applies_to_terms": [],
+    "applies_to_programs": [],
+    "is_active": true,
+    "effective_date": "2023-01-01",
+    "times_applied": 0,
+    "last_applied_date": null
+  }
+},
+{
+  "model": "finance.discountrule",
+  "pk": 6,
+  "fields": {
+    "created_at": "2025-07-30T03:08:12.726Z",
+    "updated_at": "2025-07-30T03:08:12.726Z",
+    "created_by": null,
+    "updated_by": null,
+    "rule_name": "Early Bird Discount - Higher Rate 20%",
+    "rule_type": "EARLY_BIRD",
+    "pattern_text": "dis. 20%",
+    "discount_percentage": "20.00",
+    "fixed_amount": null,
+    "applies_to_terms": [],
+    "applies_to_programs": [],
+    "is_active": true,
+    "effective_date": "2023-01-01",
+    "times_applied": 0,
+    "last_applied_date": null
+  }
+}
+]

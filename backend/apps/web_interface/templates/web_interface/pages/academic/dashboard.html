@@ -1,0 +1,143 @@
+{% extends "web_interface/base/dashboard_base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Academic Management" %}{% endblock %}
+
+{% block page_header %}
+<div class="flex items-center justify-between">
+    <div>
+        <h1 class="text-3xl font-bold text-gray-900">{% trans "Academic Management" %}</h1>
+        <p class="mt-2 text-sm text-gray-600">
+            {% trans "Manage courses, enrollments, grades, and academic records" %}
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Academic Overview Statistics -->
+<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="p-5">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <span class="text-2xl">📚</span>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                    <dl>
+                        <dt class="text-sm font-medium text-gray-500 truncate">{% trans "Active Courses" %}</dt>
+                        <dd class="text-lg font-medium text-gray-900">{{ total_courses }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="p-5">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <span class="text-2xl">👥</span>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                    <dl>
+                        <dt class="text-sm font-medium text-gray-500 truncate">{% trans "Total Enrollments" %}</dt>
+                        <dd class="text-lg font-medium text-gray-900">{{ total_enrollments }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="p-5">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <span class="text-2xl">✅</span>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                    <dl>
+                        <dt class="text-sm font-medium text-gray-500 truncate">{% trans "Active Enrollments" %}</dt>
+                        <dd class="text-lg font-medium text-gray-900">{{ active_enrollments }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="p-5">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <span class="text-2xl">⏳</span>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                    <dl>
+                        <dt class="text-sm font-medium text-gray-500 truncate">{% trans "Pending Enrollments" %}</dt>
+                        <dd class="text-lg font-medium text-gray-900">{{ pending_enrollments }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+{% if quick_actions %}
+<div class="bg-white shadow overflow-hidden sm:rounded-md mb-8">
+    <div class="px-4 py-5 sm:p-6">
+        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+            {% trans "Quick Actions" %}
+        </h3>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {% for action in quick_actions %}
+            <a href="{% url action.url %}" 
+               class="relative block p-6 border border-gray-200 rounded-lg hover:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200">
+                <div class="flex items-center">
+                    <span class="text-2xl mr-3">{{ action.icon }}</span>
+                    <span class="text-sm font-medium text-gray-900">{{ action.name }}</span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Role-specific Content -->
+{% if current_role == 'student' %}
+<div class="bg-white shadow overflow-hidden sm:rounded-md">
+    <div class="px-4 py-5 sm:p-6">
+        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+            {% trans "Student Academic Information" %}
+        </h3>
+        <p class="text-sm text-gray-600">
+            {% trans "Access your schedules, grades, and course information using the quick actions above." %}
+        </p>
+    </div>
+</div>
+{% elif current_role == 'teacher' %}
+<div class="bg-white shadow overflow-hidden sm:rounded-md">
+    <div class="px-4 py-5 sm:p-6">
+        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+            {% trans "Teacher Academic Tools" %}
+        </h3>
+        <p class="text-sm text-gray-600">
+            {% trans "Manage your classes, enter grades, and view teaching schedules using the tools above." %}
+        </p>
+    </div>
+</div>
+{% else %}
+<div class="bg-white shadow overflow-hidden sm:rounded-md">
+    <div class="px-4 py-5 sm:p-6">
+        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+            {% trans "Academic Administration" %}
+        </h3>
+        <p class="text-sm text-gray-600">
+            {% trans "Manage courses, enrollments, grades, and academic records for the institution." %}
+        </p>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

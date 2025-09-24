@@ -1,0 +1,23 @@
+{
+  "backend": {
+    "claude_id": "backend-claude",
+    "workspace": "/Users/jeffreystark/PycharmProjects/naga-monorepo/backend/",
+    "status": "active",
+    "current_task": "Session initialization and project state review",
+    "last_activity": "2025-01-07T04:00:00Z",
+    "files_locked": ["backend/", "libs/shared/api-types/"],
+    "recent_commits": [
+      "64574616: feat(backend): comprehensive enrollment and people model updates",
+      "4e46c2f7: feat(templates): update base_with_sidebar.html with latest package versions and HTMX"
+    ],
+    "session_start": "2025-01-07T04:00:00Z",
+    "coordination_status": "ready"
+  },
+  "frontend": {
+    "claude_id": "none",
+    "workspace": "inactive",
+    "status": "inactive",
+    "last_activity": "none",
+    "files_locked": []
+  }
+}

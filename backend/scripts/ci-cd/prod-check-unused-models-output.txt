@@ -1,0 +1,163 @@
+Scanning 654 Python files...
+
+============================================================
+UNUSED MODELS REPORT
+============================================================
+
+🔴 DEFINITELY UNUSED MODELS (147):
+  - Authenticator
+  - Constance
+  - EmailAddress
+  - EmailConfirmation
+  - LogEntry
+  - Session
+  - Site
+  - SocialAccount
+  - SocialApp
+  - SocialToken
+  - Task
+  - academic.CanonicalRequirement
+  - academic.CourseEquivalency
+  - academic.StudentCourseOverride
+  - academic.StudentDegreeProgress
+  - academic.StudentRequirementException
+  - academic.TransferCredit
+  - academic_records.DocumentQuota
+  - academic_records.DocumentQuotaUsage
+  - academic_records.DocumentRequest
+  - academic_records.DocumentRequestComment
+  - academic_records.DocumentTypeConfig
+  - academic_records.DocumentUsageTracker
+  - academic_records.GeneratedDocument
+  - account.EmailAddress
+  - account.EmailConfirmation
+  - accounts.Department
+  - accounts.Permission
+  - accounts.Position
+  - accounts.PositionAssignment
+  - accounts.Role
+  - accounts.RolePermission
+  - accounts.TeachingAssignment
+  - accounts.UserRole
+  - admin.LogEntry
+  - attendance.AttendanceArchive
+  - attendance.AttendanceRecord
+  - attendance.AttendanceSession
+  - attendance.AttendanceSettings
+  - attendance.PermissionRequest
+  - attendance.RosterSync
+  - auth.Group
+  - auth.Permission
+  - common.Holiday
+  - common.Room
+  - common.StudentActivityLog
+  - common.SystemAuditLog
+  - constance.Constance
+  - contenttypes.ContentType
+  - curriculum.Course
+  - curriculum.CoursePartTemplate
+  - curriculum.CoursePrerequisite
+  - curriculum.Cycle
+  - curriculum.Division
+  - curriculum.Major
+  - curriculum.SeniorProjectGroup
+  - curriculum.Term
+  - curriculum.Textbook
+  - django_dramatiq.Task
+  - enrollment.AcademicJourney
+  - enrollment.AcademicProgression
+  - enrollment.CertificateIssuance
+  - enrollment.ClassHeaderEnrollment
+  - enrollment.ClassPartEnrollment
+  - enrollment.ClassSessionExemption
+  - enrollment.MajorDeclaration
+  - enrollment.ProgramEnrollment
+  - enrollment.ProgramMilestone
+  - enrollment.ProgramPeriod
+  - enrollment.ProgramTransition
+  - enrollment.SeniorProjectGroup
+  - enrollment.StudentCourseEligibility
+  - enrollment.StudentCycleStatus
+  - finance.ARReconstructionBatch
+  - finance.AdministrativeFeeConfig
+  - finance.CashierSession
+  - finance.ClerkIdentification
+  - finance.CourseFixedPricing
+  - finance.DefaultPricing
+  - finance.DiscountApplication
+  - finance.DiscountRule
+  - finance.DocumentExcessFee
+  - finance.FeeGLMapping
+  - finance.FeePricing
+  - finance.FinancialTransaction
+  - finance.GLAccount
+  - finance.GLBatch
+  - finance.Invoice
+  - finance.InvoiceLineItem
+  - finance.JournalEntry
+  - finance.JournalEntryLine
+  - finance.LegacyReceiptMapping
+  - finance.MaterialityThreshold
+  - finance.Payment
+  - finance.ReadingClassPricing
+  - finance.ReconciliationAdjustment
+  - finance.ReconciliationBatch
+  - finance.ReconciliationRule
+  - finance.ReconciliationStatus
+  - finance.ReconstructionScholarshipEntry
+  - finance.SeniorProjectCourse
+  - finance.SeniorProjectPricing
+  - grading.ClassPartGrade
+  - grading.ClassSessionGrade
+  - grading.GPARecord
+  - grading.GradeChangeHistory
+  - grading.GradeConversion
+  - grading.GradingScale
+  - language.LanguageLevelSkipRequest
+  - language.LanguageProgramPromotion
+  - language.LanguageStudentPromotion
+  - level_testing.DuplicateCandidate
+  - level_testing.PlacementTest
+  - level_testing.PotentialStudent
+  - level_testing.TestAttempt
+  - level_testing.TestPayment
+  - level_testing.TestSession
+  - mfa.Authenticator
+  - mobile.MobileAuthAttempt
+  - mobile.MobileAuthToken
+  - people.EmergencyContact
+  - people.Person
+  - people.PersonEventLog
+  - people.PhoneNumber
+  - people.StaffProfile
+  - people.StudentAuditLog
+  - people.StudentPhoto
+  - people.StudentProfile
+  - people.TeacherLeaveRequest
+  - people.TeacherProfile
+  - scheduling.ClassHeader
+  - scheduling.ClassPart
+  - scheduling.ClassSession
+  - scheduling.CombinedClassGroup
+  - scheduling.CombinedClassInstance
+  - scheduling.CombinedCourseTemplate
+  - scheduling.ReadingClass
+  - scheduling.TestPeriodReset
+  - scholarships.Scholarship
+  - scholarships.Sponsor
+  - scholarships.SponsoredStudent
+  - sessions.Session
+  - sites.Site
+  - socialaccount.SocialAccount
+  - socialaccount.SocialApp
+  - socialaccount.SocialToken
+  - users.User
+
+🟡 POTENTIALLY UNUSED MODELS (1):
+   (Only referenced in models.py files)
+  - Position (in apps/accounts/models.py)
+
+📊 SUMMARY:
+  Total models found: 270
+  Definitely unused: 147
+  Potentially unused: 1

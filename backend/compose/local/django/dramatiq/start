@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+echo 'Starting Dramatiq worker for development...'
+
+# Start Dramatiq worker with auto-reload for development
+exec uv run python manage.py rundramatiq --processes 2 --threads 4 --reload

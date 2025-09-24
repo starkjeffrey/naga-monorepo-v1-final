@@ -1,0 +1,269 @@
+{
+  "python.defaultInterpreterPath": "./backend/venv/bin/python",
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.autoSearchPaths": true,
+  "python.analysis.extraPaths": [
+    "./backend"
+  ],
+  "python.linting.enabled": false,
+  "python.linting.pylintEnabled": false,
+  "python.linting.flake8Enabled": false,
+  "python.formatting.provider": "none",
+  "python.sortImports.args": [
+    "--profile",
+    "black"
+  ],
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.ruff": "explicit",
+      "source.organizeImports.ruff": "explicit"
+    },
+    "editor.tabSize": 4
+  },
+  "vue.inlayHints.missingProps": true,
+  "vue.inlayHints.inlineHandlerLeading": true,
+  "vue.inlayHints.optionsWrapper": true,
+  "typescript.inlayHints.parameterNames.enabled": "literals",
+  "typescript.inlayHints.parameterTypes.enabled": true,
+  "typescript.inlayHints.variableTypes.enabled": true,
+  "typescript.inlayHints.propertyDeclarationTypes.enabled": true,
+  "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  "editor.rulers": [
+    119
+  ],
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/coverage": true,
+    "**/__pycache__": true,
+    "**/*.pyc": true,
+    "**/venv": true,
+    "**/env": true,
+    "**/.venv": true,
+    "**/.env": true,
+    "**/dev-dist": true,
+    "**/htmlcov": true,
+    "**/.pytest_cache": true,
+    "**/staticfiles": true,
+    "**/media": true,
+    "**/*.sql.gz": true,
+    "**/*.log": true
+  },
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/dist/**": true,
+    "**/__pycache__/**": true,
+    "**/venv/**": true,
+    "**/.venv/**": true,
+    "**/dev-dist/**": true,
+    "**/htmlcov/**": true,
+    "**/.git/**": true,
+    "**/.pytest_cache/**": true,
+    "**/staticfiles/**": true,
+    "**/media/**": true
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "Vue.volar",
+    "editor.tabSize": 2
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "django.snippets.exclude": [],
+  "emmet.includeLanguages": {
+    "django-html": "html"
+  },
+  "terminal.integrated.cwd": "${workspaceFolder}",
+  "terminal.integrated.env.osx": {
+    "PYTHONPATH": "${workspaceFolder}/backend",
+    "PATH": "${env:HOME}/.claude/commands:${env:HOME}/.claude/commands/sc:${env:PATH}",
+    "CLAUDE_HOME": "${env:HOME}/.claude"
+  },
+  "terminal.integrated.profiles.osx": {
+    "zsh (with Claude)": {
+      "path": "zsh",
+      "args": [
+        "-l"
+      ],
+      "env": {
+        "PATH": "${env:HOME}/.claude/commands:${env:HOME}/.claude/commands/sc:${env:PATH}",
+        "CLAUDE_HOME": "${env:HOME}/.claude"
+      }
+    }
+  },
+  "terminal.integrated.defaultProfile.osx": "zsh (with Claude)",
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestArgs": [
+    "backend"
+  ],
+  "python.testing.unittestEnabled": false,
+  "remote.SSH.configFile": "~/.ssh/config",
+  "remote.SSH.showLoginTerminal": true,
+  "git.ignoreLimitWarning": true,
+  "git.autofetch": true,
+  "git.autofetchPeriod": 180,
+  "git.confirmSync": false,
+  "git.enableSmartCommit": true,
+  "git.suggestSmartCommit": true,
+  "git.fetchOnPull": true,
+  "git.pruneOnFetch": true,
+  "git.showPushSuccessNotification": true,
+  "git.allowForcePush": false,
+  "git.allowNoVerifyCommit": false,
+  "git.rebaseWhenSync": true,
+  "git.enableCommitSigning": false,
+  "git.defaultRemote": "origin",
+  "git.pullTags": false,
+  "git.showActionButton": {
+    "commit": true,
+    "publish": true,
+    "sync": true
+  },
+  "git.timeline.showAuthors": true,
+  "git.timeline.date": "committed",
+  "eslint.workingDirectories": [
+    "frontend"
+  ],
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "vue"
+  ],
+  "nx.enableLibraryImports": true,
+  "nx.showFirstRunNotice": false,
+  "docker.showStartPage": false,
+  "docker.defaultRegistryPath": "localhost:5000",
+  "quasar.autoImportComponentCase": "kebab",
+  "vetur.validation.template": false,
+  "vetur.validation.script": false,
+  "vetur.validation.style": false,
+  "prettier.configPath": "./frontend/.prettierrc.json",
+  "prettier.ignorePath": "./frontend/.prettierignore",
+  "files.associations": {
+    "*.vue": "vue",
+    "*.py": "python",
+    "*.html": "html",
+    "*.css": "css",
+    "*.scss": "scss",
+    "*.js": "javascript",
+    "*.ts": "typescript",
+    "*.json": "json",
+    "**/*.html": "html",
+    "**/templates/**/*.html": "django-html",
+    "**/templates/**/*.txt": "django-txt",
+    "**/.env*": "properties",
+    "**/docker-compose*.yml": "docker-compose",
+    "**/Dockerfile*": "dockerfile"
+  },
+  "security.workspace.trust.untrustedFiles": "open",
+  "security.workspace.trust.banner": "never",
+  "security.workspace.trust.startupPrompt": "never",
+  "explorer.compactFolders": false,
+  "breadcrumbs.enabled": true,
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  "search.followSymlinks": false,
+  "typescript.preferences.includePackageJsonAutoImports": "off",
+  "typescript.suggest.autoImports": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "workbench.editor.enablePreview": false,
+  "workbench.editor.enablePreviewFromQuickOpen": false,
+  "editor.minimap.enabled": false,
+  "editor.semanticHighlighting.enabled": true,
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": "active",
+  "editor.linkedEditing": true,
+  "sqlite.sqlite3": "/usr/bin/sqlite3",
+  "liveshare.featureSet": "stable",
+  "liveshare.guestApprovalRequired": true,
+  "nxConsole.generateAiAgentRules": true,
+  "workbench.tree.indent": 20,
+  "workbench.tree.renderIndentGuides": "always",
+  "explorer.sortOrder": "type",
+  "explorer.autoReveal": false,
+  "explorer.decorations.colors": true,
+  "explorer.decorations.badges": true,
+  "workbench.colorCustomizations": {
+    "list.activeSelectionBackground": "#0E639C",
+    "list.activeSelectionForeground": "#FFFFFF",
+    "list.inactiveSelectionBackground": "#3A3D41",
+    "list.hoverBackground": "#2A2D2E",
+    "list.focusBackground": "#094771",
+    "list.dropBackground": "#264F78",
+    "tree.indentGuidesStroke": "#FF9800",
+    "tree.inactiveIndentGuidesStroke": "#8C8C8C",
+    "sideBarSectionHeader.background": "#333333",
+    "sideBarSectionHeader.foreground": "#FFFFFF"
+  },
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    "**/.ruff_cache": true,
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/dev-dist": true,
+    "**/htmlcov": true,
+    "**/staticfiles": true,
+    "**/media/photos": true,
+    "**/media/student-photos": true,
+    "**/*.sql.gz": true,
+    "**/*.log": true,
+    "**/*_fixtures.json": true,
+    "**/fixtures_*": true,
+    "**/fixtures_comprehensive_*": true,
+    "**/enrollment_backup_*": true,
+    "**/backup_*": true,
+    "**/CLEAN_BASELINE_*": true
+  },
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.expand": false,
+  "explorer.fileNesting.patterns": {
+    "*.py": "${capture}_test.py, test_${capture}.py, ${capture}.pyi",
+    "migrations/__init__.py": "*.py, __pycache__",
+    "*.vue": "${capture}.spec.ts, ${capture}.test.ts, ${capture}.d.ts, ${capture}.css, ${capture}.scss",
+    "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, .npmrc",
+    "vite.config.*": "vite.*.*, vitest.config.*, jest.config.*, jest.preset.js, eslint.config.*",
+    "tsconfig.json": "tsconfig.*.json",
+    "jest.config.*": "jest.preset.js, babel.config.*, jest.*.js",
+    "eslint.config.*": ".eslintignore, .prettierrc*, .editorconfig",
+    "Dockerfile": "Dockerfile.*, .dockerignore",
+    "docker-compose.yml": "docker-compose.*.yml",
+    "docker-compose.local.yml": "docker-compose.*.yml",
+    "docker-compose.production.yml": "docker-compose.*.yml",
+    "pyproject.toml": "poetry.lock, requirements.txt, requirements-*.txt, ruff*.toml, pytest.ini, uv.lock, coverage*, .coveragerc",
+    "README.md": "CLAUDE.md, IMPLEMENTATION_*.md, **/*.md"
+  }
+}

@@ -1,0 +1,157 @@
+{% load i18n %}
+
+<!-- KPI Cards -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+    <!-- Total Revenue -->
+    <div class="metric-card">
+        <div class="flex items-center">
+            <div class="metric-icon bg-green-100">
+                <i class="fas fa-dollar-sign text-green-600 text-xl"></i>
+            </div>
+            <div class="ml-4 flex-1">
+                <div class="metric-label">{% trans "Total Revenue" %}</div>
+                <div class="metric-value">${{ revenue_data.total|floatformat:2 }}</div>
+                <div class="metric-change {% if revenue_data.growth_rate >= 0 %}positive{% else %}negative{% endif %}">
+                    <i class="fas fa-arrow-{% if revenue_data.growth_rate >= 0 %}up{% else %}down{% endif %} mr-1"></i>
+                    {{ revenue_data.growth_rate|floatformat:1 }}%
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transactions -->
+    <div class="metric-card">
+        <div class="flex items-center">
+            <div class="metric-icon bg-blue-100">
+                <i class="fas fa-receipt text-blue-600 text-xl"></i>
+            </div>
+            <div class="ml-4 flex-1">
+                <div class="metric-label">{% trans "Transactions" %}</div>
+                <div class="metric-value">{{ revenue_data.count|floatformat:0 }}</div>
+                <div class="text-xs text-gray-500 mt-1">
+                    {% trans "Payment transactions" %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Average Transaction -->
+    <div class="metric-card">
+        <div class="flex items-center">
+            <div class="metric-icon bg-indigo-100">
+                <i class="fas fa-chart-line text-indigo-600 text-xl"></i>
+            </div>
+            <div class="ml-4 flex-1">
+                <div class="metric-label">{% trans "Avg Transaction" %}</div>
+                <div class="metric-value">${{ revenue_data.average|floatformat:2 }}</div>
+                <div class="text-xs text-gray-500 mt-1">
+                    {% trans "Per transaction" %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Outstanding -->
+    <div class="metric-card">
+        <div class="flex items-center">
+            <div class="metric-icon bg-yellow-100">
+                <i class="fas fa-clock text-yellow-600 text-xl"></i>
+            </div>
+            <div class="ml-4 flex-1">
+                <div class="metric-label">{% trans "Outstanding" %}</div>
+                <div class="metric-value">${{ outstanding_data.total|floatformat:2 }}</div>
+                <div class="text-xs text-gray-500 mt-1">
+                    {{ outstanding_data.count }} {% trans "invoices" %}
+                    {% if outstanding_data.overdue_count > 0 %}
+                        <span class="text-red-600">({{ outstanding_data.overdue_count }} {% trans "overdue" %})</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    <!-- Revenue Chart -->
+    <div class="chart-container">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">{% trans "Revenue Trend" %}</h3>
+        <div class="relative h-64">
+            <canvas id="revenueChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Payment Methods -->
+    <div class="chart-container">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">{% trans "Payment Methods" %}</h3>
+        <div class="relative h-64">
+            <canvas id="paymentMethodChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Detailed Reports Links -->
+<div class="chart-container">
+    <h3 class="text-lg font-semibold text-gray-900 mb-4">{% trans "Detailed Reports" %}</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <a href="{% url 'web_interface:daily-cash-report' %}" class="report-link">
+            <i class="report-icon fas fa-cash-register"></i>
+            <div>
+                <div class="font-medium text-gray-900">{% trans "Daily Cash Report" %}</div>
+                <div class="text-sm text-gray-500">{% trans "Cash transactions by day" %}</div>
+            </div>
+        </a>
+        
+        <a href="{% url 'web_interface:student-balances-report' %}" class="report-link">
+            <i class="report-icon fas fa-users"></i>
+            <div>
+                <div class="font-medium text-gray-900">{% trans "Student Balances" %}</div>
+                <div class="text-sm text-gray-500">{% trans "Outstanding by student" %}</div>
+            </div>
+        </a>
+        
+        <a href="#" class="report-link" onclick="generateReport('monthly')">
+            <i class="report-icon fas fa-calendar-alt"></i>
+            <div>
+                <div class="font-medium text-gray-900">{% trans "Monthly Summary" %}</div>
+                <div class="text-sm text-gray-500">{% trans "Monthly financial summary" %}</div>
+            </div>
+        </a>
+        
+        <a href="#" class="report-link" onclick="generateReport('enrollment')">
+            <i class="report-icon fas fa-graduation-cap"></i>
+            <div>
+                <div class="font-medium text-gray-900">{% trans "Enrollment Revenue" %}</div>
+                <div class="text-sm text-gray-500">{% trans "Revenue by enrollment" %}</div>
+            </div>
+        </a>
+        
+        <a href="#" class="report-link" onclick="generateReport('collections')">
+            <i class="report-icon fas fa-search-dollar"></i>
+            <div>
+                <div class="font-medium text-gray-900">{% trans "Collections Report" %}</div>
+                <div class="text-sm text-gray-500">{% trans "Payment collections analysis" %}</div>
+            </div>
+        </a>
+        
+        <a href="#" class="report-link" onclick="generateReport('audit')">
+            <i class="report-icon fas fa-shield-alt"></i>
+            <div>
+                <div class="font-medium text-gray-900">{% trans "Audit Trail" %}</div>
+                <div class="text-sm text-gray-500">{% trans "Financial transaction audit" %}</div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<script>
+function generateReport(reportType) {
+    // Show loading state
+    event.target.classList.add('opacity-50');
+    
+    // TODO: Implement specific report generation
+    setTimeout(() => {
+        event.target.classList.remove('opacity-50');
+        alert(`${reportType} report generation coming soon!`);
+    }, 1000);
+}</script>

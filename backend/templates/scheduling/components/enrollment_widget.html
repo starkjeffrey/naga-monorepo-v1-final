@@ -1,0 +1,203 @@
+{# Enrollment Management Widget #}
+{# Usage: {% include 'scheduling/components/enrollment_widget.html' with class=class_header %} #}
+{% load i18n %}
+
+<div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
+     id="enrollment-widget-{{ class.pk }}">
+  <!-- Header -->
+  <div class="mb-4">
+    <h3 class="text-lg font-medium text-gray-900">{% trans "Enrollment Management" %}</h3>
+    <p class="mt-1 text-sm text-gray-500">
+      {{ class.course.code }} - {{ class.course.title }} ({% trans "Section" %}
+      {{ class.section_id }})
+    </p>
+  </div>
+  <!-- Capacity Indicator -->
+  <div class="mb-6">
+    <div class="flex justify-between items-center mb-2">
+      <span class="text-sm font-medium text-gray-700">{% trans "Enrollment Status" %}</span>
+      <span class="text-sm text-gray-500">
+        {{ class.enrollment_count }} / {{ class.max_enrollment }} {% trans
+        "enrolled" %}
+      </span>
+    </div>
+    <div class="w-full bg-gray-200 rounded-full h-2.5">
+      {% widthratio class.enrollment_count class.max_enrollment 100 as enrollment_percentage %}
+      <div class="h-2.5 rounded-full transition-all duration-300 {% if class.enrollment_count >= class.max_enrollment %}bg-red-600 {% elif enrollment_percentage > 80 %}bg-yellow-500 {% else %}bg-green-600{% endif %}"
+           style="width: {{ enrollment_percentage }}%"></div>
+    </div>
+    {% if class.is_full %}
+      <p class="mt-2 text-sm text-red-600">
+        <svg class="inline h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+        </svg>
+        {% trans "This class is full" %}
+      </p>
+    {% endif %}
+  </div>
+  <!-- Add Student Form -->
+  <div class="mb-6">
+    <h4 class="text-sm font-medium text-gray-700 mb-3">{% trans "Add Student" %}</h4>
+    <form hx-post="{% url 'scheduling:enroll_student' class.pk %}"
+          hx-target="#enrollment-list-{{ class.pk }}"
+          hx-swap="beforeend"
+          hx-on::after-request="this.reset(); updateEnrollmentCount()">
+      {% csrf_token %}
+      <div class="flex gap-2">
+        <div class="flex-1 relative">
+          <input type="text"
+                 name="student_search"
+                 id="student-search-{{ class.pk }}"
+                 class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                 placeholder="{% trans 'Search by student ID or name' %}"
+                 autocomplete="off"
+                 hx-get="{% url 'scheduling:student_search' %}"
+                 hx-trigger="keyup changed delay:300ms"
+                 hx-target="#student-search-results-{{ class.pk }}"
+                 hx-swap="innerHTML"
+                 hx-indicator="#search-spinner-{{ class.pk }}" />
+          <!-- Search spinner -->
+          <div id="search-spinner-{{ class.pk }}"
+               class="htmx-indicator absolute right-2 top-2">
+            <svg class="animate-spin h-5 w-5 text-gray-400"
+                 fill="none"
+                 viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+              </path>
+            </svg>
+          </div>
+          <!-- Search results dropdown -->
+          <div id="student-search-results-{{ class.pk }}"
+               class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm hidden">
+          </div>
+        </div>
+        <input type="hidden" name="student_id" id="selected-student-{{ class.pk }}" />
+        <button
+          type="submit"
+          class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+          {% if class.is_full %}disabled{% endif %}>
+          <svg class="h-4 w-4 mr-1.5"
+               fill="none"
+               stroke="currentColor"
+               viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          </svg>
+          {% trans "Add" %}
+        </button>
+      </div>
+    </form>
+  </div>
+  <!-- Current Enrollments List -->
+  <div>
+    <h4 class="text-sm font-medium text-gray-700 mb-3">{% trans "Current Enrollments" %}</h4>
+    <div class="space-y-2 max-h-96 overflow-y-auto"
+         id="enrollment-list-{{ class.pk }}">
+      {% for enrollment in class.class_header_enrollments.all %}
+        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors"
+             id="enrollment-{{ enrollment.pk }}">
+          <div class="flex items-center space-x-3">
+            <div class="flex-shrink-0">
+              <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-gray-500">
+                <span class="text-xs font-medium leading-none text-white">{{ enrollment.student.person.get_initials }}</span>
+              </span>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-900">{{ enrollment.student.person.get_full_name }}</p>
+              <p class="text-sm text-gray-500">
+                ID: {{ enrollment.student.student_id }}
+                {% if enrollment.final_grade %}
+                  • Grade:
+                  <span class="font-medium">{{ enrollment.final_grade }}</span>
+                {% endif %}
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-2">
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {% if enrollment.status == 'ENROLLED' %}bg-green-100 text-green-800 {% elif enrollment.status == 'WAITLISTED' %}bg-yellow-100 text-yellow-800 {% elif enrollment.status == 'DROPPED' %}bg-red-100 text-red-800 {% else %}bg-gray-100 text-gray-800{% endif %}">
+              {{ enrollment.get_status_display }}
+            </span>
+            {% if enrollment.status == 'ENROLLED' %}
+              <button type="button"
+                      hx-delete="{% url 'scheduling:drop_student' enrollment.pk %}"
+                      hx-confirm="{% trans 'Are you sure you want to drop this student?' %}"
+                      hx-target="#enrollment-{{ enrollment.pk }}"
+                      hx-swap="outerHTML swap:1s"
+                      class="text-red-600 hover:text-red-700">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
+            {% endif %}
+          </div>
+        </div>
+      {% empty %}
+        <p class="text-sm text-gray-500 text-center py-4">{% trans "No students enrolled yet" %}</p>
+      {% endfor %}
+    </div>
+  </div>
+  <!-- Waitlist Section (if applicable) -->
+  {% if waitlist_count > 0 %}
+    <div class="mt-6 pt-6 border-t border-gray-200">
+      <h4 class="text-sm font-medium text-gray-700 mb-3">{% trans "Waitlist" %} ({{ waitlist_count }})</h4>
+      <div class="text-sm text-gray-500">
+        <p>
+          {% trans "Students will be automatically enrolled as spots become
+          available." %}
+        </p>
+        <a href="{% url 'scheduling:class_waitlist' class.pk %}"
+           class="mt-2 inline-flex items-center text-blue-600 hover:text-blue-500">
+          {% trans "Manage Waitlist" %}
+          <svg class="ml-1 h-4 w-4"
+               fill="none"
+               stroke="currentColor"
+               viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  {% endif %}
+</div>
+<script>
+  // Handle student search selection
+  document.addEventListener('click', function(event) {
+    if (event.target.matches('.student-search-result')) {
+      const studentId = event.target.dataset.studentId;
+      const studentName = event.target.dataset.studentName;
+      const classId = event.target.dataset.classId;
+
+      // Set the hidden input value
+      document.getElementById(`selected-student-${classId}`).value = studentId;
+
+      // Update the search input to show selected student
+      document.getElementById(`student-search-${classId}`).value = studentName;
+
+      // Hide the search results
+      document
+        .getElementById(`student-search-results-${classId}`)
+        .classList.add('hidden');
+    }
+  });
+
+  // Update enrollment count after changes
+  function updateEnrollmentCount() {
+    // This would trigger an HTMX request to update the enrollment count
+    // For now, we'll rely on page refresh or HTMX partial updates
+  }
+
+  // Show/hide search results based on input
+  document.addEventListener('htmx:afterRequest', function(event) {
+    if (
+      event.detail.target.id &&
+      event.detail.target.id.includes('student-search-results')
+    ) {
+      const results = event.detail.target;
+      if (results.innerHTML.trim()) {
+        results.classList.remove('hidden');
+      } else {
+        results.classList.add('hidden');
+      }
+    }
+  });
+</script>

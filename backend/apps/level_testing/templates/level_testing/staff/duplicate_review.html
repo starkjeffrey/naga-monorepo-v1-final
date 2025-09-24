@@ -1,0 +1,404 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% load form_tags %}
+
+{% block title %}
+  {% trans "Duplicate Review" %} - {% trans "Level Testing" %} - {{ block.super }}
+{% endblock %}
+{% block content %}
+  <div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Header -->
+      <div class="mb-8 flex justify-between items-center">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900">{% trans "Duplicate Review" %}</h1>
+          <p class="mt-2 text-gray-600">{% trans "Review potential duplicate student records" %}</p>
+        </div>
+        <a href="{% url 'level_testing:staff_dashboard' %}"
+           class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+          <svg class="h-4 w-4 mr-2"
+               fill="none"
+               stroke="currentColor"
+               viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+          </svg>
+          {% trans "Back to Dashboard" %}
+        </a>
+      </div>
+      <!-- Alert for High Priority -->
+      {% if duplicate_candidates|length > 0 %}
+        {% for candidate in
+          duplicate_candidates %}
+          {% if candidate.risk_level == "HIGH" %}
+            <div class="bg-red-50 border border-red-200 rounded-md p-4 mb-6">
+              <div class="flex">
+                <div class="flex-shrink-0">
+                  <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd">
+                    </path>
+                  </svg>
+                </div>
+                <div class="ml-3">
+                  <h3 class="text-sm font-medium text-red-800">{% trans "High Priority Review Required" %}</h3>
+                  <div class="mt-2 text-sm text-red-700">
+                    <p>
+                      {% trans "This application has high-confidence potential duplicate
+                      matches" %}
+                      {% if candidate.has_outstanding_debt %}
+                        {% trans "with
+                        outstanding debt concerns" %}
+                      {% endif %}
+                      . {% trans "Please
+                      review carefully before approving." %}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- New Application Details -->
+        <div class="bg-white shadow rounded-lg">
+          <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-900">{% trans "New Application" %}</h2>
+          </div>
+          <div class="px-6 py-4">
+            <div class="space-y-4">
+              <!-- Personal Information -->
+              <div>
+                <h3 class="text-lg font-medium text-gray-900 mb-3">{% trans "Personal Information" %}</h3>
+                <div class="bg-gray-50 rounded-lg p-4 space-y-3">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <span class="text-sm font-medium text-gray-500">{% trans "English Name" %}</span>
+                      <p class="text-sm text-gray-900">{{ potential_student.full_name_eng }}</p>
+                    </div>
+                    {% if potential_student.full_name_khm %}
+                      <div>
+                        <span class="text-sm font-medium text-gray-500">{% trans "Khmer Name" %}</span>
+                        <p class="text-sm text-gray-900">{{ potential_student.full_name_khm }}</p>
+                      </div>
+                    {% endif %}
+                    <div>
+                      <span class="text-sm font-medium text-gray-500">{% trans "Date of Birth" %}</span>
+                      <p class="text-sm text-gray-900">{{ potential_student.date_of_birth|date:"F d, Y" }}</p>
+                    </div>
+                    <div>
+                      <span class="text-sm font-medium text-gray-500">{% trans "Age" %}</span>
+                      <p class="text-sm text-gray-900">
+                        {{ potential_student.current_age }} {% trans "years old"
+                        %}
+                      </p>
+                    </div>
+                    <div>
+                      <span class="text-sm font-medium text-gray-500">{% trans "Birth Province" %}</span>
+                      <p class="text-sm text-gray-900">{{ potential_student.get_birth_province_display }}</p>
+                    </div>
+                    <div>
+                      <span class="text-sm font-medium text-gray-500">{% trans "Gender" %}</span>
+                      <p class="text-sm text-gray-900">{{ potential_student.get_preferred_gender_display }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Contact Information -->
+              <div>
+                <h3 class="text-lg font-medium text-gray-900 mb-3">{% trans "Contact Information" %}</h3>
+                <div class="bg-gray-50 rounded-lg p-4 space-y-3">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <span class="text-sm font-medium text-gray-500">{% trans "Phone Number" %}</span>
+                      <p class="text-sm text-gray-900">{{ potential_student.phone_number }}</p>
+                    </div>
+                    {% if potential_student.telegram_number %}
+                      <div>
+                        <span class="text-sm font-medium text-gray-500">{% trans "Telegram" %}</span>
+                        <p class="text-sm text-gray-900">{{ potential_student.telegram_number }}</p>
+                      </div>
+                    {% endif %}
+                    {% if potential_student.personal_email %}
+                      <div class="md:col-span-2">
+                        <span class="text-sm font-medium text-gray-500">{% trans "Email" %}</span>
+                        <p class="text-sm text-gray-900">{{ potential_student.personal_email }}</p>
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+              <!-- Application Details -->
+              <div>
+                <h3 class="text-lg font-medium text-gray-900 mb-3">{% trans "Application Details" %}</h3>
+                <div class="bg-gray-50 rounded-lg p-4 space-y-3">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <span class="text-sm font-medium text-gray-500">{% trans "Test Number" %}</span>
+                      <p class="text-sm font-mono text-gray-900">{{ potential_student.test_number }}</p>
+                    </div>
+                    <div>
+                      <span class="text-sm font-medium text-gray-500">{% trans "Application Date" %}</span>
+                      <p class="text-sm text-gray-900">{{ potential_student.created_at|date:"F d, Y g:i A" }}</p>
+                    </div>
+                    <div>
+                      <span class="text-sm font-medium text-gray-500">{% trans "Preferred Program" %}</span>
+                      <p class="text-sm text-gray-900">{{ potential_student.get_preferred_program_display }}</p>
+                    </div>
+                    <div>
+                      <span class="text-sm font-medium text-gray-500">{% trans "Current School" %}</span>
+                      <p class="text-sm text-gray-900">
+                        {% if potential_student.current_school == 'OTHER' %}
+                          {{
+                          potential_student.other_school_name }}
+                        {% else %}
+                          {{
+                          potential_student.get_current_school_display }}
+                        {% endif
+                        %}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Potential Duplicates -->
+        <div class="bg-white shadow rounded-lg">
+          <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-900">{% trans "Potential Duplicates" %}</h2>
+            <p class="text-sm text-gray-600 mt-1">
+              {{ duplicate_candidates|length }} {% trans "potential match(es)
+              found" %}
+            </p>
+          </div>
+          <div class="px-6 py-4">
+            {% if duplicate_candidates %}
+              <div class="space-y-4">
+                {% for candidate in duplicate_candidates %}
+                  <div class="border rounded-lg p-4 {% if candidate.risk_level == 'HIGH' %}border-red-300 bg-red-50{% elif candidate.risk_level == 'MEDIUM' %}border-yellow-300 bg-yellow-50{% else %}border-gray-300 bg-gray-50{% endif %}">
+                    <!-- Risk Level Badge -->
+                    <div class="flex items-center justify-between mb-3">
+                      <span class="inline-flex px-2 py-1 text-xs font-bold rounded-full {% if candidate.risk_level == 'HIGH' %}bg-red-100 text-red-800 {% elif candidate.risk_level == 'MEDIUM' %}bg-yellow-100 text-yellow-800 {% else %}bg-green-100 text-green-800{% endif %}">
+                        {{ candidate.risk_level }} {% trans "RISK" %}
+                      </span>
+                      <span class="text-sm font-medium text-gray-600">
+                        {{ candidate.confidence_score|floatformat:0 }}% {% trans
+                        "confidence" %}
+                      </span>
+                    </div>
+                    <!-- Match Information -->
+                    <div class="space-y-2">
+                      <div>
+                        <span class="text-sm font-medium text-gray-500">{% trans "Existing Student Name" %}</span>
+                        <p class="text-sm text-gray-900">{{ candidate.matched_name }}</p>
+                      </div>
+                      <div>
+                        <span class="text-sm font-medium text-gray-500">{% trans "Match Type" %}</span>
+                        <p class="text-sm text-gray-900">{{ candidate.get_match_type_display }}</p>
+                      </div>
+                      {% if candidate.matched_birth_date %}
+                        <div>
+                          <span class="text-sm font-medium text-gray-500">{% trans "Birth Date" %}</span>
+                          <p class="text-sm text-gray-900">{{ candidate.matched_birth_date|date:"F d, Y" }}</p>
+                        </div>
+                      {% endif %}
+                      {% if candidate.matched_phone %}
+                        <div>
+                          <span class="text-sm font-medium text-gray-500">{% trans "Phone Number" %}</span>
+                          <p class="text-sm text-gray-900">{{ candidate.matched_phone }}</p>
+                        </div>
+                      {% endif %}
+                      <!-- Debt Warning -->
+                      {% if candidate.has_outstanding_debt %}
+                        <div class="mt-3 p-3 bg-red-100 border border-red-300 rounded">
+                          <div class="flex items-center">
+                            <svg class="h-4 w-4 text-red-500 mr-2"
+                                 fill="currentColor"
+                                 viewBox="0 0 20 20">
+                              <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd">
+                              </path>
+                            </svg>
+                            <span class="text-sm font-medium text-red-800">
+                              {% trans "Outstanding Debt Concern" %}
+                              {% if
+                                candidate.debt_amount %}
+                                - ${{ candidate.debt_amount }}{%
+                                endif %}
+                              </span>
+                            </div>
+                          </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+              {% else %}
+                <div class="text-center py-8">
+                  <svg class="mx-auto h-12 w-12 text-gray-400"
+                       fill="none"
+                       stroke="currentColor"
+                       viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
+                    </path>
+                  </svg>
+                  <h3 class="mt-2 text-sm font-medium text-gray-900">{% trans "No potential duplicates found" %}</h3>
+                  <p class="mt-1 text-sm text-gray-500">{% trans "This application appears to be unique." %}</p>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <!-- Review Decision Form -->
+        <div class="mt-8 bg-white shadow rounded-lg">
+          <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-900">{% trans "Review Decision" %}</h2>
+            <p class="text-sm text-gray-600 mt-1">{% trans "Please make a decision about this application" %}</p>
+          </div>
+          <div class="px-6 py-4">
+            <form method="post">
+              {% csrf_token %}
+              <!-- Form Errors -->
+              {% if form.non_field_errors %}
+                <div class="bg-red-50 border border-red-200 rounded-md p-4 mb-6">
+                  <div class="flex">
+                    <div class="flex-shrink-0">
+                      <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd">
+                        </path>
+                      </svg>
+                    </div>
+                    <div class="ml-3">
+                      <h3 class="text-sm font-medium text-red-800">{% trans "Please correct the following errors:" %}</h3>
+                      <div class="mt-2 text-sm text-red-700">{{ form.non_field_errors }}</div>
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+              <!-- Decision Radio Buttons -->
+              <div class="space-y-4 mb-6">
+                <div class="text-base font-medium text-gray-900">{% trans "Decision" %}</div>
+                {% for field in form %}
+                  {% if field.name == 'action' %}
+                    <div class="space-y-4">
+                      {% for choice in field %}
+                        <div class="flex items-start">
+                          <div class="flex items-center h-5">{{ choice.tag }}</div>
+                          <div class="ml-3">
+                            <label for="{{ choice.id_for_label }}"
+                                   class="text-sm font-medium text-gray-700">{{ choice.choice_label }}</label>
+                            {% if choice.choice_value == 'confirm_new' %}
+                              <p class="text-sm text-gray-500">
+                                {% trans "Allow the student to proceed with testing. This
+                                creates a new student record." %}
+                              </p>
+                            {% elif choice.choice_value == 'confirm_duplicate' %}
+                              <p class="text-sm text-gray-500">
+                                {% trans "Block the application. This is the same person
+                                trying to create a duplicate account." %}
+                              </p>
+                            {% elif choice.choice_value == 'needs_more_info' %}
+                              <p class="text-sm text-gray-500">
+                                {% trans "Requires additional investigation. Keep for manual
+                                review." %}
+                              </p>
+                            {% endif %}
+                          </div>
+                        </div>
+                      {% endfor %}
+                    </div>
+                    {% if field.errors %}
+                      <div class="mt-1 text-sm text-red-600">
+                        {% for error in field.errors %}<p>{{ error }}</p>{% endfor %}
+                      </div>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              </div>
+              <!-- Review Notes -->
+              {% for field in form %}
+                {% if field.name == 'review_notes' %}
+                  <div class="mb-6">
+                    <label for="{{ field.id_for_label }}"
+                           class="block text-sm font-medium text-gray-700 mb-2">
+                      {{ field.label }}
+                      {% if field.field.required %}<span class="text-red-500">*</span>{% endif %}
+                    </label>
+                    {{ field|add_class:"w-full px-3 py-2 border border-gray-300
+                    rounded-md shadow-sm focus:outline-none focus:ring-2
+                    focus:ring-blue-500 focus:border-blue-500" }}
+                    {% if field.help_text
+                      %}
+                      <p class="mt-1 text-sm text-gray-500">{{ field.help_text }}</p>
+                    {% endif %}
+                    {% if field.errors %}
+                      <div class="mt-1 text-sm text-red-600">
+                        {% for error in field.errors %}<p>{{ error }}</p>{% endfor %}
+                      </div>
+                    {% endif %}
+                  </div>
+                {% endif %}
+              {% endfor %}
+              <!-- Action Buttons -->
+              <div class="flex justify-between items-center pt-6 border-t border-gray-200">
+                <a href="{% url 'level_testing:staff_applications' %}"
+                   class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                  {% trans "Cancel" %}
+                </a>
+                <button type="submit"
+                        class="inline-flex items-center px-6 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                  <svg class="h-4 w-4 mr-2"
+                       fill="none"
+                       stroke="currentColor"
+                       viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
+                    </path>
+                  </svg>
+                  {% trans "Submit Review" %}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endblock %}
+  {% block extra_js %}
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Add confirmation for blocking applications
+        const form = document.querySelector('form');
+        const confirmDuplicateRadio = document.querySelector(
+          'input[value="confirm_duplicate"]'
+        );
+
+        form.addEventListener('submit', function(e) {
+          if (confirmDuplicateRadio.checked) {
+            const confirmed = confirm(
+              '{% trans "Are you sure you want to block this application as a confirmed duplicate? This action cannot be easily undone." %}'
+            );
+            if (!confirmed) {
+              e.preventDefault();
+            }
+          }
+        });
+
+        // Highlight high-risk matches
+        const highRiskElements = document.querySelectorAll('.border-red-300');
+        highRiskElements.forEach((element) => {
+          element.style.animation = 'pulse 2s infinite';
+        });
+
+        // Add CSS animation for high-risk elements
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes pulse {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.8; }
+            }
+        `;
+        document.head.appendChild(style);
+      });
+    </script>
+  {% endblock %}

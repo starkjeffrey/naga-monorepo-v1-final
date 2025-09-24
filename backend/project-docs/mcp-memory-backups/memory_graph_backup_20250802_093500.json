@@ -1,0 +1,66 @@
+{
+  "export_timestamp": "2025-08-02T09:35:00",
+  "export_source": "mcp__memory__read_graph",
+  "entities": [
+    {
+      "type": "entity",
+      "name": "ProgramEnrollment Analytical Scripts",
+      "entityType": "legacy_migration_system",
+      "observations": [
+        "Sophisticated SQL-based data analysis scripts that CREATE historical program transition data by analyzing course completion patterns",
+        "Primary script: final_program_enrollment_data.sql - uses complex algorithms to detect academic majors from signature course completion (3+ courses required)",
+        "Uses CASE statements to determine derived_major based on course completion counts: BAD (Business Admin), FIN (Finance), TOU (Tourism), INT (International Relations), TES (TESOL)",
+        "Analyzes both language program enrollments (IEAP, EHSS, GESL) and academic program enrollments with graduation status detection",
+        "Quality assessment: 9.5/10 - exceptionally well-designed analytical scripts with comprehensive data analysis capabilities",
+        "Located in naga-backend_version_0 but was missing from current monorepo until copied to backend/scripts/legacy_analysis/",
+        "Creates audit trails for program changes and handles joint program detection (overlapping/consecutive enrollments)",
+        "Integrates multiple data sources: course records, student data, grades, and enrollment dates for complete program transition history",
+        "⚠️ DEPRECATED: SchoolStructuralUnit model references in scripts are now obsolete",
+        "Scripts reference SchoolStructuralUnit.objects.filter() calls that need updating to new standard models",
+        "MAJOR_CODE_MAP translations (BAD->Business Administration, etc.) need remapping to current model structure",
+        "Import scripts will require significant refactoring due to model changes from MPTT to standard Django models"
+      ]
+    },
+    {
+      "type": "entity",
+      "name": "PostgreSQL MCP Fix",
+      "entityType": "solution",
+      "observations": [
+        "PostgreSQL MCP server connection fix for Docker-based PostgreSQL",
+        "Correct command format: claude mcp add postgres npx -- -y @modelcontextprotocol/server-postgres postgresql://debug:debug@IP:5432/DATABASE",
+        "The '-y' flag must be passed after '--' to npx to auto-install the package",
+        "Use host machine IP address (not localhost) when PostgreSQL runs in Docker",
+        "Get IP with: ipconfig getifaddr en0",
+        "Verify connection with: claude mcp list | grep postgres",
+        "Common failure: Missing 'npx' command or incorrect '-y' flag placement"
+      ]
+    },
+    {
+      "type": "entity",
+      "name": "Claude MCP Configuration",
+      "entityType": "configuration",
+      "observations": [
+        "Claude Code MCP config stored in: /Users/jeffreystark/.claude.json",
+        "Different from Claude Desktop config at: ~/Library/Application Support/Claude/claude_desktop_config.json",
+        "Claude Code uses separate MCP servers from Claude Desktop",
+        "Config file can be very large (3MB+) as it contains conversation history",
+        "MCP servers managed with: claude mcp add/remove/list commands"
+      ]
+    }
+  ],
+  "relations": [
+    {
+      "type": "relation",
+      "from": "PostgreSQL MCP Fix",
+      "to": "Claude MCP Configuration",
+      "relationType": "applies_to"
+    },
+    {
+      "type": "relation",
+      "from": "PostgreSQL MCP Fix",
+      "to": "naga-monorepo",
+      "relationType": "fixes_issue_in"
+    }
+  ],
+  "_note": "This is a partial export showing the most recent entities. Use mcp__memory__read_graph for complete export."
+}

@@ -1,0 +1,466 @@
+[
+{
+  "model": "common.holiday",
+  "pk": 1,
+  "fields": {
+    "created_at": "2024-04-09T12:00:00Z",
+    "updated_at": "2024-04-09T12:00:00Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "eng_name": "International New Year's Day",
+    "khmer_name": "ទិវាចូលឆ្នាំសកល",
+    "start_date": "2025-01-01",
+    "end_date": "2025-01-01",
+    "is_active": true,
+    "notes": "Imported from V0 fixture"
+  }
+},
+{
+  "model": "common.holiday",
+  "pk": 2,
+  "fields": {
+    "created_at": "2024-04-09T12:00:00Z",
+    "updated_at": "2024-04-09T12:00:00Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "eng_name": "Victory Day over Genocide",
+    "khmer_name": "ទិវាជ័យជម្នះលើរបបប្រល័យពូជសាសន៍",
+    "start_date": "2025-01-07",
+    "end_date": "2025-01-07",
+    "is_active": true,
+    "notes": "Imported from V0 fixture"
+  }
+},
+{
+  "model": "common.holiday",
+  "pk": 3,
+  "fields": {
+    "created_at": "2024-04-09T12:00:00Z",
+    "updated_at": "2024-04-09T12:00:00Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "eng_name": "International Women's Day",
+    "khmer_name": "ទិវានារីអន្តរជាតិ",
+    "start_date": "2025-03-08",
+    "end_date": "2025-03-08",
+    "is_active": true,
+    "notes": "Imported from V0 fixture"
+  }
+},
+{
+  "model": "common.holiday",
+  "pk": 4,
+  "fields": {
+    "created_at": "2024-04-09T12:00:00Z",
+    "updated_at": "2024-04-09T12:00:00Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "eng_name": "Khmer New Year",
+    "khmer_name": "ពិធីបុណ្យចូលឆ្នាំថ្មី ប្រពៃណីជាតិខ្មែរ",
+    "start_date": "2025-04-14",
+    "end_date": "2025-04-16",
+    "is_active": true,
+    "notes": "Imported from V0 fixture"
+  }
+},
+{
+  "model": "common.holiday",
+  "pk": 5,
+  "fields": {
+    "created_at": "2024-04-09T12:00:00Z",
+    "updated_at": "2024-04-09T12:00:00Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "eng_name": "International Labor Day",
+    "khmer_name": "ទិវាពលកម្មអន្តរជាតិ",
+    "start_date": "2025-05-01",
+    "end_date": "2025-05-01",
+    "is_active": true,
+    "notes": "Imported from V0 fixture"
+  }
+},
+{
+  "model": "common.holiday",
+  "pk": 6,
+  "fields": {
+    "created_at": "2024-04-09T12:00:00Z",
+    "updated_at": "2024-04-09T12:00:00Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "eng_name": "Visak Bochea Day",
+    "khmer_name": "ពិធីបុណ្យវិសាខបូជា",
+    "start_date": "2025-05-11",
+    "end_date": "2025-05-11",
+    "is_active": true,
+    "notes": "Imported from V0 fixture"
+  }
+},
+{
+  "model": "common.holiday",
+  "pk": 7,
+  "fields": {
+    "created_at": "2024-04-09T12:00:00Z",
+    "updated_at": "2024-04-09T12:00:00Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "eng_name": "King Sihamoni's Birthday",
+    "khmer_name": "ព្រះរាជពិធីបុណ្យចម្លើនព្រះជន្មរុក្ខ ព្រះករុណាព្រះបាទសម្ដេច ព្រះបរមនាថ នរោត្តម សីហមុនី",
+    "start_date": "2025-05-14",
+    "end_date": "2025-05-14",
+    "is_active": true,
+    "notes": "Imported from V0 fixture"
+  }
+},
+{
+  "model": "common.holiday",
+  "pk": 8,
+  "fields": {
+    "created_at": "2024-04-09T12:00:00Z",
+    "updated_at": "2024-04-09T12:00:00Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "eng_name": "Royal Plowing Ceremony",
+    "khmer_name": "ព្រះរាជពិធីច្រត់ព្រះនង្គ័ល",
+    "start_date": "2025-05-15",
+    "end_date": "2025-05-15",
+    "is_active": true,
+    "notes": "Imported from V0 fixture"
+  }
+},
+{
+  "model": "common.holiday",
+  "pk": 9,
+  "fields": {
+    "created_at": "2024-04-09T12:00:00Z",
+    "updated_at": "2024-04-09T12:00:00Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "eng_name": "Queen Monineath's Birthday",
+    "khmer_name": "ព្រះរាជពិធីចម្លើនព្រះជន្ម របស់សម្ដេចមហាក្សត្រី នរោត្តម មុនិនាថ",
+    "start_date": "2025-06-18",
+    "end_date": "2025-06-18",
+    "is_active": true,
+    "notes": "Imported from V0 fixture"
+  }
+},
+{
+  "model": "common.holiday",
+  "pk": 10,
+  "fields": {
+    "created_at": "2024-04-09T12:00:00Z",
+    "updated_at": "2024-04-09T12:00:00Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "eng_name": "Pchum Ben Day",
+    "khmer_name": "ពិធីបុណ្យភ្ជុំបិណ្ឌ",
+    "start_date": "2025-09-21",
+    "end_date": "2025-09-23",
+    "is_active": true,
+    "notes": "Imported from V0 fixture"
+  }
+},
+{
+  "model": "common.holiday",
+  "pk": 11,
+  "fields": {
+    "created_at": "2024-04-09T12:00:00Z",
+    "updated_at": "2024-04-09T12:00:00Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "eng_name": "Constitution Day",
+    "khmer_name": "ទិវាបញ្ចេញរដ្ឋធម្មនុញ្ញ",
+    "start_date": "2025-09-24",
+    "end_date": "2025-09-24",
+    "is_active": true,
+    "notes": "Imported from V0 fixture"
+  }
+},
+{
+  "model": "common.holiday",
+  "pk": 12,
+  "fields": {
+    "created_at": "2024-04-09T12:00:00Z",
+    "updated_at": "2024-04-09T12:00:00Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "eng_name": "Commemoration Day of The Late King Sihanouk",
+    "khmer_name": "ទិវាប្រគល់ព្រះវិញ្ញាណក្ខន្ធ ព្រះករុណាព្រះបាទសម្ដេច នរោត្តម សីហនុ",
+    "start_date": "2025-10-15",
+    "end_date": "2025-10-15",
+    "is_active": true,
+    "notes": "Imported from V0 fixture"
+  }
+},
+{
+  "model": "common.holiday",
+  "pk": 13,
+  "fields": {
+    "created_at": "2024-04-09T12:00:00Z",
+    "updated_at": "2024-04-09T12:00:00Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "eng_name": "King Sihamoni's Coronation Day",
+    "khmer_name": "ព្រះរាជពិធីប្រកាសរាជសម្បតិ្ត ព្រះករុណាព្រះបាទសម្ដេចបរមនាថ នរោត្តម សីហមុនី",
+    "start_date": "2025-10-29",
+    "end_date": "2025-10-29",
+    "is_active": true,
+    "notes": "Imported from V0 fixture"
+  }
+},
+{
+  "model": "common.holiday",
+  "pk": 14,
+  "fields": {
+    "created_at": "2024-04-09T12:00:00Z",
+    "updated_at": "2024-04-09T12:00:00Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "eng_name": "Water Festival",
+    "khmer_name": "ព្រះរាជពិធីបុណ្យអុំទូក បណ្ដែតប្រទីប និងសំពះព្រះខែ",
+    "start_date": "2025-11-04",
+    "end_date": "2025-11-06",
+    "is_active": true,
+    "notes": "Imported from V0 fixture"
+  }
+},
+{
+  "model": "common.holiday",
+  "pk": 15,
+  "fields": {
+    "created_at": "2024-04-09T12:00:00Z",
+    "updated_at": "2024-04-09T12:00:00Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "eng_name": "Independence Day",
+    "khmer_name": "ទិវាឯករាជ្យជាតិ",
+    "start_date": "2025-11-09",
+    "end_date": "2025-11-09",
+    "is_active": true,
+    "notes": "Imported from V0 fixture"
+  }
+},
+{
+  "model": "common.holiday",
+  "pk": 16,
+  "fields": {
+    "created_at": "2024-04-09T12:00:00Z",
+    "updated_at": "2024-04-09T12:00:00Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "eng_name": "Peace Day",
+    "khmer_name": "ទិវាសន្តិភាពលើកម្ពុជាជាតិ",
+    "start_date": "2025-12-29",
+    "end_date": "2025-12-29",
+    "is_active": true,
+    "notes": "Imported from V0 fixture"
+  }
+},
+{
+  "model": "common.holiday",
+  "pk": 17,
+  "fields": {
+    "created_at": "2025-05-14T12:00:00Z",
+    "updated_at": "2025-05-14T12:00:00Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "eng_name": "International New Year's Day",
+    "khmer_name": "ទិវាចូលឆ្នាំសកល",
+    "start_date": "2026-01-01",
+    "end_date": "2026-01-01",
+    "is_active": true,
+    "notes": "Imported from V0 fixture"
+  }
+},
+{
+  "model": "common.holiday",
+  "pk": 18,
+  "fields": {
+    "created_at": "2025-05-14T12:00:00Z",
+    "updated_at": "2025-05-14T12:00:00Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "eng_name": "Victory Day over Genocide",
+    "khmer_name": "ទិវាជ័យជម្នះលើរបបប្រល័យពូជសាសន៍",
+    "start_date": "2026-01-07",
+    "end_date": "2026-01-07",
+    "is_active": true,
+    "notes": "Imported from V0 fixture"
+  }
+},
+{
+  "model": "common.holiday",
+  "pk": 19,
+  "fields": {
+    "created_at": "2025-05-14T12:00:00Z",
+    "updated_at": "2025-05-14T12:00:00Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "eng_name": "International Women's Day",
+    "khmer_name": "ទិវានារីអន្តរជាតិ",
+    "start_date": "2026-03-08",
+    "end_date": "2026-03-08",
+    "is_active": true,
+    "notes": "Imported from V0 fixture"
+  }
+},
+{
+  "model": "common.holiday",
+  "pk": 20,
+  "fields": {
+    "created_at": "2025-05-14T12:00:00Z",
+    "updated_at": "2025-05-14T12:00:00Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "eng_name": "Khmer New Year",
+    "khmer_name": "ពិធីបុណ្យចូលឆ្នាំថ្មី ប្រពៃណីជាតិខ្មែរ",
+    "start_date": "2026-04-14",
+    "end_date": "2026-04-16",
+    "is_active": true,
+    "notes": "Imported from V0 fixture"
+  }
+},
+{
+  "model": "common.holiday",
+  "pk": 21,
+  "fields": {
+    "created_at": "2025-05-14T12:00:00Z",
+    "updated_at": "2025-05-14T12:00:00Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "eng_name": "International Labor Day",
+    "khmer_name": "ទិវាពលកម្មអន្តរជាតិ",
+    "start_date": "2026-05-01",
+    "end_date": "2026-05-01",
+    "is_active": true,
+    "notes": "Imported from V0 fixture"
+  }
+},
+{
+  "model": "common.holiday",
+  "pk": 22,
+  "fields": {
+    "created_at": "2025-05-14T12:00:00Z",
+    "updated_at": "2025-05-14T12:00:00Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "eng_name": "Royal Plowing Ceremony",
+    "khmer_name": "ព្រះរាជពិធីច្រត់ព្រះនង្គ័ល",
+    "start_date": "2026-05-05",
+    "end_date": "2026-05-05",
+    "is_active": true,
+    "notes": "Imported from V0 fixture"
+  }
+},
+{
+  "model": "common.holiday",
+  "pk": 23,
+  "fields": {
+    "created_at": "2025-05-14T12:00:00Z",
+    "updated_at": "2025-05-14T12:00:00Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "eng_name": "King Sihamoni's Birthday",
+    "khmer_name": "ព្រះរាជពិធីបុណ្យចម្លើនព្រះជន្មរុក្ខ ព្រះករុណាព្រះបាទសម្ដេច ព្រះបរមនាថ នរោត្តម សីហមុនី",
+    "start_date": "2026-05-14",
+    "end_date": "2026-05-14",
+    "is_active": true,
+    "notes": "Imported from V0 fixture"
+  }
+},
+{
+  "model": "common.holiday",
+  "pk": 24,
+  "fields": {
+    "created_at": "2025-05-14T12:00:00Z",
+    "updated_at": "2025-05-14T12:00:00Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "eng_name": "Visak Bochea Day",
+    "khmer_name": "ពិធីបុណ្យវិសាខបូជា",
+    "start_date": "2026-05-22",
+    "end_date": "2026-05-22",
+    "is_active": true,
+    "notes": "Imported from V0 fixture"
+  }
+},
+{
+  "model": "common.holiday",
+  "pk": 25,
+  "fields": {
+    "created_at": "2025-05-14T12:00:00Z",
+    "updated_at": "2025-05-14T12:00:00Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "eng_name": "Constitution Day",
+    "khmer_name": "ទិវាបញ្ចេញរដ្ឋធម្មនុញ្ញ",
+    "start_date": "2026-09-24",
+    "end_date": "2026-09-24",
+    "is_active": true,
+    "notes": "Imported from V0 fixture"
+  }
+},
+{
+  "model": "common.holiday",
+  "pk": 26,
+  "fields": {
+    "created_at": "2025-05-14T12:00:00Z",
+    "updated_at": "2025-05-14T12:00:00Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "eng_name": "Commemoration Day of The Late King Sihanouk",
+    "khmer_name": "ទិវាប្រគល់ព្រះវិញ្ញាណក្ខន្ធ ព្រះករុណាព្រះបាទសម្ដេច នរោត្តម សីហនុ",
+    "start_date": "2026-10-15",
+    "end_date": "2026-10-15",
+    "is_active": true,
+    "notes": "Imported from V0 fixture"
+  }
+},
+{
+  "model": "common.holiday",
+  "pk": 27,
+  "fields": {
+    "created_at": "2025-05-14T12:00:00Z",
+    "updated_at": "2025-05-14T12:00:00Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "eng_name": "King Sihamoni's Coronation Day",
+    "khmer_name": "ព្រះរាជពិធីប្រកាសរាជសម្បតិ្ត ព្រះករុណាព្រះបាទសម្ដេចបរមនាថ នរោត្តម សីហមុនី",
+    "start_date": "2026-10-29",
+    "end_date": "2026-10-29",
+    "is_active": true,
+    "notes": "Imported from V0 fixture"
+  }
+},
+{
+  "model": "common.holiday",
+  "pk": 28,
+  "fields": {
+    "created_at": "2025-05-14T12:00:00Z",
+    "updated_at": "2025-05-14T12:00:00Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "eng_name": "Independence Day",
+    "khmer_name": "ទិវាឯករាជ្យជាតិ",
+    "start_date": "2026-11-09",
+    "end_date": "2026-11-09",
+    "is_active": true,
+    "notes": "Imported from V0 fixture"
+  }
+},
+{
+  "model": "common.holiday",
+  "pk": 29,
+  "fields": {
+    "created_at": "2025-05-14T12:00:00Z",
+    "updated_at": "2025-05-14T12:00:00Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "eng_name": "Peace Day",
+    "khmer_name": "ទិវាសន្តិភាពលើកម្ពុជាជាតិ",
+    "start_date": "2026-12-29",
+    "end_date": "2026-12-29",
+    "is_active": true,
+    "notes": "Imported from V0 fixture"
+  }
+}
+]

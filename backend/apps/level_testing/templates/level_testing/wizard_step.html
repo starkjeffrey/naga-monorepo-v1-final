@@ -1,0 +1,257 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% load form_tags %}
+
+{% block title %}
+  {{ step_title }} - {% trans "Level Testing Application" %} - {{ block.super }}
+{% endblock %}
+{% block content %}
+  <div class="min-h-screen bg-gray-50 py-2 px-3">
+    <!-- Mobile-First Container: Full width on mobile, constrained on larger screens -->
+    <div class="max-w-sm mx-auto sm:max-w-md lg:max-w-lg">
+      <!-- Mobile-Optimized Progress Header -->
+      <div class="bg-white rounded-lg shadow-sm border p-4 mb-4">
+        <div class="flex justify-between items-center mb-4">
+          <h1 class="text-xl font-bold text-gray-900 leading-tight">{{ step_title }}</h1>
+          <span class="text-sm font-semibold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
+            {{ step_number }}/{{ total_steps }}
+          </span>
+        </div>
+        <!-- Enhanced Progress Bar -->
+        <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
+          <div class="bg-blue-500 h-2 rounded-full transition-all duration-500 ease-out"
+               style="width: {{ progress_percent }}%"></div>
+        </div>
+        {% if step_description %}<p class="text-base text-gray-700 leading-relaxed">{{ step_description }}</p>{% endif %}
+      </div>
+      <!-- Mobile-Optimized Form Container -->
+      <div class="bg-white rounded-lg shadow-sm border">
+        <form method="post"
+              hx-post="{% url 'level_testing:wizard_validation' %}?step={{ step_number }}"
+              hx-trigger="change"
+              hx-target="#form-errors"
+              hx-swap="innerHTML"
+              class="p-5">
+          {% csrf_token %}
+          <!-- Mobile-Friendly Error Display -->
+          <div id="form-errors" class="mb-6">
+            {% if form.non_field_errors %}
+              <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                <div class="flex">
+                  <svg class="h-6 w-6 text-red-500 mt-0.5 mr-3 flex-shrink-0"
+                       fill="currentColor"
+                       viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd">
+                    </path>
+                  </svg>
+                  <div>
+                    <p class="font-semibold text-red-800 text-base">{% trans "Please correct the following errors:" %}</p>
+                    <div class="mt-2 text-red-700 text-base">{{ form.non_field_errors }}</div>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+          </div>
+          <!-- Mobile-First Form Fields with Enhanced Touch Targets -->
+          <div class="space-y-6">
+            {% for field in form %}
+              <div class="space-y-2">
+                <label for="{{ field.id_for_label }}"
+                       class="block text-base font-semibold text-gray-800 leading-tight">
+                  {{ field.label }}
+                  {% if field.field.required %}<span class="text-red-500 ml-1 text-lg">*</span>{% endif %}
+                </label>
+                {% if field.field.widget.input_type == 'select' %}
+                  {{ field|add_class:"w-full px-4 py-4 text-base border-2 border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none shadow-sm" }}
+                {% elif field.field.widget.input_type == 'textarea' %}
+                  {{ field|add_class:"w-full px-4 py-4 text-base border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none min-h-[120px] shadow-sm" }}
+                {% elif field.field.widget.input_type == 'checkbox' %}
+                  <div class="flex items-start p-3 bg-gray-50 rounded-lg">
+                    {{ field|add_class:"h-5 w-5 text-blue-600 focus:ring-blue-500 border-2 border-gray-400 rounded mt-1 mr-4 flex-shrink-0" }}
+                    <label for="{{ field.id_for_label }}"
+                           class="text-base text-gray-800 leading-relaxed font-medium cursor-pointer">
+                      {{ field.label }}
+                    </label>
+                  </div>
+                {% elif field.field.widget.input_type == 'date' %}
+                  {{ field|add_class:"w-full px-4 py-4 text-base border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm" }}
+                {% else %}
+                  {{ field|add_class:"w-full px-4 py-4 text-base border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm" }}
+                {% endif %}
+                {% if field.help_text %}<p class="mt-2 text-sm text-gray-600 leading-relaxed">{{ field.help_text }}</p>{% endif %}
+                {% if field.errors %}
+                  <div class="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+                    {% for error in field.errors %}<p class="text-sm text-red-700 font-medium">{{ error }}</p>{% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+          <!-- Mobile-First Navigation with Enhanced Touch Targets -->
+          <div class="mt-8 pt-6 border-t border-gray-200">
+            <div class="flex justify-between items-center gap-4">
+              {% if prev_step_url %}
+                <a href="{{ prev_step_url }}"
+                   class="inline-flex items-center px-5 py-4 border-2 border-gray-300 text-base font-semibold rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-3 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 min-w-[100px] justify-center">
+                  <svg class="h-5 w-5 mr-2"
+                       fill="none"
+                       stroke="currentColor"
+                       viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                  </svg>
+                  {% trans "Back" %}
+                </a>
+              {% else %}
+                <div class="min-w-[100px]"></div>
+              {% endif %}
+              <button type="submit"
+                      class="inline-flex items-center px-6 py-4 border-2 border-transparent text-base font-bold rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-3 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 min-w-[120px] justify-center shadow-lg">
+                {% trans "Continue" %}
+                <svg class="h-5 w-5 ml-2"
+                     fill="none"
+                     stroke="currentColor"
+                     viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- Simplified Step Indicators -->
+      <div class="mt-4 flex justify-center">
+        <div class="flex space-x-2">
+          {% for i in "12345"|make_list %}
+            {% if forloop.counter <= step_number %}
+              <div class="w-2 h-2 bg-blue-600 rounded-full"></div>
+            {% else %}
+              <div class="w-2 h-2 bg-gray-300 rounded-full"></div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      <!-- Mobile Progress Text -->
+      <div class="mt-2 text-center">
+        <span class="text-xs text-gray-500 font-medium">{{ progress_percent }}% {% trans "Complete" %}</span>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block extra_js %}
+  <script src="https://unpkg.com/htmx.org@2.0.3"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.querySelector('form');
+      const stepNumber = {
+        {
+          step_number
+        }
+      };
+      const storageKey = `level_testing_step_${stepNumber}`;
+
+      // Load saved data
+      const savedData = localStorage.getItem(storageKey);
+      if (savedData) {
+        try {
+          const data = JSON.parse(savedData);
+          Object.keys(data).forEach(key => {
+            const field = form.querySelector(`[name="${key}"]`);
+            if (field) {
+              if (field.type === 'checkbox') {
+                field.checked = data[key];
+              } else {
+                field.value = data[key];
+              }
+            }
+          });
+        } catch (e) {
+          console.log('Error loading saved form data:', e);
+        }
+      }
+
+      // Save data on form change
+      form.addEventListener('change', function() {
+        const formData = new FormData(form);
+        const data = {};
+        for (let [key, value] of formData.entries()) {
+          if (key !== 'csrfmiddlewaretoken') {
+            data[key] = value;
+          }
+        }
+        localStorage.setItem(storageKey, JSON.stringify(data));
+      });
+
+      // Clear saved data on successful submission
+      form.addEventListener('submit', function() {
+        localStorage.removeItem(storageKey);
+      });
+    });
+
+    // Conditional field display for education section
+    window.toggleStudyFields = function(value) {
+      // Hide all conditional fields first
+      const allConditionalFields = document.querySelectorAll('.conditional-field');
+      allConditionalFields.forEach(field => {
+        field.closest('div').style.display = 'none';
+      });
+
+      // Show relevant fields based on selection
+      if (value === 'high_school') {
+        const highSchoolFields = document.querySelectorAll('.high-school-field');
+        highSchoolFields.forEach(field => {
+          field.closest('div').style.display = 'block';
+        });
+      } else if (value === 'university') {
+        const universityFields = document.querySelectorAll('.university-field');
+        universityFields.forEach(field => {
+          field.closest('div').style.display = 'block';
+        });
+      } else if (value === 'not_studying') {
+        const workFields = document.querySelectorAll('.work-field');
+        workFields.forEach(field => {
+          field.closest('div').style.display = 'block';
+        });
+      }
+
+      // Show 'Other' field if needed for high school or university
+      const showOtherField = (value === 'high_school' && document.querySelector('[name="current_high_school"]')?.value?.includes('OTHER')) ||
+        (value === 'university' && document.querySelector('[name="current_university"]')?.value?.includes('OTHER'));
+
+      if (showOtherField) {
+        const otherFields = document.querySelectorAll('.other-field');
+        otherFields.forEach(field => {
+          field.closest('div').style.display = 'block';
+        });
+      }
+    };
+
+    // Initialize conditional fields on page load
+    const studyStatusField = document.getElementById('id_current_study_status');
+    if (studyStatusField && studyStatusField.value) {
+      toggleStudyFields(studyStatusField.value);
+    }
+
+    // Handle high school and university dropdowns to show 'Other' field
+    document.addEventListener('change', function(e) {
+      if (e.target.name === 'current_high_school' || e.target.name === 'current_university') {
+        const showOther = e.target.value && e.target.value.includes('OTHER');
+        const otherFields = document.querySelectorAll('.other-field');
+        otherFields.forEach(field => {
+          field.closest('div').style.display = showOther ? 'block' : 'none';
+        });
+      }
+    });
+
+    // Smooth scrolling to errors
+    document.body.addEventListener('htmx:afterRequest', function(evt) {
+      const errorContainer = document.getElementById('form-errors');
+      if (errorContainer && errorContainer.innerHTML.trim()) {
+        errorContainer.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  </script>
+{% endblock %}

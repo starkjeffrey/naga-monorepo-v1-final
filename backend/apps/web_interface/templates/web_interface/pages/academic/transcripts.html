@@ -1,0 +1,35 @@
+{% extends "web_interface/base/dashboard_page.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}Academic Transcripts - {{ block.super }}{% endblock %}
+
+{% block page_title %}Academic Transcripts{% endblock %}
+
+{% block dashboard_content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">{% trans "Academic Transcripts" %}</h3>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">
+                        {% trans "The academic transcripts feature is currently under development." %}
+                    </p>
+                    <p>
+                        {% trans "This page will allow authorized users to:" %}
+                    </p>
+                    <ul>
+                        <li>{% trans "Generate official academic transcripts" %}</li>
+                        <li>{% trans "View student academic records" %}</li>
+                        <li>{% trans "Print transcript reports" %}</li>
+                        <li>{% trans "Export transcript data" %}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

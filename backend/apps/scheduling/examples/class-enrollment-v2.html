@@ -1,0 +1,1457 @@
+        .course-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .course-short-name {
+            font-size: 11px;
+            color: var(--gray-500);
+            font-weight: 500;
+        }<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Schedule & Enrollment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --hover-gradient: linear-gradient(135deg, #7c8ff5 0%, #8e5cb2 100%);
+            --success-color: #48bb78;
+            --warning-color: #ed8936;
+            --danger-color: #f56565;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(to bottom right, #f0f9ff, #e0e7ff);
+            min-height: 100vh;
+            color: var(--gray-800);
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Section */
+        .header {
+            background: white;
+            border-radius: 16px;
+            padding: 24px 32px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--gray-200);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stats-container {
+            display: flex;
+            gap: 32px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray-500);
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--gray-700);
+            margin-top: 4px;
+        }
+
+        /* Controls Section */
+        .controls {
+            background: white;
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--gray-200);
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: 200px 200px 1fr auto;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray-600);
+        }
+
+        select, input {
+            padding: 10px 12px;
+            border: 2px solid var(--gray-200);
+            border-radius: 10px;
+            font-size: 14px;
+            background: white;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        select:hover, input:hover {
+            border-color: var(--gray-300);
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .prefix-filters {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .prefix-chip {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid var(--gray-200);
+            background: white;
+            color: var(--gray-600);
+            user-select: none;
+        }
+
+        .prefix-chip:hover {
+            border-color: var(--gray-300);
+            transform: translateY(-1px);
+        }
+
+        .prefix-chip.active {
+            background: var(--primary-gradient);
+            color: white;
+            border-color: transparent;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            padding-left: 36px;
+            width: 100%;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+        }
+
+        /* Class List */
+        .class-list {
+            background: white;
+            border-radius: 16px;
+            padding: 8px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--gray-200);
+        }
+
+        .class-header-row {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .class-header-row:hover {
+            box-shadow: var(--shadow-md);
+            border-color: var(--gray-200);
+        }
+
+        .class-header-row.expanded {
+            background: var(--gray-50);
+            border-color: #667eea;
+        }
+
+        .class-header-content {
+            padding: 16px 20px;
+            cursor: pointer;
+            display: grid;
+            grid-template-columns: 40px 140px 60px 120px 240px 150px 120px 80px 1fr;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .expand-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: var(--gray-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            color: var(--gray-600);
+            font-weight: bold;
+        }
+
+        .class-header-row.expanded .expand-icon {
+            background: var(--primary-gradient);
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .course-code {
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--gray-800);
+        }
+
+        .combined-courses {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .combined-courses .course-code {
+            font-size: 13px;
+            line-height: 1.2;
+        }
+
+        .combined-courses .course-code:first-child {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .course-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .course-short-name {
+            font-size: 11px;
+            color: var(--gray-500);
+            font-weight: 500;
+        }
+
+        .section-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--primary-gradient);
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .time-badge {
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+        }
+
+        .time-extended::before {
+            content: '+';
+            position: absolute;
+            top: -8px;
+            right: -4px;
+            background: #667eea;
+            color: white;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .time-morning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .time-afternoon {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .time-evening {
+            background: #e9d5ff;
+            color: #6b21a8;
+        }
+
+        .teacher-names {
+            color: var(--gray-700);
+            font-weight: 500;
+            font-size: 13px;
+            line-height: 1.3;
+        }
+
+        .teacher-names .teacher-item {
+            display: block;
+        }
+
+        .teacher-name {
+            color: var(--gray-700);
+            font-weight: 500;
+        }
+
+        .room-number {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: var(--gray-100);
+            border-radius: 8px;
+            font-weight: 600;
+            color: var(--gray-700);
+            font-size: 13px;
+        }
+
+        .room-arranged {
+            color: var(--gray-400);
+            font-style: italic;
+        }
+
+        .enrollment-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .enrollment-bar {
+            width: 60px;
+            height: 8px;
+            background: var(--gray-200);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .enrollment-fill {
+            height: 100%;
+            background: var(--success-color);
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        .enrollment-fill.warning {
+            background: var(--warning-color);
+        }
+
+        .enrollment-fill.full {
+            background: var(--danger-color);
+        }
+
+        .enrollment-text {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-600);
+        }
+
+        .class-type-badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .type-ieap {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .type-ehss {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .type-gesl {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .type-express {
+            background: #fce7f3;
+            color: #9f1239;
+        }
+
+        .type-combined {
+            background: #f3e8ff;
+            color: #6b21a8;
+        }
+
+        .type-request {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        /* Class Details (Accordion Content) */
+        .class-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            padding: 0 20px;
+        }
+
+        .class-details.expanded {
+            max-height: 800px;
+            padding: 0 20px 20px;
+        }
+
+        .session-container {
+            background: white;
+            border-radius: 10px;
+            padding: 16px;
+            margin-top: 12px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .session-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--gray-100);
+        }
+
+        .session-badge {
+            padding: 4px 12px;
+            background: var(--primary-gradient);
+            color: white;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .session-info {
+            font-size: 13px;
+            color: var(--gray-600);
+        }
+
+        .part-row {
+            display: grid;
+            grid-template-columns: 40px 140px 200px 150px 180px 1fr;
+            gap: 16px;
+            padding: 12px 16px;
+            background: var(--gray-50);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            align-items: center;
+            border: 1px solid var(--gray-200);
+        }
+
+        .part-indicator {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            background: white;
+            border: 2px solid var(--gray-300);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+            color: var(--gray-600);
+        }
+
+        .part-type {
+            font-weight: 600;
+            color: var(--gray-700);
+            font-size: 13px;
+        }
+
+        .schedule-info {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--gray-600);
+        }
+
+        .days-pills {
+            display: flex;
+            gap: 3px;
+        }
+
+        .day-pill {
+            width: 24px;
+            height: 24px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+            background: white;
+            border: 1px solid var(--gray-300);
+            color: var(--gray-600);
+        }
+
+        .day-pill.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .day-pill.weekend {
+            background: var(--gray-100);
+            border-color: var(--gray-400);
+        }
+
+        .day-pill.weekend.active {
+            background: #8b5cf6;
+            border-color: #8b5cf6;
+        }
+
+        .schedule-arranged {
+            color: var(--gray-400);
+            font-style: italic;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--gray-500);
+        }
+
+        .empty-state h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: var(--gray-600);
+        }
+
+        /* Loading State */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            color: var(--gray-500);
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--gray-200);
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 1400px) {
+            .class-header-content {
+                grid-template-columns: 40px 120px 50px 100px 150px 120px 80px 60px 1fr;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .controls-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .prefix-filters {
+                grid-column: 1 / -1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <h1>Class Schedule & Enrollment</h1>
+                <div class="stats-container">
+                    <div class="stat-item">
+                        <div class="stat-label">Total Classes</div>
+                        <div class="stat-value" id="totalClasses">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Total Enrolled</div>
+                        <div class="stat-value" id="totalEnrolled">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Available Seats</div>
+                        <div class="stat-value" id="availableSeats">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <div class="controls-grid">
+                <div class="control-group">
+                    <label class="control-label">Term</label>
+                    <select id="termSelect">
+                        <option value="language">Language Programs</option>
+                        <option value="ba">BA Programs</option>
+                        <option value="ma">MA Programs</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label">View</label>
+                    <select id="viewSelect">
+                        <option value="all">All Classes</option>
+                        <option value="available">Available Only</option>
+                        <option value="full">Full Classes</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Course Prefix Filter</label>
+                    <div class="prefix-filters" id="prefixFilters">
+                        <!-- Dynamic based on term -->
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Search</label>
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="searchInput" placeholder="Search by course, teacher, room...">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Class List -->
+        <div class="class-list" id="classList">
+            <div class="loading">
+                <div class="loading-spinner"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data structure with enhanced variety
+        const sampleClasses = {
+            language: [
+                {
+                    id: 'ieap01',
+                    course_code: 'IEAP-01',
+                    course_title: 'Intensive English Level 1',
+                    short_name: 'Intensive English 1',
+                    section_id: 'B',
+                    time_of_day: 'MORN',
+                    class_type: 'ieap',
+                    status: 'ACTIVE',
+                    max_enrollment: 18,
+                    current_enrollment: 16,
+                    sessions: [
+                        {
+                            session_number: 1,
+                            session_name: 'First Session',
+                            parts: [
+                                {
+                                    part_code: 'A',
+                                    part_type: 'INTEGRATED',
+                                    teacher: 'Ms. Emily Chen',
+                                    room: 'L-101',
+                                    meeting_days: ['MON', 'TUE', 'WED', 'THU', 'FRI'],
+                                    start_time: '08:00',
+                                    end_time: '11:00'
+                                }
+                            ]
+                        },
+                        {
+                            session_number: 2,
+                            session_name: 'Second Session',
+                            parts: [
+                                {
+                                    part_code: 'A',
+                                    part_type: 'INTEGRATED',
+                                    teacher: 'Mr. James Wilson',
+                                    room: 'L-101',
+                                    meeting_days: ['MON', 'TUE', 'WED', 'THU', 'FRI'],
+                                    start_time: '11:00',
+                                    end_time: '14:00'
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: 'ehss02',
+                    course_code: 'EHSS-02',
+                    course_title: 'High School English Level 2',
+                    short_name: 'HS English 2',
+                    section_id: 'A',
+                    time_of_day: 'AFT',
+                    class_type: 'ehss',
+                    status: 'ACTIVE',
+                    max_enrollment: 20,
+                    current_enrollment: 18,
+                    parts: [
+                        {
+                            part_code: 'A',
+                            part_type: 'GRAMMAR',
+                            teacher: 'Mr. David Kim',
+                            room: 'H-105',
+                            meeting_days: ['MON', 'WED'],
+                            start_time: '14:00',
+                            end_time: '15:30'
+                        },
+                        {
+                            part_code: 'B',
+                            part_type: 'GRAMMAR-2',
+                            teacher: 'Ms. Jennifer Park',
+                            room: 'H-105',
+                            meeting_days: ['TUE', 'THU'],
+                            start_time: '14:00',
+                            end_time: '15:30'
+                        },
+                        {
+                            part_code: 'C',
+                            part_type: 'COMPUTER',
+                            teacher: 'Mr. Alex Turner',
+                            room: 'C-Lab-1',
+                            meeting_days: ['FRI'],
+                            start_time: '14:00',
+                            end_time: '15:30'
+                        }
+                    ]
+                },
+                {
+                    id: 'gesl03',
+                    course_code: 'GESL-03',
+                    course_title: 'General ESL Level 3',
+                    short_name: 'General ESL 3',
+                    section_id: 'C',
+                    time_of_day: 'EVE',
+                    class_type: 'gesl',
+                    status: 'ACTIVE',
+                    max_enrollment: 15,
+                    current_enrollment: 12,
+                    parts: [
+                        {
+                            part_code: 'A',
+                            part_type: 'CONVERSATION',
+                            teacher: 'Ms. Sarah Miller',
+                            room: 'G-201',
+                            meeting_days: ['MON', 'WED', 'FRI'],
+                            start_time: '18:00',
+                            end_time: '19:30'
+                        },
+                        {
+                            part_code: 'B',
+                            part_type: 'WRITING',
+                            teacher: 'Dr. Robert Lee',
+                            room: 'G-201',
+                            meeting_days: ['TUE', 'THU'],
+                            start_time: '18:00',
+                            end_time: '19:30'
+                        }
+                    ]
+                },
+                {
+                    id: 'express01',
+                    course_code: 'EXPRESS-01',
+                    course_title: 'Express English',
+                    section_id: 'A',
+                    time_of_day: 'MORN',
+                    class_type: 'express',
+                    status: 'ACTIVE',
+                    max_enrollment: 12,
+                    current_enrollment: 10,
+                    parts: [
+                        {
+                            part_code: 'A',
+                            part_type: 'INTENSIVE',
+                            teacher: 'Ms. Lucy Wang',
+                            room: 'E-101',
+                            meeting_days: ['SAT', 'SUN'],
+                            start_time: '09:00',
+                            end_time: '12:00'
+                        }
+                    ]
+                }
+            ],
+            ba: [
+                {
+                    id: 'engl101',
+                    course_code: 'ENGL-101',
+                    course_title: 'English Composition I',
+                    short_name: 'Composition I',
+                    section_id: 'A',
+                    time_of_day: 'MORN',
+                    class_type: 'academic',
+                    status: 'ACTIVE',
+                    max_enrollment: 25,
+                    current_enrollment: 22,
+                    teacher: 'Dr. Sarah Johnson',
+                    room: 'B-203',
+                    meeting_days: ['MON', 'WED', 'FRI'],
+                    start_time: '09:00',
+                    end_time: '10:15'
+                },
+                {
+                    id: 'soc429',
+                    course_code: 'ENGL-302A-SOC-429-THM-322',
+                    course_title: 'Combined: Literature, Sociology & Theology',
+                    short_name: 'Lit/Soc/Theo',
+                    section_id: 'A',
+                    time_of_day: 'AFT',
+                    class_type: 'combined',
+                    status: 'ACTIVE',
+                    max_enrollment: 30,
+                    current_enrollment: 24,
+                    teacher: 'Dr. Michael Brown',
+                    room: 'S-301',
+                    meeting_days: ['TUE', 'THU'],
+                    start_time: '14:00',
+                    end_time: '15:30',
+                    combined_courses: ['ENGL-302A', 'SOC-429', 'THM-322']
+                },
+                {
+                    id: 'math201',
+                    course_code: 'MATH-201',
+                    course_title: 'Calculus II',
+                    short_name: 'Calc II',
+                    section_id: 'B',
+                    time_of_day: 'AFT',
+                    class_type: 'academic',
+                    status: 'ACTIVE',
+                    max_enrollment: 30,
+                    current_enrollment: 28,
+                    teacher: 'Dr. Alan Turing',
+                    room: 'M-201',
+                    meeting_days: ['SAT'],
+                    start_time: '13:00',
+                    end_time: '16:00',
+                    is_extended: true  // 3-hour class
+                },
+                {
+                    id: 'read301',
+                    course_code: 'READ-301',
+                    course_title: 'Advanced Reading',
+                    short_name: 'Adv Reading',
+                    section_id: 'A',
+                    time_of_day: 'MORN',
+                    class_type: 'request',
+                    tier: 'REQUEST 3-5',
+                    status: 'ACTIVE',
+                    max_enrollment: 5,
+                    current_enrollment: 4,
+                    teacher: 'Ms. Jane Smith',
+                    room: null,  // May not meet physically
+                    meeting_days: [],
+                    start_time: null,
+                    end_time: null
+                }
+            ],
+            ma: [
+                {
+                    id: 'ma601',
+                    course_code: 'THEO-601',
+                    course_title: 'Advanced Systematic Theology',
+                    short_name: 'Systematic Theo',
+                    section_id: 'A',
+                    time_of_day: 'EVE',
+                    class_type: 'academic',
+                    status: 'ACTIVE',
+                    max_enrollment: 15,
+                    current_enrollment: 12,
+                    teacher: 'Dr. Thomas Aquinas',
+                    room: 'T-401',
+                    meeting_days: ['MON'],
+                    start_time: '18:00',
+                    end_time: '21:00',
+                    is_extended: true  // 3-hour class
+                },
+                {
+                    id: 'ma602',
+                    course_code: 'BIBL-602',
+                    course_title: 'Hebrew Exegesis',
+                    short_name: 'Hebrew',
+                    section_id: 'B',
+                    time_of_day: 'MORN',
+                    class_type: 'academic',
+                    status: 'ACTIVE',
+                    max_enrollment: 12,
+                    current_enrollment: 8,
+                    teacher: 'Dr. Rachel Cohen',
+                    room: 'B-501',
+                    meeting_days: ['TUE', 'THU'],
+                    start_time: '09:00',
+                    end_time: '10:30'
+                },
+                {
+                    id: 'ma603',
+                    course_code: 'READ-601',
+                    course_title: 'Directed Reading',
+                    short_name: 'Directed Reading',
+                    section_id: 'A',
+                    time_of_day: 'MORN',
+                    class_type: 'request',
+                    tier: 'REQUEST 1-2',
+                    status: 'ACTIVE',
+                    max_enrollment: 2,
+                    current_enrollment: 1,
+                    teacher: 'Dr. Paul Anderson',
+                    room: null,
+                    meeting_days: [],
+                    start_time: null,
+                    end_time: null
+                }
+            ]
+        };
+
+        // State management
+        let currentTerm = 'language';
+        let currentFilter = 'all';
+        let currentSearch = '';
+        let expandedClasses = new Set();
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            setupEventListeners();
+            updatePrefixFilters();
+            loadClasses();
+            updateStats();
+        });
+
+        function setupEventListeners() {
+            // Term selector
+            document.getElementById('termSelect').addEventListener('change', (e) => {
+                currentTerm = e.target.value;
+                updatePrefixFilters();
+                loadClasses();
+                updateStats();
+            });
+            
+            // View filter
+            document.getElementById('viewSelect').addEventListener('change', (e) => {
+                currentFilter = e.target.value;
+                renderClasses();
+            });
+            
+            // Search
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                currentSearch = e.target.value.toLowerCase();
+                renderClasses();
+            });
+        }
+
+        function updatePrefixFilters() {
+            const container = document.getElementById('prefixFilters');
+            let prefixes = [];
+            
+            if (currentTerm === 'language') {
+                prefixes = ['All', 'IEAP', 'EHSS', 'GESL', 'EXPRESS'];
+            } else if (currentTerm === 'ba') {
+                prefixes = ['All', 'ENGL', 'MATH', 'SOC', 'THM', 'READ'];
+            } else if (currentTerm === 'ma') {
+                prefixes = ['All', 'THEO', 'BIBL', 'READ'];
+            }
+            
+            container.innerHTML = prefixes.map(prefix => 
+                `<button class="prefix-chip ${prefix === 'All' ? 'active' : ''}" data-prefix="${prefix.toLowerCase()}">${prefix}</button>`
+            ).join('');
+            
+            // Add click handlers
+            container.querySelectorAll('.prefix-chip').forEach(chip => {
+                chip.addEventListener('click', (e) => {
+                    container.querySelectorAll('.prefix-chip').forEach(c => c.classList.remove('active'));
+                    e.target.classList.add('active');
+                    renderClasses();
+                });
+            });
+        }
+
+        function loadClasses() {
+            // Simulate loading
+            const classList = document.getElementById('classList');
+            classList.innerHTML = '<div class="loading"><div class="loading-spinner"></div></div>';
+            
+            setTimeout(() => {
+                renderClasses();
+            }, 500);
+        }
+
+        function renderClasses() {
+            const classList = document.getElementById('classList');
+            const activePrefix = document.querySelector('.prefix-chip.active')?.dataset.prefix || 'all';
+            
+            // Get classes for current term
+            let classes = sampleClasses[currentTerm] || [];
+            
+            // Filter classes
+            let filteredClasses = classes.filter(cls => {
+                // Prefix filter
+                if (activePrefix !== 'all') {
+                    const coursePrefix = cls.course_code.split('-')[0].toLowerCase();
+                    if (coursePrefix !== activePrefix) {
+                        return false;
+                    }
+                }
+                
+                // View filter
+                if (currentFilter === 'available' && cls.current_enrollment >= cls.max_enrollment) {
+                    return false;
+                }
+                if (currentFilter === 'full' && cls.current_enrollment < cls.max_enrollment) {
+                    return false;
+                }
+                
+                // Search filter
+                if (currentSearch) {
+                    const searchableText = `${cls.course_code} ${cls.course_title} ${cls.teacher || ''} ${cls.room || ''}`.toLowerCase();
+                    if (!searchableText.includes(currentSearch)) {
+                        return false;
+                    }
+                }
+                
+                return true;
+            });
+            
+            if (filteredClasses.length === 0) {
+                classList.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No classes found</h3>
+                        <p>Try adjusting your filters or search criteria</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            classList.innerHTML = filteredClasses.map(cls => renderClassHeader(cls)).join('');
+            
+            // Restore expanded state
+            expandedClasses.forEach(id => {
+                const row = document.querySelector(`[data-class-id="${id}"]`);
+                if (row) {
+                    toggleClass(id);
+                }
+            });
+        }
+
+        function renderClassHeader(cls) {
+            const enrollmentPercent = (cls.current_enrollment / cls.max_enrollment) * 100;
+            const enrollmentStatus = enrollmentPercent >= 100 ? 'full' : enrollmentPercent >= 80 ? 'warning' : '';
+            const isExpanded = expandedClasses.has(cls.id);
+            
+            // Collect all teachers
+            let allTeachers = new Set();
+            let allDays = new Set();
+            let allTimes = new Set();
+            let displayRoom = cls.room;
+            
+            if (cls.class_type === 'ieap' && cls.sessions) {
+                // For IEAP, get teachers from all sessions
+                cls.sessions.forEach(session => {
+                    session.parts.forEach(part => {
+                        allTeachers.add(part.teacher);
+                        part.meeting_days?.forEach(day => allDays.add(day));
+                        if (part.start_time && part.end_time) {
+                            allTimes.add(`${part.start_time}-${part.end_time}`);
+                        }
+                    });
+                });
+                displayRoom = cls.sessions[0].parts[0].room;
+            } else if (cls.parts) {
+                // Language programs with parts
+                cls.parts.forEach(part => {
+                    allTeachers.add(part.teacher);
+                    part.meeting_days?.forEach(day => allDays.add(day));
+                    if (part.start_time && part.end_time) {
+                        allTimes.add(`${part.start_time}-${part.end_time}`);
+                    }
+                });
+                displayRoom = cls.parts[0].room;
+            } else if (cls.teacher) {
+                // Single teacher classes
+                allTeachers.add(cls.teacher);
+                cls.meeting_days?.forEach(day => allDays.add(day));
+                if (cls.start_time && cls.end_time) {
+                    allTimes.add(`${cls.start_time}-${cls.end_time}`);
+                }
+            }
+            
+            // Format teachers display
+            const teachersArray = Array.from(allTeachers);
+            const teachersDisplay = teachersArray.length > 2 ? 
+                `<div class="teacher-names">
+                    ${teachersArray.slice(0, 2).map(t => `<span class="teacher-item">${t}</span>`).join('')}
+                    <span class="teacher-item">+${teachersArray.length - 2} more</span>
+                </div>` :
+                `<div class="teacher-names">
+                    ${teachersArray.map(t => `<span class="teacher-item">${t}</span>`).join('')}
+                </div>`;
+            
+            // Format schedule display
+            let displaySchedule = '';
+            if (allDays.size > 0) {
+                const dayOrder = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+                const sortedDays = Array.from(allDays).sort((a, b) => dayOrder.indexOf(a) - dayOrder.indexOf(b));
+                const dayMap = {'MON': 'M', 'TUE': 'T', 'WED': 'W', 'THU': 'R', 'FRI': 'F', 'SAT': 'S', 'SUN': 'U'};
+                const daysStr = sortedDays.map(d => dayMap[d]).join('');
+                
+                if (allTimes.size === 1) {
+                    displaySchedule = `${daysStr} ${Array.from(allTimes)[0]}`;
+                } else if (allTimes.size > 1) {
+                    displaySchedule = `${daysStr} Multiple Times`;
+                } else {
+                    displaySchedule = daysStr;
+                }
+            } else {
+                displaySchedule = 'Arranged';
+            }
+            
+            // Handle combined courses display
+            let courseDisplay = '';
+            if (cls.combined_courses) {
+                courseDisplay = `
+                    <div class="course-info">
+                        <div class="combined-courses">
+                            ${cls.combined_courses.map((code, idx) => 
+                                `<div class="course-code">${code}</div>`
+                            ).join('')}
+                        </div>
+                        ${cls.short_name ? `<div class="course-short-name">${cls.short_name}</div>` : ''}
+                    </div>
+                `;
+            } else {
+                courseDisplay = `
+                    <div class="course-info">
+                        <div class="course-code">${cls.course_code}</div>
+                        ${cls.short_name ? `<div class="course-short-name">${cls.short_name}</div>` : ''}
+                    </div>
+                `;
+            }
+            
+            // Handle room display
+            const roomDisplay = displayRoom ? 
+                `<div class="room-number">📍 ${displayRoom}</div>` : 
+                `<div class="room-number room-arranged">Arranged</div>`;
+            
+            // Handle time badge with extended indicator
+            const timeBadgeClass = cls.is_extended ? 'time-extended' : '';
+            
+            return `
+                <div class="class-header-row ${isExpanded ? 'expanded' : ''}" data-class-id="${cls.id}">
+                    <div class="class-header-content" onclick="toggleClass('${cls.id}')">
+                        <div class="expand-icon">▶</div>
+                        ${courseDisplay}
+                        <div class="section-badge">${cls.section_id}</div>
+                        <div class="time-badge time-${cls.time_of_day.toLowerCase()} ${timeBadgeClass}">${getTimeLabel(cls.time_of_day)}</div>
+                        ${teachersDisplay}
+                        ${roomDisplay}
+                        <div class="schedule-info ${!displayRoom ? 'schedule-arranged' : ''}">${displaySchedule}</div>
+                        <div class="enrollment-info">
+                            <div class="enrollment-bar">
+                                <div class="enrollment-fill ${enrollmentStatus}" style="width: ${enrollmentPercent}%"></div>
+                            </div>
+                            <span class="enrollment-text">${cls.current_enrollment}/${cls.max_enrollment}</span>
+                        </div>
+                        <div>
+                            ${renderClassTypeBadge(cls)}
+                        </div>
+                    </div>
+                    <div class="class-details ${isExpanded ? 'expanded' : ''}" id="details-${cls.id}">
+                        ${renderClassDetails(cls)}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderClassTypeBadge(cls) {
+            if (cls.class_type === 'combined') {
+                return `<span class="class-type-badge type-combined">COMBINED</span>`;
+            }
+            if (cls.class_type === 'request') {
+                return `<span class="class-type-badge type-request">${cls.tier}</span>`;
+            }
+            if (cls.class_type === 'ieap') {
+                return `<span class="class-type-badge type-ieap">IEAP</span>`;
+            }
+            if (cls.class_type === 'ehss') {
+                return `<span class="class-type-badge type-ehss">EHSS</span>`;
+            }
+            if (cls.class_type === 'gesl') {
+                return `<span class="class-type-badge type-gesl">GESL</span>`;
+            }
+            if (cls.class_type === 'express') {
+                return `<span class="class-type-badge type-express">EXPRESS</span>`;
+            }
+            return '';
+        }
+
+        function renderClassDetails(cls) {
+            // For REQUEST classes without physical meetings
+            if (cls.class_type === 'request' && (!cls.meeting_days || cls.meeting_days.length === 0)) {
+                return `
+                    <div class="session-container">
+                        <div class="session-info">
+                            <strong>Course:</strong> ${cls.course_title}<br>
+                            <strong>Type:</strong> ${cls.tier}<br>
+                            <strong>Instructor:</strong> ${cls.teacher}<br>
+                            <strong>Meeting:</strong> By arrangement<br>
+                            <strong>Note:</strong> Contact instructor to arrange meeting times
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Combined classes - show as single part with visual days
+            if (cls.class_type === 'combined') {
+                return `
+                    <div class="session-container">
+                        <div class="session-info" style="margin-bottom: 12px;">
+                            <strong>Combined Courses:</strong><br>
+                            ${cls.combined_courses.map(code => `• ${code}`).join('<br>')}
+                        </div>
+                        <div class="part-row">
+                            <div class="part-indicator">A</div>
+                            <div class="part-type">Main Class</div>
+                            <div class="teacher-name">${cls.teacher}</div>
+                            <div class="room-number">📍 ${cls.room}</div>
+                            <div class="schedule-info">
+                                <div class="days-pills">
+                                    ${renderDayPills(cls.meeting_days)}
+                                </div>
+                                <span>${cls.start_time} - ${cls.end_time}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Regular academic classes (BA/MA) - show with visual day pattern
+            if (cls.class_type === 'academic') {
+                return `
+                    <div class="session-container">
+                        <div class="part-row">
+                            <div class="part-indicator">A</div>
+                            <div class="part-type">${cls.is_extended ? '3-Hour Session' : 'Main Class'}</div>
+                            <div class="teacher-name">${cls.teacher}</div>
+                            <div class="room-number">📍 ${cls.room}</div>
+                            <div class="schedule-info">
+                                <div class="days-pills">
+                                    ${renderDayPills(cls.meeting_days)}
+                                </div>
+                                <span>${cls.start_time} - ${cls.end_time}</span>
+                            </div>
+                        </div>
+                        ${cls.course_title ? `
+                            <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--gray-200);">
+                                <div class="session-info">
+                                    <strong>Full Title:</strong> ${cls.course_title}
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }
+            
+            // IEAP with sessions
+            if (cls.sessions) {
+                return cls.sessions.map(session => `
+                    <div class="session-container">
+                        <div class="session-header">
+                            <span class="session-badge">${session.session_name}</span>
+                        </div>
+                        ${session.parts.map(part => renderPart(part)).join('')}
+                    </div>
+                `).join('');
+            }
+            
+            // Language programs with parts (EHSS, GESL, EXPRESS)
+            if (cls.parts) {
+                return `
+                    <div class="session-container">
+                        ${cls.parts.map(part => renderPart(part)).join('')}
+                    </div>
+                `;
+            }
+            
+            return '';
+        }
+
+        function renderPart(part) {
+            const hasSchedule = part.meeting_days && part.meeting_days.length > 0;
+            
+            return `
+                <div class="part-row">
+                    <div class="part-indicator">${part.part_code}</div>
+                    <div class="part-type">${formatPartType(part.part_type)}</div>
+                    <div class="teacher-name">${part.teacher}</div>
+                    <div class="room-number ${!part.room ? 'room-arranged' : ''}">📍 ${part.room || 'Arranged'}</div>
+                    <div class="schedule-info ${!hasSchedule ? 'schedule-arranged' : ''}">
+                        ${hasSchedule ? `
+                            <div class="days-pills">
+                                ${renderDayPills(part.meeting_days)}
+                            </div>
+                            <span>${part.start_time} - ${part.end_time}</span>
+                        ` : 'Arranged'}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderDayPills(days) {
+            const allDays = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+            const dayLabels = ['M', 'T', 'W', 'R', 'F', 'S', 'U'];
+            
+            return allDays.map((day, idx) => {
+                const isActive = days && days.includes(day);
+                const isWeekend = idx >= 5;
+                return `<span class="day-pill ${isActive ? 'active' : ''} ${isWeekend ? 'weekend' : ''}">${dayLabels[idx]}</span>`;
+            }).join('');
+        }
+
+        function toggleClass(classId) {
+            const row = document.querySelector(`[data-class-id="${classId}"]`);
+            const details = document.getElementById(`details-${classId}`);
+            
+            if (expandedClasses.has(classId)) {
+                expandedClasses.delete(classId);
+                row.classList.remove('expanded');
+                details.classList.remove('expanded');
+            } else {
+                expandedClasses.add(classId);
+                row.classList.add('expanded');
+                details.classList.add('expanded');
+            }
+        }
+
+        function formatSchedule(obj) {
+            if (!obj.meeting_days || obj.meeting_days.length === 0) {
+                return 'Arranged';
+            }
+            
+            const dayMap = {
+                'MON': 'M', 'TUE': 'T', 'WED': 'W', 'THU': 'R', 
+                'FRI': 'F', 'SAT': 'S', 'SUN': 'U'
+            };
+            
+            const days = obj.meeting_days.map(d => dayMap[d] || d.substring(0, 1)).join('');
+            
+            if (obj.start_time && obj.end_time) {
+                return `${days} ${obj.start_time}-${obj.end_time}`;
+            }
+            
+            return days;
+        }
+
+        function formatPartType(type) {
+            const typeMap = {
+                'MAIN': 'Main Class',
+                'INTEGRATED': 'Integrated Skills',
+                'GRAMMAR': 'Grammar',
+                'GRAMMAR-2': 'Grammar 2',
+                'CONVERSATION': 'Conversation',
+                'WRITING': 'Writing',
+                'READING': 'Reading',
+                'COMPUTER': 'Computer Lab',
+                'LAB': 'Laboratory',
+                'INTENSIVE': 'Intensive'
+            };
+            return typeMap[type] || type;
+        }
+
+        function getTimeLabel(timeOfDay) {
+            const labels = {
+                'MORN': 'Morning',
+                'AFT': 'Afternoon',
+                'EVE': 'Evening',
+                'NIGHT': 'Night'
+            };
+            return labels[timeOfDay] || timeOfDay;
+        }
+
+        function updateStats() {
+            const classes = sampleClasses[currentTerm] || [];
+            const totalClasses = classes.length;
+            const totalEnrolled = classes.reduce((sum, cls) => sum + cls.current_enrollment, 0);
+            const totalCapacity = classes.reduce((sum, cls) => sum + cls.max_enrollment, 0);
+            const availableSeats = totalCapacity - totalEnrolled;
+            
+            document.getElementById('totalClasses').textContent = totalClasses;
+            document.getElementById('totalEnrolled').textContent = totalEnrolled;
+            document.getElementById('availableSeats').textContent = availableSeats;
+        }
+    </script>
+</body>
+</html>

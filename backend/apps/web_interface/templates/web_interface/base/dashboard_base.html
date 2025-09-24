@@ -1,0 +1,390 @@
+{% extends "web_interface/base/base.html" %}
+
+{% load static %}
+{% load i18n %}
+{% load web_interface_tags %}
+
+{% block extra_head %}
+  <!-- Alpine.js for command palette -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+{% endblock %}
+
+{% block title %}{{ page_title|default:"Dashboard" }} - {{ block.super }}{% endblock %}
+{% block body_class %}dashboard-page{% endblock %}
+{% block content %}
+  <div class="dashboard active" id="dashboard">
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">N</div>
+          <div>
+            <div class="sidebar-title">{% trans "Naga SIS" %}</div>
+            <div class="user-info" id="userRole">
+              {{ user.get_full_name|default:user.username }}
+              {% if current_role %}- {{ current_role|title }}{% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <nav class="nav-menu" id="navMenu">
+        {% get_user_navigation user as navigation %}
+        {% for section in navigation %}
+          <div class="nav-section">
+            <div class="nav-section-title">{{ section.title|trans }}</div>
+            {% for item in section.items %}
+              <a href="{% if item.url_name %}{% url item.url_name %}{% else %}#{% endif %}"
+                 class="nav-item {% if item.page == current_page %}active{% endif %}"
+                 data-page="{{ item.page }}"
+                 {% if item.url_name %} hx-get="{% url item.url_name %}" hx-target="#contentArea" hx-ext="naga-nav" hx-push-url="true" {% endif %}>
+                <span class="nav-icon">{{ item.icon }}</span>
+                <span>{{ item.name|trans }}</span>
+              </a>
+            {% endfor %}
+          </div>
+        {% endfor %}
+      </nav>
+    </div>
+    <!-- Main Content Area -->
+    <div class="main-content">
+      <!-- Header -->
+      <div class="header">
+        <h2 class="page-title" id="pageTitle">{{ page_title|default:"Dashboard" }}</h2>
+        <div class="header-actions">
+          {% block header_actions %}
+            {% if user.is_authenticated %}
+              <!-- Command Palette Trigger -->
+              <button class="header-btn" 
+                      onclick="document.querySelector('#command-palette [x-data]').__x.$data.open = true"
+                      title="{% trans 'Command Palette' %} (⌘K)">
+                <i class="fas fa-search"></i>
+                <span class="sr-only">{% trans "Command Palette" %}</span>
+              </button>
+              
+              <!-- Notifications -->
+              <div class="dropdown notification-dropdown">
+                <button class="header-btn dropdown-toggle notification-btn" 
+                        data-toggle="dropdown"
+                        title="{% trans 'Notifications' %}">
+                  <i class="fas fa-bell"></i>
+                  <span id="notification-count" class="notification-badge hidden">0</span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right notification-menu">
+                  <div class="dropdown-header">
+                    <h6 class="dropdown-title">{% trans "Notifications" %}</h6>
+                  </div>
+                  <div id="notifications-dropdown" 
+                       hx-get="{% url 'web_interface:user-notifications' %}"
+                       hx-trigger="load, refreshNotifications from:body">
+                    <div class="text-center py-4">
+                      <i class="fas fa-spinner fa-spin text-gray-400"></i>
+                      <div class="text-gray-500 mt-2">{% trans "Loading notifications..." %}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {% if current_role == 'admin' or current_role == 'staff' %}
+                <button class="btn btn-primary"
+                        data-modal-url="{% url 'web_interface:modal-student-create' %}"
+                        title="{% trans 'Add New Student' %}">
+                  <i class="fas fa-plus"></i>
+                  {% trans "New Student" %}
+                </button>
+              {% endif %}
+              {% if current_role == 'finance' or current_role == 'admin' %}
+                <button class="btn btn-success"
+                        data-modal-url="{% url 'web_interface:modal-invoice-create' %}"
+                        title="{% trans 'Generate Invoice' %}">
+                  <i class="fas fa-file-invoice"></i>
+                  {% trans "New Invoice" %}
+                </button>
+                <button class="btn btn-info"
+                        data-modal-url="{% url 'web_interface:modal-quick-payment' %}"
+                        title="{% trans 'Quick Payment Processing' %}">
+                  <i class="fas fa-credit-card"></i>
+                  {% trans "Quick Payment" %}
+                </button>
+              {% endif %}
+              <!-- Role Switch Dropdown (if user has multiple roles) -->
+              {% get_user_roles user as user_roles %}
+              {% if user_roles|length > 1 %}
+                <div class="dropdown">
+                  <button class="header-btn dropdown-toggle" data-toggle="dropdown">{% trans "Switch Role" %}</button>
+                  <div class="dropdown-menu">
+                    {% for role in user_roles %}
+                      <a class="dropdown-item {% if role == current_role %}active{% endif %}"
+                         href="{% url 'web_interface:role-switch' %}?role={{ role }}">{{ role|title }}</a>
+                    {% endfor %}
+                  </div>
+                </div>
+              {% endif %}
+              <a href="{% url 'web_interface:logout' %}" class="header-btn">{% trans "Logout" %}</a>
+            {% endif %}
+          {% endblock %}
+        </div>
+      </div>
+      <!-- Content Area -->
+      <div id="contentArea"
+           class="content-area"
+           hx-get="{% url 'web_interface:dashboard' %}"
+           hx-trigger="load"
+           hx-ext="naga-nav">
+        {% block dashboard_content %}
+          <!-- Loading state while dashboard content loads -->
+          <div class="text-center mt-5">
+            <div class="spinner-border" role="status">
+              <span class="sr-only">{% trans "Loading..." %}</span>
+            </div>
+          </div>
+        {% endblock %}
+      </div>
+    </div>
+  </div>
+  
+  <!-- Command Palette -->
+  {% include "web_interface/components/command_palette.html" %}
+  
+  <!-- Modal Container -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalTitle">{% trans "Modal" %}</h3>
+        <button type="button"
+                class="btn-close"
+                onclick="window.DashboardApp.closeModal()">&times;</button>
+      </div>
+      <div id="modalBody" class="modal-body">
+        <!-- Modal content will be loaded here -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="window.DashboardApp.closeModal()">{% trans "Cancel" %}</button>
+        <button class="btn"
+                id="modalSaveBtn"
+                onclick="window.DashboardApp.saveModal()">{% trans "Save" %}</button>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block extra_css %}
+  <style>
+    /* Mobile responsive adjustments */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        z-index: 1001;
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .mobile-menu-toggle {
+        display: block;
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 1002;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 12px;
+        cursor: pointer;
+      }
+    }
+
+    .mobile-menu-toggle {
+      display: none;
+    }
+
+    /* Dropdown styles */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 100%;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      box-shadow: var(--shadow);
+      min-width: 120px;
+      z-index: 1000;
+    }
+
+    .dropdown.open .dropdown-menu {
+      display: block;
+    }
+
+    .dropdown-item {
+      display: block;
+      padding: 8px 16px;
+      color: var(--dark);
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .dropdown-item:hover {
+      background: var(--light);
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .dropdown-item.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Loading spinner */
+    .spinner-border {
+      width: 2rem;
+      height: 2rem;
+      border: 0.25em solid currentColor;
+      border-right-color: transparent;
+      border-radius: 50%;
+      animation: spinner-border 0.75s linear infinite;
+    }
+
+    @keyframes spinner-border {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Notification styles */
+    .notification-dropdown {
+      position: relative;
+    }
+
+    .notification-btn {
+      position: relative;
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: -2px;
+      right: -6px;
+      background: #dc3545;
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 11px;
+      line-height: 18px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .notification-menu {
+      width: 350px;
+      max-height: 400px;
+      overflow-y: auto;
+      right: 0;
+      left: auto;
+    }
+
+    .dropdown-header {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--light);
+    }
+
+    .dropdown-title {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .dropdown-menu-right {
+      right: 0;
+      left: auto;
+    }
+
+    /* Header button spacing */
+    .header-actions > * {
+      margin-left: 8px;
+    }
+
+    .header-actions > *:first-child {
+      margin-left: 0;
+    }
+
+  </style>
+{% endblock %}
+{% block extra_js %}
+  <script>
+    // Mobile menu toggle
+    function toggleMobileMenu() {
+      const sidebar = document.querySelector('.sidebar');
+      sidebar.classList.toggle('open');
+    }
+
+    // Dropdown functionality
+    document.addEventListener('click', function(event) {
+      const dropdown = event.target.closest('.dropdown');
+      if (dropdown) {
+        const dropdownToggle = dropdown.querySelector('.dropdown-toggle');
+        if (event.target === dropdownToggle) {
+          event.preventDefault();
+          dropdown.classList.toggle('open');
+        }
+      } else {
+        // Close all dropdowns when clicking outside
+        document.querySelectorAll('.dropdown').forEach(d => {
+          d.classList.remove('open');
+        });
+      }
+    });
+
+    // Initialize dashboard-specific functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize notification refresh
+      setInterval(() => {
+        htmx.trigger('#notifications-dropdown', 'refreshNotifications');
+      }, 30000); // Refresh every 30 seconds
+      
+      // Add mobile menu button if not present
+      if (window.innerWidth <= 768 && !document.querySelector('.mobile-menu-toggle')) {
+        const menuBtn = document.createElement('button');
+        menuBtn.className = 'mobile-menu-toggle';
+        menuBtn.innerHTML = '☰';
+        menuBtn.onclick = toggleMobileMenu;
+        document.body.appendChild(menuBtn);
+      }
+
+      // Handle window resize
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+          const sidebar = document.querySelector('.sidebar');
+          sidebar.classList.remove('open');
+
+          // Remove mobile menu button
+          const menuBtn = document.querySelector('.mobile-menu-toggle');
+          if (menuBtn) {
+            menuBtn.remove();
+          }
+        } else if (!document.querySelector('.mobile-menu-toggle')) {
+          // Add mobile menu button
+          const menuBtn = document.createElement('button');
+          menuBtn.className = 'mobile-menu-toggle';
+          menuBtn.innerHTML = '☰';
+          menuBtn.onclick = toggleMobileMenu;
+          document.body.appendChild(menuBtn);
+        }
+      });
+
+      // Dashboard content will be loaded automatically via HTMX hx-trigger="load"
+    });
+  </script>
+{% endblock %}

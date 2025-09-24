@@ -1,0 +1,16 @@
+{% load i18n %}
+
+<div class="sis-alert sis-alert-{{ type }} mb-4">
+    <div class="flex items-center">
+        {% if type == "success" %}
+            <i class="fas fa-check-circle mr-2"></i>
+        {% elif type == "error" %}
+            <i class="fas fa-exclamation-circle mr-2"></i>
+        {% elif type == "warning" %}
+            <i class="fas fa-exclamation-triangle mr-2"></i>
+        {% else %}
+            <i class="fas fa-info-circle mr-2"></i>
+        {% endif %}
+        <span>{{ message }}</span>
+    </div>
+</div>

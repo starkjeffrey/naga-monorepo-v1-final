@@ -1,0 +1,268 @@
+{% extends "web_interface/base/dashboard_base.html" %}
+{% load i18n %}
+{% load static %}
+{% load web_interface_tags %}
+
+{% block title %}{% trans "Enhanced Class Cards" %}{% endblock %}
+
+{% block dashboard_content %}
+<!-- Navigation breadcrumb -->
+<nav class="bg-gray-50 border-b border-gray-200 px-4 py-2">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex items-center space-x-2 text-sm">
+      <a href="{% url 'web_interface:dashboard' %}" class="text-blue-600 hover:text-blue-800">Dashboard</a>
+      <span class="text-gray-400">></span>
+      <a href="{% url 'web_interface:enrollment-management' %}" class="text-blue-600 hover:text-blue-800">Enrollment</a>
+      <span class="text-gray-400">></span>
+      <span class="text-gray-600">Enhanced Class Cards</span>
+    </div>
+  </div>
+</nav>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <!-- Header -->
+  <div class="py-6 border-b border-gray-200">
+    <div class="flex justify-between items-center">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900">{% trans "Enhanced Class Cards" %}</h1>
+        <p class="text-gray-600 mt-2">{% trans "Visual class management with inline enrollment actions" %}</p>
+      </div>
+      
+      <!-- Term Filter -->
+      <div class="flex items-center space-x-4">
+        <select class="rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+          {% for term in available_terms %}
+          <option value="{{ term.id }}" {% if term.id == current_term.id %}selected{% endif %}>
+            {{ term.code }}
+          </option>
+          {% endfor %}
+        </select>
+        
+        <button class="px-4 py-2 bg-blue-600 text-white rounded-md shadow-sm text-sm font-medium hover:bg-blue-700"
+                onclick="openQuickEnrollModal()">
+          {% trans "Quick Enroll" %}
+        </button>
+      </div>
+    </div>
+    
+    <!-- Stats -->
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+        <div class="text-2xl font-bold text-green-600">{{ classes|length }}</div>
+        <div class="text-sm text-gray-600">{% trans "Total Classes" %}</div>
+      </div>
+      <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+        <div class="text-2xl font-bold text-blue-600">
+          {{ classes|add_enrolled_counts }}
+        </div>
+        <div class="text-sm text-gray-600">{% trans "Total Enrolled" %}</div>
+      </div>
+      <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+        <div class="text-2xl font-bold text-yellow-600">
+          {{ classes|nearly_full_count }}
+        </div>
+        <div class="text-sm text-gray-600">{% trans "Nearly Full" %}</div>
+      </div>
+      <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+        <div class="text-2xl font-bold text-red-600">
+          {{ classes|full_classes_count }}
+        </div>
+        <div class="text-sm text-gray-600">{% trans "Full Classes" %}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Class Cards Grid -->
+  <div class="py-6">
+    {% if classes %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for class in classes %}
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+        <!-- Card Header -->
+        <div class="p-6 pb-4">
+          <div class="flex justify-between items-start">
+            <div class="flex-1">
+              <h3 class="text-lg font-semibold text-gray-900">
+                {{ class.course.code }}
+              </h3>
+              <p class="text-gray-600 mt-1">{{ class.course.title }}</p>
+              <p class="text-sm text-gray-500 mt-2">
+                {% with primary_teacher=class.get_primary_teacher %}
+                  {% if primary_teacher %}
+                    {{ primary_teacher.person.full_name }}
+                  {% else %}
+                    {% trans "TBD" %}
+                  {% endif %}
+                {% endwith %}
+              </p>
+            </div>
+            
+            <!-- Enrollment Status Badge -->
+            <div class="text-right">
+              <div class="text-2xl font-bold
+                         {% if class.seats_available > 10 %}text-green-600
+                         {% elif class.seats_available > 0 %}text-yellow-600
+                         {% else %}text-red-600{% endif %}">
+                {{ class.seats_available|default:0 }}
+              </div>
+              <div class="text-xs text-gray-500">{% trans "seats left" %}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card Details -->
+        <div class="px-6 py-3 border-t border-gray-100">
+          <div class="grid grid-cols-2 gap-3 text-sm">
+            <div>
+              <span class="text-gray-500">{% trans "Schedule:" %}</span>
+              <div class="font-medium">
+                {% if class.time_designation %}
+                  {{ class.time_designation }}
+                {% else %}
+                  {% trans "TBD" %}
+                {% endif %}
+              </div>
+            </div>
+            <div>
+              <span class="text-gray-500">{% trans "Room:" %}</span>
+              <div class="font-medium">
+                {% with primary_room=class.get_primary_room %}
+                  {% if primary_room %}
+                    {{ primary_room.code }}
+                  {% else %}
+                    {% trans "TBD" %}
+                  {% endif %}
+                {% endwith %}
+              </div>
+            </div>
+            <div>
+              <span class="text-gray-500">{% trans "Credits:" %}</span>
+              <div class="font-medium">{{ class.course.credits|default:"3" }}</div>
+            </div>
+            <div>
+              <span class="text-gray-500">{% trans "Enrolled:" %}</span>
+              <div class="font-medium">{{ class.enrolled_count|default:0 }}/{{ class.max_enrollment|default:30 }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-between items-center">
+          <button class="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                  onclick="viewRoster({{ class.id }})">
+            {% trans "View Roster" %}
+          </button>
+          
+          <div class="flex space-x-2">
+            <button class="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+                    onclick="quickEnroll({{ class.id }})">
+              {% trans "Quick Enroll" %}
+            </button>
+            {% if class.seats_available <= 0 %}
+            <button class="px-3 py-1 bg-orange-600 text-white text-sm rounded hover:bg-orange-700"
+                    onclick="addToWaitlist({{ class.id }})">
+              {% trans "Waitlist" %}
+            </button>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <!-- Empty State -->
+    <div class="text-center py-12">
+      <div class="text-gray-400 mb-4">
+        <svg class="mx-auto h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+        </svg>
+      </div>
+      <h3 class="text-lg font-medium text-gray-900 mb-2">{% trans "No Classes Available" %}</h3>
+      <p class="text-gray-500">{% trans "No classes are currently available for the selected term." %}</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Quick Enrollment Modal -->
+<div id="quick-enroll-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+  <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+    <div class="p-6">
+      <h3 class="text-lg font-medium text-gray-900 mb-4">{% trans "Quick Enrollment" %}</h3>
+      
+      <form id="quick-enroll-form">
+        {% csrf_token %}
+        <input type="hidden" id="selected-class-id" name="class_id">
+        
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">{% trans "Search Student" %}</label>
+          <input type="text" 
+                 id="modal-student-search" 
+                 placeholder="{% trans 'Enter student name or ID...' %}"
+                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        
+        <div class="flex justify-end space-x-3">
+          <button type="button" 
+                  onclick="closeQuickEnrollModal()"
+                  class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+            {% trans "Cancel" %}
+          </button>
+          <button type="submit"
+                  class="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700">
+            {% trans "Enroll" %}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+function viewRoster(classId) {
+  // Open roster modal - implement with HTMX or redirect
+  window.open(`/enrollment/class/${classId}/roster/`, '_blank');
+}
+
+function quickEnroll(classId) {
+  document.getElementById('selected-class-id').value = classId;
+  document.getElementById('quick-enroll-modal').classList.remove('hidden');
+}
+
+function addToWaitlist(classId) {
+  // Implement waitlist functionality
+  alert(`{% trans "Waitlist functionality for class ${classId} - Coming soon!" %}`);
+}
+
+function openQuickEnrollModal() {
+  document.getElementById('quick-enroll-modal').classList.remove('hidden');
+}
+
+function closeQuickEnrollModal() {
+  document.getElementById('quick-enroll-modal').classList.add('hidden');
+  document.getElementById('quick-enroll-form').reset();
+}
+
+// Form submission
+document.getElementById('quick-enroll-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  const studentSearch = document.getElementById('modal-student-search').value.trim();
+  if (!studentSearch) {
+    alert('{% trans "Please enter a student name or ID." %}');
+    return;
+  }
+  
+  // Here you would normally submit via HTMX or AJAX
+  alert('{% trans "Enrollment submitted! (Demo mode)" %}');
+  closeQuickEnrollModal();
+});
+
+// Close modal when clicking outside
+document.getElementById('quick-enroll-modal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    closeQuickEnrollModal();
+  }
+});
+</script>
+{% endblock %}

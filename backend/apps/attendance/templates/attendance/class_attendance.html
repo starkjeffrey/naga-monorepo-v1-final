@@ -1,0 +1,451 @@
+{% extends "web_interface/base/dashboard_base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Class Attendance" %} - {{ class_header.course.code }}{% endblock %}
+
+{% block dashboard_content %}
+<div class="max-w-7xl mx-auto px-4 py-6">
+  <!-- Header -->
+  <div class="bg-white rounded-lg shadow-sm mb-6">
+    <div class="px-6 py-4 border-b border-gray-200">
+      <div class="flex justify-between items-center">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">{{ class_header.course.code }}</h1>
+          <p class="text-gray-600">{{ class_header.course.name }}</p>
+          <p class="text-sm text-gray-500 mt-1">
+            <i class="fas fa-calendar mr-1"></i>
+            {{ today|date:"l, F d, Y" }}
+            {% if session_created %}
+              <span class="ml-2 text-green-600">
+                <i class="fas fa-plus-circle mr-1"></i>
+                {% trans "Session created" %}
+              </span>
+            {% endif %}
+          </p>
+        </div>
+        
+        <div class="flex items-center space-x-3">
+          <a href="{% url 'attendance:dashboard' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left mr-2"></i>
+            {% trans "Back to Dashboard" %}
+          </a>
+          <a href="{% url 'attendance:attendance_report' class_header.id %}" class="btn btn-outline-primary">
+            <i class="fas fa-chart-line mr-2"></i>
+            {% trans "View Report" %}
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Statistics Bar -->
+    <div class="px-6 py-4 bg-gray-50">
+      <div class="grid grid-cols-2 md:grid-cols-6 gap-4 text-center">
+        <div>
+          <div class="text-lg font-bold text-gray-900">{{ total_students }}</div>
+          <div class="text-xs text-gray-500">{% trans "Total" %}</div>
+        </div>
+        <div>
+          <div class="text-lg font-bold text-green-600" id="present-count">{{ present_count }}</div>
+          <div class="text-xs text-gray-500">{% trans "Present" %}</div>
+        </div>
+        <div>
+          <div class="text-lg font-bold text-red-600" id="absent-count">{{ absent_count }}</div>
+          <div class="text-xs text-gray-500">{% trans "Absent" %}</div>
+        </div>
+        <div>
+          <div class="text-lg font-bold text-yellow-600" id="late-count">{{ late_count }}</div>
+          <div class="text-xs text-gray-500">{% trans "Late" %}</div>
+        </div>
+        <div>
+          <div class="text-lg font-bold text-blue-600" id="excused-count">{{ excused_count }}</div>
+          <div class="text-xs text-gray-500">{% trans "Excused" %}</div>
+        </div>
+        <div>
+          <div class="text-lg font-bold text-purple-600" id="attendance-rate">{{ attendance_rate }}%</div>
+          <div class="text-xs text-gray-500">{% trans "Rate" %}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="bg-white rounded-lg shadow-sm mb-6">
+    <div class="px-6 py-4">
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">{% trans "Quick Actions" %}</h2>
+      
+      <div class="flex flex-wrap gap-3">
+        <button onclick="markAllPresent()" class="btn btn-success">
+          <i class="fas fa-user-check mr-2"></i>
+          {% trans "Mark All Present" %}
+        </button>
+        
+        <button onclick="markAllAbsent()" class="btn btn-danger">
+          <i class="fas fa-user-times mr-2"></i>
+          {% trans "Mark All Absent" %}
+        </button>
+        
+        <button onclick="refreshRoster()" class="btn btn-outline-primary">
+          <i class="fas fa-sync-alt mr-2"></i>
+          {% trans "Refresh" %}
+        </button>
+        
+        <button onclick="toggleQuickScan()" class="btn btn-outline-info">
+          <i class="fas fa-qrcode mr-2"></i>
+          {% trans "Quick Scan" %}
+        </button>
+        
+        <button onclick="exportAttendance()" class="btn btn-outline-secondary">
+          <i class="fas fa-download mr-2"></i>
+          {% trans "Export" %}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Student Roster -->
+  <div class="bg-white rounded-lg shadow-sm">
+    <div class="px-6 py-4 border-b border-gray-200">
+      <div class="flex justify-between items-center">
+        <h2 class="text-lg font-semibold text-gray-900">{% trans "Student Roster" %}</h2>
+        
+        <!-- Search and Filter -->
+        <div class="flex items-center space-x-4">
+          <div class="relative">
+            <input type="text" 
+                   id="student-filter"
+                   class="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                   placeholder="{% trans 'Search students...' %}"
+                   onkeyup="filterStudents(this.value)">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fas fa-search text-gray-400"></i>
+            </div>
+          </div>
+          
+          <select id="status-filter" onchange="filterByStatus(this.value)" class="border border-gray-300 rounded-md px-3 py-2">
+            <option value="">{% trans "All Status" %}</option>
+            <option value="present">{% trans "Present" %}</option>
+            <option value="absent">{% trans "Absent" %}</option>
+            <option value="late">{% trans "Late" %}</option>
+            <option value="excused">{% trans "Excused" %}</option>
+            <option value="not_marked">{% trans "Not Marked" %}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Attendance Table -->
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              {% trans "Student" %}
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              {% trans "Status" %}
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              {% trans "Check-in Time" %}
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              {% trans "Notes" %}
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              {% trans "Actions" %}
+            </th>
+          </tr>
+        </thead>
+        <tbody id="attendance-roster" class="bg-white divide-y divide-gray-200">
+          {% for student_data in student_data %}
+            {% include 'attendance/partials/student_row.html' with student=student_data.student attendance_record=student_data.attendance_record attendance_status=student_data.attendance_status check_in_time=student_data.check_in_time notes=student_data.notes %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Quick Scan Modal -->
+<div id="quick-scan-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+  <div class="flex items-center justify-center min-h-screen px-4">
+    <div class="bg-white rounded-lg max-w-md w-full p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-semibold">{% trans "Quick Scan Attendance" %}</h3>
+        <button onclick="toggleQuickScan()" class="text-gray-400 hover:text-gray-600">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            {% trans "Scan Student ID" %}
+          </label>
+          <input type="text" 
+                 id="quick-scan-input" 
+                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                 placeholder="{% trans 'Scan or type student ID...' %}"
+                 onkeypress="handleQuickScan(event)">
+        </div>
+        
+        <div class="grid grid-cols-2 gap-2">
+          <button onclick="setQuickScanStatus('present')" class="btn btn-success btn-sm" id="scan-present">
+            <i class="fas fa-check mr-1"></i>
+            {% trans "Present" %}
+          </button>
+          <button onclick="setQuickScanStatus('late')" class="btn btn-warning btn-sm" id="scan-late">
+            <i class="fas fa-clock mr-1"></i>
+            {% trans "Late" %}
+          </button>
+        </div>
+        
+        <div id="scan-result" class="text-sm text-center py-2">
+          {% trans "Ready to scan..." %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentScanStatus = 'present';
+let lastScanTime = 0;
+
+// Quick action functions
+function markAllPresent() {
+  if (confirm('{% trans "Mark all students as present?" %}')) {
+    fetch('{% url "attendance:quick_mark_all" class_header.id %}', {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: 'mark_as=present'
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        refreshRoster();
+        showNotification(data.message, 'success');
+      } else {
+        showNotification(data.error, 'error');
+      }
+    });
+  }
+}
+
+function markAllAbsent() {
+  if (confirm('{% trans "Mark all students as absent?" %}')) {
+    fetch('{% url "attendance:quick_mark_all" class_header.id %}', {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: 'mark_as=absent'
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        refreshRoster();
+        showNotification(data.message, 'success');
+      } else {
+        showNotification(data.error, 'error');
+      }
+    });
+  }
+}
+
+function refreshRoster() {
+  fetch('{% url "attendance:attendance_roster" class_header.id %}')
+    .then(response => response.text())
+    .then(html => {
+      document.getElementById('attendance-roster').innerHTML = html;
+      updateStatistics();
+    });
+}
+
+function toggleQuickScan() {
+  const modal = document.getElementById('quick-scan-modal');
+  modal.classList.toggle('hidden');
+  if (!modal.classList.contains('hidden')) {
+    document.getElementById('quick-scan-input').focus();
+  } else {
+    document.getElementById('quick-scan-input').value = '';
+    document.getElementById('scan-result').textContent = '{% trans "Ready to scan..." %}';
+  }
+}
+
+function setQuickScanStatus(status) {
+  currentScanStatus = status;
+  // Update button states
+  document.querySelectorAll('#quick-scan-modal .btn').forEach(btn => {
+    btn.classList.remove('btn-active');
+  });
+  document.getElementById(`scan-${status}`).classList.add('btn-active');
+}
+
+function handleQuickScan(event) {
+  if (event.key === 'Enter') {
+    const now = Date.now();
+    const studentId = event.target.value.trim();
+    
+    // Prevent duplicate scans within 1 second
+    if (now - lastScanTime < 1000) {
+      return;
+    }
+    lastScanTime = now;
+    
+    if (studentId) {
+      markStudentAttendance(studentId, currentScanStatus);
+      event.target.value = '';
+    }
+  }
+}
+
+function markStudentAttendance(studentId, status) {
+  // Find student row by ID
+  const studentRow = document.querySelector(`tr[data-student-id="${studentId}"]`);
+  if (!studentRow) {
+    document.getElementById('scan-result').textContent = `{% trans "Student not found:" %} ${studentId}`;
+    document.getElementById('scan-result').className = 'text-sm text-center py-2 text-red-600';
+    return;
+  }
+
+  const actualStudentId = studentRow.dataset.studentPk;
+  
+  fetch('{% url "attendance:mark_attendance" class_header.id %}', {
+    method: 'POST',
+    headers: {
+      'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: `student_id=${actualStudentId}&attendance_status=${status}`
+  })
+  .then(response => response.text())
+  .then(html => {
+    studentRow.outerHTML = html;
+    updateStatistics();
+    
+    document.getElementById('scan-result').textContent = `{% trans "Marked as" %} ${status}: ${studentId}`;
+    document.getElementById('scan-result').className = 'text-sm text-center py-2 text-green-600';
+    
+    setTimeout(() => {
+      document.getElementById('scan-result').textContent = '{% trans "Ready to scan..." %}';
+      document.getElementById('scan-result').className = 'text-sm text-center py-2';
+    }, 2000);
+  });
+}
+
+function markAttendance(studentId, status) {
+  const formData = new FormData();
+  formData.append('student_id', studentId);
+  formData.append('attendance_status', status);
+  formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+
+  fetch('{% url "attendance:mark_attendance" class_header.id %}', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.text())
+  .then(html => {
+    const studentRow = document.querySelector(`tr[data-student-pk="${studentId}"]`);
+    if (studentRow) {
+      studentRow.outerHTML = html;
+      updateStatistics();
+    }
+  });
+}
+
+function updateStatistics() {
+  // Count attendance statuses from current table
+  const rows = document.querySelectorAll('#attendance-roster tr');
+  let counts = { present: 0, absent: 0, late: 0, excused: 0, not_marked: 0 };
+  
+  rows.forEach(row => {
+    const status = row.dataset.attendanceStatus;
+    if (status && counts.hasOwnProperty(status)) {
+      counts[status]++;
+    }
+  });
+  
+  // Update display
+  document.getElementById('present-count').textContent = counts.present;
+  document.getElementById('absent-count').textContent = counts.absent;
+  document.getElementById('late-count').textContent = counts.late;
+  document.getElementById('excused-count').textContent = counts.excused;
+  
+  // Calculate attendance rate
+  const total = Object.values(counts).reduce((a, b) => a + b, 0);
+  const rate = total > 0 ? Math.round((counts.present / total) * 100) : 0;
+  document.getElementById('attendance-rate').textContent = rate + '%';
+}
+
+function filterStudents(query) {
+  const rows = document.querySelectorAll('#attendance-roster tr');
+  query = query.toLowerCase();
+  
+  rows.forEach(row => {
+    const studentName = row.querySelector('.student-name')?.textContent.toLowerCase() || '';
+    const studentId = row.querySelector('.student-id')?.textContent.toLowerCase() || '';
+    
+    if (studentName.includes(query) || studentId.includes(query)) {
+      row.style.display = '';
+    } else {
+      row.style.display = 'none';
+    }
+  });
+}
+
+function filterByStatus(status) {
+  const rows = document.querySelectorAll('#attendance-roster tr');
+  
+  rows.forEach(row => {
+    if (!status || row.dataset.attendanceStatus === status) {
+      row.style.display = '';
+    } else {
+      row.style.display = 'none';
+    }
+  });
+}
+
+function exportAttendance() {
+  // TODO: Implement attendance export
+  alert('{% trans "Export functionality coming soon!" %}');
+}
+
+function showNotification(message, type) {
+  // Simple notification (can be enhanced with a proper notification system)
+  const color = type === 'success' ? 'green' : 'red';
+  const notification = document.createElement('div');
+  notification.className = `fixed top-4 right-4 bg-${color}-500 text-white px-4 py-2 rounded-lg shadow-lg z-50`;
+  notification.textContent = message;
+  
+  document.body.appendChild(notification);
+  
+  setTimeout(() => {
+    notification.remove();
+  }, 3000);
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', function(e) {
+  // Ctrl/Cmd + S for quick scan
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    e.preventDefault();
+    toggleQuickScan();
+  }
+  
+  // Escape to close modals
+  if (e.key === 'Escape') {
+    document.getElementById('quick-scan-modal').classList.add('hidden');
+  }
+});
+
+// Auto-refresh every 30 seconds
+setInterval(refreshRoster, 30000);
+</script>
+
+<!-- Add CSRF token for JavaScript -->
+{% csrf_token %}
+{% endblock %}

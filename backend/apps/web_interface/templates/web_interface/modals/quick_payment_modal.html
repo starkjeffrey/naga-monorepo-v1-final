@@ -1,0 +1,209 @@
+{% extends "web_interface/modals/base_modal.html" %}
+
+{% load i18n %}
+{% load web_interface_tags %}
+
+{% block modal_content %}
+  <form id="quick-payment-form"
+        hx-post="{% url 'web_interface:quick-payment' %}"
+        hx-target="#modal-overlay"
+        hx-swap="outerHTML"
+        hx-indicator="#quick-payment-loading">
+    {% csrf_token %}
+    <div class="form-sections">
+      {% if selected_student %}
+        <div class="form-section">
+          <h4 class="form-section-title">
+            <i class="fas fa-user"></i>
+            {% trans "Student Information" %}
+          </h4>
+          <div class="student-summary">
+            <div class="student-info">
+              <div class="student-details">
+                <span class="student-name">{{ selected_student.person.full_name }}</span>
+                <span class="student-id">{{ selected_student.student_id }}</span>
+              </div>
+              <span class="student-status status-{{ selected_student.current_status|lower }}">
+                {{ selected_student.get_current_status_display }}
+              </span>
+            </div>
+          </div>
+          <input type="hidden" name="student_id" value="{{ selected_student.id }}" />
+        </div>
+      {% else %}
+        <div class="form-section">
+          <h4 class="form-section-title">
+            <i class="fas fa-search"></i>
+            {% trans "Select Student" %}
+          </h4>
+          <div class="form-group">
+            <label for="student-search" class="form-label required">{% trans "Student" %}</label>
+            <div class="student-search-container">
+              <input type="text"
+                     id="student-search"
+                     name="q"
+                     class="form-input"
+                     placeholder="{% trans 'Search for student...' %}"
+                     hx-get="{% url 'web_interface:finance-student-search' %}"
+                     hx-target="#student-search-results"
+                     hx-trigger="keyup changed delay:500ms"
+                     hx-include="this"
+                     autocomplete="off" />
+              <div id="student-search-results" class="search-results"></div>
+            </div>
+            <input type="hidden" id="student_id" name="student_id" required />
+          </div>
+        </div>
+      {% endif %}
+      {% if outstanding_invoices %}
+        <div class="form-section">
+          <h4 class="form-section-title">
+            <i class="fas fa-file-invoice-dollar"></i>
+            {% trans "Outstanding Invoices" %}
+          </h4>
+          <div class="invoice-list">
+            {% for invoice in outstanding_invoices %}
+              <div class="invoice-item"
+                   data-invoice-id="{{ invoice.id }}"
+                   data-amount-due="{{ invoice.amount_due }}">
+                <div class="invoice-info">
+                  <div class="invoice-number">{{ invoice.invoice_number }}</div>
+                  <div class="invoice-details">
+                    <span class="invoice-date">{{ invoice.issue_date|date:"M d, Y" }}</span>
+                    <span class="invoice-status status-{{ invoice.status|lower }}">{{ invoice.get_status_display }}</span>
+                  </div>
+                </div>
+                <div class="invoice-amount">
+                  <div class="total-amount">{{ invoice.total_amount|format_currency }}</div>
+                  <div class="amount-due">Due: {{ invoice.amount_due|format_currency }}</div>
+                </div>
+                <div class="invoice-action">
+                  <input type="radio"
+                         name="selected_invoice"
+                         value="{{ invoice.id }}"
+                         id="invoice_{{ invoice.id }}"
+                         onchange="selectInvoice('{{ invoice.id }}', '{{ invoice.amount_due }}')" />
+                  <label for="invoice_{{ invoice.id }}" class="radio-label">{% trans "Pay This" %}</label>
+                </div>
+              </div>
+            {% empty %}
+              <div class="no-invoices">
+                <i class="fas fa-check-circle text-success"></i>
+                <p>{% trans "No outstanding invoices for this student." %}</p>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+      <div class="form-section"
+           id="payment-section"
+           style="{% if not outstanding_invoices %}display: none;
+                  {% endif %}">
+        <h4 class="form-section-title">
+          <i class="fas fa-credit-card"></i>
+          {% trans "Payment Details" %}
+        </h4>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="payment_amount" class="form-label required">{% trans "Payment Amount" %}</label>
+            <div class="input-group">
+              <span class="input-group-text">$</span>
+              <input type="number"
+                     id="payment_amount"
+                     name="payment_amount"
+                     class="form-input"
+                     step="0.01"
+                     min="0.01"
+                     required />
+            </div>
+            <div class="form-help" id="amount-help"></div>
+          </div>
+          <div class="form-group">
+            <label for="payment_method" class="form-label required">{% trans "Payment Method" %}</label>
+            <select id="payment_method"
+                    name="payment_method"
+                    class="form-select"
+                    required>
+              <option value="">{% trans "Select method..." %}</option>
+              <option value="CASH">{% trans "Cash" %}</option>
+              <option value="CREDIT_CARD">{% trans "Credit Card" %}</option>
+              <option value="BANK_TRANSFER">{% trans "Bank Transfer" %}</option>
+              <option value="CHECK">{% trans "Check" %}</option>
+              <option value="SCHOLARSHIP">{% trans "Scholarship" %}</option>
+              <option value="OTHER">{% trans "Other" %}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="reference_number" class="form-label">{% trans "Reference Number" %}</label>
+          <input type="text"
+                 id="reference_number"
+                 name="reference_number"
+                 class="form-input"
+                 placeholder="{% trans 'Transaction ID, check number, etc.' %}" />
+        </div>
+        <div class="form-group">
+          <label for="payment_notes" class="form-label">{% trans "Notes" %}</label>
+          <textarea id="payment_notes"
+                    name="payment_notes"
+                    class="form-textarea"
+                    rows="2"
+                    placeholder="{% trans 'Payment notes...' %}"></textarea>
+        </div>
+      </div>
+    </div>
+    <div id="quick-payment-loading" class="htmx-indicator">
+      <div class="loading-spinner">
+        <i class="fas fa-spinner fa-spin"></i>
+        {% trans "Processing payment..." %}
+      </div>
+    </div>
+  </form>
+  <script>
+    // Handle invoice selection
+    function selectInvoice(invoiceId, amountDue) {
+      const amountInput = document.getElementById('payment_amount');
+      const amountHelp = document.getElementById('amount-help');
+      const paymentSection = document.getElementById('payment-section');
+
+      // Show payment section
+      paymentSection.style.display = 'block';
+
+      // Set maximum amount and help text
+      amountInput.max = amountDue;
+      amountInput.value = amountDue; // Pre-fill with full amount
+      amountHelp.innerHTML = `Maximum: $${amountDue} <a href="#" onclick="setFullAmount('${amountDue}')">{% trans "(Use full amount)" %}</a>`;
+    }
+
+    function setFullAmount(amount) {
+      document.getElementById('payment_amount').value = amount;
+    }
+
+    // Handle student selection from search results
+    document.addEventListener('click', function(e) {
+      if (e.target.closest('.student-search-result')) {
+        const result = e.target.closest('.student-search-result');
+        const studentId = result.dataset.studentId;
+        const studentName = result.dataset.studentName;
+
+        document.getElementById('student_id').value = studentId;
+        document.getElementById('student-search').value = studentName;
+        document.getElementById('student-search-results').innerHTML = '';
+
+        // Reload modal with student selected
+        const url = new URL(window.location.href);
+        url.searchParams.set('student_id', studentId);
+        DashboardApp.loadModalContent(url.pathname + '?' + url.searchParams.toString());
+      }
+    });
+  </script>
+{% endblock %}
+{% block modal_footer %}
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" onclick="closeModal()">{% trans "Cancel" %}</button>
+    <button type="submit" class="btn btn-success" form="quick-payment-form">
+      <i class="fas fa-credit-card"></i>
+      {% trans "Process Payment" %}
+    </button>
+  </div>
+{% endblock %}

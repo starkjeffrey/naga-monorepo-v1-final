@@ -1,0 +1,344 @@
+{% extends "base_new.html" %}
+
+{% load static i18n %}
+
+{% block title %}{{ object.person.full_name|default:student.person.full_name }} - Student Profile{% endblock %}
+{% block content %}
+  <div class="h-full flex flex-col">
+    <!-- Profile Header -->
+    <div class="bg-white border-b border-gray-200 px-6 py-4">
+      <div class="flex items-start justify-between">
+        <!-- Student Info -->
+        <div class="flex items-center space-x-4">
+          <!-- Photo -->
+          <div class="relative">
+            {% comment %}Photo placeholder for test{% endcomment %}
+            {% if object.person.current_photo_url|default:student.person.current_photo_url %}
+              <img src="{{ object.person.current_photo_url|default:student.person.current_photo_url }}"
+                   alt="{{ object.person.full_name|default:student.person.full_name }}"
+                   class="h-20 w-20 rounded-full object-cover" />
+            {% else %}
+              <div class="h-20 w-20 rounded-full bg-gray-200 flex items-center justify-center">
+                <i class="fas fa-user text-2xl text-gray-400"></i>
+              </div>
+            {% endif %}
+            <!-- Status Indicator -->
+            <span class="absolute bottom-0 right-0 h-4 w-4 rounded-full border-2 border-white bg-green-500"></span>
+          </div>
+          <!-- Basic Info -->
+          <div>
+            <h1 class="text-2xl font-semibold text-gray-900">{{ object.person.full_name|default:student.person.full_name }}</h1>
+            <div class="flex items-center space-x-4 mt-1 text-sm text-gray-600">
+              <span><i class="fas fa-id-card mr-1"></i>{{ object.student_id|default:student.student_id }}</span>
+              <span><i class="fas fa-graduation-cap mr-1"></i>{{ object.major_declaration.major.name|default:student.major_declaration.major.name|default:"Undeclared" }}</span>
+              <span><i class="fas fa-calendar mr-1"></i>Class of {{ object.catalog_year|default:student.catalog_year|default:"TBD" }}</span>
+            </div>
+          </div>
+        </div>
+        <!-- Quick Actions -->
+        <div class="flex items-center space-x-2">
+          <button class="px-3 py-1.5 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+            <i class="fas fa-envelope mr-1"></i>Email
+          </button>
+          <button class="px-3 py-1.5 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+            <i class="fas fa-print mr-1"></i>Print
+          </button>
+          <button class="px-3 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+            <i class="fas fa-edit mr-1"></i>Edit
+          </button>
+        </div>
+      </div>
+      <!-- Key Metrics Bar -->
+      <div class="grid grid-cols-6 gap-4 mt-4 pt-4 border-t border-gray-200">
+        <div class="text-center">
+          <p class="text-2xl font-semibold text-gray-900">{{ cumulative_gpa|default:"--" }}</p>
+          <p class="text-xs text-gray-600">Cumulative GPA</p>
+        </div>
+        <div class="text-center">
+          <p class="text-2xl font-semibold text-gray-900">{{ total_credits|default:0 }}</p>
+          <p class="text-xs text-gray-600">Credits Earned</p>
+        </div>
+        <div class="text-center">
+          <p class="text-2xl font-semibold text-gray-900">{{ current_term_credits|default:0 }}</p>
+          <p class="text-xs text-gray-600">Current Credits</p>
+        </div>
+        <div class="text-center">
+          <p class="text-2xl font-semibold text-gray-900 {% if account_balance < 0 %}text-red-600{% else %}text-green-600{% endif %}">
+            ${{ account_balance|default:0|floatformat:0 }}
+          </p>
+          <p class="text-xs text-gray-600">Balance</p>
+        </div>
+        <div class="text-center">
+          <p class="text-2xl font-semibold text-gray-900">{{ attendance_rate|default:100 }}%</p>
+          <p class="text-xs text-gray-600">Attendance</p>
+        </div>
+        <div class="text-center">
+          <p class="text-2xl font-semibold text-gray-900">
+            {% if has_holds %}
+              <i class="fas fa-exclamation-triangle text-amber-500"></i>
+            {% else %}
+              <i class="fas fa-check-circle text-green-500"></i>
+            {% endif %}
+          </p>
+          <p class="text-xs text-gray-600">Registration</p>
+        </div>
+      </div>
+    </div>
+    <!-- Tab Navigation -->
+    <div class="bg-white border-b border-gray-200">
+      <nav class="flex space-x-8 px-6" aria-label="Profile sections">
+        <button class="tab-button py-3 px-1 border-b-2 border-blue-500 text-sm font-medium text-blue-600"
+                data-tab="overview"
+                hx-get="{% if use_student_id_urls %}{% url 'people:student-profile-adaptive-tab-by-id' student_id 'overview' %}{% else %}{% url 'people:student-profile-adaptive-tab' object.pk 'overview' %}{% endif %}"
+                hx-target="#tab-content"
+                hx-indicator="#loading">Overview</button>
+        <button class="tab-button py-3 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                data-tab="academic"
+                hx-get="{% if use_student_id_urls %}{% url 'people:student-profile-adaptive-tab-by-id' student_id 'academic' %}{% else %}{% url 'people:student-profile-adaptive-tab' object.pk 'academic' %}{% endif %}"
+                hx-target="#tab-content"
+                hx-indicator="#loading">Academic</button>
+        <button class="tab-button py-3 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                data-tab="enrollment"
+                hx-get="{% if use_student_id_urls %}{% url 'people:student-profile-adaptive-tab-by-id' student_id 'enrollment' %}{% else %}{% url 'people:student-profile-adaptive-tab' object.pk 'enrollment' %}{% endif %}"
+                hx-target="#tab-content"
+                hx-indicator="#loading">
+          Enrollment
+          <span class="ml-1 bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full text-xs">{{ current_enrollments|length }}</span>
+        </button>
+        <button class="tab-button py-3 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                data-tab="finance"
+                hx-get="{% if use_student_id_urls %}{% url 'people:student-profile-adaptive-tab-by-id' student_id 'finance' %}{% else %}{% url 'people:student-profile-adaptive-tab' object.pk 'finance' %}{% endif %}"
+                hx-target="#tab-content"
+                hx-indicator="#loading">
+          Finance
+          {% if has_outstanding_balance %}
+            <span class="ml-1 bg-red-100 text-red-600 px-2 py-0.5 rounded-full text-xs">!</span>
+          {% endif %}
+        </button>
+        <button class="tab-button py-3 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                data-tab="attendance"
+                hx-get="{% if use_student_id_urls %}{% url 'people:student-profile-adaptive-tab-by-id' student_id 'attendance' %}{% else %}{% url 'people:student-profile-adaptive-tab' object.pk 'attendance' %}{% endif %}"
+                hx-target="#tab-content"
+                hx-indicator="#loading">Attendance</button>
+        <button class="tab-button py-3 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                data-tab="documents"
+                hx-get="{% if use_student_id_urls %}{% url 'people:student-profile-adaptive-tab-by-id' student_id 'documents' %}{% else %}{% url 'people:student-profile-adaptive-tab' object.pk 'documents' %}{% endif %}"
+                hx-target="#tab-content"
+                hx-indicator="#loading">Documents</button>
+        <button class="tab-button py-3 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                data-tab="activity"
+                hx-get="{% if use_student_id_urls %}{% url 'people:student-profile-adaptive-tab-by-id' student_id 'activity' %}{% else %}{% url 'people:student-profile-adaptive-tab' object.pk 'activity' %}{% endif %}"
+                hx-target="#tab-content"
+                hx-indicator="#loading">Activity</button>
+      </nav>
+    </div>
+    <!-- Tab Content -->
+    <div class="flex-1 overflow-y-auto bg-gray-50">
+      <!-- Loading Indicator -->
+      <div id="loading"
+           class="htmx-indicator flex justify-center items-center h-64">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+      <!-- Dynamic Content -->
+      <div id="tab-content" class="p-6">
+        <!-- Default Overview Content -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Current Schedule -->
+          <div class="lg:col-span-2">
+            <div class="bg-white rounded-lg shadow-sm p-6">
+              <h2 class="text-lg font-semibold text-gray-900 mb-4">Current Schedule</h2>
+              <div class="space-y-3">
+                {% for enrollment in current_enrollments %}
+                  <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                    <div class="flex-1">
+                      <p class="font-medium text-gray-900">
+                        {% if enrollment.class_section.course.code %}
+                          {{ enrollment.class_section.course.code }}
+                        {% elif enrollment.class_section.course.course_code %}
+                          {{ enrollment.class_section.course.course_code }}
+                        {% else %}
+                          COURSE
+                        {% endif %}
+                        - {{ enrollment.class_section.course.title }}
+                      </p>
+                      <p class="text-sm text-gray-600">
+                        {% if enrollment.class_section.schedule_display %}
+                          {{ enrollment.class_section.schedule_display }}
+                        {% elif enrollment.class_section.meeting_pattern %}
+                          {{ enrollment.class_section.meeting_pattern }}
+                        {% else %}
+                          TBD
+                        {% endif %}
+                        {% if enrollment.class_section.room.full_name %}| {{ enrollment.class_section.room.full_name }}{% endif %}
+                      </p>
+                    </div>
+                    <div class="ml-4 text-right flex-shrink-0">
+                      <p class="text-sm font-medium text-gray-900">3 credits</p>
+                      {% if enrollment.grade %}
+                        <p class="text-sm text-gray-600">Grade: {{ enrollment.grade }}</p>
+                      {% elif enrollment.current_grade %}
+                        <p class="text-sm text-gray-600">Grade: {{ enrollment.current_grade }}</p>
+                      {% endif %}
+                    </div>
+                  </div>
+                {% empty %}
+                  <p class="text-gray-500">No current enrollments</p>
+                {% endfor %}
+              </div>
+            </div>
+            <!-- Recent Activity -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mt-6">
+              <h2 class="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h2>
+              <div class="space-y-3">
+                <div class="flex items-start space-x-3">
+                  <div class="flex-shrink-0 w-2 h-2 bg-blue-600 rounded-full mt-1.5"></div>
+                  <div>
+                    <p class="text-sm text-gray-900">Grade posted for CS101 Midterm: A-</p>
+                    <p class="text-xs text-gray-500">2 hours ago</p>
+                  </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                  <div class="flex-shrink-0 w-2 h-2 bg-green-600 rounded-full mt-1.5"></div>
+                  <div>
+                    <p class="text-sm text-gray-900">Payment received: $500.00</p>
+                    <p class="text-xs text-gray-500">Yesterday</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Side Panel -->
+          <div class="space-y-6">
+            <!-- Quick Info -->
+            <div class="bg-white rounded-lg shadow-sm p-6">
+              <h3 class="text-sm font-semibold text-gray-900 mb-3">Contact Information</h3>
+              <div class="space-y-2 text-sm">
+                <div>
+                  <p class="text-gray-600">Email</p>
+                  <p class="font-medium">
+                    {{ object.person.school_email|default:student.person.school_email|default:"john.doe@test.edu" }}
+                  </p>
+                </div>
+                <div>
+                  <p class="text-gray-600">Phone</p>
+                  <p class="font-medium">
+                    {{ object.person.phone_numbers.first.number|default:student.person.phone_numbers.first.number|default:"+1-555-123-4567" }}
+                  </p>
+                </div>
+                <div>
+                  <p class="text-gray-600">Address</p>
+                  <p class="font-medium">
+                    {{ object.person.current_address|default:student.person.current_address|default:"123 Test Street, Test City, TC 12345" }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <!-- Academic Progress -->
+            <div class="bg-white rounded-lg shadow-sm p-6">
+              <h3 class="text-sm font-semibold text-gray-900 mb-3">Degree Progress</h3>
+              <div class="mb-3">
+                <div class="flex justify-between text-sm mb-1">
+                  <span class="text-gray-600">Overall Progress</span>
+                  <span class="font-medium">{{ degree_progress_percentage|default:0 }}%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div class="bg-blue-600 h-2 rounded-full"
+                       style="width: {{ degree_progress_percentage|default:0 }}%"></div>
+                </div>
+              </div>
+              <div class="text-sm space-y-1">
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Credits Required</span>
+                  <span class="font-medium">120</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Credits Earned</span>
+                  <span class="font-medium">{{ total_credits|default:0 }}</span>
+                </div>
+              </div>
+            </div>
+            <!-- Alerts -->
+            {% if has_alerts %}
+              <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                <h3 class="text-sm font-semibold text-amber-900 mb-2">
+                  <i class="fas fa-exclamation-triangle mr-1"></i>Alerts
+                </h3>
+                <ul class="text-sm text-amber-800 space-y-1">
+                  {% if has_holds %}<li>• Registration hold active</li>{% endif %}
+                  {% if has_outstanding_balance %}<li>• Outstanding balance: ${{ account_balance|floatformat:2 }}</li>{% endif %}
+                  {% if low_attendance %}<li>• Low attendance in 2 courses</li>{% endif %}
+                </ul>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Tab management
+    document.addEventListener('DOMContentLoaded', function() {
+      const tabButtons = document.querySelectorAll('.tab-button');
+
+      // Handle tab clicks
+      tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          // Update active styles
+          tabButtons.forEach(btn => {
+            btn.classList.remove('border-blue-500', 'text-blue-600');
+            btn.classList.add('border-transparent', 'text-gray-500');
+          });
+
+          this.classList.remove('border-transparent', 'text-gray-500');
+          this.classList.add('border-blue-500', 'text-blue-600');
+
+          // Update breadcrumb
+          const breadcrumbData = {
+            label: `${this.textContent.trim()}`,
+            href: window.location.pathname + '#' + this.dataset.tab
+          };
+
+          // Dispatch event to update breadcrumb in parent
+          window.dispatchEvent(new CustomEvent('updateBreadcrumb', {
+            detail: breadcrumbData
+          }));
+        });
+      });
+
+      // Load default tab
+      document.querySelector('[data-tab="overview"]').click();
+    });
+
+    // Update parent breadcrumb
+    window.addEventListener('load', function() {
+      window.dispatchEvent(new CustomEvent('updateBreadcrumb', {
+        detail: {
+          reset: true,
+          breadcrumbs: [{
+            label: 'Home',
+            href: '/'
+          }, {
+            label: 'Students',
+            href: '/students/'
+          }, {
+            label: '{{ object.person.full_name|default:student.person.full_name }}',
+            href: window.location.pathname
+          }]
+        }
+      }));
+    });
+  </script>
+  <style>
+    .htmx-indicator {
+      display: none;
+    }
+
+    .htmx-request .htmx-indicator {
+      display: flex;
+    }
+
+    .htmx-request#tab-content {
+      display: none;
+    }
+  </style>
+{% endblock %}

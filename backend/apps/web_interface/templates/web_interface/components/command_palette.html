@@ -1,0 +1,345 @@
+{% load i18n %}
+
+<!-- Command Palette Global Component -->
+<div id="command-palette" 
+     class="hidden fixed inset-0 z-50 overflow-y-auto"
+     x-data="commandPalette()"
+     @keydown.window.cmd.k.prevent="open = true"
+     @keydown.window.ctrl.k.prevent="open = true"
+     @keydown.window.escape="open = false"
+     x-show="open"
+     x-transition.opacity>
+  
+    <div class="min-h-screen pt-4 px-4 pb-20 text-center sm:p-0">
+        <!-- Background overlay -->
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+             @click="open = false"></div>
+
+        <!-- Command palette panel -->
+        <div class="relative inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl sm:w-full"
+             @click.stop>
+            <div class="bg-white">
+                <!-- Search input -->
+                <div class="border-b border-gray-200">
+                    <div class="flex items-center px-4 py-3">
+                        <i class="fas fa-search text-gray-400 mr-3"></i>
+                        <input type="text"
+                               x-model="search"
+                               @input="filterCommands()"
+                               @keydown.down.prevent="highlightNext()"
+                               @keydown.up.prevent="highlightPrev()"
+                               @keydown.enter.prevent="executeHighlighted()"
+                               class="w-full text-lg focus:outline-none placeholder-gray-400"
+                               placeholder="{% trans 'Type a command or search...' %}"
+                               x-ref="commandInput">
+                    </div>
+                </div>
+
+                <!-- Results -->
+                <div class="max-h-96 overflow-y-auto">
+                    <div class="py-2">
+                        <!-- Recent Commands -->
+                        <div x-show="!search && recentCommands.length > 0">
+                            <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase">
+                                {% trans "Recent" %}
+                            </div>
+                            <template x-for="(cmd, index) in recentCommands" :key="cmd.id">
+                                <button @click="executeCommand(cmd)"
+                                        :class="{ 'bg-gray-100': highlightedIndex === index }"
+                                        class="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center justify-between group">
+                                    <div class="flex items-center">
+                                        <span x-html="cmd.icon" class="mr-3 text-gray-400"></span>
+                                        <span x-text="cmd.name"></span>
+                                    </div>
+                                    <kbd class="hidden group-hover:inline-block text-xs text-gray-400 bg-gray-200 px-1 rounded" 
+                                         x-text="cmd.shortcut"></kbd>
+                                </button>
+                            </template>
+                        </div>
+
+                        <!-- Search Results -->
+                        <div x-show="filteredCommands.length > 0">
+                            <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase">
+                                {% trans "Commands" %}
+                            </div>
+                            <template x-for="(cmd, index) in filteredCommands" :key="cmd.id">
+                                <button @click="executeCommand(cmd)"
+                                        :class="{ 'bg-gray-100': highlightedIndex === index + recentCommands.length }"
+                                        class="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center justify-between group">
+                                    <div class="flex items-center">
+                                        <span x-html="cmd.icon" class="mr-3 text-gray-400"></span>
+                                        <div>
+                                            <div x-text="cmd.name" class="font-medium"></div>
+                                            <div x-show="cmd.description" 
+                                                 class="text-xs text-gray-500" 
+                                                 x-text="cmd.description"></div>
+                                        </div>
+                                    </div>
+                                    <kbd class="hidden group-hover:inline-block text-xs text-gray-400 bg-gray-200 px-1 rounded" 
+                                         x-text="cmd.shortcut"></kbd>
+                                </button>
+                            </template>
+                        </div>
+
+                        <!-- No results -->
+                        <div x-show="search && filteredCommands.length === 0" 
+                             class="px-4 py-8 text-center text-gray-500">
+                            {% trans "No commands found for" %} "<span x-text="search"></span>"
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="border-t border-gray-200 px-4 py-2 bg-gray-50">
+                    <div class="flex justify-between items-center text-xs text-gray-500">
+                        <div class="flex space-x-4">
+                            <span><kbd class="px-1 bg-gray-200 rounded">↑↓</kbd> {% trans "Navigate" %}</span>
+                            <span><kbd class="px-1 bg-gray-200 rounded">↵</kbd> {% trans "Select" %}</span>
+                            <span><kbd class="px-1 bg-gray-200 rounded">Esc</kbd> {% trans "Close" %}</span>
+                        </div>
+                        <div>
+                            <kbd class="px-1 bg-gray-200 rounded">⌘K</kbd> {% trans "Open palette" %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function commandPalette() {
+    return {
+        open: false,
+        search: '',
+        recentCommands: [],
+        filteredCommands: [],
+        highlightedIndex: 0,
+        
+        commands: [
+            {
+                id: 'find-student',
+                name: '{% trans "Find Student" %}',
+                description: '{% trans "Search for a student by ID or name" %}',
+                icon: '<i class="fas fa-search w-5 h-5"></i>',
+                shortcut: '⌘S',
+                action: () => window.location.href = '{% url "web_interface:student-locator" %}'
+            },
+            {
+                id: 'new-enrollment',
+                name: '{% trans "New Enrollment" %}',
+                description: '{% trans "Enroll a student in a class" %}',
+                icon: '<i class="fas fa-plus w-5 h-5"></i>',
+                shortcut: '⌘E',
+                action: () => window.location.href = '{% url "web_interface:enrollment-management" %}'
+            },
+            {
+                id: 'collect-payment',
+                name: '{% trans "Collect Payment" %}',
+                description: '{% trans "Open cashier payment interface" %}',
+                icon: '<i class="fas fa-cash-register w-5 h-5"></i>',
+                shortcut: '⌘P',
+                action: () => window.location.href = '{% url "web_interface:cashier" %}'
+            },
+            {
+                id: 'grade-entry',
+                name: '{% trans "Enter Grades" %}',
+                description: '{% trans "Grade entry with Excel-like navigation" %}',
+                icon: '<i class="fas fa-edit w-5 h-5"></i>',
+                shortcut: '⌘G',
+                action: () => window.location.href = '{% url "web_interface:grade-entry" %}'
+            },
+            {
+                id: 'schedule-builder',
+                name: '{% trans "Schedule Builder" %}',
+                description: '{% trans "Visual schedule builder with drag-drop" %}',
+                icon: '<i class="fas fa-calendar-alt w-5 h-5"></i>',
+                shortcut: '⌘B',
+                action: () => window.location.href = '{% url "web_interface:schedule-builder" %}'
+            },
+            {
+                id: 'reports-dashboard',
+                name: '{% trans "Financial Reports" %}',
+                description: '{% trans "View financial reports and analytics" %}',
+                icon: '<i class="fas fa-chart-bar w-5 h-5"></i>',
+                shortcut: '⌘R',
+                action: () => window.location.href = '{% url "web_interface:reports-dashboard" %}'
+            },
+            {
+                id: 'create-student',
+                name: '{% trans "Create Student" %}',
+                description: '{% trans "Add a new student to the system" %}',
+                icon: '<i class="fas fa-user-plus w-5 h-5"></i>',
+                shortcut: '⌘N',
+                action: () => window.location.href = '{% url "web_interface:student-create" %}'
+            },
+            {
+                id: 'quick-payment',
+                name: '{% trans "Quick Payment" %}',
+                description: '{% trans "Process a quick payment" %}',
+                icon: '<i class="fas fa-money-bill-wave w-5 h-5"></i>',
+                shortcut: '⌘Q',
+                action: () => window.location.href = '{% url "web_interface:quick-payment" %}'
+            },
+            {
+                id: 'activity-log',
+                name: '{% trans "Activity Log" %}',
+                description: '{% trans "View system activity and audit trail" %}',
+                icon: '<i class="fas fa-history w-5 h-5"></i>',
+                shortcut: '⌘L',
+                action: () => this.showActivityLog()
+            },
+            {
+                id: 'help',
+                name: '{% trans "Help & Support" %}',
+                description: '{% trans "Get help and documentation" %}',
+                icon: '<i class="fas fa-question-circle w-5 h-5"></i>',
+                shortcut: '⌘?',
+                action: () => window.open('/help/', '_blank')
+            }
+        ],
+        
+        filterCommands() {
+            if (!this.search) {
+                this.filteredCommands = this.commands.slice(0, 8);
+                this.highlightedIndex = 0;
+                return;
+            }
+            
+            const search = this.search.toLowerCase();
+            this.filteredCommands = this.commands.filter(cmd => 
+                cmd.name.toLowerCase().includes(search) ||
+                (cmd.description && cmd.description.toLowerCase().includes(search))
+            );
+            this.highlightedIndex = 0;
+        },
+        
+        highlightNext() {
+            const totalItems = this.recentCommands.length + this.filteredCommands.length;
+            if (totalItems > 0) {
+                this.highlightedIndex = (this.highlightedIndex + 1) % totalItems;
+            }
+        },
+        
+        highlightPrev() {
+            const totalItems = this.recentCommands.length + this.filteredCommands.length;
+            if (totalItems > 0) {
+                this.highlightedIndex = this.highlightedIndex === 0 ? totalItems - 1 : this.highlightedIndex - 1;
+            }
+        },
+        
+        executeHighlighted() {
+            const totalRecent = this.recentCommands.length;
+            if (this.highlightedIndex < totalRecent) {
+                this.executeCommand(this.recentCommands[this.highlightedIndex]);
+            } else {
+                const filteredIndex = this.highlightedIndex - totalRecent;
+                if (filteredIndex < this.filteredCommands.length) {
+                    this.executeCommand(this.filteredCommands[filteredIndex]);
+                }
+            }
+        },
+        
+        executeCommand(cmd) {
+            // Save to recent
+            this.recentCommands = [cmd, ...this.recentCommands.filter(c => c.id !== cmd.id)].slice(0, 5);
+            localStorage.setItem('recentCommands', JSON.stringify(this.recentCommands));
+            
+            // Close palette
+            this.open = false;
+            this.search = '';
+            this.highlightedIndex = 0;
+            
+            // Execute command
+            if (typeof cmd.action === 'function') {
+                cmd.action();
+            }
+        },
+        
+        showActivityLog() {
+            // Create a modal for activity log
+            const modal = document.createElement('div');
+            modal.innerHTML = `
+                <div class="fixed inset-0 z-50 overflow-y-auto">
+                    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:p-0">
+                        <div class="fixed inset-0 bg-gray-500 bg-opacity-75" onclick="this.parentElement.parentElement.remove()"></div>
+                        <div class="relative inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+                            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h3 class="text-lg font-medium text-gray-900">System Activity</h3>
+                                    <button onclick="this.closest('[class*=fixed]').remove()" class="text-gray-400 hover:text-gray-600">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                <div hx-get="{% url 'web_interface:activity-feed' %}" hx-trigger="load">
+                                    <div class="text-center py-4">
+                                        <i class="fas fa-spinner fa-spin text-gray-400"></i>
+                                        <div class="text-gray-500 mt-2">Loading activity...</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        },
+        
+        init() {
+            // Load recent commands
+            const saved = localStorage.getItem('recentCommands');
+            if (saved) {
+                try {
+                    this.recentCommands = JSON.parse(saved);
+                } catch (e) {
+                    this.recentCommands = [];
+                }
+            }
+            
+            // Initial filter
+            this.filterCommands();
+            
+            // Focus input when opened
+            this.$watch('open', value => {
+                if (value) {
+                    this.$nextTick(() => {
+                        this.$refs.commandInput.focus();
+                    });
+                } else {
+                    this.search = '';
+                    this.highlightedIndex = 0;
+                    this.filterCommands();
+                }
+            });
+            
+            // Global keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                if (this.open) return;
+                
+                // Command shortcuts
+                if ((e.metaKey || e.ctrlKey) && !e.shiftKey && !e.altKey) {
+                    const shortcuts = {
+                        's': 'find-student',
+                        'e': 'new-enrollment', 
+                        'p': 'collect-payment',
+                        'g': 'grade-entry',
+                        'b': 'schedule-builder',
+                        'r': 'reports-dashboard',
+                        'n': 'create-student',
+                        'q': 'quick-payment',
+                        'l': 'activity-log'
+                    };
+                    
+                    if (shortcuts[e.key]) {
+                        e.preventDefault();
+                        const cmd = this.commands.find(c => c.id === shortcuts[e.key]);
+                        if (cmd) {
+                            this.executeCommand(cmd);
+                        }
+                    }
+                }
+            });
+        }
+    }
+}
+</script>

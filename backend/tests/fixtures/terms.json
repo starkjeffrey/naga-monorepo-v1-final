@@ -1,0 +1,62 @@
+[
+  {
+    "model": "curriculum.term",
+    "pk": 1,
+    "fields": {
+      "name": "Fall 2025",
+      "code": "F25",
+      "start_date": "2025-08-15",
+      "end_date": "2025-12-15", 
+      "is_active": true,
+      "registration_start_date": "2025-07-01",
+      "registration_end_date": "2025-08-08",
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "curriculum.term",
+    "pk": 2,
+    "fields": {
+      "name": "Spring 2026",
+      "code": "S26", 
+      "start_date": "2026-01-15",
+      "end_date": "2026-05-15",
+      "is_active": true,
+      "registration_start_date": "2025-11-01",
+      "registration_end_date": "2026-01-08",
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "curriculum.term",
+    "pk": 3,
+    "fields": {
+      "name": "Summer 2026",
+      "code": "SU26",
+      "start_date": "2026-06-01", 
+      "end_date": "2026-08-01",
+      "is_active": true,
+      "registration_start_date": "2026-04-01",
+      "registration_end_date": "2026-05-25",
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "curriculum.term",
+    "pk": 4,
+    "fields": {
+      "name": "Fall 2024 (Previous)",
+      "code": "F24",
+      "start_date": "2024-08-15",
+      "end_date": "2024-12-15",
+      "is_active": false,
+      "registration_start_date": "2024-07-01", 
+      "registration_end_date": "2024-08-08",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-12-20T00:00:00Z"
+    }
+  }
+]

@@ -1,0 +1,169 @@
+<!-- Activity Log Tab Content -->
+<div class="space-y-6">
+  <!-- Activity Filters -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <i class="fas fa-history mr-2 text-gray-400"></i>
+      Activity Log
+    </h2>
+    <!-- Filter Controls -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Activity Type</label>
+        <select class="form-select w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200">
+          <option value="">All Activities</option>
+          <option value="academic">Academic</option>
+          <option value="financial">Financial</option>
+          <option value="enrollment">Enrollment</option>
+          <option value="profile">Profile Updates</option>
+          <option value="system">System</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Date Range</label>
+        <select class="form-select w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200">
+          <option value="7">Last 7 Days</option>
+          <option value="30">Last 30 Days</option>
+          <option value="90">Last 90 Days</option>
+          <option value="365">Last Year</option>
+          <option value="all">All Time</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Performed By</label>
+        <select class="form-select w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200">
+          <option value="">Anyone</option>
+          <option value="student">Student</option>
+          <option value="advisor">Advisor</option>
+          <option value="registrar">Registrar</option>
+          <option value="system">System</option>
+        </select>
+      </div>
+      <div class="flex items-end">
+        <button class="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors">
+          <i class="fas fa-filter mr-2"></i>
+          Apply Filters
+        </button>
+      </div>
+    </div>
+    <!-- Activity Summary Stats -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+      <div class="text-center">
+        <p class="text-2xl font-semibold text-gray-900 dark:text-gray-100">{{ total_activities|default:0 }}</p>
+        <p class="text-xs text-gray-600 dark:text-gray-400">Total Activities</p>
+      </div>
+      <div class="text-center">
+        <p class="text-2xl font-semibold text-gray-900 dark:text-gray-100">{{ activities_this_month|default:0 }}</p>
+        <p class="text-xs text-gray-600 dark:text-gray-400">This Month</p>
+      </div>
+      <div class="text-center">
+        <p class="text-2xl font-semibold text-gray-900 dark:text-gray-100">{{ unique_users|default:0 }}</p>
+        <p class="text-xs text-gray-600 dark:text-gray-400">Unique Users</p>
+      </div>
+      <div class="text-center">
+        <p class="text-2xl font-semibold text-gray-900 dark:text-gray-100">{{ last_activity_days|default:0 }}</p>
+        <p class="text-xs text-gray-600 dark:text-gray-400">Days Since Last Activity</p>
+      </div>
+    </div>
+  </div>
+  <!-- Activity Timeline -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Activity Timeline</h3>
+    <div class="space-y-8">
+      {% for date_group in activity_timeline %}
+        <!-- Date Group -->
+        <div>
+          <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3 sticky top-0 bg-white dark:bg-gray-800 py-2">
+            {{ date_group.date|date:"l, F d, Y" }}
+          </h4>
+          <div class="space-y-4 pl-8 relative">
+            <!-- Vertical Line -->
+            <div class="absolute left-0 top-0 bottom-0 w-0.5 bg-gray-200 dark:bg-gray-700"></div>
+            {% for activity in date_group.activities %}
+              <div class="relative">
+                <!-- Activity Dot -->
+                <div class="absolute -left-8 top-1.5 w-4 h-4 rounded-full border-2 border-white dark:border-gray-800 {% if activity.type == 'academic' %}bg-blue-500 {% elif activity.type == 'financial' %}bg-green-500 {% elif activity.type == 'enrollment' %}bg-purple-500 {% elif activity.type == 'profile' %}bg-orange-500 {% else %}bg-gray-500{% endif %}">
+                </div>
+                <!-- Activity Content -->
+                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                  <div class="flex justify-between items-start mb-2">
+                    <div class="flex items-center space-x-2">
+                      <i class="fas {{ activity.icon }} text-{{ activity.color }}-500"></i>
+                      <span class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ activity.title }}</span>
+                    </div>
+                    <span class="text-xs text-gray-500 dark:text-gray-400">{{ activity.time|date:"g:i A" }}</span>
+                  </div>
+                  <p class="text-sm text-gray-600 dark:text-gray-300">{{ activity.description }}</p>
+                  {% if activity.details %}
+                    <div class="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                      {% for key, value in activity.details.items %}
+                        <span class="inline-block mr-3">
+                          <strong>{{ key }}:</strong> {{ value }}
+                        </span>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                  <div class="mt-2 flex items-center justify-between text-xs">
+                    <span class="text-gray-500 dark:text-gray-400">By: {{ activity.performed_by }}</span>
+                    {% if activity.ip_address %}
+                      <span class="text-gray-400 dark:text-gray-500">IP: {{ activity.ip_address }}</span>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% empty %}
+        <div class="text-center py-8">
+          <i class="fas fa-history text-4xl text-gray-300 dark:text-gray-600 mb-3"></i>
+          <p class="text-gray-500 dark:text-gray-400">No activity records found</p>
+        </div>
+      {% endfor %}
+    </div>
+    <!-- Load More Button -->
+    {% if has_more_activities %}
+      <div class="mt-8 text-center">
+        <button class="px-6 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+          <i class="fas fa-plus mr-2"></i>
+          Load More Activities
+        </button>
+      </div>
+    {% endif %}
+  </div>
+  <!-- Activity Categories Breakdown -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Activity Breakdown by Category</h3>
+    <div class="space-y-4">
+      {% for category in activity_categories %}
+        <div>
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+              <i class="fas {{ category.icon }} text-{{ category.color }}-500 mr-2"></i>
+              {{ category.name }}
+            </span>
+            <span class="text-sm text-gray-500 dark:text-gray-400">
+              {{ category.count }} activities ({{ category.percentage }}%)
+            </span>
+          </div>
+          <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+            <div class="bg-{{ category.color }}-500 h-2 rounded-full"
+                 style="width: {{ category.percentage }}%"></div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  <!-- Export Options -->
+  <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 flex justify-between items-center">
+    <p class="text-sm text-gray-600 dark:text-gray-400">Export activity log for record keeping or analysis</p>
+    <div class="flex space-x-2">
+      <button class="px-3 py-1 text-sm bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
+        <i class="fas fa-file-csv mr-1"></i> CSV
+      </button>
+      <button class="px-3 py-1 text-sm bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
+        <i class="fas fa-file-pdf mr-1"></i> PDF
+      </button>
+    </div>
+  </div>
+</div>

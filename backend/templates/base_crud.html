@@ -1,0 +1,85 @@
+{% load static %}
+
+<div id="crud-container"
+     class="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-4 sm:p-6">
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6 pb-4 border-b border-slate-200 dark:border-slate-700">
+    <div>
+      <h1 class="text-2xl font-bold text-slate-900 dark:text-white">{{ crud.page_title }}</h1>
+      {% if crud.page_subtitle %}
+        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">{{ crud.page_subtitle }}</p>
+      {% endif %}
+    </div>
+    <div class="flex flex-wrap gap-2 items-center">
+      <!-- Column Visibility -->
+      {% if crud.enable_column_toggle %}
+        <div class="relative">
+          <button id="column-toggle-button"
+                  class="inline-flex items-center px-3 py-2 border border-slate-300 dark:border-slate-600 shadow-sm text-sm font-medium rounded-md text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-700 hover:bg-slate-50 dark:hover:bg-slate-600">
+            <i class="fas fa-eye-slash w-4 h-4 mr-2"></i>
+            Columns
+            <span id="hidden-columns-count"
+                  class="ml-1.5 text-xs bg-slate-200 dark:bg-slate-600 text-slate-600 dark:text-slate-300 px-1.5 py-0.5 rounded-full hidden"></span>
+            <i id="column-toggle-icon"
+               class="fas fa-chevron-down w-4 h-4 ml-2 transition-transform"></i>
+          </button>
+          <div id="column-dropdown"
+               class="absolute right-0 z-50 mt-2 w-64 rounded-md shadow-2xl bg-white dark:bg-slate-700 ring-1 ring-black ring-opacity-5 hidden">
+            <div class="p-2 border-b border-slate-200 dark:border-slate-600 flex items-center justify-between">
+              <h3 class="text-sm font-semibold text-slate-900 dark:text-white">Toggle Columns</h3>
+              <button id="close-column-dropdown"
+                      class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">&times;</button>
+            </div>
+            <div id="column-checkboxes" class="max-h-80 overflow-y-auto p-2">
+              {% for field in crud.fields %}
+                {% if not field.is_action %}
+                  <label class="flex items-center px-3 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-600 cursor-pointer">
+                    <input type="checkbox"
+                           class="column-toggle h-4 w-4 text-blue-600 focus:ring-blue-500 border-slate-300 rounded mr-3"
+                           data-key="{{ field.name }}"
+                           checked />
+                    {{ field.verbose_name }}
+                  </label>
+                {% endif %}
+              {% endfor %}
+              <label class="flex items-center px-3 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-600 cursor-pointer">
+                <input type="checkbox"
+                       class="column-toggle h-4 w-4 text-blue-600 focus:ring-blue-500 border-slate-300 rounded mr-3"
+                       data-key="actions"
+                       checked />
+                Actions
+              </label>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+      <!-- Add New Button -->
+      {% if crud.create_url %}
+        <a href="{{ crud.create_url }}"
+           class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">
+          <i class="fas fa-plus w-4 h-4 mr-2"></i>
+          Add New
+        </a>
+      {% endif %}
+    </div>
+  </div>
+  <!-- Search & Filters -->
+  <div class="mb-4">
+    <div class="relative">
+      <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+      <input type="text"
+             name="search"
+             class="w-full pl-10 pr-4 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-700 focus:ring-2 focus:ring-blue-500"
+             placeholder="Search..."
+             value="{{ request.GET.search|default:'' }}"
+             hx-get="{{ request.path }}"
+             hx-trigger="keyup changed delay:300ms"
+             hx-target="#crud-table-container"
+             hx-swap="innerHTML"
+             hx-indicator="#table-loading-indicator" />
+    </div>
+    {% block additional_filters %}{% endblock %}
+  </div>
+  <!-- Table Container -->
+  <div id="crud-table-container" class="relative">{% include 'common/crud/table.html' %}</div>
+</div>

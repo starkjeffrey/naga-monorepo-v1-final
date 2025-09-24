@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Class Schedule & Enrollment{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/class_schedule.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <h1>Class Schedule & Enrollment</h1>
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div class="stat-label">Total Classes</div>
+                    <div class="stat-value" id="totalClasses">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Total Enrolled</div>
+                    <div class="stat-value" id="totalEnrolled">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Available Seats</div>
+                    <div class="stat-value" id="availableSeats">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+        <div class="controls-grid">
+            <div class="control-group">
+                <label class="control-label">Term</label>
+                <select id="termSelect">
+                    {% for term in available_terms %}
+                        <option value="{{ term.id }}" {% if active_term and term.id == active_term.id %}selected{% endif %}>
+                            {{ term.code }} ({{ term.get_term_type_display }})
+                        </option>
+                    {% empty %}
+                        <option value="">No terms available</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label class="control-label">View</label>
+                <select id="viewSelect">
+                    <option value="all">All Classes</option>
+                    <option value="available">Available Only</option>
+                    <option value="full">Full Classes</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Course Prefix Filter</label>
+                <div class="prefix-filters" id="prefixFilters">
+                    <!-- Dynamically populated based on term -->
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Search</label>
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" placeholder="Search by course, teacher, room...">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Class List -->
+    <div class="class-list" id="classList">
+        <div class="loading">
+            <div class="loading-spinner"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Pass Django context to JavaScript
+    window.APP_CONFIG = {
+        apiUrl: "{% url 'scheduling:class_data_api' %}",
+        enrollUrl: "{% url 'scheduling:enroll_student_api' %}",
+        csrfToken: "{{ csrf_token }}",
+        currentUser: {% if user.is_authenticated %}"{{ user.username }}"{% else %}null{% endif %},
+        initialTermId: {% if active_term %}{{ active_term.id }}{% else %}null{% endif %},
+        activeTerm: {% if active_term %}{"id": {{ active_term.id }}, "code": "{{ active_term.code }}", "type": "{{ active_term.term_type }}"}{% else %}null{% endif %}
+    };
+</script>
+<script src="{% static 'js/class_schedule.js' %}"></script>
+{% endblock %}

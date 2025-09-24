@@ -1,0 +1,2992 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Naga SIS API",
+        "version": "1.0.0",
+        "description": "Student Information System API for Naga University"
+    },
+    "paths": {
+        "/api/health/": {
+            "get": {
+                "operationId": "config_api_health_check",
+                "summary": "Health Check",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "description": "Health check endpoint for monitoring."
+            }
+        },
+        "/api/info/": {
+            "get": {
+                "operationId": "config_api_api_info",
+                "summary": "Api Info",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "description": "API information endpoint."
+            }
+        },
+        "/api/attendance/teacher/start-session": {
+            "post": {
+                "operationId": "apps_attendance_api_start_attendance_session",
+                "summary": "Start Attendance Session",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AttendanceSessionResponseSchema"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Teacher starts attendance session with generated code.\nCreates session record and initializes student attendance records.",
+                "tags": [
+                    "Attendance"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AttendanceSessionCreateSchema"
+                            }
+                        }
+                    },
+                    "required": true
+                }
+            }
+        },
+        "/api/attendance/teacher/class-roster/{class_part_id}": {
+            "get": {
+                "operationId": "apps_attendance_api_get_class_roster",
+                "summary": "Get Class Roster",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "class_part_id",
+                        "schema": {
+                            "title": "Class Part Id",
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ClassRosterResponseSchema"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Get current class roster for teacher's mobile app.\nUses latest roster sync data.",
+                "tags": [
+                    "Attendance"
+                ]
+            }
+        },
+        "/api/attendance/teacher/manual-attendance": {
+            "post": {
+                "operationId": "apps_attendance_api_manual_attendance_entry",
+                "summary": "Manual Attendance Entry",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "description": "Teacher manual attendance entry (backup option).\nFor when mobile code system fails.",
+                "tags": [
+                    "Attendance"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ManualAttendanceSchema"
+                            }
+                        }
+                    },
+                    "required": true
+                }
+            }
+        },
+        "/api/attendance/teacher/end-session/{session_id}": {
+            "post": {
+                "operationId": "apps_attendance_api_end_attendance_session",
+                "summary": "End Attendance Session",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "session_id",
+                        "schema": {
+                            "title": "Session Id",
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "description": "Teacher ends attendance session.\nMarks session as inactive and finalizes attendance.",
+                "tags": [
+                    "Attendance"
+                ]
+            }
+        },
+        "/api/attendance/student/submit-code": {
+            "post": {
+                "operationId": "apps_attendance_api_submit_attendance_code",
+                "summary": "Submit Attendance Code",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StudentCodeResponseSchema"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Student submits attendance code from mobile app.\nValidates code, geofence, and timing.",
+                "tags": [
+                    "Attendance"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StudentCodeSubmissionSchema"
+                            }
+                        }
+                    },
+                    "required": true
+                }
+            }
+        },
+        "/api/attendance/student/my-attendance/{class_part_id}": {
+            "get": {
+                "operationId": "apps_attendance_api_get_student_attendance_stats",
+                "summary": "Get Student Attendance Stats",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "class_part_id",
+                        "schema": {
+                            "title": "Class Part Id",
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "description": "Get student's attendance statistics for a class.",
+                "tags": [
+                    "Attendance"
+                ]
+            }
+        },
+        "/api/attendance/student/request-permission": {
+            "post": {
+                "operationId": "apps_attendance_api_request_permission",
+                "summary": "Request Permission",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "description": "Student requests permission for excused absence.\nFollows program-specific approval workflows.",
+                "tags": [
+                    "Attendance"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PermissionRequestCreateSchema"
+                            }
+                        }
+                    },
+                    "required": true
+                }
+            }
+        },
+        "/api/attendance/admin/sessions": {
+            "get": {
+                "operationId": "apps_attendance_api_list_attendance_sessions",
+                "summary": "List Attendance Sessions",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "schema": {
+                            "default": 100,
+                            "minimum": 1,
+                            "title": "Limit",
+                            "type": "integer"
+                        },
+                        "required": false
+                    },
+                    {
+                        "in": "query",
+                        "name": "offset",
+                        "schema": {
+                            "default": 0,
+                            "minimum": 0,
+                            "title": "Offset",
+                            "type": "integer"
+                        },
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PagedAttendanceSessionResponseSchema"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "List all attendance sessions for admin dashboard.",
+                "tags": [
+                    "Attendance"
+                ]
+            }
+        },
+        "/api/attendance/admin/attendance-report/{class_part_id}": {
+            "get": {
+                "operationId": "apps_attendance_api_get_attendance_report",
+                "summary": "Get Attendance Report",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "class_part_id",
+                        "schema": {
+                            "title": "Class Part Id",
+                            "type": "integer"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "query",
+                        "name": "start_date",
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Start Date"
+                        },
+                        "required": false
+                    },
+                    {
+                        "in": "query",
+                        "name": "end_date",
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "End Date"
+                        },
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "description": "Generate attendance report for admin dashboard.",
+                "tags": [
+                    "Attendance"
+                ]
+            }
+        },
+        "/api/attendance/admin/sync-rosters": {
+            "post": {
+                "operationId": "apps_attendance_api_manual_roster_sync",
+                "summary": "Manual Roster Sync",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "description": "Manually trigger roster synchronization.",
+                "tags": [
+                    "Attendance"
+                ]
+            }
+        },
+        "/api/grading/grades/": {
+            "post": {
+                "operationId": "apps_grading_api_create_grade",
+                "summary": "Create Grade",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GradeResponseSchema"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Create a new grade entry.\n\nAllows teachers to enter grades for students in their classes.\nValidates grade data and creates proper audit trails.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/GradeEntrySchema"
+                            }
+                        }
+                    },
+                    "required": true
+                }
+            },
+            "get": {
+                "operationId": "apps_grading_api_list_grades",
+                "summary": "List Grades",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "class_part_id",
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "integer"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Class Part Id"
+                        },
+                        "required": false
+                    },
+                    {
+                        "in": "query",
+                        "name": "enrollment_id",
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "integer"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Enrollment Id"
+                        },
+                        "required": false
+                    },
+                    {
+                        "in": "query",
+                        "name": "status",
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Status"
+                        },
+                        "required": false
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "schema": {
+                            "default": 50,
+                            "maximum": 200,
+                            "minimum": 1,
+                            "title": "Limit",
+                            "type": "integer"
+                        },
+                        "required": false
+                    },
+                    {
+                        "in": "query",
+                        "name": "offset",
+                        "schema": {
+                            "default": 0,
+                            "minimum": 0,
+                            "title": "Offset",
+                            "type": "integer"
+                        },
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "$ref": "#/components/schemas/GradeResponseSchema"
+                                    },
+                                    "title": "Response",
+                                    "type": "array"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "List grades with optional filtering.\n\nAllows teachers to view grades for their classes with pagination."
+            }
+        },
+        "/api/grading/grades/{grade_id}/": {
+            "put": {
+                "operationId": "apps_grading_api_update_grade",
+                "summary": "Update Grade",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "grade_id",
+                        "schema": {
+                            "title": "Grade Id",
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GradeResponseSchema"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Update an existing grade entry.\n\nAllows teachers to modify grades with proper audit trails.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/GradeUpdateSchema"
+                            }
+                        }
+                    },
+                    "required": true
+                }
+            },
+            "get": {
+                "operationId": "apps_grading_api_get_grade",
+                "summary": "Get Grade",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "grade_id",
+                        "schema": {
+                            "title": "Grade Id",
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GradeResponseSchema"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Get a specific grade by ID."
+            }
+        },
+        "/api/grading/grades/{grade_id}/status/": {
+            "patch": {
+                "operationId": "apps_grading_api_change_grade_status",
+                "summary": "Change Grade Status",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "grade_id",
+                        "schema": {
+                            "title": "Grade Id",
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GradeResponseSchema"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Change the status of a grade.\n\nAllows teachers to submit, approve, or finalize grades.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/GradeStatusChangeSchema"
+                            }
+                        }
+                    },
+                    "required": true
+                }
+            }
+        },
+        "/api/grading/grades/{grade_id}/history/": {
+            "get": {
+                "operationId": "apps_grading_api_get_grade_history",
+                "summary": "Get Grade History",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "grade_id",
+                        "schema": {
+                            "title": "Grade Id",
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "$ref": "#/components/schemas/GradeHistorySchema"
+                                    },
+                                    "title": "Response",
+                                    "type": "array"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Get change history for a specific grade."
+            }
+        },
+        "/api/grading/grading-scales/": {
+            "get": {
+                "operationId": "apps_grading_api_list_grading_scales",
+                "summary": "List Grading Scales",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "description": "List available grading scales."
+            }
+        },
+        "/api/grading/grades/convert/": {
+            "post": {
+                "operationId": "apps_grading_api_convert_grade",
+                "summary": "Convert Grade",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "numeric_score",
+                        "schema": {
+                            "title": "Numeric Score",
+                            "type": "number"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "query",
+                        "name": "grading_scale_id",
+                        "schema": {
+                            "title": "Grading Scale Id",
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "description": "Convert a numeric score to letter grade using specified grading scale.\n\nUseful for real-time grade conversion in teacher interfaces."
+            }
+        },
+        "/api/grading/grades/bulk-import/": {
+            "post": {
+                "operationId": "apps_grading_api_bulk_import_grades",
+                "summary": "Bulk Import Grades",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "description": "Import grades in bulk from external systems.\n\nHandles batch processing with error reporting.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BulkGradeImportSchema"
+                            }
+                        }
+                    },
+                    "required": true
+                }
+            }
+        },
+        "/api/grading/grades/calculate-session/{enrollment_id}/{session_id}/": {
+            "post": {
+                "operationId": "apps_grading_api_calculate_session_grade",
+                "summary": "Calculate Session Grade",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "enrollment_id",
+                        "schema": {
+                            "title": "Enrollment Id",
+                            "type": "integer"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "path",
+                        "name": "session_id",
+                        "schema": {
+                            "title": "Session Id",
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "description": "Calculate grade for a class session from component grades.\n\nTriggers recalculation of weighted averages for session grades."
+            }
+        },
+        "/api/grading/gpa/calculate-term/{student_id}/{term_id}/{major_id}/": {
+            "post": {
+                "operationId": "apps_grading_api_calculate_term_gpa",
+                "summary": "Calculate Term Gpa",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "student_id",
+                        "schema": {
+                            "title": "Student Id",
+                            "type": "integer"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "path",
+                        "name": "term_id",
+                        "schema": {
+                            "title": "Term Id",
+                            "type": "integer"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "path",
+                        "name": "major_id",
+                        "schema": {
+                            "title": "Major Id",
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "description": "Calculate term GPA for a student's major.\n\nTriggers GPA calculation for the specified term and major."
+            }
+        },
+        "/api/grading/gpa/student/{student_id}/": {
+            "get": {
+                "operationId": "apps_grading_api_get_student_gpa_records",
+                "summary": "Get Student Gpa Records",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "student_id",
+                        "schema": {
+                            "title": "Student Id",
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "$ref": "#/components/schemas/GPARecordSchema"
+                                    },
+                                    "title": "Response",
+                                    "type": "array"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Get all GPA records for a student."
+            }
+        },
+        "/api/finance/pricing/course/": {
+            "get": {
+                "operationId": "apps_finance_api_get_course_pricing",
+                "summary": "Get Course Pricing",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "student_id",
+                        "schema": {
+                            "title": "Student Id",
+                            "type": "integer"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "query",
+                        "name": "course_id",
+                        "schema": {
+                            "title": "Course Id",
+                            "type": "integer"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "query",
+                        "name": "term_id",
+                        "schema": {
+                            "title": "Term Id",
+                            "type": "integer"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "query",
+                        "name": "pricing_date",
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Pricing Date"
+                        },
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PricingResponseSchema"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Get pricing for a specific course, student, and term.\n\nCalculates the final price including any term adjustments\nand returns detailed pricing information."
+            }
+        },
+        "/api/finance/pricing/fees/": {
+            "get": {
+                "operationId": "apps_finance_api_get_applicable_fees",
+                "summary": "Get Applicable Fees",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "student_id",
+                        "schema": {
+                            "title": "Student Id",
+                            "type": "integer"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "query",
+                        "name": "term_id",
+                        "schema": {
+                            "title": "Term Id",
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "description": "Get all applicable fees for a student in a term.\n\nReturns detailed fee information including amounts and descriptions."
+            }
+        },
+        "/api/finance/pricing/total-cost/": {
+            "get": {
+                "operationId": "apps_finance_api_calculate_total_cost",
+                "summary": "Calculate Total Cost",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "student_id",
+                        "schema": {
+                            "title": "Student Id",
+                            "type": "integer"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "query",
+                        "name": "term_id",
+                        "schema": {
+                            "title": "Term Id",
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "description": "Calculate total cost for a student's enrollments in a term.\n\nReturns comprehensive cost breakdown including courses and fees."
+            }
+        },
+        "/api/finance/invoices/": {
+            "post": {
+                "operationId": "apps_finance_api_create_invoice",
+                "summary": "Create Invoice",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InvoiceResponseSchema"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Create a new invoice for student enrollments.\n\nGenerates an invoice with line items for courses and applicable fees.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/InvoiceCreateSchema"
+                            }
+                        }
+                    },
+                    "required": true
+                }
+            },
+            "get": {
+                "operationId": "apps_finance_api_list_invoices",
+                "summary": "List Invoices",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "student_id",
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "integer"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Student Id"
+                        },
+                        "required": false
+                    },
+                    {
+                        "in": "query",
+                        "name": "term_id",
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "integer"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Term Id"
+                        },
+                        "required": false
+                    },
+                    {
+                        "in": "query",
+                        "name": "status",
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Status"
+                        },
+                        "required": false
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "schema": {
+                            "default": 50,
+                            "maximum": 200,
+                            "minimum": 1,
+                            "title": "Limit",
+                            "type": "integer"
+                        },
+                        "required": false
+                    },
+                    {
+                        "in": "query",
+                        "name": "offset",
+                        "schema": {
+                            "default": 0,
+                            "minimum": 0,
+                            "title": "Offset",
+                            "type": "integer"
+                        },
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "$ref": "#/components/schemas/InvoiceResponseSchema"
+                                    },
+                                    "title": "Response",
+                                    "type": "array"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "List invoices with optional filtering.\n\nSupports filtering by student, term, and status with pagination."
+            }
+        },
+        "/api/finance/invoices/{invoice_id}/": {
+            "get": {
+                "operationId": "apps_finance_api_get_invoice_detail",
+                "summary": "Get Invoice Detail",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "invoice_id",
+                        "schema": {
+                            "title": "Invoice Id",
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InvoiceDetailResponseSchema"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Get detailed information about a specific invoice."
+            }
+        },
+        "/api/finance/invoices/{invoice_id}/send/": {
+            "patch": {
+                "operationId": "apps_finance_api_send_invoice",
+                "summary": "Send Invoice",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "invoice_id",
+                        "schema": {
+                            "title": "Invoice Id",
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InvoiceResponseSchema"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Send an invoice to the student.\n\nUpdates invoice status to 'sent' and records the action."
+            }
+        },
+        "/api/finance/payments/": {
+            "post": {
+                "operationId": "apps_finance_api_record_payment",
+                "summary": "Record Payment",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaymentResponseSchema"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Record a payment against an invoice.\n\nCreates payment record and updates invoice status.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PaymentRecordSchema"
+                            }
+                        }
+                    },
+                    "required": true
+                }
+            },
+            "get": {
+                "operationId": "apps_finance_api_list_payments",
+                "summary": "List Payments",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "invoice_id",
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "integer"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Invoice Id"
+                        },
+                        "required": false
+                    },
+                    {
+                        "in": "query",
+                        "name": "student_id",
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "integer"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Student Id"
+                        },
+                        "required": false
+                    },
+                    {
+                        "in": "query",
+                        "name": "status",
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Status"
+                        },
+                        "required": false
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "schema": {
+                            "default": 50,
+                            "maximum": 200,
+                            "minimum": 1,
+                            "title": "Limit",
+                            "type": "integer"
+                        },
+                        "required": false
+                    },
+                    {
+                        "in": "query",
+                        "name": "offset",
+                        "schema": {
+                            "default": 0,
+                            "minimum": 0,
+                            "title": "Offset",
+                            "type": "integer"
+                        },
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "$ref": "#/components/schemas/PaymentResponseSchema"
+                                    },
+                                    "title": "Response",
+                                    "type": "array"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "List payments with optional filtering.\n\nSupports filtering by invoice, student, and status with pagination."
+            }
+        },
+        "/api/finance/payments/refund/": {
+            "post": {
+                "operationId": "apps_finance_api_refund_payment",
+                "summary": "Refund Payment",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaymentResponseSchema"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Process a payment refund.\n\nCreates refund record and updates invoice balances.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PaymentRefundSchema"
+                            }
+                        }
+                    },
+                    "required": true
+                }
+            }
+        },
+        "/api/finance/transactions/student/{student_id}/": {
+            "get": {
+                "operationId": "apps_finance_api_get_student_financial_history",
+                "summary": "Get Student Financial History",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "student_id",
+                        "schema": {
+                            "title": "Student Id",
+                            "type": "integer"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "query",
+                        "name": "term_id",
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "integer"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Term Id"
+                        },
+                        "required": false
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "schema": {
+                            "default": 50,
+                            "maximum": 200,
+                            "minimum": 1,
+                            "title": "Limit",
+                            "type": "integer"
+                        },
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "$ref": "#/components/schemas/FinancialHistorySchema"
+                                    },
+                                    "title": "Response",
+                                    "type": "array"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Get financial transaction history for a student.\n\nReturns comprehensive audit trail of all financial operations."
+            }
+        },
+        "/api/finance/billing/auto-invoice/": {
+            "post": {
+                "operationId": "apps_finance_api_create_auto_invoice",
+                "summary": "Create Auto Invoice",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "student_id",
+                        "schema": {
+                            "title": "Student Id",
+                            "type": "integer"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "query",
+                        "name": "term_id",
+                        "schema": {
+                            "title": "Term Id",
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "description": "Create an automatic invoice for student's current enrollments.\n\nGenerates invoice for all active enrollments in the specified term."
+            }
+        },
+        "/api/finance/pricing-tiers/": {
+            "get": {
+                "operationId": "apps_finance_api_list_pricing_tiers",
+                "summary": "List Pricing Tiers",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "description": "List all active pricing tiers."
+            }
+        },
+        "/api/finance/currencies/": {
+            "get": {
+                "operationId": "apps_finance_api_list_currencies",
+                "summary": "List Currencies",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "description": "List all supported currencies."
+            }
+        },
+        "/api/academic-records/transcript-requests/": {
+            "post": {
+                "operationId": "apps_academic_records_api_create_transcript_request",
+                "summary": "Create Transcript Request",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "student_id",
+                        "schema": {
+                            "title": "Student Id",
+                            "type": "string"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "query",
+                        "name": "request_type",
+                        "schema": {
+                            "default": "OFFICIAL",
+                            "title": "Request Type",
+                            "type": "string"
+                        },
+                        "required": false
+                    },
+                    {
+                        "in": "query",
+                        "name": "delivery_method",
+                        "schema": {
+                            "default": "EMAIL",
+                            "title": "Delivery Method",
+                            "type": "string"
+                        },
+                        "required": false
+                    },
+                    {
+                        "in": "query",
+                        "name": "recipient_name",
+                        "schema": {
+                            "default": "",
+                            "title": "Recipient Name",
+                            "type": "string"
+                        },
+                        "required": false
+                    },
+                    {
+                        "in": "query",
+                        "name": "recipient_email",
+                        "schema": {
+                            "default": "",
+                            "title": "Recipient Email",
+                            "type": "string"
+                        },
+                        "required": false
+                    },
+                    {
+                        "in": "query",
+                        "name": "recipient_address",
+                        "schema": {
+                            "default": "",
+                            "title": "Recipient Address",
+                            "type": "string"
+                        },
+                        "required": false
+                    },
+                    {
+                        "in": "query",
+                        "name": "urgent_request",
+                        "schema": {
+                            "default": false,
+                            "title": "Urgent Request",
+                            "type": "boolean"
+                        },
+                        "required": false
+                    },
+                    {
+                        "in": "query",
+                        "name": "request_notes",
+                        "schema": {
+                            "default": "",
+                            "title": "Request Notes",
+                            "type": "string"
+                        },
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "description": "Create a new transcript request.\n\nArgs:\n    student_id: Student ID for the transcript\n    request_type: Type of transcript (OFFICIAL, UNOFFICIAL, etc.)\n    delivery_method: How to deliver the transcript\n    recipient_name: Name of recipient (optional)\n    recipient_email: Email for delivery (optional)\n    recipient_address: Address for delivery (optional)\n    urgent_request: Whether this is an urgent request\n    request_notes: Additional notes about the request\n\nReturns:\n    Created transcript request data"
+            }
+        },
+        "/api/academic-records/transcript-requests/{request_id}": {
+            "get": {
+                "operationId": "apps_academic_records_api_get_transcript_request",
+                "summary": "Get Transcript Request",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "request_id",
+                        "schema": {
+                            "title": "Request Id",
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "description": "Get details of a specific transcript request.\n\nArgs:\n    request_id: ID of the transcript request\n\nReturns:\n    Transcript request details"
+            }
+        },
+        "/api/academic-records/transcript-requests/{request_id}/status": {
+            "put": {
+                "operationId": "apps_academic_records_api_update_transcript_request_status",
+                "summary": "Update Transcript Request Status",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "request_id",
+                        "schema": {
+                            "title": "Request Id",
+                            "type": "integer"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "query",
+                        "name": "new_status",
+                        "schema": {
+                            "title": "New Status",
+                            "type": "string"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "query",
+                        "name": "notes",
+                        "schema": {
+                            "default": "",
+                            "title": "Notes",
+                            "type": "string"
+                        },
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "description": "Update the status of a transcript request.\n\nArgs:\n    request_id: ID of the transcript request\n    new_status: New status for the request\n    notes: Optional notes about the status change\n\nReturns:\n    Updated transcript request data"
+            }
+        },
+        "/api/academic-records/transcript-requests/{request_id}/generate": {
+            "post": {
+                "operationId": "apps_academic_records_api_generate_transcript",
+                "summary": "Generate Transcript",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "request_id",
+                        "schema": {
+                            "title": "Request Id",
+                            "type": "integer"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "query",
+                        "name": "include_transfer_credits",
+                        "schema": {
+                            "default": true,
+                            "title": "Include Transfer Credits",
+                            "type": "boolean"
+                        },
+                        "required": false
+                    },
+                    {
+                        "in": "query",
+                        "name": "as_of_date",
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "As Of Date"
+                        },
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "description": "Generate an official transcript for a request.\n\nArgs:\n    request_id: ID of the transcript request\n    include_transfer_credits: Whether to include transfer credits\n    as_of_date: Generate transcript as of this date (YYYY-MM-DD)\n\nReturns:\n    Generated document information"
+            }
+        },
+        "/api/academic-records/documents/{document_id}": {
+            "get": {
+                "operationId": "apps_academic_records_api_get_document",
+                "summary": "Get Document",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "document_id",
+                        "schema": {
+                            "title": "Document Id",
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "description": "Get details of an official document.\n\nArgs:\n    document_id: UUID of the document\n\nReturns:\n    Document details"
+            }
+        },
+        "/api/academic-records/verify/{verification_code}": {
+            "get": {
+                "operationId": "apps_academic_records_api_verify_document",
+                "summary": "Verify Document",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "verification_code",
+                        "schema": {
+                            "title": "Verification Code",
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "description": "Verify an official document using its verification code.\n\nArgs:\n    verification_code: Verification code from the document\n\nReturns:\n    Document verification information"
+            }
+        },
+        "/api/academic-records/students/{student_id}/academic-summary": {
+            "get": {
+                "operationId": "apps_academic_records_api_get_student_academic_summary",
+                "summary": "Get Student Academic Summary",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "student_id",
+                        "schema": {
+                            "title": "Student Id",
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "description": "Get comprehensive academic summary for a student.\n\nArgs:\n    student_id: Student ID\n\nReturns:\n    Academic summary data"
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "AttendanceSessionResponseSchema": {
+                "description": "Schema for attendance session response.",
+                "properties": {
+                    "id": {
+                        "title": "Id",
+                        "type": "integer"
+                    },
+                    "class_part_id": {
+                        "title": "Class Part Id",
+                        "type": "integer"
+                    },
+                    "class_name": {
+                        "title": "Class Name",
+                        "type": "string"
+                    },
+                    "session_date": {
+                        "title": "Session Date",
+                        "type": "string"
+                    },
+                    "start_time": {
+                        "title": "Start Time",
+                        "type": "string"
+                    },
+                    "attendance_code": {
+                        "title": "Attendance Code",
+                        "type": "string"
+                    },
+                    "code_expires_at": {
+                        "title": "Code Expires At",
+                        "type": "string"
+                    },
+                    "is_active": {
+                        "title": "Is Active",
+                        "type": "boolean"
+                    },
+                    "total_students": {
+                        "title": "Total Students",
+                        "type": "integer"
+                    },
+                    "present_count": {
+                        "title": "Present Count",
+                        "type": "integer"
+                    },
+                    "absent_count": {
+                        "title": "Absent Count",
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "id",
+                    "class_part_id",
+                    "class_name",
+                    "session_date",
+                    "start_time",
+                    "attendance_code",
+                    "code_expires_at",
+                    "is_active",
+                    "total_students",
+                    "present_count",
+                    "absent_count"
+                ],
+                "title": "AttendanceSessionResponseSchema",
+                "type": "object"
+            },
+            "AttendanceSessionCreateSchema": {
+                "description": "Schema for teacher creating attendance session.",
+                "properties": {
+                    "class_part_id": {
+                        "title": "Class Part Id",
+                        "type": "integer"
+                    },
+                    "attendance_code": {
+                        "title": "Attendance Code",
+                        "type": "string"
+                    },
+                    "latitude": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Latitude"
+                    },
+                    "longitude": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Longitude"
+                    },
+                    "is_makeup_class": {
+                        "default": false,
+                        "title": "Is Makeup Class",
+                        "type": "boolean"
+                    },
+                    "makeup_reason": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Makeup Reason"
+                    }
+                },
+                "required": [
+                    "class_part_id",
+                    "attendance_code"
+                ],
+                "title": "AttendanceSessionCreateSchema",
+                "type": "object"
+            },
+            "ClassRosterResponseSchema": {
+                "description": "Schema for class roster response.",
+                "properties": {
+                    "class_part_id": {
+                        "title": "Class Part Id",
+                        "type": "integer"
+                    },
+                    "class_name": {
+                        "title": "Class Name",
+                        "type": "string"
+                    },
+                    "session_date": {
+                        "title": "Session Date",
+                        "type": "string"
+                    },
+                    "total_students": {
+                        "title": "Total Students",
+                        "type": "integer"
+                    },
+                    "students": {
+                        "items": {
+                            "$ref": "#/components/schemas/RosterStudentSchema"
+                        },
+                        "title": "Students",
+                        "type": "array"
+                    },
+                    "last_synced": {
+                        "title": "Last Synced",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "class_part_id",
+                    "class_name",
+                    "session_date",
+                    "total_students",
+                    "students",
+                    "last_synced"
+                ],
+                "title": "ClassRosterResponseSchema",
+                "type": "object"
+            },
+            "RosterStudentSchema": {
+                "description": "Schema for student in class roster.",
+                "properties": {
+                    "student_id": {
+                        "title": "Student Id",
+                        "type": "integer"
+                    },
+                    "student_name": {
+                        "title": "Student Name",
+                        "type": "string"
+                    },
+                    "enrollment_status": {
+                        "title": "Enrollment Status",
+                        "type": "string"
+                    },
+                    "is_audit": {
+                        "title": "Is Audit",
+                        "type": "boolean"
+                    },
+                    "photo_url": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Photo Url"
+                    }
+                },
+                "required": [
+                    "student_id",
+                    "student_name",
+                    "enrollment_status",
+                    "is_audit"
+                ],
+                "title": "RosterStudentSchema",
+                "type": "object"
+            },
+            "ManualAttendanceSchema": {
+                "description": "Schema for teacher manual attendance entry.",
+                "properties": {
+                    "session_id": {
+                        "title": "Session Id",
+                        "type": "integer"
+                    },
+                    "student_id": {
+                        "title": "Student Id",
+                        "type": "integer"
+                    },
+                    "status": {
+                        "title": "Status",
+                        "type": "string"
+                    },
+                    "notes": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Notes"
+                    }
+                },
+                "required": [
+                    "session_id",
+                    "student_id",
+                    "status"
+                ],
+                "title": "ManualAttendanceSchema",
+                "type": "object"
+            },
+            "StudentCodeResponseSchema": {
+                "description": "Schema for code submission response.",
+                "properties": {
+                    "success": {
+                        "title": "Success",
+                        "type": "boolean"
+                    },
+                    "status": {
+                        "title": "Status",
+                        "type": "string"
+                    },
+                    "message": {
+                        "title": "Message",
+                        "type": "string"
+                    },
+                    "within_geofence": {
+                        "anyOf": [
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Within Geofence"
+                    },
+                    "distance_meters": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Distance Meters"
+                    }
+                },
+                "required": [
+                    "success",
+                    "status",
+                    "message"
+                ],
+                "title": "StudentCodeResponseSchema",
+                "type": "object"
+            },
+            "StudentCodeSubmissionSchema": {
+                "description": "Schema for student code submission.",
+                "properties": {
+                    "session_id": {
+                        "title": "Session Id",
+                        "type": "integer"
+                    },
+                    "submitted_code": {
+                        "title": "Submitted Code",
+                        "type": "string"
+                    },
+                    "latitude": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Latitude"
+                    },
+                    "longitude": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Longitude"
+                    }
+                },
+                "required": [
+                    "session_id",
+                    "submitted_code"
+                ],
+                "title": "StudentCodeSubmissionSchema",
+                "type": "object"
+            },
+            "PermissionRequestCreateSchema": {
+                "description": "Schema for creating permission request.",
+                "properties": {
+                    "class_part_id": {
+                        "title": "Class Part Id",
+                        "type": "integer"
+                    },
+                    "session_date": {
+                        "title": "Session Date",
+                        "type": "string"
+                    },
+                    "reason": {
+                        "title": "Reason",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "class_part_id",
+                    "session_date",
+                    "reason"
+                ],
+                "title": "PermissionRequestCreateSchema",
+                "type": "object"
+            },
+            "Input": {
+                "properties": {
+                    "limit": {
+                        "default": 100,
+                        "minimum": 1,
+                        "title": "Limit",
+                        "type": "integer"
+                    },
+                    "offset": {
+                        "default": 0,
+                        "minimum": 0,
+                        "title": "Offset",
+                        "type": "integer"
+                    }
+                },
+                "title": "Input",
+                "type": "object"
+            },
+            "PagedAttendanceSessionResponseSchema": {
+                "properties": {
+                    "items": {
+                        "items": {
+                            "$ref": "#/components/schemas/AttendanceSessionResponseSchema"
+                        },
+                        "title": "Items",
+                        "type": "array"
+                    },
+                    "count": {
+                        "title": "Count",
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "items",
+                    "count"
+                ],
+                "title": "PagedAttendanceSessionResponseSchema",
+                "type": "object"
+            },
+            "GradeResponseSchema": {
+                "description": "Schema for grade response data.",
+                "properties": {
+                    "id": {
+                        "title": "Id",
+                        "type": "integer"
+                    },
+                    "enrollment_id": {
+                        "title": "Enrollment Id",
+                        "type": "integer"
+                    },
+                    "class_part_id": {
+                        "title": "Class Part Id",
+                        "type": "integer"
+                    },
+                    "student_name": {
+                        "title": "Student Name",
+                        "type": "string"
+                    },
+                    "class_part_name": {
+                        "title": "Class Part Name",
+                        "type": "string"
+                    },
+                    "numeric_score": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Numeric Score"
+                    },
+                    "letter_grade": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Letter Grade"
+                    },
+                    "gpa_points": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Gpa Points"
+                    },
+                    "grade_status": {
+                        "title": "Grade Status",
+                        "type": "string"
+                    },
+                    "grade_source": {
+                        "title": "Grade Source",
+                        "type": "string"
+                    },
+                    "entered_at": {
+                        "format": "date-time",
+                        "title": "Entered At",
+                        "type": "string"
+                    },
+                    "notes": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Notes"
+                    }
+                },
+                "required": [
+                    "id",
+                    "enrollment_id",
+                    "class_part_id",
+                    "student_name",
+                    "class_part_name",
+                    "numeric_score",
+                    "letter_grade",
+                    "gpa_points",
+                    "grade_status",
+                    "grade_source",
+                    "entered_at",
+                    "notes"
+                ],
+                "title": "GradeResponseSchema",
+                "type": "object"
+            },
+            "GradeEntrySchema": {
+                "description": "Schema for grade entry requests.",
+                "properties": {
+                    "enrollment_id": {
+                        "title": "Enrollment Id",
+                        "type": "integer"
+                    },
+                    "class_part_id": {
+                        "title": "Class Part Id",
+                        "type": "integer"
+                    },
+                    "numeric_score": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Numeric Score"
+                    },
+                    "letter_grade": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Letter Grade"
+                    },
+                    "notes": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": "",
+                        "title": "Notes"
+                    },
+                    "grade_source": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": "MANUAL_TEACHER",
+                        "title": "Grade Source"
+                    }
+                },
+                "required": [
+                    "enrollment_id",
+                    "class_part_id"
+                ],
+                "title": "GradeEntrySchema",
+                "type": "object"
+            },
+            "GradeUpdateSchema": {
+                "description": "Schema for grade update requests.",
+                "properties": {
+                    "numeric_score": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Numeric Score"
+                    },
+                    "letter_grade": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Letter Grade"
+                    },
+                    "notes": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Notes"
+                    },
+                    "reason": {
+                        "title": "Reason",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "reason"
+                ],
+                "title": "GradeUpdateSchema",
+                "type": "object"
+            },
+            "GradeStatusChangeSchema": {
+                "description": "Schema for grade status change requests.",
+                "properties": {
+                    "new_status": {
+                        "title": "New Status",
+                        "type": "string"
+                    },
+                    "reason": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": "",
+                        "title": "Reason"
+                    }
+                },
+                "required": [
+                    "new_status"
+                ],
+                "title": "GradeStatusChangeSchema",
+                "type": "object"
+            },
+            "GradeHistorySchema": {
+                "description": "Schema for grade change history.",
+                "properties": {
+                    "id": {
+                        "title": "Id",
+                        "type": "integer"
+                    },
+                    "change_type": {
+                        "title": "Change Type",
+                        "type": "string"
+                    },
+                    "changed_by": {
+                        "title": "Changed By",
+                        "type": "string"
+                    },
+                    "changed_at": {
+                        "format": "date-time",
+                        "title": "Changed At",
+                        "type": "string"
+                    },
+                    "previous_score": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Previous Score"
+                    },
+                    "previous_letter": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Previous Letter"
+                    },
+                    "new_score": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "New Score"
+                    },
+                    "new_letter": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "New Letter"
+                    },
+                    "reason": {
+                        "title": "Reason",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "id",
+                    "change_type",
+                    "changed_by",
+                    "changed_at",
+                    "previous_score",
+                    "previous_letter",
+                    "new_score",
+                    "new_letter",
+                    "reason"
+                ],
+                "title": "GradeHistorySchema",
+                "type": "object"
+            },
+            "BulkGradeImportSchema": {
+                "description": "Schema for bulk grade import requests.",
+                "properties": {
+                    "grade_data": {
+                        "items": {
+                            "additionalProperties": true,
+                            "type": "object"
+                        },
+                        "title": "Grade Data",
+                        "type": "array"
+                    },
+                    "grade_source": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": "MOODLE_IMPORT",
+                        "title": "Grade Source"
+                    }
+                },
+                "required": [
+                    "grade_data"
+                ],
+                "title": "BulkGradeImportSchema",
+                "type": "object"
+            },
+            "GPARecordSchema": {
+                "description": "Schema for GPA record data.",
+                "properties": {
+                    "id": {
+                        "title": "Id",
+                        "type": "integer"
+                    },
+                    "student_name": {
+                        "title": "Student Name",
+                        "type": "string"
+                    },
+                    "term": {
+                        "title": "Term",
+                        "type": "string"
+                    },
+                    "major": {
+                        "title": "Major",
+                        "type": "string"
+                    },
+                    "gpa_type": {
+                        "title": "Gpa Type",
+                        "type": "string"
+                    },
+                    "gpa_value": {
+                        "title": "Gpa Value",
+                        "type": "number"
+                    },
+                    "quality_points": {
+                        "title": "Quality Points",
+                        "type": "number"
+                    },
+                    "credit_hours_attempted": {
+                        "title": "Credit Hours Attempted",
+                        "type": "number"
+                    },
+                    "credit_hours_earned": {
+                        "title": "Credit Hours Earned",
+                        "type": "number"
+                    },
+                    "calculated_at": {
+                        "format": "date-time",
+                        "title": "Calculated At",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "id",
+                    "student_name",
+                    "term",
+                    "major",
+                    "gpa_type",
+                    "gpa_value",
+                    "quality_points",
+                    "credit_hours_attempted",
+                    "credit_hours_earned",
+                    "calculated_at"
+                ],
+                "title": "GPARecordSchema",
+                "type": "object"
+            },
+            "PricingInquirySchema": {
+                "description": "Schema for pricing inquiry requests.",
+                "properties": {
+                    "student_id": {
+                        "title": "Student Id",
+                        "type": "integer"
+                    },
+                    "course_id": {
+                        "title": "Course Id",
+                        "type": "integer"
+                    },
+                    "term_id": {
+                        "title": "Term Id",
+                        "type": "integer"
+                    },
+                    "pricing_date": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Pricing Date"
+                    }
+                },
+                "required": [
+                    "student_id",
+                    "course_id",
+                    "term_id"
+                ],
+                "title": "PricingInquirySchema",
+                "type": "object"
+            },
+            "PricingResponseSchema": {
+                "description": "Schema for pricing response data.",
+                "properties": {
+                    "course": {
+                        "title": "Course",
+                        "type": "string"
+                    },
+                    "student": {
+                        "title": "Student",
+                        "type": "string"
+                    },
+                    "term": {
+                        "title": "Term",
+                        "type": "string"
+                    },
+                    "price": {
+                        "title": "Price",
+                        "type": "number"
+                    },
+                    "currency": {
+                        "title": "Currency",
+                        "type": "string"
+                    },
+                    "pricing_tier": {
+                        "title": "Pricing Tier",
+                        "type": "string"
+                    },
+                    "pricing_details": {
+                        "additionalProperties": true,
+                        "title": "Pricing Details",
+                        "type": "object"
+                    }
+                },
+                "required": [
+                    "course",
+                    "student",
+                    "term",
+                    "price",
+                    "currency",
+                    "pricing_tier",
+                    "pricing_details"
+                ],
+                "title": "PricingResponseSchema",
+                "type": "object"
+            },
+            "InvoiceResponseSchema": {
+                "description": "Schema for invoice response data.",
+                "properties": {
+                    "id": {
+                        "title": "Id",
+                        "type": "integer"
+                    },
+                    "invoice_number": {
+                        "title": "Invoice Number",
+                        "type": "string"
+                    },
+                    "student": {
+                        "title": "Student",
+                        "type": "string"
+                    },
+                    "term": {
+                        "title": "Term",
+                        "type": "string"
+                    },
+                    "status": {
+                        "title": "Status",
+                        "type": "string"
+                    },
+                    "issue_date": {
+                        "title": "Issue Date",
+                        "type": "string"
+                    },
+                    "due_date": {
+                        "title": "Due Date",
+                        "type": "string"
+                    },
+                    "subtotal": {
+                        "title": "Subtotal",
+                        "type": "number"
+                    },
+                    "tax_amount": {
+                        "title": "Tax Amount",
+                        "type": "number"
+                    },
+                    "total_amount": {
+                        "title": "Total Amount",
+                        "type": "number"
+                    },
+                    "paid_amount": {
+                        "title": "Paid Amount",
+                        "type": "number"
+                    },
+                    "amount_due": {
+                        "title": "Amount Due",
+                        "type": "number"
+                    },
+                    "currency": {
+                        "title": "Currency",
+                        "type": "string"
+                    },
+                    "is_overdue": {
+                        "title": "Is Overdue",
+                        "type": "boolean"
+                    }
+                },
+                "required": [
+                    "id",
+                    "invoice_number",
+                    "student",
+                    "term",
+                    "status",
+                    "issue_date",
+                    "due_date",
+                    "subtotal",
+                    "tax_amount",
+                    "total_amount",
+                    "paid_amount",
+                    "amount_due",
+                    "currency",
+                    "is_overdue"
+                ],
+                "title": "InvoiceResponseSchema",
+                "type": "object"
+            },
+            "InvoiceCreateSchema": {
+                "description": "Schema for invoice creation requests.",
+                "properties": {
+                    "student_id": {
+                        "title": "Student Id",
+                        "type": "integer"
+                    },
+                    "term_id": {
+                        "title": "Term Id",
+                        "type": "integer"
+                    },
+                    "enrollment_ids": {
+                        "items": {
+                            "type": "integer"
+                        },
+                        "title": "Enrollment Ids",
+                        "type": "array"
+                    },
+                    "due_days": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": 30,
+                        "title": "Due Days"
+                    },
+                    "notes": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": "",
+                        "title": "Notes"
+                    }
+                },
+                "required": [
+                    "student_id",
+                    "term_id",
+                    "enrollment_ids"
+                ],
+                "title": "InvoiceCreateSchema",
+                "type": "object"
+            },
+            "InvoiceDetailResponseSchema": {
+                "description": "Schema for detailed invoice response.",
+                "properties": {
+                    "id": {
+                        "title": "Id",
+                        "type": "integer"
+                    },
+                    "invoice_number": {
+                        "title": "Invoice Number",
+                        "type": "string"
+                    },
+                    "student": {
+                        "title": "Student",
+                        "type": "string"
+                    },
+                    "term": {
+                        "title": "Term",
+                        "type": "string"
+                    },
+                    "status": {
+                        "title": "Status",
+                        "type": "string"
+                    },
+                    "issue_date": {
+                        "title": "Issue Date",
+                        "type": "string"
+                    },
+                    "due_date": {
+                        "title": "Due Date",
+                        "type": "string"
+                    },
+                    "subtotal": {
+                        "title": "Subtotal",
+                        "type": "number"
+                    },
+                    "tax_amount": {
+                        "title": "Tax Amount",
+                        "type": "number"
+                    },
+                    "total_amount": {
+                        "title": "Total Amount",
+                        "type": "number"
+                    },
+                    "paid_amount": {
+                        "title": "Paid Amount",
+                        "type": "number"
+                    },
+                    "amount_due": {
+                        "title": "Amount Due",
+                        "type": "number"
+                    },
+                    "currency": {
+                        "title": "Currency",
+                        "type": "string"
+                    },
+                    "is_overdue": {
+                        "title": "Is Overdue",
+                        "type": "boolean"
+                    },
+                    "notes": {
+                        "title": "Notes",
+                        "type": "string"
+                    },
+                    "line_items": {
+                        "items": {
+                            "additionalProperties": true,
+                            "type": "object"
+                        },
+                        "title": "Line Items",
+                        "type": "array"
+                    },
+                    "payments": {
+                        "items": {
+                            "additionalProperties": true,
+                            "type": "object"
+                        },
+                        "title": "Payments",
+                        "type": "array"
+                    }
+                },
+                "required": [
+                    "id",
+                    "invoice_number",
+                    "student",
+                    "term",
+                    "status",
+                    "issue_date",
+                    "due_date",
+                    "subtotal",
+                    "tax_amount",
+                    "total_amount",
+                    "paid_amount",
+                    "amount_due",
+                    "currency",
+                    "is_overdue",
+                    "notes",
+                    "line_items",
+                    "payments"
+                ],
+                "title": "InvoiceDetailResponseSchema",
+                "type": "object"
+            },
+            "PaymentResponseSchema": {
+                "description": "Schema for payment response data.",
+                "properties": {
+                    "id": {
+                        "title": "Id",
+                        "type": "integer"
+                    },
+                    "payment_reference": {
+                        "title": "Payment Reference",
+                        "type": "string"
+                    },
+                    "invoice_number": {
+                        "title": "Invoice Number",
+                        "type": "string"
+                    },
+                    "amount": {
+                        "title": "Amount",
+                        "type": "number"
+                    },
+                    "currency": {
+                        "title": "Currency",
+                        "type": "string"
+                    },
+                    "payment_method": {
+                        "title": "Payment Method",
+                        "type": "string"
+                    },
+                    "payment_date": {
+                        "title": "Payment Date",
+                        "type": "string"
+                    },
+                    "status": {
+                        "title": "Status",
+                        "type": "string"
+                    },
+                    "payer_name": {
+                        "title": "Payer Name",
+                        "type": "string"
+                    },
+                    "external_reference": {
+                        "title": "External Reference",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "id",
+                    "payment_reference",
+                    "invoice_number",
+                    "amount",
+                    "currency",
+                    "payment_method",
+                    "payment_date",
+                    "status",
+                    "payer_name",
+                    "external_reference"
+                ],
+                "title": "PaymentResponseSchema",
+                "type": "object"
+            },
+            "PaymentRecordSchema": {
+                "description": "Schema for payment recording requests.",
+                "properties": {
+                    "invoice_id": {
+                        "title": "Invoice Id",
+                        "type": "integer"
+                    },
+                    "amount": {
+                        "title": "Amount",
+                        "type": "number"
+                    },
+                    "payment_method": {
+                        "title": "Payment Method",
+                        "type": "string"
+                    },
+                    "payment_date": {
+                        "title": "Payment Date",
+                        "type": "string"
+                    },
+                    "payer_name": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": "",
+                        "title": "Payer Name"
+                    },
+                    "external_reference": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": "",
+                        "title": "External Reference"
+                    },
+                    "notes": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": "",
+                        "title": "Notes"
+                    }
+                },
+                "required": [
+                    "invoice_id",
+                    "amount",
+                    "payment_method",
+                    "payment_date"
+                ],
+                "title": "PaymentRecordSchema",
+                "type": "object"
+            },
+            "PaymentRefundSchema": {
+                "description": "Schema for payment refund requests.",
+                "properties": {
+                    "payment_id": {
+                        "title": "Payment Id",
+                        "type": "integer"
+                    },
+                    "refund_amount": {
+                        "title": "Refund Amount",
+                        "type": "number"
+                    },
+                    "reason": {
+                        "title": "Reason",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "payment_id",
+                    "refund_amount",
+                    "reason"
+                ],
+                "title": "PaymentRefundSchema",
+                "type": "object"
+            },
+            "FinancialHistorySchema": {
+                "description": "Schema for financial transaction history.",
+                "properties": {
+                    "id": {
+                        "title": "Id",
+                        "type": "integer"
+                    },
+                    "transaction_id": {
+                        "title": "Transaction Id",
+                        "type": "string"
+                    },
+                    "transaction_type": {
+                        "title": "Transaction Type",
+                        "type": "string"
+                    },
+                    "amount": {
+                        "title": "Amount",
+                        "type": "number"
+                    },
+                    "currency": {
+                        "title": "Currency",
+                        "type": "string"
+                    },
+                    "description": {
+                        "title": "Description",
+                        "type": "string"
+                    },
+                    "transaction_date": {
+                        "title": "Transaction Date",
+                        "type": "string"
+                    },
+                    "invoice_number": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Invoice Number"
+                    },
+                    "payment_reference": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Payment Reference"
+                    }
+                },
+                "required": [
+                    "id",
+                    "transaction_id",
+                    "transaction_type",
+                    "amount",
+                    "currency",
+                    "description",
+                    "transaction_date",
+                    "invoice_number",
+                    "payment_reference"
+                ],
+                "title": "FinancialHistorySchema",
+                "type": "object"
+            }
+        }
+    },
+    "servers": []
+}

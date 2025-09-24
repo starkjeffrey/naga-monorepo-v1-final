@@ -1,0 +1,48 @@
+{
+  "mcpServers": {
+    "naga-django": {
+      "command": "docker",
+      "args": [
+        "compose",
+        "-f",
+        "/Users/jeffreystark/PycharmProjects/naga-monorepo/backend/docker-compose.local.yml",
+        "exec",
+        "-T",
+        "django",
+        "python",
+        "manage.py",
+        "stdio_server"
+      ],
+      "env": {}
+    },
+    "naga-postgres": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "postgresql://debug:debug@localhost:5432/naga"
+      ],
+      "env": {
+        "PGPASSWORD": "debug"
+      }
+    },
+    "naga-filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/Users/jeffreystark/PycharmProjects/naga-monorepo/backend"
+      ],
+      "env": {
+        "ALLOWED_DIRECTORIES": "/Users/jeffreystark/PycharmProjects/naga-monorepo"
+      }
+    },
+    "naga-github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
+      }
+    }
+  }
+}

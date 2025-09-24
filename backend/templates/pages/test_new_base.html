@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+
+{% load static i18n %}
+
+{% block title %}
+  {% trans "Test New Base Template" %} - {{ block.super }}
+{% endblock title %}
+{% block extra_css %}
+  <style>
+    .test-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+  </style>
+{% endblock extra_css %}
+{% block content %}
+  <div class="p-6 space-y-6">
+    <div class="max-w-7xl mx-auto">
+      <!-- Page Header -->
+      <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">{% trans "New Base Template Test" %}</h1>
+        <p class="text-gray-600 dark:text-gray-300">
+          {% trans "Testing the modular component structure and responsive design." %}
+        </p>
+      </div>
+      <!-- Template Features Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <!-- Responsive Design -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <div class="flex items-center mb-4">
+            <i class="fas fa-mobile-alt text-blue-600 dark:text-blue-400 text-2xl mr-3"></i>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">{% trans "Responsive Design" %}</h3>
+          </div>
+          <p class="text-gray-600 dark:text-gray-300 text-sm">
+            {% trans "Mobile-first approach with collapsible sidebar and touch-friendly navigation." %}
+          </p>
+        </div>
+        <!-- Modular Components -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <div class="flex items-center mb-4">
+            <i class="fas fa-cubes text-green-600 dark:text-green-400 text-2xl mr-3"></i>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">{% trans "Modular Components" %}</h3>
+          </div>
+          <p class="text-gray-600 dark:text-gray-300 text-sm">
+            {% trans "Separated header, sidebar, and message components for maintainability." %}
+          </p>
+        </div>
+        <!-- Dark Mode -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <div class="flex items-center mb-4">
+            <i class="fas fa-moon text-purple-600 dark:text-purple-400 text-2xl mr-3"></i>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">{% trans "Dark Mode" %}</h3>
+          </div>
+          <p class="text-gray-600 dark:text-gray-300 text-sm">
+            {% trans "System-aware dark mode with localStorage persistence and smooth transitions." %}
+          </p>
+        </div>
+        <!-- HTMX Integration -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <div class="flex items-center mb-4">
+            <i class="fas fa-bolt text-yellow-600 dark:text-yellow-400 text-2xl mr-3"></i>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">{% trans "HTMX Ready" %}</h3>
+          </div>
+          <p class="text-gray-600 dark:text-gray-300 text-sm">
+            {% trans "Integrated HTMX support with proper event handling and loading states." %}
+          </p>
+        </div>
+        <!-- Accessibility -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <div class="flex items-center mb-4">
+            <i class="fas fa-universal-access text-indigo-600 dark:text-indigo-400 text-2xl mr-3"></i>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">{% trans "Accessible" %}</h3>
+          </div>
+          <p class="text-gray-600 dark:text-gray-300 text-sm">
+            {% trans "ARIA labels, keyboard navigation, and screen reader friendly structure." %}
+          </p>
+        </div>
+        <!-- Performance -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <div class="flex items-center mb-4">
+            <i class="fas fa-rocket text-red-600 dark:text-red-400 text-2xl mr-3"></i>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">{% trans "Optimized" %}</h3>
+          </div>
+          <p class="text-gray-600 dark:text-gray-300 text-sm">
+            {% trans "Efficient CSS loading, minimal JavaScript, and optimized for production." %}
+          </p>
+        </div>
+      </div>
+      <!-- Interactive Test Section -->
+      <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-6 text-white">
+        <h2 class="text-2xl font-bold mb-4">{% trans "Interactive Features Test" %}</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <button onclick="NagaLayout.toggleSidebar()"
+                  class="bg-white bg-opacity-20 hover:bg-opacity-30 rounded-lg p-4 transition-all duration-200 btn-transition">
+            <i class="fas fa-bars mr-2"></i>
+            {% trans "Toggle Sidebar" %}
+          </button>
+          <button onclick="NagaLayout.toggleTheme()"
+                  class="bg-white bg-opacity-20 hover:bg-opacity-30 rounded-lg p-4 transition-all duration-200 btn-transition">
+            <i class="fas fa-adjust mr-2"></i>
+            {% trans "Toggle Theme" %}
+          </button>
+          <button onclick="window.location.reload()"
+                  class="bg-white bg-opacity-20 hover:bg-opacity-30 rounded-lg p-4 transition-all duration-200 btn-transition">
+            <i class="fas fa-sync mr-2"></i>
+            {% trans "Refresh Page" %}
+          </button>
+        </div>
+      </div>
+      <!-- CSS Architecture Info -->
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">{% trans "CSS Architecture" %}</h2>
+        <div class="space-y-3">
+          <div class="flex items-center text-sm text-gray-600 dark:text-gray-300">
+            <i class="fas fa-file-code text-blue-500 mr-3"></i>
+            <span class="font-mono">static/css/layout.css</span>
+            <span class="ml-2">- Layout and responsive styles</span>
+          </div>
+          <div class="flex items-center text-sm text-gray-600 dark:text-gray-300">
+            <i class="fas fa-file-code text-green-500 mr-3"></i>
+            <span class="font-mono">static/js/layout.js</span>
+            <span class="ml-2">- Interactive functionality</span>
+          </div>
+          <div class="flex items-center text-sm text-gray-600 dark:text-gray-300">
+            <i class="fas fa-puzzle-piece text-purple-500 mr-3"></i>
+            <span class="font-mono">templates/components/</span>
+            <span class="ml-2">- Modular template components</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+{% block extra_js %}
+  <script>
+    // Test script to demonstrate HTMX integration
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('New base template loaded successfully!');
+      console.log('HTMX version:', htmx.version);
+      console.log('NagaLayout functions available:', !!window.NagaLayout);
+    });
+  </script>
+{% endblock extra_js %}

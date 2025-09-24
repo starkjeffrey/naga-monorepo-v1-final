@@ -1,0 +1,236 @@
+volumes:
+  naga_postgres_data: {}
+  naga_postgres_data_backups: {}
+  naga_traefik: {}
+  naga_django_media: {}
+  naga_django_static: {}
+  naga_redis_data: {}
+  naga_uptime_kuma_data: {}
+  naga_netdata_config: {}
+  naga_netdata_lib: {}
+  naga_netdata_cache: {}
+  naga_prometheus_data: {}
+
+services:
+  django: &django
+    build:
+      context: .
+      dockerfile: ./compose/production/django/Dockerfile
+    image: naga_django
+    container_name: naga_django
+    volumes:
+      - naga_django_media:/app/mediafiles
+      - naga_django_static:/app/staticfiles
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file:
+      - ./.envs/.production/.django
+      - ./.envs/.production/.postgres
+    command: /start
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'python',
+          '-c',
+          "import urllib.request; urllib.request.urlopen('http://localhost:8000/health-check/')",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  postgres:
+    build:
+      context: .
+      dockerfile: ./compose/production/postgres/Dockerfile
+    image: naga_postgres
+    container_name: naga_postgres
+    volumes:
+      - naga_postgres_data:/var/lib/postgresql/data
+      - naga_postgres_data_backups:/backups
+    env_file:
+      - ./.envs/.production/.postgres
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB']
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  traefik:
+    build:
+      context: .
+      dockerfile: ./compose/production/traefik/Dockerfile
+    image: naga_traefik
+    container_name: naga_traefik
+    depends_on:
+      - django
+    volumes:
+      - naga_traefik:/etc/traefik/acme
+    ports:
+      - '0.0.0.0:80:80'
+      - '0.0.0.0:443:443'
+
+  redis:
+    image: docker.io/redis:8.2-alpine
+    volumes:
+      - naga_redis_data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  dramatiq:
+    <<: *django
+    image: naga_dramatiq
+    container_name: naga_dramatiq
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      django:
+        condition: service_healthy
+    command: /start-dramatiq
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'python',
+          'manage.py',
+          'shell',
+          '-c',
+          "import dramatiq; print('OK')",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./compose/production/nginx/Dockerfile
+    image: naga_nginx
+    container_name: naga_nginx
+    depends_on:
+      - django
+    volumes:
+      - naga_django_media:/usr/share/nginx/media:ro
+
+  # Production Monitoring Services
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    container_name: naga_uptime_kuma
+    restart: unless-stopped
+    volumes:
+      - naga_uptime_kuma_data:/app/data
+    environment:
+      - UPTIME_KUMA_DISABLE_FRAME_SAMEORIGIN=1
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.uptime-kuma.rule=Host(`uptime.${DOMAIN_NAME}`)
+      - traefik.http.routers.uptime-kuma.tls=true
+      - traefik.http.routers.uptime-kuma.tls.certresolver=letsencrypt
+      - traefik.http.services.uptime-kuma.loadbalancer.server.port=3001
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'wget',
+          '--quiet',
+          '--tries=1',
+          '--spider',
+          'http://localhost:3001',
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  netdata:
+    image: netdata/netdata:latest
+    container_name: naga_netdata
+    restart: unless-stopped
+    volumes:
+      - naga_netdata_config:/etc/netdata
+      - naga_netdata_lib:/var/lib/netdata
+      - naga_netdata_cache:/var/cache/netdata
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/os-release:/host/etc/os-release:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - NETDATA_CLAIM_TOKEN=${NETDATA_CLAIM_TOKEN:-}
+      - NETDATA_CLAIM_URL=${NETDATA_CLAIM_URL:-https://app.netdata.cloud}
+      - NETDATA_CLAIM_ROOMS=${NETDATA_CLAIM_ROOMS:-}
+      - PGID=999
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - apparmor:unconfined
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.netdata.rule=Host(`netdata.${DOMAIN_NAME}`)
+      - traefik.http.routers.netdata.tls=true
+      - traefik.http.routers.netdata.tls.certresolver=letsencrypt
+      - traefik.http.services.netdata.loadbalancer.server.port=19999
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'wget',
+          '--quiet',
+          '--tries=1',
+          '--spider',
+          'http://localhost:19999',
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: naga_prometheus
+    restart: unless-stopped
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - naga_prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=30d'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.prometheus.rule=Host(`prometheus.${DOMAIN_NAME}`)
+      - traefik.http.routers.prometheus.tls=true
+      - traefik.http.routers.prometheus.tls.certresolver=letsencrypt
+      - traefik.http.services.prometheus.loadbalancer.server.port=9090
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'wget',
+          '--quiet',
+          '--tries=1',
+          '--spider',
+          'http://localhost:9090/-/healthy',
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3

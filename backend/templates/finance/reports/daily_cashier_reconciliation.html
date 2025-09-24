@@ -1,0 +1,336 @@
+{% extends "base_new.html" %}
+
+{% load static i18n humanize %}
+
+{% block title %}
+  Daily\nCashier Reconciliation - {{ report_date|date:"M d, Y" }} - {{ block.super }}{%\nendblock %}
+  {% block extra_css %}
+    \n<style>
+  \n .report-header {
+    \n @apply bg-gray-50 rounded-lg p-6 mb-6;
+    \n
+  }
+
+  \n .reconciliation-card {
+    \n @apply bg-white rounded-lg shadow-md p-6 mb-4;
+    \n
+  }
+
+  \n .variance-positive {
+    \n @apply text-green-600 font-semibold;
+    \n
+  }
+
+  \n .variance-negative {
+    \n @apply text-red-600 font-semibold;
+    \n
+  }
+
+  \n .variance-zero {
+    \n @apply text-gray-600;
+    \n
+  }
+
+  \n @media print {
+    \n .no-print {
+      \n display: none !important;
+      \n
+    }
+
+    \n .page-break {
+      \n page-break-after: always;
+      \n
+    }
+
+    \n
+  }
+
+  \n
+</style>
+    \n
+  {% endblock %}
+  {% block content %}
+    \n
+    <div class="container mx-auto px-4 py-6">
+      \n  <!-- Report Header -->\n
+      <div class="report-header">
+        \n
+        <div class="flex justify-between items-start">
+          \n
+          <div>
+            \n
+            <h1 class="text-3xl font-bold text-gray-800">\n          Daily Cashier Reconciliation Report\n</h1>
+            \n
+            <p class="text-lg text-gray-600 mt-2">\n          {{ report_date|date:"l, F j, Y" }}\n</p>
+            \n
+          </div>
+          \n
+          <div class="flex space-x-3 no-print">
+            \n
+            <button onclick="window.print()" class="btn btn-outline-secondary">
+              \n
+              <svg\n class="w-5 h-5 mr-2"\n            fill="none"\n            stroke="currentColor"\n            viewBox="0 0 24 24"\n>
+                \n
+                <path\n stroke-linecap="round"\n              stroke-linejoin="round"\n              stroke-width="2"\n              d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2z"\n>
+                </path>
+                \n
+              </svg>
+              \n          Print Report\n
+            </button>
+            \n
+          </div>
+          \n
+        </div>
+        \n
+      </div>
+      \n\n  <!-- Summary -->\n
+      <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        \n
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Summary</h2>
+        \n
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          \n
+          <div>
+            \n
+            <p class="text-sm text-gray-600">Active Cashiers</p>
+            \n
+            <p class="text-2xl font-bold text-gray-800">\n          {{ session_details|length }}\n</p>
+            \n
+          </div>
+          \n
+          <div>
+            \n
+            <p class="text-sm text-gray-600">Total Variance</p>
+            \n
+            <p\n class="text-2xl font-bold {% if total_variance > 0 %}variance-positive{% elif total_variance < 0 %}variance-negative{% else %}variance-zero{% endif %}"\n>
+              \n
+              {% if total_variance > 0 %}+{% endif %}
+              ${{\n          total_variance|floatformat:2|intcomma }}\n
+            </p>
+            \n
+          </div>
+          \n
+          <div>
+            \n
+            <p class="text-sm text-gray-600">Status</p>
+            \n
+            <p\n class="text-2xl font-bold {% if total_variance == 0 %}text-green-600{% else %}text-yellow-600{% endif %}"\n>
+              \n
+              {% if total_variance == 0 %}
+                Balanced
+              {% else %}
+                Variance Detected{%\n          endif %}\n
+              </p>
+              \n
+            </div>
+            \n
+          </div>
+          \n
+        </div>
+        \n\n  <!-- Individual Cashier Sessions -->\n
+        {% for detail in session_details %}
+          \n
+          <div class="reconciliation-card">
+            \n
+            <div class="flex justify-between items-start mb-4">
+              \n
+              <div>
+                \n
+                <h3 class="text-lg font-semibold text-gray-800">\n          {{ detail.session.cashier.get_full_name }}\n</h3>
+                \n
+                <p class="text-sm text-gray-600">
+                  \n          Session: {{ detail.session.opening_time|time:"g:i A" }} -
+                  {% if\n          detail.session.closing_time %}
+                    {{\n          detail.session.closing_time|time:"g:i A" }}
+                  {% else %}
+                    Still Open {%\n          endif %}\n
+                  </p>
+                  \n
+                </div>
+                \n      <span\n class="px-3 py-1 text-sm font-semibold rounded-full {% if detail.session.status == 'OPEN' %}bg-green-100 text-green-800 {% elif detail.session.status == 'CLOSED' %}bg-gray-100 text-gray-800 {% else %}bg-yellow-100 text-yellow-800{% endif %}"\n>\n        {{ detail.session.get_status_display }}\n      </span>\n
+              </div>
+              \n\n
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                \n      <!-- Cash Flow -->\n
+                <div>
+                  \n
+                  <h4 class="font-medium text-gray-700 mb-3">Cash Flow</h4>
+                  \n
+                  <table class="w-full text-sm">
+                    \n
+                    <tr class="border-b">
+                      \n
+                      <td class="py-2 text-gray-600">Opening Cash</td>
+                      \n
+                      <td class="py-2 text-right font-medium">
+                        \n              ${{ detail.session.opening_cash|floatformat:2|intcomma }}\n
+                      </td>
+                      \n
+                    </tr>
+                    \n
+                    <tr class="border-b">
+                      \n
+                      <td class="py-2 text-gray-600">Cash Payments Received</td>
+                      \n
+                      <td class="py-2 text-right font-medium text-green-600">
+                        \n              +${{ detail.cash_payments|floatformat:2|intcomma }}\n
+                      </td>
+                      \n
+                    </tr>
+                    \n
+                    <tr class="border-b font-semibold">
+                      \n
+                      <td class="py-2">Expected Cash</td>
+                      \n
+                      <td class="py-2 text-right">\n              ${{ detail.expected_cash|floatformat:2|intcomma }}\n</td>
+                      \n
+                    </tr>
+                    \n
+                    {% if detail.session.closing_cash is not None %}
+                      \n
+                      <tr class="border-b">
+                        \n
+                        <td class="py-2 text-gray-600">Actual Closing Cash</td>
+                        \n
+                        <td class="py-2 text-right font-medium">
+                          \n              ${{ detail.session.closing_cash|floatformat:2|intcomma }}\n
+                        </td>
+                        \n
+                      </tr>
+                      \n
+                      <tr>
+                        \n
+                        <td class="py-2 font-semibold">Variance</td>
+                        \n
+                        <td\n class="py-2 text-right {% if detail.variance > 0 %}variance-positive{% elif detail.variance < 0 %}variance-negative{% else %}variance-zero{% endif %}"\n>
+                          \n
+                          {% if detail.variance > 0 %}+{% endif %}
+                          ${{\n              detail.variance|floatformat:2|intcomma }}\n
+                        </td>
+                        \n
+                      </tr>
+                      \n
+                    {% endif %}
+                    \n
+                  </table>
+                  \n
+                </div>
+                \n\n      <!-- Session Statistics -->\n
+                <div>
+                  \n
+                  <h4 class="font-medium text-gray-700 mb-3">Session Statistics</h4>
+                  \n
+                  <table class="w-full text-sm">
+                    \n
+                    <tr class="border-b">
+                      \n
+                      <td class="py-2 text-gray-600">Total Payments Processed</td>
+                      \n
+                      <td class="py-2 text-right font-medium">\n              {{ detail.payment_count }}\n</td>
+                      \n
+                    </tr>
+                    \n
+                    <tr class="border-b">
+                      \n
+                      <td class="py-2 text-gray-600">Session Duration</td>
+                      \n
+                      <td class="py-2 text-right font-medium">
+                        \n
+                        {% if detail.session.closing_time %}
+                          {{ detail.session.duration }}\n              hours
+                        {% else %}
+                          In Progress
+                        {% endif %}
+                        \n
+                      </td>
+                      \n
+                    </tr>
+                    \n
+                  </table>
+                  \n
+                </div>
+                \n
+              </div>
+              \n\n
+              {% if detail.session.notes %}
+                \n
+                <div class="mt-4 p-3 bg-gray-50 rounded">
+                  \n
+                  <p class="text-sm font-medium text-gray-700 mb-1">Notes:</p>
+                  \n
+                  <p class="text-sm text-gray-600">{{ detail.session.notes }}</p>
+                  \n
+                </div>
+                \n
+              {% endif %}
+              {% if detail.variance and detail.variance != 0 %}
+                \n
+                <div class="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded">
+                  \n
+                  <p class="text-sm font-medium text-yellow-800 mb-1">\n        Variance Explanation Required\n</p>
+                  \n
+                  <p class="text-sm text-yellow-700">
+                    \n        This session has a variance of\n        <span class="font-semibold">\n
+                    {% if detail.variance > 0 %}+{% endif %}
+                    ${{\n          detail.variance|floatformat:2 }} </span\n>. Please ensure proper documentation is provided.\n
+                  </p>
+                  \n
+                </div>
+                \n
+              {% endif %}
+              \n
+            </div>
+            \n  {% empty %}\n
+            <div class="bg-white rounded-lg shadow-md p-6">
+              \n
+              <p class="text-center text-gray-500">\n      No cashier sessions found for this date.\n</p>
+              \n
+            </div>
+            \n
+          {% endfor %}
+          \n\n  <!-- Sign-off Section -->\n
+          <div class="bg-white rounded-lg shadow-md p-6 mt-6">
+            \n
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Authorization</h2>
+            \n
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              \n
+              <div>
+                \n
+                <p class="text-sm text-gray-600 mb-2">Prepared By:</p>
+                \n
+                <div class="border-b border-gray-300 pb-8"></div>
+                \n
+                <p class="text-sm text-gray-600 mt-2">\n          Name: _________________________\n</p>
+                \n
+                <p class="text-sm text-gray-600 mt-1">\n          Date: _________________________\n</p>
+                \n
+              </div>
+              \n
+              <div>
+                \n
+                <p class="text-sm text-gray-600 mb-2">Reviewed By:</p>
+                \n
+                <div class="border-b border-gray-300 pb-8"></div>
+                \n
+                <p class="text-sm text-gray-600 mt-2">\n          Name: _________________________\n</p>
+                \n
+                <p class="text-sm text-gray-600 mt-1">\n          Date: _________________________\n</p>
+                \n
+              </div>
+              \n
+            </div>
+            \n
+          </div>
+          \n
+        </div>
+        \n
+      {% endblock %}
+      {% block extra_js %}
+        \n<script>
+  \
+  n // Date navigation\n  function changeDate(days) {\n    const currentDate = new Date('{{ report_date|date:"Y-m-d" }}');\n    currentDate.setDate(currentDate.getDate() + days);\n    const newDate = currentDate.toISOString().split('T')[0];\n    window.location.href = `?date=${newDate}`;\n  }\n
+</script>
+        \n
+      {% endblock %}
+      \n

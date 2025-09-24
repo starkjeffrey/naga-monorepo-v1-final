@@ -1,0 +1,456 @@
+{% load static i18n %}
+
+<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}" class="h-full">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>
+      {% block title %}
+        {{ system_name|default:"PUCSR SIS" }}
+      {% endblock title %}
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="{% static 'favicon.ico' %}" />
+    {% block css %}
+      <!-- Tailwind CSS -->
+      <script src="https://cdn.tailwindcss.com"></script>
+      <!-- Font Awesome -->
+      <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+      <!-- Google Fonts -->
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+            rel="stylesheet" />
+      <!-- HTMX -->
+      <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+      <!-- Define Alpine.js components before Alpine loads -->
+      <script>
+        window.navigationController = function() {
+          return {
+            // State
+            sidebarMode: 'full', // full, icons, hidden
+            currentWorkspace: 'general',
+            breadcrumbs: [{
+              label: 'Home',
+              href: '/'
+            }],
+            viewType: 'list', // list, detail
+            darkMode: false,
+            currentLanguage: 'en', // en, km
+
+            // Navigation items by workspace
+            workspaces: {
+              general: [{
+                type: 'link',
+                id: 'dashboard',
+                label: 'Dashboard',
+                href: '/',
+                icon: 'fas fa-home'
+              }, {
+                type: 'header',
+                label: 'Quick Access'
+              }, {
+                type: 'link',
+                id: 'students',
+                label: 'Students',
+                href: '/students/',
+                icon: 'fas fa-users'
+              }, {
+                type: 'link',
+                id: 'courses',
+                label: 'Courses',
+                href: '/courses/',
+                icon: 'fas fa-book'
+              }, {
+                type: 'link',
+                id: 'finance',
+                label: 'Finance',
+                href: '/finance/',
+                icon: 'fas fa-dollar-sign'
+              }, ],
+              students: [{
+                type: 'link',
+                id: 'dashboard',
+                label: 'Dashboard',
+                href: '/students/',
+                icon: 'fas fa-home'
+              }, {
+                type: 'header',
+                label: 'Records'
+              }, {
+                type: 'link',
+                id: 'all-students',
+                label: 'All Students',
+                href: '/students/list/',
+                icon: 'fas fa-users'
+              }, {
+                type: 'link',
+                id: 'add-student',
+                label: 'Add Student',
+                href: '/students/add/',
+                icon: 'fas fa-user-plus'
+              }, {
+                type: 'header',
+                label: 'Enrollment'
+              }, {
+                type: 'link',
+                id: 'enrollment',
+                label: 'Enrollment',
+                href: '/enrollment/',
+                icon: 'fas fa-graduation-cap'
+              }, {
+                type: 'link',
+                id: 'attendance',
+                label: 'Attendance',
+                href: '/attendance/',
+                icon: 'fas fa-calendar-check'
+              }, ],
+              finance: [{
+                type: 'link',
+                id: 'dashboard',
+                label: 'Dashboard',
+                href: '/finance/',
+                icon: 'fas fa-home'
+              }, {
+                type: 'header',
+                label: 'Transactions'
+              }, {
+                type: 'link',
+                id: 'payments',
+                label: 'Payments',
+                href: '/finance/payments/',
+                icon: 'fas fa-credit-card'
+              }, {
+                type: 'link',
+                id: 'billing',
+                label: 'Billing',
+                href: '/finance/billing/',
+                icon: 'fas fa-file-invoice-dollar'
+              }, {
+                type: 'header',
+                label: 'Management'
+              }, {
+                type: 'link',
+                id: 'scholarships',
+                label: 'Scholarships',
+                href: '/finance/scholarships/',
+                icon: 'fas fa-hand-holding-usd'
+              }, {
+                type: 'link',
+                id: 'reports',
+                label: 'Reports',
+                href: '/finance/reports/',
+                icon: 'fas fa-chart-bar'
+              }, ],
+            },
+
+            // Computed
+            get currentWorkspaceItems() {
+              return this.workspaces[this.currentWorkspace] || [];
+            },
+
+            // Methods
+            init() {
+              // Restore saved preferences
+              const saved = localStorage.getItem('navPreferences');
+              if (saved) {
+                const prefs = JSON.parse(saved);
+                this.sidebarMode = prefs.sidebarMode || 'full';
+                this.currentWorkspace = prefs.currentWorkspace || 'general';
+                this.darkMode = prefs.darkMode || false;
+                this.currentLanguage = prefs.currentLanguage || 'en';
+              }
+
+              // Apply dark mode
+              this.applyDarkMode();
+
+              // Listen for navigation events
+              document.addEventListener('htmx:afterSwap', (event) => {
+                this.checkViewType();
+              });
+
+              // Keyboard shortcut (Cmd/Ctrl + B)
+              document.addEventListener('keydown', (e) => {
+                if ((e.metaKey || e.ctrlKey) && e.key === 'b') {
+                  e.preventDefault();
+                  this.toggleSidebar();
+                }
+              });
+
+              // Check initial view type
+              this.checkViewType();
+            },
+
+            checkViewType() {
+              // Auto-switch to focus mode for detail views
+              const path = window.location.pathname;
+              if (path.match(/\/students\/\d+\//) ||
+                path.match(/\/courses\/\d+\//) ||
+                path.match(/\/finance\/\w+\/\d+\//)) {
+                this.viewType = 'detail';
+                if (this.sidebarMode === 'full') {
+                  this.sidebarMode = 'icons';
+                }
+              } else {
+                this.viewType = 'list';
+              }
+            },
+
+            toggleSidebar() {
+              const modes = ['full', 'icons', 'hidden'];
+              const currentIndex = modes.indexOf(this.sidebarMode);
+              this.sidebarMode = modes[(currentIndex + 1) % modes.length];
+              this.savePreferences();
+            },
+
+            switchWorkspace(workspace) {
+              this.currentWorkspace = workspace;
+              this.savePreferences();
+            },
+
+            handleNavClick(event, item) {
+              // Update breadcrumbs
+              if (item.id === 'dashboard') {
+                this.breadcrumbs = [{
+                  label: 'Home',
+                  href: '/'
+                }];
+              }
+              // Let HTMX handle the actual navigation
+            },
+
+            isActive(href) {
+              return window.location.pathname === href;
+            },
+
+            toggleDarkMode() {
+              this.darkMode = !this.darkMode;
+              this.applyDarkMode();
+              this.savePreferences();
+            },
+
+            applyDarkMode() {
+              if (this.darkMode) {
+                document.documentElement.classList.add('dark');
+              } else {
+                document.documentElement.classList.remove('dark');
+              }
+            },
+
+            switchLanguage(lang) {
+              this.currentLanguage = lang;
+              // In a real app, this would trigger a page reload with the new language
+              // For now, we'll just save the preference
+              this.savePreferences();
+
+              // Redirect to language-specific URL
+              const currentPath = window.location.pathname;
+              const newPath = `/${lang}${currentPath}`;
+              // window.location.href = newPath; // Uncomment when language URLs are set up
+            },
+
+            savePreferences() {
+              localStorage.setItem('navPreferences', JSON.stringify({
+                sidebarMode: this.sidebarMode,
+                currentWorkspace: this.currentWorkspace,
+                darkMode: this.darkMode,
+                currentLanguage: this.currentLanguage
+              }));
+            }
+          };
+        }
+      </script>
+      <!-- Alpine.js for interactivity -->
+      <script defer src="https://unpkg.com/alpinejs@3.14.1/dist/cdn.min.js"></script>
+      <!-- Tailwind Configuration -->
+      <script>
+        tailwind.config = {
+          darkMode: 'class',
+          theme: {
+            extend: {
+              fontFamily: {
+                'sans': ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+              }
+            }
+          }
+        }
+      </script>
+      <style>
+        body {
+          font-family: 'Inter', sans-serif;
+        }
+
+        /* Smooth transitions */
+        .sidebar-transition {
+          transition: all 0.3s ease-in-out;
+        }
+
+        /* Custom scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #4B5563;
+          border-radius: 3px;
+        }
+
+        /* Icon-only mode styles */
+        .sidebar-collapsed .sidebar-label {
+          display: none;
+        }
+
+        .sidebar-collapsed .sidebar-item {
+          justify-content: center;
+        }
+
+        .sidebar-collapsed .sidebar-tooltip {
+          display: block;
+        }
+
+        /* Prevent FOUC - Show content even before Alpine loads */
+        [x-cloak] {
+          display: none !important;
+        }
+      </style>
+    {% endblock %}
+  </head>
+  <body class="h-full bg-gray-50 dark:bg-gray-900"
+        x-data="navigationController()"
+        x-init="init()"
+        :class="{'sidebar-collapsed': sidebarMode === 'icons', 'sidebar-hidden': sidebarMode === 'hidden'}"
+        @keydown.window.escape="console.log('Alpine is working')">
+    <!-- Main Container -->
+    <div class="flex h-full">
+      <!-- Adaptive Sidebar -->
+      <aside :class="{ 'w-64': sidebarMode === 'full', 'w-16': sidebarMode === 'icons', 'w-0': sidebarMode === 'hidden' }"
+             class="w-64 sidebar-transition bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white flex-shrink-0 overflow-hidden">
+        <!-- Sidebar Header -->
+        <div class="h-16 flex items-center justify-between px-4 border-b border-slate-300 dark:border-slate-700">
+          <div class="flex items-center space-x-3">
+            <!-- Logo with fallback icon -->
+            <div class="h-8 w-8 bg-blue-600 rounded flex items-center justify-center">
+              <i class="fas fa-graduation-cap text-white"></i>
+            </div>
+            <span class="font-semibold text-lg sidebar-label">Naga SIS</span>
+          </div>
+        </div>
+        <!-- Workspace Selector (Full mode only) -->
+        <div x-show="sidebarMode === 'full'"
+             class="px-4 py-3 border-b border-slate-300 dark:border-slate-700">
+          <select @change="switchWorkspace($event.target.value)"
+                  class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm">
+            <option value="general">General</option>
+            <option value="students">Student Services</option>
+            <option value="finance">Finance</option>
+            <option value="academic">Academic</option>
+          </select>
+        </div>
+        <!-- Navigation Items -->
+        <nav class="flex-1 overflow-y-auto custom-scrollbar p-2">
+          <template x-for="item in currentWorkspaceItems" :key="item.id">
+            <div>
+              <!-- Section Header (Full mode only) -->
+              <div x-show="item.type === 'header' && sidebarMode === 'full'"
+                   class="px-3 py-2 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+                   x-text="item.label"></div>
+              <!-- Navigation Link -->
+              <a x-show="item.type === 'link'"
+                 :href="item.href"
+                 @click="handleNavClick($event, item)"
+                 class="sidebar-item flex items-center px-3 py-2 my-1 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors relative group"
+                 :class="{'bg-slate-200 dark:bg-slate-700': isActive(item.href)}">
+                <i :class="item.icon" class="w-5 text-center"></i>
+                <span class="ml-3 sidebar-label" x-text="item.label"></span>
+                <!-- Tooltip for icon mode -->
+                <div class="sidebar-tooltip hidden absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-sm rounded whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none z-50">
+                  <span x-text="item.label"></span>
+                </div>
+              </a>
+            </div>
+          </template>
+        </nav>
+        <!-- Sidebar Footer -->
+        <div class="p-4 border-t border-slate-300 dark:border-slate-700">
+          <button @click="toggleSidebar()"
+                  class="w-full flex items-center justify-center py-2 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition-colors">
+            <i :class="sidebarMode === 'full' ? 'fa-chevron-left' : 'fa-chevron-right'"
+               class="fas text-slate-600 dark:text-slate-400"></i>
+          </button>
+        </div>
+      </aside>
+      <!-- Main Content Area -->
+      <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Top Bar -->
+        <header class="bg-white dark:bg-slate-900 shadow-sm border-b border-gray-200 dark:border-gray-700 h-16 flex-shrink-0">
+          <div class="h-full px-4 flex items-center justify-between">
+            <!-- Left side: Breadcrumb or Toggle -->
+            <div class="flex items-center space-x-4">
+              <!-- Menu Toggle (when sidebar hidden) -->
+              <button x-show="sidebarMode === 'hidden'"
+                      @click="toggleSidebar()"
+                      class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
+                <i class="fas fa-bars dark:text-gray-300"></i>
+              </button>
+              <!-- Breadcrumb Navigation -->
+              <nav class="flex items-center space-x-2 text-sm">
+                <template x-for="(crumb, index) in breadcrumbs" :key="index">
+                  <div class="flex items-center">
+                    <a :href="crumb.href"
+                       class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
+                       :class="{'font-medium text-gray-900 dark:text-gray-200': index === breadcrumbs.length - 1}"
+                       x-text="crumb.label"></a>
+                    <i x-show="index < breadcrumbs.length - 1"
+                       class="fas fa-chevron-right text-gray-400 dark:text-gray-500 mx-2 text-xs"></i>
+                  </div>
+                </template>
+              </nav>
+            </div>
+            <!-- Right side: User menu & actions -->
+            <div class="flex items-center space-x-4">
+              <!-- Language Toggle -->
+              <div class="flex items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
+                <button @click="switchLanguage('en')"
+                        :class="currentLanguage === 'en' ? 'bg-white dark:bg-gray-600 shadow' : ''"
+                        class="px-3 py-1 text-sm rounded-md transition-all dark:text-gray-200">EN</button>
+                <button @click="switchLanguage('km')"
+                        :class="currentLanguage === 'km' ? 'bg-white dark:bg-gray-600 shadow' : ''"
+                        class="px-3 py-1 text-sm rounded-md transition-all dark:text-gray-200">KM</button>
+              </div>
+              <!-- Dark Mode Toggle -->
+              <button @click="toggleDarkMode()"
+                      class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                <i :class="darkMode ? 'fas fa-sun text-yellow-500' : 'fas fa-moon text-gray-600'"></i>
+              </button>
+              <!-- Notifications -->
+              <button class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg relative">
+                <i class="fas fa-bell dark:text-gray-300"></i>
+                <span class="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full"></span>
+              </button>
+              <!-- User Menu -->
+              <div class="flex items-center space-x-3">
+                <!-- User Avatar (with fallback) -->
+                <div class="h-8 w-8 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
+                  <i class="fas fa-user text-gray-600 dark:text-gray-300 text-sm"></i>
+                </div>
+                <span class="text-sm font-medium dark:text-gray-200">{{ user.full_name|default:"Guest" }}</span>
+              </div>
+            </div>
+          </div>
+        </header>
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900">
+          {% block content %}{% endblock %}
+        </main>
+      </div>
+    </div>
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>

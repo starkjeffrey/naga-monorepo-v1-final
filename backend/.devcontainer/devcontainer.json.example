@@ -1,0 +1,102 @@
+
+{
+  "name": "Naga Backend Development",
+  "dockerComposeFile": "../docker-compose.local.yml",
+  "service": "django",
+  "workspaceFolder": "/app",
+
+  // Configure VS Code settings
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.linting.enabled": true,
+        "python.linting.ruffEnabled": true,
+        "python.formatting.provider": "black",
+        "python.formatting.blackArgs": ["--line-length=119"],
+        "[python]": {
+          "editor.formatOnSave": true,
+          "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+          }
+        }
+      },
+
+      // Auto-install extensions
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "batisteo.vscode-django",
+        "ms-azuretools.vscode-docker",
+        "mtxr.sqltools",
+        "mtxr.sqltools-driver-pg"
+      ]
+    }
+  },
+
+  // Port forwarding
+  "forwardPorts": [8000, 5432, 6379],
+
+  // Run commands after container starts
+  "postCreateCommand": "uv sync && python manage.py migrate",
+
+  // Environment variables
+  "remoteEnv": {
+    "USE_DOCKER": "yes",
+    "DJANGO_SETTINGS_MODULE": "config.settings.local"
+  },
+
+  // Keep container running
+  "overrideCommand": false
+}
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    )
+
+    ^
+
+  File "/usr/local/lib/python3.13/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+
+    return executor(sql, params, many, context)
+
+  File "/usr/local/lib/python3.13/site-packages/django/db/backends/utils.py", line 100, in _execute
+
+    with self.db.wrap_database_errors:
+
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  File "/usr/local/lib/python3.13/site-packages/django/db/utils.py", line 91, in __exit__
+
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+
+  File "/usr/local/lib/python3.13/site-packages/django/db/backends/utils.py", line 105, in _execute
+
+    return self.cursor.execute(sql, params)
+
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+
+  File "/usr/local/lib/python3.13/site-packages/psycopg/cursor.py", line 97, in execute
+
+    raise ex.with_traceback(None)
+
+django.db.utils.ProgrammingError: relation "curriculum_term" does not exist
+
+LINE 1: ...eadline_date", "curriculum_term"."is_active" FROM "curriculu...
+
+                                                             ^
+
+INFO:     138.197.232.106:28224 - "GET / HTTP/1.1" 500 Internal Server Error
+
+INFO:     138.197.232.106:19386 - "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 304 Not Modified
+
+/usr/local/lib/python3.13/site-packages/django/core/handlers/asgi.py:332: Warning: StreamingHttpResponse must consume synchronous iterators in order to serve them asynchronously. Use an asynchronous iterator instead.
+
+  async for part in content:
+
+INFO:     138.197.232.106:54350 - "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 304 Not Modified
+
+INFO:     138.197.232.106:28224 - "GET /static/debug_toolbar/css/print.css HTTP/1.1" 304 Not Modified
+
+INFO:     138.197.232.106:28224 - "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 304 Not Modified
+
+INFO:     127.0.0.1:57040 - "GET /admin/ HTTP/1.1" 302 Found

@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block title %}
+  {% trans "Dashboard"
+  %} - {{ block.super }}
+{% endblock %}
+{% block login_content %}
+  <!-- Login page for unauthenticated users -->
+  <div class="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+      <div class="text-center">
+        <i class="fas fa-graduation-cap text-6xl text-blue-600 mb-4"></i>
+        <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white">{% trans "PUCSR Student Information System" %}</h2>
+        <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">{% trans "Please sign in to access your account" %}</p>
+      </div>
+      <div class="bg-white dark:bg-slate-800 shadow-lg rounded-lg p-8">
+        <div class="space-y-4">
+          <a href="{% url 'admin:index' %}"
+             class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+            <i class="fas fa-sign-in-alt mr-2" aria-hidden="true"></i>
+            {% trans "Sign In" %}
+          </a>
+          <div class="text-center">
+            <p class="text-sm text-gray-600 dark:text-gray-400">{% trans "Need help? Contact your system administrator." %}</p>
+          </div>
+          <div class="border-t border-gray-200 dark:border-gray-600 pt-4">
+            <div class="text-center text-xs text-gray-500 dark:text-gray-400">
+              {% trans "Pannasastra University of Cambodia" %}
+              <br />
+              {% trans "Siem Reap Campus" %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block content %}
+  <div class="bg-gray-50 p-4">
+    <!-- Welcome Message -->
+    <div class="mb-4">
+      <p class="text-gray-600">
+        {% trans "Navigate using the sidebar to access different areas of the
+        system based on your role." %}
+      </p>
+    </div>
+    <!-- Role-based Quick Actions -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      {% if user.is_superuser %}
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+          <div class="p-5">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <i class="fas fa-cogs h-6 w-6 text-red-400"></i>
+              </div>
+              <div class="ml-5 w-0 flex-1">
+                <dl>
+                  <dt class="text-sm font-medium text-gray-500 truncate">{% trans "System Administrator" %}</dt>
+                  <dd class="text-sm text-gray-900">
+                    {% trans "Full system access" %}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% else %}
+        {% for group in user.groups.all %}
+          {% if group.name == 'finance_manager' %}
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+              <div class="p-5">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0">
+                    <i class="fas fa-dollar-sign h-6 w-6 text-green-400"></i>
+                  </div>
+                  <div class="ml-5 w-0 flex-1">
+                    <dl>
+                      <dt class="text-sm font-medium text-gray-500 truncate">{% trans "Finance Management" %}</dt>
+                      <dd class="text-sm text-gray-900">
+                        {% trans "Payments, invoicing, and reports" %}
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+          {% if group.name == 'registrar' %}
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+              <div class="p-5">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0">
+                    <i class="fas fa-users h-6 w-6 text-blue-400"></i>
+                  </div>
+                  <div class="ml-5 w-0 flex-1">
+                    <dl>
+                      <dt class="text-sm font-medium text-gray-500 truncate">{% trans "Student Management" %}</dt>
+                      <dd class="text-sm text-gray-900">
+                        {% trans "Enrollment and student records" %}
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+          {% if group.name == 'academic_coordinator' %}
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+              <div class="p-5">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0">
+                    <i class="fas fa-graduation-cap h-6 w-6 text-purple-400"></i>
+                  </div>
+                  <div class="ml-5 w-0 flex-1">
+                    <dl>
+                      <dt class="text-sm font-medium text-gray-500 truncate">{% trans "Academic Programs" %}</dt>
+                      <dd class="text-sm text-gray-900">
+                        {% trans "Courses, programs, and scheduling" %}
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+          {% if group.name == 'clerk' %}
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+              <div class="p-5">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0">
+                    <i class="fas fa-clipboard-check h-6 w-6 text-yellow-400"></i>
+                  </div>
+                  <div class="ml-5 w-0 flex-1">
+                    <dl>
+                      <dt class="text-sm font-medium text-gray-500 truncate">{% trans "Level Testing" %}</dt>
+                      <dd class="text-sm text-gray-900">
+                        {% trans "Test applications and administration" %}
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </div>
+    <!-- System Information -->
+    <div class="bg-white shadow rounded-lg">
+      <div class="px-4 py-4 sm:p-6">
+        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-3">{% trans "System Information" %}</h3>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div>
+            <dt class="text-sm font-medium text-gray-500">{% trans "Your Role" %}</dt>
+            <dd class="text-sm text-gray-900">
+              {{ user_role_display }}
+            </dd>
+          </div>
+          <div>
+            <dt class="text-sm font-medium text-gray-500">{% trans "Institution" %}</dt>
+            <dd class="text-sm text-gray-900">
+              {{ institution_name }}
+            </dd>
+          </div>
+          <div>
+            <dt class="text-sm font-medium text-gray-500">{% trans "Current Term" %}</dt>
+            <dd class="text-sm text-gray-900">
+              {{ current_term }}
+            </dd>
+          </div>
+          <div>
+            <dt class="text-sm font-medium text-gray-500">{% trans "System Version" %}</dt>
+            <dd class="text-sm text-gray-900">
+              {{ system_version }}
+            </dd>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

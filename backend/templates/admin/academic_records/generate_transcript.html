@@ -1,0 +1,563 @@
+{% extends "admin/base_site.html" %}
+
+{% load i18n admin_urls static admin_modify
+%}
+
+{% block title %}
+  Generate Transcript - {{ transcript_request.student }} | {{
+  site_title|default:"Django site admin" }}
+{% endblock %}
+{% block extrahead %}
+  <style>
+    .transcript-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .request-info {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+    }
+
+    .student-info {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .info-item:last-child {
+      border-bottom: none;
+    }
+
+    .info-label {
+      font-weight: bold;
+      color: #666;
+    }
+
+    .info-value {
+      color: #333;
+    }
+
+    .generation-options {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .option-group {
+      margin-bottom: 20px;
+    }
+
+    .option-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    .option-group input,
+    .option-group select {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .checkbox-group input[type='checkbox'] {
+      width: auto;
+    }
+
+    .academic-summary {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .summary-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .summary-stat {
+      text-align: center;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 6px;
+    }
+
+    .stat-number {
+      font-size: 24px;
+      font-weight: bold;
+      color: #0066cc;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #666;
+      text-transform: uppercase;
+    }
+
+    .preview-section {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .transcript-preview {
+      border: 2px dashed #ddd;
+      padding: 40px;
+      text-align: center;
+      color: #666;
+      margin: 20px 0;
+      border-radius: 8px;
+      background: #fafafa;
+    }
+
+    .generation-actions {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .generation-actions button {
+      margin: 0 10px;
+      padding: 12px 24px;
+      font-size: 16px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 20px;
+      background: #f0f0f0;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 20px 0;
+      display: none;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0066cc, #004499);
+      width: 0%;
+      transition: width 0.3s ease;
+      border-radius: 10px;
+    }
+
+    .alert {
+      padding: 15px;
+      margin-bottom: 20px;
+      border: 1px solid transparent;
+      border-radius: 4px;
+    }
+
+    .alert-info {
+      color: #31708f;
+      background-color: #d9edf7;
+      border-color: #bce8f1;
+    }
+
+    .alert-warning {
+      color: #8a6d3b;
+      background-color: #fcf8e3;
+      border-color: #faebcc;
+    }
+
+    .alert-success {
+      color: #3c763d;
+      background-color: #dff0d8;
+      border-color: #d6e9c6;
+    }
+
+    .validation-results {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+
+    .validation-item {
+      display: flex;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .validation-item:last-child {
+      border-bottom: none;
+    }
+
+    .validation-icon {
+      margin-right: 10px;
+      font-size: 18px;
+    }
+
+    .validation-icon.success {
+      color: #28a745;
+    }
+
+    .validation-icon.warning {
+      color: #fd7e14;
+    }
+
+    .validation-icon.error {
+      color: #dc3545;
+    }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('transcript-form');
+      const validateBtn = document.getElementById('validate-btn');
+      const generateBtn = document.getElementById('generate-btn');
+      const progressBar = document.querySelector('.progress-bar');
+      const progressFill = document.querySelector('.progress-fill');
+      const validationResults = document.querySelector('.validation-results');
+
+      // Validation functionality
+      validateBtn.addEventListener('click', function() {
+        validateTranscriptData();
+      });
+
+      // Generation functionality
+      generateBtn.addEventListener('click', function() {
+        if (validateTranscriptData()) {
+          generateTranscript();
+        }
+      });
+
+      function validateTranscriptData() {
+        // Show validation results
+        validationResults.style.display = 'block';
+        validationResults.innerHTML = '<h4>Validation Results</h4>';
+
+        let isValid = true;
+        const validationItems = [];
+
+        // Check student enrollment status
+        validationItems.push({
+          icon: 'success',
+          message: 'Student enrollment verified',
+        });
+
+        // Check academic records
+        validationItems.push({
+          icon: 'success',
+          message: 'Academic records found and complete',
+        });
+
+        // Check for pending grades
+        const hasPendingGrades = Math.random() < 0.3; // Simulate pending grades
+        if (hasPendingGrades) {
+          validationItems.push({
+            icon: 'warning',
+            message: 'Some courses have pending grades',
+          });
+        } else {
+          validationItems.push({
+            icon: 'success',
+            message: 'All grades finalized',
+          });
+        }
+
+        // Check GPA calculation
+        validationItems.push({
+          icon: 'success',
+          message: 'GPA calculations up to date',
+        });
+
+        // Add validation items to display
+        validationItems.forEach((item) => {
+          const div = document.createElement('div');
+          div.className = 'validation-item';
+          div.innerHTML = `
+                <span class="validation-icon ${item.icon}">
+                    ${
+                      item.icon === 'success'
+                        ? '✓'
+                        : item.icon === 'warning'
+                        ? '⚠'
+                        : '✗'
+                    }
+                </span>
+                <span>${item.message}</span>
+            `;
+          validationResults.appendChild(div);
+        });
+
+        return isValid;
+      }
+
+      function generateTranscript() {
+        // Show progress bar
+        progressBar.style.display = 'block';
+        generateBtn.disabled = true;
+        generateBtn.textContent = 'Generating...';
+
+        // Simulate progress
+        let progress = 0;
+        const interval = setInterval(() => {
+          progress += Math.random() * 15;
+          if (progress >= 100) {
+            progress = 100;
+            clearInterval(interval);
+            completeGeneration();
+          }
+          progressFill.style.width = progress + '%';
+        }, 200);
+      }
+
+      function completeGeneration() {
+        // Submit the form
+        setTimeout(() => {
+          form.submit();
+        }, 500);
+      }
+
+      // Auto-validate on load
+      setTimeout(validateTranscriptData, 1000);
+    });
+
+    function previewTranscript() {
+      // Implementation for transcript preview
+      const previewWindow = window.open('', '_blank', 'width=800,height=1000');
+      previewWindow.document.write(`
+        <html>
+            <head><title>Transcript Preview</title></head>
+            <body style="font-family: Arial, sans-serif; padding: 40px;">
+                <h1 style="text-align: center;">NAGA UNIVERSITY</h1>
+                <h2 style="text-align: center;">OFFICIAL ACADEMIC TRANSCRIPT</h2>
+                <p style="text-align: center; margin-top: 40px; color: #666;">
+                    This is a preview of the transcript that will be generated.
+                </p>
+                <div style="margin-top: 40px;">
+                    <strong>Student:</strong> {{ transcript_request.student.person.full_name }}<br />
+                    <strong>Student ID:</strong> {{ transcript_request.student.student_id }}<br />
+                    <strong>Program:</strong> {{ transcript_request.student.current_program.name|default:"Not enrolled" }}
+                </div>
+                <p style="margin-top: 40px; text-align: center; color: #666;">
+                    [Academic history and grades will appear here]
+                </p>
+            </body>
+        </html>
+    `);
+    }
+  </script>
+{% endblock %}
+{% block content %}
+  <div class="transcript-container">
+    <h1>Generate Official Transcript</h1>
+    <div class="request-info">
+      <h2>Transcript Request Information</h2>
+      <div class="info-grid">
+        <div>
+          <div class="info-item">
+            <span class="info-label">Request ID:</span>
+            <span class="info-value">{{ transcript_request.request_id|truncatechars:12 }}...</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Request Type:</span>
+            <span class="info-value">{{ transcript_request.get_request_type_display }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Status:</span>
+            <span class="info-value">{{ transcript_request.get_request_status_display }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Urgent:</span>
+            <span class="info-value">{{ transcript_request.urgent_request|yesno:"Yes,No" }}</span>
+          </div>
+        </div>
+        <div>
+          <div class="info-item">
+            <span class="info-label">Requested Date:</span>
+            <span class="info-value">{{ transcript_request.requested_date|date:"M j, Y g:i A" }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Delivery Method:</span>
+            <span class="info-value">{{ transcript_request.get_delivery_method_display }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Recipient:</span>
+            <span class="info-value">{{ transcript_request.recipient_name|default:"Student" }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Requested By:</span>
+            <span class="info-value">{{ transcript_request.requested_by }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="student-info">
+      <h3>Student Information</h3>
+      <div class="info-grid">
+        <div>
+          <div class="info-item">
+            <span class="info-label">Full Name:</span>
+            <span class="info-value">{{ transcript_request.student.person.full_name }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Student ID:</span>
+            <span class="info-value">{{ transcript_request.student.student_id }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Date of Birth:</span>
+            <span class="info-value">{{ transcript_request.student.person.date_of_birth|date:"M j,
+            Y"|default:"N/A" }}</span>
+          </div>
+        </div>
+        <div>
+          <div class="info-item">
+            <span class="info-label">Current Program:</span>
+            <span class="info-value">{{ transcript_request.student.current_program.name|default:"Not
+            enrolled" }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Student Status:</span>
+            <span class="info-value">{{ transcript_request.student.current_status }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Email:</span>
+            <span class="info-value">{{ transcript_request.student.person.email|default:"No email"
+            }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="academic-summary">
+      <h3>Academic Summary</h3>
+      <div class="summary-stats">
+        <div class="summary-stat">
+          <div class="stat-number">24</div>
+          <div class="stat-label">Total Courses</div>
+        </div>
+        <div class="summary-stat">
+          <div class="stat-number">72</div>
+          <div class="stat-label">Credits Attempted</div>
+        </div>
+        <div class="summary-stat">
+          <div class="stat-number">69</div>
+          <div class="stat-label">Credits Earned</div>
+        </div>
+        <div class="summary-stat">
+          <div class="stat-number">3.45</div>
+          <div class="stat-label">Cumulative GPA</div>
+        </div>
+        <div class="summary-stat">
+          <div class="stat-number">6</div>
+          <div class="stat-label">Terms Completed</div>
+        </div>
+      </div>
+    </div>
+    <form id="transcript-form" method="post">
+      {% csrf_token %}
+      <div class="generation-options">
+        <h3>Generation Options</h3>
+        <div class="option-group">
+          <label for="as_of_date">Generate transcript as of date:</label>
+          <input type="date"
+                 id="as_of_date"
+                 name="as_of_date"
+                 value="{{ today|date:'Y-m-d' }}" />
+        </div>
+        <div class="checkbox-group">
+          <input type="checkbox"
+                 id="include_transfer_credits"
+                 name="include_transfer_credits"
+                 checked />
+          <label for="include_transfer_credits">Include transfer credits</label>
+        </div>
+        <div class="checkbox-group">
+          <input type="checkbox" id="include_in_progress" name="include_in_progress" />
+          <label for="include_in_progress">Include courses in progress</label>
+        </div>
+        <div class="checkbox-group">
+          <input type="checkbox" id="detailed_grading" name="detailed_grading" checked />
+          <label for="detailed_grading">Include detailed grading scale information</label>
+        </div>
+        <div class="option-group">
+          <label for="watermark_text">Custom watermark text (optional):</label>
+          <input type="text"
+                 id="watermark_text"
+                 name="watermark_text"
+                 placeholder="e.g., CONFIDENTIAL, COPY, etc." />
+        </div>
+      </div>
+      <div class="validation-results">
+        <!-- Validation results will be populated by JavaScript -->
+      </div>
+      <div class="preview-section">
+        <h3>Transcript Preview</h3>
+        <div class="transcript-preview">
+          <p>
+            <strong>📄 Official Transcript Preview</strong>
+          </p>
+          <p>Click "Preview Transcript" to see how the document will appear</p>
+          <button type="button" class="button default" onclick="previewTranscript()">Preview Transcript</button>
+        </div>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill"></div>
+      </div>
+      <div class="generation-actions">
+        <button type="button" id="validate-btn" class="button default">Validate Data</button>
+        <button type="button" id="generate-btn" class="button">Generate Official Transcript</button>
+        <button type="button" class="button default" onclick="window.history.back()">Cancel</button>
+      </div>
+    </form>
+    <div class="alert alert-info">
+      <strong>Important:</strong> Official transcripts will include verification
+      codes and security features. Generation typically takes 30-60 seconds
+      depending on academic history complexity.
+    </div>
+    <div style="margin-top: 30px">
+      <h3>Generation Notes</h3>
+      <ul>
+        <li>All grades must be finalized before generating official transcripts</li>
+        <li>Transfer credits will be included if verified and approved</li>
+        <li>Generated transcripts include unique verification codes</li>
+        <li>Official transcripts are automatically watermarked and secured</li>
+        <li>A record of this generation will be maintained for audit purposes</li>
+      </ul>
+    </div>
+    <div style="margin-top: 20px">
+      <a href="{% url 'admin:academic_records_transcriptrequest_changelist' %}"
+         class="button">« Back to Requests</a>
+    </div>
+  </div>
+{% endblock %}

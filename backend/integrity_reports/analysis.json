@@ -1,0 +1,668 @@
+{
+  "issues": {
+    "critical": [
+      {
+        "type": "null_constraint_mismatch",
+        "table": "enrollment_programtransition",
+        "column": "from_enrollment_id",
+        "db_nullable": false,
+        "model_nullable": true,
+        "has_data": false
+      },
+      {
+        "type": "null_constraint_mismatch",
+        "table": "enrollment_programtransition",
+        "column": "to_enrollment_id",
+        "db_nullable": false,
+        "model_nullable": true,
+        "has_data": false
+      },
+      {
+        "type": "null_constraint_mismatch",
+        "table": "enrollment_student_cycle_status",
+        "column": "is_deleted",
+        "db_nullable": true,
+        "model_nullable": false,
+        "has_data": false
+      },
+      {
+        "type": "null_constraint_mismatch",
+        "table": "finance_payment",
+        "column": "processed_date",
+        "db_nullable": false,
+        "model_nullable": true,
+        "has_data": true
+      },
+      {
+        "type": "null_constraint_mismatch",
+        "table": "finance_payment",
+        "column": "processed_by_id",
+        "db_nullable": false,
+        "model_nullable": true,
+        "has_data": true
+      },
+      {
+        "type": "null_constraint_mismatch",
+        "table": "finance_reconciliation_batch",
+        "column": "created_by_id",
+        "db_nullable": false,
+        "model_nullable": true,
+        "has_data": true
+      },
+      {
+        "type": "null_constraint_mismatch",
+        "table": "finance_reconciliation_batch",
+        "column": "updated_by_id",
+        "db_nullable": false,
+        "model_nullable": true,
+        "has_data": true
+      },
+      {
+        "type": "null_constraint_mismatch",
+        "table": "finance_reconciliation_status",
+        "column": "created_by_id",
+        "db_nullable": false,
+        "model_nullable": true,
+        "has_data": false
+      },
+      {
+        "type": "null_constraint_mismatch",
+        "table": "finance_reconciliation_status",
+        "column": "updated_by_id",
+        "db_nullable": false,
+        "model_nullable": true,
+        "has_data": false
+      },
+      {
+        "type": "null_constraint_mismatch",
+        "table": "finance_reconciliation_status",
+        "column": "confidence_score",
+        "db_nullable": false,
+        "model_nullable": true,
+        "has_data": false
+      },
+      {
+        "type": "null_constraint_mismatch",
+        "table": "finance_reconciliation_adjustment",
+        "column": "created_by_id",
+        "db_nullable": false,
+        "model_nullable": true,
+        "has_data": false
+      },
+      {
+        "type": "null_constraint_mismatch",
+        "table": "finance_reconciliation_adjustment",
+        "column": "updated_by_id",
+        "db_nullable": false,
+        "model_nullable": true,
+        "has_data": false
+      },
+      {
+        "type": "null_constraint_mismatch",
+        "table": "finance_reconciliation_rule",
+        "column": "created_by_id",
+        "db_nullable": false,
+        "model_nullable": true,
+        "has_data": false
+      },
+      {
+        "type": "null_constraint_mismatch",
+        "table": "finance_reconciliation_rule",
+        "column": "updated_by_id",
+        "db_nullable": false,
+        "model_nullable": true,
+        "has_data": false
+      },
+      {
+        "type": "null_constraint_mismatch",
+        "table": "finance_materiality_threshold",
+        "column": "created_by_id",
+        "db_nullable": false,
+        "model_nullable": true,
+        "has_data": true
+      },
+      {
+        "type": "null_constraint_mismatch",
+        "table": "finance_materiality_threshold",
+        "column": "updated_by_id",
+        "db_nullable": false,
+        "model_nullable": true,
+        "has_data": true
+      }
+    ],
+    "high": [
+      {
+        "type": "extra_column",
+        "table": "scheduling_classpart_textbooks",
+        "column": "id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "curriculum_seniorprojectgroup",
+        "column": "students",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "enrollment_seniorprojectgroup",
+        "column": "students",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "scheduling_classparttemplate_default_textbooks",
+        "column": "classparttemplate_id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "curriculum_courseparttemplate_textbooks",
+        "column": "courseparttemplate_id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "curriculum_course_majors",
+        "column": "major_id",
+        "has_data": true,
+        "recommendation": "preserve"
+      },
+      {
+        "type": "extra_column",
+        "table": "curriculum_seniorprojectgroup_students",
+        "column": "seniorprojectgroup_id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "finance_reconciliation_status_matched_enrollments",
+        "column": "reconciliationstatus_id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "enrollment_seniorprojectgroup_students",
+        "column": "id",
+        "has_data": true,
+        "recommendation": "preserve"
+      },
+      {
+        "type": "extra_column",
+        "table": "finance_cashier_session_backup",
+        "column": "date",
+        "has_data": true,
+        "recommendation": "preserve"
+      },
+      {
+        "type": "extra_column",
+        "table": "socialaccount_socialapp_sites",
+        "column": "id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "users_user_groups",
+        "column": "id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "scheduling_classpart_textbooks",
+        "column": "textbook_id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "users_user_user_permissions",
+        "column": "id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "socialaccount_socialapp",
+        "column": "sites",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "enrollment_academicjourney",
+        "column": "expected_completion_date",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "scheduling_classparttemplate_default_textbooks",
+        "column": "textbook_id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "users_user_user_permissions",
+        "column": "user_id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "scheduling_testperiodreset_specific_classes",
+        "column": "id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "scheduling_classparttemplate_default_textbooks",
+        "column": "id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "curriculum_course_majors",
+        "column": "id",
+        "has_data": true,
+        "recommendation": "preserve"
+      },
+      {
+        "type": "extra_column",
+        "table": "enrollment_seniorprojectgroup_students",
+        "column": "studentprofile_id",
+        "has_data": true,
+        "recommendation": "preserve"
+      },
+      {
+        "type": "extra_column",
+        "table": "finance_reconciliation_status",
+        "column": "matched_enrollments",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "finance_cashier_session_backup",
+        "column": "id",
+        "has_data": true,
+        "recommendation": "preserve"
+      },
+      {
+        "type": "extra_column",
+        "table": "users_user_groups",
+        "column": "user_id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "users_user",
+        "column": "user_permissions",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "curriculum_course_majors",
+        "column": "course_id",
+        "has_data": true,
+        "recommendation": "preserve"
+      },
+      {
+        "type": "extra_column",
+        "table": "scheduling_combinedcoursetemplate_courses",
+        "column": "id",
+        "has_data": true,
+        "recommendation": "preserve"
+      },
+      {
+        "type": "extra_column",
+        "table": "users_user",
+        "column": "groups",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "finance_cashier_session_backup",
+        "column": "opening_time",
+        "has_data": true,
+        "recommendation": "preserve"
+      },
+      {
+        "type": "extra_column",
+        "table": "scheduling_combinedcoursetemplate_courses",
+        "column": "course_id",
+        "has_data": true,
+        "recommendation": "preserve"
+      },
+      {
+        "type": "extra_column",
+        "table": "curriculum_courseparttemplate_textbooks",
+        "column": "id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "scheduling_combinedcoursetemplate_courses",
+        "column": "combinedcoursetemplate_id",
+        "has_data": true,
+        "recommendation": "preserve"
+      },
+      {
+        "type": "extra_column",
+        "table": "people_teacherleaverequest_affected_class_parts",
+        "column": "teacherleaverequest_id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "enrollment_studentcourseeligibility_missing_prerequisites",
+        "column": "id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "finance_reconciliation_status_matched_enrollments",
+        "column": "id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "people_teacherleaverequest_affected_class_parts",
+        "column": "classpart_id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "users_user_user_permissions",
+        "column": "permission_id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "finance_cashier_session_backup",
+        "column": "expected_cash",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "scheduling_testperiodreset_specific_classes",
+        "column": "testperiodreset_id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "scheduling_testperiodreset",
+        "column": "specific_classes",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "enrollment_academicjourney",
+        "column": "language_level",
+        "has_data": true,
+        "recommendation": "preserve"
+      },
+      {
+        "type": "extra_column",
+        "table": "scheduling_combinedcoursetemplate",
+        "column": "courses",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "scheduling_testperiodreset_specific_classes",
+        "column": "classheader_id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "enrollment_studentcourseeligibility_missing_prerequisites",
+        "column": "course_id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "curriculum_seniorprojectgroup_students",
+        "column": "id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "curriculum_seniorprojectgroup_students",
+        "column": "studentprofile_id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "people_teacherleaverequest",
+        "column": "affected_class_parts",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "finance_cashier_session_backup",
+        "column": "status",
+        "has_data": true,
+        "recommendation": "preserve"
+      },
+      {
+        "type": "extra_column",
+        "table": "curriculum_courseparttemplate",
+        "column": "textbooks",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "scheduling_classpart",
+        "column": "textbooks",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "finance_cashier_session_backup",
+        "column": "opening_cash",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "enrollment_academicjourney",
+        "column": "accumulated_credits",
+        "has_data": true,
+        "recommendation": "preserve"
+      },
+      {
+        "type": "extra_column",
+        "table": "enrollment_studentcourseeligibility_missing_prerequisites",
+        "column": "studentcourseeligibility_id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "curriculum_course",
+        "column": "majors",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "finance_cashier_session_backup",
+        "column": "closing_time",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "people_teacherleaverequest_affected_class_parts",
+        "column": "id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "curriculum_courseparttemplate_textbooks",
+        "column": "textbook_id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "scheduling_classpart_textbooks",
+        "column": "classpart_id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "enrollment_academicjourney",
+        "column": "courses_completed",
+        "has_data": true,
+        "recommendation": "preserve"
+      },
+      {
+        "type": "extra_column",
+        "table": "finance_reconciliation_status_matched_enrollments",
+        "column": "classheaderenrollment_id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "enrollment_studentcourseeligibility",
+        "column": "missing_prerequisites",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "socialaccount_socialapp_sites",
+        "column": "socialapp_id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "socialaccount_socialapp_sites",
+        "column": "site_id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "finance_cashier_session_backup",
+        "column": "closing_cash",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "enrollment_seniorprojectgroup_students",
+        "column": "seniorprojectgroup_id",
+        "has_data": true,
+        "recommendation": "preserve"
+      },
+      {
+        "type": "extra_column",
+        "table": "finance_cashier_session_backup",
+        "column": "variance",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "users_user_groups",
+        "column": "group_id",
+        "has_data": false,
+        "recommendation": "drop"
+      },
+      {
+        "type": "extra_column",
+        "table": "enrollment_academicjourney",
+        "column": "current_level",
+        "has_data": true,
+        "recommendation": "preserve"
+      }
+    ],
+    "medium": [],
+    "low": []
+  },
+  "decisions": {
+    "enrollment_programtransition.from_enrollment_id": {
+      "action": "update_database",
+      "change": "make_nullable",
+      "reason": "Model expects nullable, no data impact"
+    },
+    "enrollment_programtransition.to_enrollment_id": {
+      "action": "update_database",
+      "change": "make_nullable",
+      "reason": "Model expects nullable, no data impact"
+    },
+    "finance_reconciliation_status.created_by_id": {
+      "action": "update_database",
+      "change": "make_nullable",
+      "reason": "Model expects nullable, no data impact"
+    },
+    "finance_reconciliation_status.updated_by_id": {
+      "action": "update_database",
+      "change": "make_nullable",
+      "reason": "Model expects nullable, no data impact"
+    },
+    "finance_reconciliation_status.confidence_score": {
+      "action": "update_database",
+      "change": "make_nullable",
+      "reason": "Model expects nullable, no data impact"
+    },
+    "finance_reconciliation_adjustment.created_by_id": {
+      "action": "update_database",
+      "change": "make_nullable",
+      "reason": "Model expects nullable, no data impact"
+    },
+    "finance_reconciliation_adjustment.updated_by_id": {
+      "action": "update_database",
+      "change": "make_nullable",
+      "reason": "Model expects nullable, no data impact"
+    },
+    "finance_reconciliation_rule.created_by_id": {
+      "action": "update_database",
+      "change": "make_nullable",
+      "reason": "Model expects nullable, no data impact"
+    },
+    "finance_reconciliation_rule.updated_by_id": {
+      "action": "update_database",
+      "change": "make_nullable",
+      "reason": "Model expects nullable, no data impact"
+    }
+  }
+}

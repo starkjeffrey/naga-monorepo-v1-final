@@ -1,0 +1,14 @@
+dist
+dist-ssr
+coverage
+node_modules
+dev-dist
+public
+*.min.js
+*.min.css
+.env.local
+.env.production.local
+.env.*.local
+package-lock.json
+yarn.lock
+pnpm-lock.yaml

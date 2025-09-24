@@ -1,0 +1,1218 @@
+[
+{
+  "model": "contenttypes.contenttype",
+  "pk": 1,
+  "fields": {
+    "app_label": "auth",
+    "model": "permission"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 2,
+  "fields": {
+    "app_label": "auth",
+    "model": "group"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 3,
+  "fields": {
+    "app_label": "contenttypes",
+    "model": "contenttype"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 4,
+  "fields": {
+    "app_label": "sessions",
+    "model": "session"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 5,
+  "fields": {
+    "app_label": "sites",
+    "model": "site"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 6,
+  "fields": {
+    "app_label": "admin",
+    "model": "logentry"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 7,
+  "fields": {
+    "app_label": "account",
+    "model": "emailaddress"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 8,
+  "fields": {
+    "app_label": "account",
+    "model": "emailconfirmation"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 9,
+  "fields": {
+    "app_label": "mfa",
+    "model": "authenticator"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 10,
+  "fields": {
+    "app_label": "socialaccount",
+    "model": "socialaccount"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 11,
+  "fields": {
+    "app_label": "socialaccount",
+    "model": "socialapp"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 12,
+  "fields": {
+    "app_label": "socialaccount",
+    "model": "socialtoken"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 13,
+  "fields": {
+    "app_label": "django_dramatiq",
+    "model": "task"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 14,
+  "fields": {
+    "app_label": "constance",
+    "model": "constance"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 15,
+  "fields": {
+    "app_label": "users",
+    "model": "user"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 16,
+  "fields": {
+    "app_label": "accounts",
+    "model": "role"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 17,
+  "fields": {
+    "app_label": "accounts",
+    "model": "rolepermission"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 18,
+  "fields": {
+    "app_label": "accounts",
+    "model": "teachingassignment"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 19,
+  "fields": {
+    "app_label": "accounts",
+    "model": "userrole"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 20,
+  "fields": {
+    "app_label": "accounts",
+    "model": "department"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 21,
+  "fields": {
+    "app_label": "accounts",
+    "model": "permission"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 22,
+  "fields": {
+    "app_label": "accounts",
+    "model": "position"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 23,
+  "fields": {
+    "app_label": "accounts",
+    "model": "positionassignment"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 24,
+  "fields": {
+    "app_label": "common",
+    "model": "holiday"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 25,
+  "fields": {
+    "app_label": "common",
+    "model": "room"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 26,
+  "fields": {
+    "app_label": "common",
+    "model": "studentactivitylog"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 27,
+  "fields": {
+    "app_label": "common",
+    "model": "systemauditlog"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 28,
+  "fields": {
+    "app_label": "people",
+    "model": "teacherleaverequest"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 29,
+  "fields": {
+    "app_label": "people",
+    "model": "teacherprofile"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 30,
+  "fields": {
+    "app_label": "people",
+    "model": "person"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 31,
+  "fields": {
+    "app_label": "people",
+    "model": "emergencycontact"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 32,
+  "fields": {
+    "app_label": "people",
+    "model": "personeventlog"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 33,
+  "fields": {
+    "app_label": "people",
+    "model": "phonenumber"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 34,
+  "fields": {
+    "app_label": "people",
+    "model": "staffprofile"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 35,
+  "fields": {
+    "app_label": "people",
+    "model": "studentprofile"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 36,
+  "fields": {
+    "app_label": "people",
+    "model": "studentauditlog"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 37,
+  "fields": {
+    "app_label": "curriculum",
+    "model": "course"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 38,
+  "fields": {
+    "app_label": "curriculum",
+    "model": "cycle"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 39,
+  "fields": {
+    "app_label": "curriculum",
+    "model": "seniorprojectgroup"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 40,
+  "fields": {
+    "app_label": "curriculum",
+    "model": "term"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 41,
+  "fields": {
+    "app_label": "curriculum",
+    "model": "textbook"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 42,
+  "fields": {
+    "app_label": "curriculum",
+    "model": "courseparttemplate"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 43,
+  "fields": {
+    "app_label": "curriculum",
+    "model": "courseprerequisite"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 44,
+  "fields": {
+    "app_label": "curriculum",
+    "model": "division"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 45,
+  "fields": {
+    "app_label": "curriculum",
+    "model": "major"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 46,
+  "fields": {
+    "app_label": "academic",
+    "model": "canonicalrequirement"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 47,
+  "fields": {
+    "app_label": "academic",
+    "model": "courseequivalency"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 48,
+  "fields": {
+    "app_label": "academic",
+    "model": "requirement"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 49,
+  "fields": {
+    "app_label": "academic",
+    "model": "requirementcourse"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 50,
+  "fields": {
+    "app_label": "academic",
+    "model": "requirementtype"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 51,
+  "fields": {
+    "app_label": "academic",
+    "model": "studentcourseoverride"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 52,
+  "fields": {
+    "app_label": "academic",
+    "model": "studentdegreeprogress"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 53,
+  "fields": {
+    "app_label": "academic",
+    "model": "studentrequirementexception"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 54,
+  "fields": {
+    "app_label": "academic",
+    "model": "studentrequirementfulfillment"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 55,
+  "fields": {
+    "app_label": "academic",
+    "model": "transfercredit"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 56,
+  "fields": {
+    "app_label": "language",
+    "model": "languageprogrampromotion"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 57,
+  "fields": {
+    "app_label": "language",
+    "model": "languagestudentpromotion"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 58,
+  "fields": {
+    "app_label": "language",
+    "model": "languagelevelskiprequest"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 59,
+  "fields": {
+    "app_label": "enrollment",
+    "model": "classheaderenrollment"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 60,
+  "fields": {
+    "app_label": "enrollment",
+    "model": "classpartenrollment"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 61,
+  "fields": {
+    "app_label": "enrollment",
+    "model": "classsessionexemption"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 62,
+  "fields": {
+    "app_label": "enrollment",
+    "model": "majordeclaration"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 63,
+  "fields": {
+    "app_label": "enrollment",
+    "model": "programenrollment"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 64,
+  "fields": {
+    "app_label": "enrollment",
+    "model": "studentcourseeligibility"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 65,
+  "fields": {
+    "app_label": "scheduling",
+    "model": "classheader"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 66,
+  "fields": {
+    "app_label": "scheduling",
+    "model": "classsession"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 67,
+  "fields": {
+    "app_label": "scheduling",
+    "model": "classpart"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 68,
+  "fields": {
+    "app_label": "scheduling",
+    "model": "combinedclassgroup"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 69,
+  "fields": {
+    "app_label": "scheduling",
+    "model": "readingclass"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 70,
+  "fields": {
+    "app_label": "scheduling",
+    "model": "testperiodreset"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 71,
+  "fields": {
+    "app_label": "attendance",
+    "model": "attendancerecord"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 72,
+  "fields": {
+    "app_label": "attendance",
+    "model": "attendancesession"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 73,
+  "fields": {
+    "app_label": "attendance",
+    "model": "attendancesettings"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 74,
+  "fields": {
+    "app_label": "attendance",
+    "model": "permissionrequest"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 75,
+  "fields": {
+    "app_label": "attendance",
+    "model": "rostersync"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 76,
+  "fields": {
+    "app_label": "attendance",
+    "model": "attendancearchive"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 77,
+  "fields": {
+    "app_label": "grading",
+    "model": "classsessiongrade"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 78,
+  "fields": {
+    "app_label": "grading",
+    "model": "gparecord"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 79,
+  "fields": {
+    "app_label": "grading",
+    "model": "gradechangehistory"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 80,
+  "fields": {
+    "app_label": "grading",
+    "model": "gradeconversion"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 81,
+  "fields": {
+    "app_label": "grading",
+    "model": "gradingscale"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 82,
+  "fields": {
+    "app_label": "grading",
+    "model": "classpartgrade"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 83,
+  "fields": {
+    "app_label": "finance",
+    "model": "feeglmapping"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 84,
+  "fields": {
+    "app_label": "finance",
+    "model": "feepricing"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 85,
+  "fields": {
+    "app_label": "finance",
+    "model": "glaccount"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 86,
+  "fields": {
+    "app_label": "finance",
+    "model": "glbatch"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 87,
+  "fields": {
+    "app_label": "finance",
+    "model": "invoice"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 88,
+  "fields": {
+    "app_label": "finance",
+    "model": "invoicelineitem"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 89,
+  "fields": {
+    "app_label": "finance",
+    "model": "journalentry"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 90,
+  "fields": {
+    "app_label": "finance",
+    "model": "journalentryline"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 91,
+  "fields": {
+    "app_label": "finance",
+    "model": "payment"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 92,
+  "fields": {
+    "app_label": "finance",
+    "model": "pricingtier"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 93,
+  "fields": {
+    "app_label": "finance",
+    "model": "termpricingadjustment"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 94,
+  "fields": {
+    "app_label": "finance",
+    "model": "coursepricing"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 95,
+  "fields": {
+    "app_label": "finance",
+    "model": "financialtransaction"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 96,
+  "fields": {
+    "app_label": "scholarships",
+    "model": "sponsor"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 97,
+  "fields": {
+    "app_label": "scholarships",
+    "model": "sponsoredstudent"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 98,
+  "fields": {
+    "app_label": "scholarships",
+    "model": "scholarship"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 99,
+  "fields": {
+    "app_label": "academic_records",
+    "model": "documentrequestcomment"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 100,
+  "fields": {
+    "app_label": "academic_records",
+    "model": "documenttypeconfig"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 101,
+  "fields": {
+    "app_label": "academic_records",
+    "model": "documentusagetracker"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 102,
+  "fields": {
+    "app_label": "academic_records",
+    "model": "generateddocument"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 103,
+  "fields": {
+    "app_label": "academic_records",
+    "model": "documentrequest"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 104,
+  "fields": {
+    "app_label": "level_testing",
+    "model": "placementtest"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 105,
+  "fields": {
+    "app_label": "level_testing",
+    "model": "potentialstudent"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 106,
+  "fields": {
+    "app_label": "level_testing",
+    "model": "duplicatecandidate"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 107,
+  "fields": {
+    "app_label": "level_testing",
+    "model": "testpayment"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 108,
+  "fields": {
+    "app_label": "level_testing",
+    "model": "testsession"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 109,
+  "fields": {
+    "app_label": "level_testing",
+    "model": "testattempt"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 110,
+  "fields": {
+    "app_label": "enrollment",
+    "model": "programtransition"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 111,
+  "fields": {
+    "app_label": "mobile",
+    "model": "mobileauthattempt"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 112,
+  "fields": {
+    "app_label": "mobile",
+    "model": "mobileauthtoken"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 113,
+  "fields": {
+    "app_label": "scheduling",
+    "model": "combinedclassinstance"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 114,
+  "fields": {
+    "app_label": "scheduling",
+    "model": "combinedcoursetemplate"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 115,
+  "fields": {
+    "app_label": "finance",
+    "model": "cashiersession"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 116,
+  "fields": {
+    "app_label": "people",
+    "model": "studentphoto"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 117,
+  "fields": {
+    "app_label": "academic",
+    "model": "canonicalrequirementfulfillment"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 118,
+  "fields": {
+    "app_label": "finance",
+    "model": "defaultpricing"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 119,
+  "fields": {
+    "app_label": "finance",
+    "model": "coursefixedpricing"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 120,
+  "fields": {
+    "app_label": "finance",
+    "model": "seniorprojectpricing"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 121,
+  "fields": {
+    "app_label": "finance",
+    "model": "readingclasspricing"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 122,
+  "fields": {
+    "app_label": "finance",
+    "model": "seniorprojectcourse"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 123,
+  "fields": {
+    "app_label": "finance",
+    "model": "materialitythreshold"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 124,
+  "fields": {
+    "app_label": "finance",
+    "model": "reconciliationbatch"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 125,
+  "fields": {
+    "app_label": "finance",
+    "model": "reconciliationrule"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 126,
+  "fields": {
+    "app_label": "finance",
+    "model": "reconciliationstatus"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 127,
+  "fields": {
+    "app_label": "finance",
+    "model": "reconciliationadjustment"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 128,
+  "fields": {
+    "app_label": "finance",
+    "model": "arreconstructionbatch"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 129,
+  "fields": {
+    "app_label": "finance",
+    "model": "legacyreceiptmapping"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 130,
+  "fields": {
+    "app_label": "finance",
+    "model": "discountrule"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 131,
+  "fields": {
+    "app_label": "finance",
+    "model": "reconstructionscholarshipentry"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 132,
+  "fields": {
+    "app_label": "finance",
+    "model": "clerkidentification"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 133,
+  "fields": {
+    "app_label": "enrollment",
+    "model": "academicjourney"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 134,
+  "fields": {
+    "app_label": "enrollment",
+    "model": "academicprogression"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 135,
+  "fields": {
+    "app_label": "enrollment",
+    "model": "certificateissuance"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 136,
+  "fields": {
+    "app_label": "enrollment",
+    "model": "programmilestone"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 137,
+  "fields": {
+    "app_label": "enrollment",
+    "model": "seniorprojectgroup"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 138,
+  "fields": {
+    "app_label": "enrollment",
+    "model": "programperiod"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 139,
+  "fields": {
+    "app_label": "finance",
+    "model": "discountapplication"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 140,
+  "fields": {
+    "app_label": "enrollment",
+    "model": "studentcyclestatus"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 141,
+  "fields": {
+    "app_label": "finance",
+    "model": "administrativefeeconfig"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 142,
+  "fields": {
+    "app_label": "finance",
+    "model": "documentexcessfee"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 143,
+  "fields": {
+    "app_label": "academic_records",
+    "model": "documentquota"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 144,
+  "fields": {
+    "app_label": "academic_records",
+    "model": "documentquotausage"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 145,
+  "fields": {
+    "app_label": "level_testing",
+    "model": "testcompletion"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 146,
+  "fields": {
+    "app_label": "debug_toolbar",
+    "model": "historyentry"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 147,
+  "fields": {
+    "app_label": "scheduling",
+    "model": "classparttemplateset"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 148,
+  "fields": {
+    "app_label": "scheduling",
+    "model": "classpromotionrule"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 149,
+  "fields": {
+    "app_label": "scheduling",
+    "model": "classparttemplate"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 150,
+  "fields": {
+    "app_label": "common",
+    "model": "activitylog"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 151,
+  "fields": {
+    "app_label": "common",
+    "model": "notification"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 152,
+  "fields": {
+    "app_label": "level_testing",
+    "model": "testaccesstoken"
+  }
+}
+]

@@ -1,0 +1,5 @@
+{% load i18n %}
+
+{% for student_data in student_data %}
+  {% include 'attendance/partials/student_row.html' with student=student_data.student attendance_record=student_data.attendance_record attendance_status=student_data.attendance_status check_in_time=student_data.check_in_time notes=student_data.notes %}
+{% endfor %}

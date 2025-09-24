@@ -1,0 +1,107 @@
+{% extends "emails/base.html" %}
+
+{% load static %}
+
+{% block subject %}Alert: {{ overdue_count }} Students Have Overdue Photos{% endblock %}
+{% block content %}
+  <div style="font-family: Arial, sans-serif;
+              max-width: 800px;
+              margin: 0 auto">
+    <h2 style="color: #d9534f;">Student Photo Update Alert</h2>
+    <div style="background-color: #f8d7da;
+                border: 1px solid #f5c6cb;
+                border-radius: 4px;
+                padding: 20px;
+                margin: 20px 0">
+      <h3 style="color: #721c24; margin-top: 0;">{{ overdue_count }} students have overdue photos</h3>
+      <p style="color: #721c24; margin-bottom: 0;">
+        These students have not updated their photos within the required timeframe.
+      </p>
+    </div>
+    <p style="color: #666; line-height: 1.6;">
+      This automated check was performed on <strong>{{ check_date|date:"F j, Y" }} at {{ check_date|time:"g:i A" }}</strong>.
+    </p>
+    <h3 style="color: #333; margin-top: 30px;">Required Actions</h3>
+    <ol style="color: #666; line-height: 1.8;">
+      <li>
+        <strong>Review the list</strong> of students with overdue photos in the admin panel:
+        <br />
+        <a href="{{ admin_url }}" style="color: #337ab7;">View Overdue Photos</a>
+      </li>
+      <li>
+        <strong>Follow up</strong> with students who have not responded to automated reminders
+      </li>
+      <li>
+        <strong>Consider blocking services</strong> for students who are significantly overdue
+      </li>
+      <li>
+        <strong>Update exemptions</strong> for students with valid reasons for delays
+      </li>
+    </ol>
+    <div style="background-color: #f5f5f5;
+                border-radius: 4px;
+                padding: 20px;
+                margin: 30px 0">
+      <h4 style="color: #333; margin-top: 0;">Photo Update Requirements</h4>
+      <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+          <td style="padding: 10px; border-bottom: 1px solid #ddd;">
+            <strong>Regular Students:</strong>
+          </td>
+          <td style="padding: 10px; border-bottom: 1px solid #ddd;">Every 6 months</td>
+        </tr>
+        <tr>
+          <td style="padding: 10px; border-bottom: 1px solid #ddd;">
+            <strong>Monks:</strong>
+          </td>
+          <td style="padding: 10px; border-bottom: 1px solid #ddd;">Every 12 months</td>
+        </tr>
+        <tr>
+          <td style="padding: 10px;">
+            <strong>Overdue Definition:</strong>
+          </td>
+          <td style="padding: 10px;">More than 30 days past update deadline</td>
+        </tr>
+      </table>
+    </div>
+    <h3 style="color: #333; margin-top: 30px;">Automated Reminder Status</h3>
+    <p style="color: #666; line-height: 1.6;">The system has been sending automated reminders to students:</p>
+    <ul style="color: #666;">
+      <li>First reminder: 30 days before expiration</li>
+      <li>Second reminder: At expiration date</li>
+      <li>Final reminder: 30 days after expiration</li>
+    </ul>
+    <p style="color: #666; margin-top: 30px;">Students on this list have either:</p>
+    <ul style="color: #666;">
+      <li>Not responded to multiple automated reminders</li>
+      <li>Technical issues preventing photo updates</li>
+      <li>Special circumstances requiring manual intervention</li>
+    </ul>
+    <div style="background-color: #fff3cd;
+                border: 1px solid #ffeeba;
+                border-radius: 4px;
+                padding: 15px;
+                margin: 30px 0">
+      <p style="color: #856404; margin: 0;">
+        <strong>Note:</strong> This notification is sent daily when overdue photos are detected.
+        You will receive another notification tomorrow if the situation persists.
+      </p>
+    </div>
+    <p style="color: #666; margin-top: 30px;">
+      For questions about the photo update process or to modify notification settings,
+      please contact the IT department.
+    </p>
+    <p style="color: #666; margin-top: 20px;">
+      Best regards,
+      <br />
+      <strong>PUCSR Student Information System</strong>
+    </p>
+  </div>
+{% endblock %}
+{% block footer %}
+  <p style="color: #999; font-size: 12px; text-align: center;">
+    This is an automated administrative alert from the PUCSR Student Information System.
+    <br />
+    To unsubscribe from these notifications, please update your admin preferences.
+  </p>
+{% endblock %}

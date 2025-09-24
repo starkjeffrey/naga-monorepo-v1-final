@@ -1,0 +1,40 @@
+{% load i18n %}
+
+{% for user in users %}
+<div class="flex items-center justify-between p-2 hover:bg-gray-50 rounded transition-colors">
+  <div class="flex items-center">
+    <div class="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center mr-3">
+      <span class="text-xs font-medium text-gray-700">
+        {{ user.first_name|first|default:user.username|first }}
+      </span>
+    </div>
+    <div>
+      <div class="text-sm font-medium cursor-pointer" 
+           onclick="showUserProfile({{ user.id }})"
+           title="{% trans 'Click to view profile' %}">
+        {{ user.get_full_name|default:user.username }}
+      </div>
+      <div class="text-xs text-gray-500">{{ user.username }}</div>
+    </div>
+  </div>
+  <div class="flex items-center space-x-1">
+    {% for group in user.groups.all %}
+    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
+      {{ group.name }}
+    </span>
+    {% endfor %}
+  </div>
+</div>
+{% empty %}
+  {% if query %}
+    <div class="text-center py-8 text-gray-500">
+      <i class="fas fa-search text-3xl mb-3"></i>
+      <p>{% trans "No users found matching" %} "{{ query }}"</p>
+    </div>
+  {% else %}
+    <div class="text-center py-8 text-gray-500">
+      <i class="fas fa-users text-3xl mb-3"></i>
+      <p>{% trans "Start typing to search users" %}</p>
+    </div>
+  {% endif %}
+{% endfor %}

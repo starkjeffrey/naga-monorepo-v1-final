@@ -1,0 +1,189 @@
+{% extends "base_new.html" %}
+
+{% load i18n %}
+
+{% block title %}
+  {% trans "Test Base2
+  Template" %} - {{ block.super }}
+{% endblock %}
+{% block content %}
+  <div style="padding: 2rem">
+    <div style="max-width: 80rem; margin: 0 auto">
+      <!-- Welcome Header -->
+      <div style="background-color: white;
+                  border-radius: 0.5rem;
+                  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+                  border: 1px solid #e2e8f0;
+                  padding: 2rem;
+                  margin-bottom: 2rem">
+        <h1 style="font-size: 1.875rem;
+                   font-weight: bold;
+                   color: #1e293b;
+                   margin-bottom: 0.5rem">{% trans "Base2.html Template Test" %}</h1>
+        <p style="color: #64748b; line-height: 1.5">
+          {% trans "This page is using your modified base2.html template. Test all
+          the navigation features to make sure everything works as expected." %}
+        </p>
+      </div>
+      <!-- Feature Test Grid -->
+      <div style="display: grid;
+                  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+                  gap: 1.5rem;
+                  margin-bottom: 2rem">
+        <!-- Hamburger Menu Test -->
+        <div style="background-color: white;
+                    border-radius: 0.5rem;
+                    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+                    border: 1px solid #e2e8f0;
+                    padding: 1.5rem">
+          <div style="display: flex; align-items: center; margin-bottom: 1rem">
+            <div style="height: 2.5rem;
+                        width: 2.5rem;
+                        background-color: #dbeafe;
+                        border-radius: 0.5rem;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center">
+              <i class="fas fa-bars" style="color: #2563eb"></i>
+            </div>
+            <h3 style="margin-left: 0.75rem;
+                       font-size: 1.125rem;
+                       font-weight: 600;
+                       color: #111827">{% trans "Hamburger Menu" %}</h3>
+          </div>
+          <p style="color: #6b7280; font-size: 0.875rem">
+            {% trans "Click the hamburger menu button in the top-left to test
+            sidebar collapse/expand functionality." %}
+          </p>
+        </div>
+        <!-- Sidebar Test -->
+        <div style="background-color: white;
+                    border-radius: 0.5rem;
+                    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+                    border: 1px solid #e2e8f0;
+                    padding: 1.5rem">
+          <div style="display: flex; align-items: center; margin-bottom: 1rem">
+            <div style="height: 2.5rem;
+                        width: 2.5rem;
+                        background-color: #dcfce7;
+                        border-radius: 0.5rem;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center">
+              <i class="fas fa-list" style="color: #16a34a"></i>
+            </div>
+            <h3 style="margin-left: 0.75rem;
+                       font-size: 1.125rem;
+                       font-weight: 600;
+                       color: #111827">{% trans "Sidebar Navigation" %}</h3>
+          </div>
+          <p style="color: #6b7280; font-size: 0.875rem">
+            {% trans "The sidebar should show all navigation items with clear,
+            readable text on a dark background." %}
+          </p>
+        </div>
+        <!-- Top Navigation Test -->
+        <div style="background-color: white;
+                    border-radius: 0.5rem;
+                    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+                    border: 1px solid #e2e8f0;
+                    padding: 1.5rem">
+          <div style="display: flex; align-items: center; margin-bottom: 1rem">
+            <div style="height: 2.5rem;
+                        width: 2.5rem;
+                        background-color: #fef3c7;
+                        border-radius: 0.5rem;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center">
+              <i class="fas fa-cog" style="color: #d97706"></i>
+            </div>
+            <h3 style="margin-left: 0.75rem;
+                       font-size: 1.125rem;
+                       font-weight: 600;
+                       color: #111827">{% trans "Top Controls" %}</h3>
+          </div>
+          <p style="color: #6b7280; font-size: 0.875rem">
+            {% trans "Test the language switcher, theme toggle, notifications, and
+            user menu in the top navigation bar." %}
+          </p>
+        </div>
+      </div>
+      <!-- Current Status -->
+      <div style="background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%);
+                  border-radius: 0.5rem;
+                  border: 1px solid #bfdbfe;
+                  padding: 1.5rem;
+                  margin-bottom: 1.5rem">
+        <h2 style="font-size: 1.25rem;
+                   font-weight: 600;
+                   color: #1e40af;
+                   margin-bottom: 1rem">{% trans "System Information" %}</h2>
+        <div style="display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+                    gap: 1rem">
+          <div style="background-color: white; border-radius: 0.5rem; padding: 1rem">
+            <div style="font-size: 0.875rem; color: #6b7280">{% trans "Current User" %}</div>
+            <div style="font-weight: 600; color: #111827">{{ request.user.name|default:request.user.email }}</div>
+          </div>
+          <div style="background-color: white; border-radius: 0.5rem; padding: 1rem">
+            <div style="font-size: 0.875rem; color: #6b7280">{% trans "Template" %}</div>
+            <div style="font-weight: 600; color: #111827">base2.html</div>
+          </div>
+          <div style="background-color: white; border-radius: 0.5rem; padding: 1rem">
+            <div style="font-size: 0.875rem; color: #6b7280">{% trans "Current Language" %}</div>
+            <div style="font-weight: 600; color: #111827">
+              {% if LANGUAGE_CODE == 'km' %}
+                🇰🇭 ភាសាខ្មែរ
+              {% else %}
+                🇺🇸 English {%
+                endif %}
+              </div>
+            </div>
+            <div style="background-color: white; border-radius: 0.5rem; padding: 1rem">
+              <div style="font-size: 0.875rem; color: #6b7280">{% trans "Current Term" %}</div>
+              <div style="font-weight: 600; color: #111827">{{ current_term|default:"No Active Term" }}</div>
+            </div>
+          </div>
+        </div>
+        <!-- Testing Instructions -->
+        <div style="background-color: #fffbeb;
+                    border: 1px solid #fed7aa;
+                    border-radius: 0.5rem;
+                    padding: 1.5rem">
+          <div style="display: flex; align-items: flex-start">
+            <i class="fas fa-lightbulb"
+               style="color: #d97706;
+                      margin-top: 0.25rem;
+                      margin-right: 0.75rem"></i>
+            <div>
+              <h3 style="font-weight: 600; color: #92400e; margin-bottom: 0.5rem">{% trans "Testing Your Modifications" %}</h3>
+              <ul style="color: #b45309;
+                         font-size: 0.875rem;
+                         list-style-type: disc;
+                         margin-left: 1.25rem">
+                <li>
+                  {% trans "Verify the hamburger menu icon is visible and clickable"
+                  %}
+                </li>
+                <li>
+                  {% trans "Check that all sidebar text is readable (no
+                  black-on-black)" %}
+                </li>
+                <li>{% trans "Test sidebar collapse/expand functionality" %}</li>
+                <li>{% trans "Confirm sidebar starts in the expanded state" %}</li>
+                <li>
+                  {% trans "Test all top navigation buttons (language, theme,
+                  notifications, user)" %}
+                </li>
+                <li>
+                  {% trans "Check mobile responsiveness by resizing the browser
+                  window" %}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endblock %}

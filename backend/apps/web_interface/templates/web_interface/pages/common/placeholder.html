@@ -1,0 +1,81 @@
+{% extends "web_interface/base/dashboard_page.html" %}
+
+{% load i18n %}
+
+{% block title %}
+  {% trans "Coming Soon" %} - {{ block.super }}
+{% endblock %}
+{% block dashboard_content %}
+  <div class="page-content">
+    <div class="placeholder-container">
+      <div class="placeholder-card">
+        <div class="placeholder-icon">
+          <i class="fas fa-hammer fa-3x text-muted"></i>
+        </div>
+        <h2 class="placeholder-title">{% trans "Under Construction" %}</h2>
+        <p class="placeholder-text">{% trans "This feature is currently being developed and will be available soon." %}</p>
+        <p class="placeholder-subtext">
+          {% trans "Please check back later or contact the administrator for more information." %}
+        </p>
+        <div class="placeholder-actions">
+          <a href="{% url 'web_interface:dashboard' %}" class="btn btn-primary">
+            <i class="fas fa-arrow-left"></i>
+            {% trans "Back to Dashboard" %}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <style>
+    .placeholder-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 60vh;
+      padding: 2rem;
+    }
+
+    .placeholder-card {
+      text-align: center;
+      max-width: 500px;
+      padding: 3rem 2rem;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border: 1px solid #e5e7eb;
+    }
+
+    .placeholder-icon {
+      margin-bottom: 2rem;
+    }
+
+    .placeholder-title {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 1rem;
+    }
+
+    .placeholder-text {
+      font-size: 1.1rem;
+      color: #6b7280;
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+
+    .placeholder-subtext {
+      font-size: 0.95rem;
+      color: #9ca3af;
+      margin-bottom: 2rem;
+      line-height: 1.5;
+    }
+
+    .placeholder-actions {
+      margin-top: 2rem;
+    }
+
+    .text-muted {
+      color: #9ca3af;
+    }
+  </style>
+{% endblock %}

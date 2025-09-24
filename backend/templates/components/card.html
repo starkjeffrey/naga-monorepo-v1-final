@@ -1,0 +1,32 @@
+{# Reusable Card Component #} {# Usage: {% include 'components/card.html' with
+title="Card Title" variant="primary" %} #} {# Variants: default, primary,
+success, warning, danger #}
+{% load i18n %}
+
+<div class=" bg-white rounded-lg shadow-sm border {% if variant == 'primary' %}border-blue-200{% elif variant == 'success' %}border-green-200{% elif variant == 'warning' %}border-yellow-200{% elif variant == 'danger' %}border-red-200{% else %}border-gray-200{% endif %} overflow-hidden transition-all duration-200 hover:shadow-md {{ extra_classes }} ">
+  {% if title or actions %}
+    <div class="px-4 py-3 border-b {% if variant == 'primary' %}bg-blue-50 border-blue-200{% elif variant == 'success' %}bg-green-50 border-green-200{% elif variant == 'warning' %}bg-yellow-50 border-yellow-200{% elif variant == 'danger' %}bg-red-50 border-red-200{% else %}bg-gray-50 border-gray-200{% endif %} flex items-center justify-between">
+      {% if title %}
+        <h3 class="text-lg font-medium {% if variant == 'primary' %}text-blue-900{% elif variant == 'success' %}text-green-900{% elif variant == 'warning' %}text-yellow-900{% elif variant == 'danger' %}text-red-900{% else %}text-gray-900{% endif %}">
+          {% if icon %}
+            <span class="inline-flex items-center">
+              {{ icon|safe }}
+              <span class="ml-2">{{ title }}</span>
+            </span>
+          {% else %}
+            {{ title }}
+          {% endif %}
+        </h3>
+      {% endif %}
+      {% if actions %}<div class="flex items-center space-x-2">{{ actions|safe }}</div>{% endif %}
+    </div>
+  {% endif %}
+  <div class="{% if not no_padding %}p-4{% endif %}">
+    {% block card_content %}{{ content|safe }}{% endblock %}
+  </div>
+  {% if footer %}
+    <div class="px-4 py-3 border-t {% if variant == 'primary' %}bg-blue-50 border-blue-200{% elif variant == 'success' %}bg-green-50 border-green-200{% elif variant == 'warning' %}bg-yellow-50 border-yellow-200{% elif variant == 'danger' %}bg-red-50 border-red-200{% else %}bg-gray-50 border-gray-200{% endif %}">
+      {{ footer|safe }}
+    </div>
+  {% endif %}
+</div>

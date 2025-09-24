@@ -1,0 +1,260 @@
+{% extends "web_interface/base/dashboard_base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Attendance Report" %} - {{ class_header.course.code }}{% endblock %}
+
+{% block dashboard_content %}
+<div class="max-w-7xl mx-auto px-4 py-6">
+  <!-- Header -->
+  <div class="bg-white rounded-lg shadow-sm mb-6">
+    <div class="px-6 py-4 border-b border-gray-200">
+      <div class="flex justify-between items-center">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">{% trans "Attendance Report" %}</h1>
+          <p class="text-gray-600">{{ class_header.course.code }} - {{ class_header.course.name }}</p>
+          <p class="text-sm text-gray-500 mt-1">
+            {{ start_date|date:"F d, Y" }} - {{ end_date|date:"F d, Y" }}
+          </p>
+        </div>
+        
+        <div class="flex items-center space-x-3">
+          <a href="{% url 'attendance:class_attendance' class_header.id %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left mr-2"></i>
+            {% trans "Back to Attendance" %}
+          </a>
+          
+          <button onclick="exportReport()" class="btn btn-outline-primary">
+            <i class="fas fa-download mr-2"></i>
+            {% trans "Export Report" %}
+          </button>
+          
+          <button onclick="printReport()" class="btn btn-outline-secondary">
+            <i class="fas fa-print mr-2"></i>
+            {% trans "Print" %}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Report Summary -->
+    <div class="px-6 py-4 bg-gray-50">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+        <div>
+          <div class="text-2xl font-bold text-gray-900">{{ total_sessions }}</div>
+          <div class="text-sm text-gray-500">{% trans "Total Sessions" %}</div>
+        </div>
+        <div>
+          <div class="text-2xl font-bold text-blue-600">{{ student_stats|length }}</div>
+          <div class="text-sm text-gray-500">{% trans "Students" %}</div>
+        </div>
+        <div>
+          {% with avg_rate=student_stats|dictsort:"attendance_rate"|first.attendance_rate %}
+            <div class="text-2xl font-bold text-green-600">
+              {% if student_stats %}
+                {{ student_stats|length|div:student_stats|length }}%
+              {% else %}
+                0%
+              {% endif %}
+            </div>
+          {% endwith %}
+          <div class="text-sm text-gray-500">{% trans "Avg Attendance" %}</div>
+        </div>
+        <div>
+          <div class="text-2xl font-bold text-purple-600">
+            {{ attendance_sessions|length }}
+          </div>
+          <div class="text-sm text-gray-500">{% trans "Sessions Recorded" %}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Date Range Filter -->
+  <div class="bg-white rounded-lg shadow-sm mb-6">
+    <div class="px-6 py-4">
+      <form method="get" class="flex items-end space-x-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            {% trans "Start Date" %}
+          </label>
+          <input type="date" name="start_date" value="{{ start_date|date:'Y-m-d' }}" 
+                 class="px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            {% trans "End Date" %}
+          </label>
+          <input type="date" name="end_date" value="{{ end_date|date:'Y-m-d' }}"
+                 class="px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+        </div>
+        
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-filter mr-2"></i>
+          {% trans "Filter" %}
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Student Attendance Statistics -->
+  <div class="bg-white rounded-lg shadow-sm">
+    <div class="px-6 py-4 border-b border-gray-200">
+      <h2 class="text-lg font-semibold text-gray-900">{% trans "Student Attendance Statistics" %}</h2>
+    </div>
+    
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              {% trans "Student" %}
+            </th>
+            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+              {% trans "Sessions" %}
+            </th>
+            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+              {% trans "Present" %}
+            </th>
+            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+              {% trans "Absent" %}
+            </th>
+            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+              {% trans "Late" %}
+            </th>
+            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+              {% trans "Excused" %}
+            </th>
+            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+              {% trans "Rate" %}
+            </th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          {% for stats in student_stats %}
+            <tr class="hover:bg-gray-50">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0 h-8 w-8">
+                    <div class="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center">
+                      <span class="text-xs font-medium text-gray-700">
+                        {{ stats.student.person.name_en|first }}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="ml-4">
+                    <div class="text-sm font-medium text-gray-900">
+                      {{ stats.student.person.name_en }}
+                    </div>
+                    <div class="text-sm text-gray-500">
+                      {{ stats.student.student_id }}
+                    </div>
+                  </div>
+                </div>
+              </td>
+              
+              <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">
+                {{ stats.total_sessions }}
+              </td>
+              
+              <td class="px-6 py-4 whitespace-nowrap text-center">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                  {{ stats.present_count }}
+                </span>
+              </td>
+              
+              <td class="px-6 py-4 whitespace-nowrap text-center">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                  {{ stats.absent_count }}
+                </span>
+              </td>
+              
+              <td class="px-6 py-4 whitespace-nowrap text-center">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                  {{ stats.late_count }}
+                </span>
+              </td>
+              
+              <td class="px-6 py-4 whitespace-nowrap text-center">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                  {{ stats.excused_count }}
+                </span>
+              </td>
+              
+              <td class="px-6 py-4 whitespace-nowrap text-center">
+                <div class="flex items-center justify-center">
+                  <div class="w-16 bg-gray-200 rounded-full h-2 mr-3">
+                    <div class="bg-green-500 h-2 rounded-full" style="width: {{ stats.attendance_rate }}%"></div>
+                  </div>
+                  <span class="text-sm font-medium text-gray-900">{{ stats.attendance_rate }}%</span>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Session History -->
+  {% if attendance_sessions %}
+    <div class="bg-white rounded-lg shadow-sm mt-6">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h2 class="text-lg font-semibold text-gray-900">{% trans "Session History" %}</h2>
+      </div>
+      
+      <div class="p-6">
+        <div class="space-y-4">
+          {% for session in attendance_sessions %}
+            <div class="border border-gray-200 rounded-lg p-4">
+              <div class="flex justify-between items-start">
+                <div>
+                  <h4 class="font-medium text-gray-900">
+                    {{ session.session_date|date:"l, F d, Y" }}
+                  </h4>
+                  <p class="text-sm text-gray-600">
+                    <i class="fas fa-clock mr-1"></i>
+                    {{ session.start_time|time:"g:i A" }}
+                  </p>
+                  {% if session.session_notes %}
+                    <p class="text-sm text-gray-500 mt-1">{{ session.session_notes }}</p>
+                  {% endif %}
+                </div>
+                
+                <div class="text-right">
+                  <div class="text-sm text-gray-500">
+                    {% trans "Recorded by" %} {{ session.recorded_by.get_full_name|default:session.recorded_by.username }}
+                  </div>
+                  <a href="{% url 'attendance:class_attendance' class_header.id %}?date={{ session.session_date|date:'Y-m-d' }}"
+                     class="text-sm text-blue-600 hover:text-blue-800">
+                    {% trans "View Details" %}
+                  </a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</div>
+
+<script>
+function exportReport() {
+  // TODO: Implement report export functionality
+  alert('{% trans "Export functionality coming soon!" %}');
+}
+
+function printReport() {
+  window.print();
+}
+</script>
+
+<style>
+@media print {
+  .no-print { display: none !important; }
+  .btn { display: none !important; }
+  body { margin: 0; }
+}
+</style>
+{% endblock %}

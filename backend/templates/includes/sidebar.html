@@ -1,0 +1,127 @@
+<!-- Mobile Overlay -->
+<div id="sidebar-overlay"
+     class="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden hidden"></div>
+<!-- Sidebar -->
+<aside id="sidebar"
+       class="fixed left-0 top-16 bottom-0 z-40 w-64 transform -translate-x-full transition-transform duration-300 ease-in-out lg:translate-x-0 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700">
+  <div class="flex flex-col h-full">
+    <!-- Navigation -->
+    <nav class="flex-1 px-4 py-6 space-y-2">
+      <a href="#quick-enrollment-modal"
+         onclick="showEnrollmentForm('quick')"
+         class="group flex items-center px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200 text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-800">
+        <i data-lucide="user-plus"
+           class="mr-3 w-5 h-5 text-gray-500 group-hover:text-blue-600 dark:text-gray-400 dark:group-hover:text-blue-400"></i>
+        Quick Enrollment
+      </a>
+      <a href="#enrollment-wizard-modal"
+         onclick="showEnrollmentForm('wizard')"
+         class="group flex items-center px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200 text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-800">
+        <i data-lucide="layers"
+           class="mr-3 w-5 h-5 text-gray-500 group-hover:text-blue-600 dark:text-gray-400 dark:group-hover:text-blue-400"></i>
+        Enrollment Wizard
+      </a>
+      <a href="#class-card-modal"
+         onclick="showEnrollmentForm('class-card')"
+         class="group flex items-center px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200 text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-800">
+        <i data-lucide="credit-card"
+           class="mr-3 w-5 h-5 text-gray-500 group-hover:text-blue-600 dark:text-gray-400 dark:group-hover:text-blue-400"></i>
+        Class Card
+      </a>
+    </nav>
+    <!-- Sidebar Footer -->
+    <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+      <div class="p-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 dark:from-blue-600 dark:to-purple-600 text-white">
+        <p class="text-sm font-semibold">Need Help?</p>
+        <p class="text-xs opacity-90 mt-1">Contact our support team</p>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- Modal Container for Enrollment Forms -->
+<div id="enrollment-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+  <div class="bg-white dark:bg-gray-900 rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+    <div class="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700">
+      <h2 id="modal-title" class="text-xl font-semibold text-gray-900 dark:text-white">Enrollment Form</h2>
+      <button onclick="hideEnrollmentForm()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+        <i data-lucide="x" class="w-6 h-6"></i>
+      </button>
+    </div>
+    <div id="modal-content" class="p-6">
+      <!-- Content will be loaded here -->
+    </div>
+  </div>
+</div>
+
+<!-- Quick Enrollment Form Template -->
+<div id="quick-enrollment-template" class="hidden">
+  <div class="space-y-4">
+    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Quick Enrollment</h3>
+    <p class="text-gray-600 dark:text-gray-400">Loading enrollment form...</p>
+  </div>
+</div>
+
+<!-- Enrollment Wizard Template -->
+<div id="enrollment-wizard-template" class="hidden">
+  <div class="space-y-4">
+    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Enrollment Wizard</h3>
+    <p class="text-gray-600 dark:text-gray-400">Loading enrollment wizard...</p>
+  </div>
+</div>
+
+<!-- Class Card Template -->
+<div id="class-card-template" class="hidden">
+  <div class="space-y-4">
+    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Enhanced Class Card View</h3>
+    <p class="text-gray-600 dark:text-gray-400">Loading class cards...</p>
+  </div>
+</div>
+
+<script>
+function showEnrollmentForm(type) {
+  const modal = document.getElementById('enrollment-modal');
+  const modalTitle = document.getElementById('modal-title');
+  const modalContent = document.getElementById('modal-content');
+  
+  // Set title and navigate to appropriate URL
+  switch(type) {
+    case 'quick':
+      modalTitle.textContent = 'Quick Enrollment Form';
+      window.location.href = '/enrollment/quick-form/';
+      return;
+    case 'wizard':
+      modalTitle.textContent = 'Enrollment Wizard';
+      window.location.href = '/enrollment/wizard/';
+      return;
+    case 'class-card':
+      modalTitle.textContent = 'Enhanced Class Cards';
+      window.location.href = '/enrollment/class-cards/';
+      return;
+  }
+  
+  // Show modal
+  modal.classList.remove('hidden');
+  document.body.classList.add('overflow-hidden');
+}
+
+function hideEnrollmentForm() {
+  const modal = document.getElementById('enrollment-modal');
+  modal.classList.add('hidden');
+  document.body.classList.remove('overflow-hidden');
+}
+
+// Close modal when clicking outside
+document.getElementById('enrollment-modal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    hideEnrollmentForm();
+  }
+});
+
+// ESC key to close modal
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    hideEnrollmentForm();
+  }
+});
+</script>

@@ -1,0 +1,227 @@
+[
+{
+  "model": "accounts.department",
+  "pk": 1,
+  "fields": {
+    "created_at": "2025-07-31T08:17:40.519Z",
+    "updated_at": "2025-07-31T08:17:40.519Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "name": "Human Resources",
+    "code": "HR",
+    "description": "",
+    "is_active": true,
+    "display_order": 100
+  }
+},
+{
+  "model": "accounts.department",
+  "pk": 2,
+  "fields": {
+    "created_at": "2025-07-31T08:18:01.587Z",
+    "updated_at": "2025-07-31T08:18:01.587Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "name": "Scholarships",
+    "code": "SCHOLARSHIPS",
+    "description": "",
+    "is_active": true,
+    "display_order": 100
+  }
+},
+{
+  "model": "accounts.department",
+  "pk": 3,
+  "fields": {
+    "created_at": "2025-07-31T08:18:30.289Z",
+    "updated_at": "2025-07-31T08:18:30.289Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "name": "Executive Management",
+    "code": "EXECUTIVE",
+    "description": "",
+    "is_active": true,
+    "display_order": 100
+  }
+},
+{
+  "model": "accounts.department",
+  "pk": 4,
+  "fields": {
+    "created_at": "2025-07-31T08:18:55.433Z",
+    "updated_at": "2025-07-31T08:18:55.433Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "name": "Language Program Department",
+    "code": "LPD",
+    "description": "",
+    "is_active": true,
+    "display_order": 100
+  }
+},
+{
+  "model": "accounts.department",
+  "pk": 5,
+  "fields": {
+    "created_at": "2025-07-31T08:19:23.637Z",
+    "updated_at": "2025-07-31T08:19:23.637Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "name": "Academic Program Department",
+    "code": "APD",
+    "description": "",
+    "is_active": true,
+    "display_order": 100
+  }
+},
+{
+  "model": "accounts.department",
+  "pk": 6,
+  "fields": {
+    "created_at": "2025-07-31T08:19:37.778Z",
+    "updated_at": "2025-07-31T08:19:37.778Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "name": "Finance",
+    "code": "FINANCE",
+    "description": "",
+    "is_active": true,
+    "display_order": 100
+  }
+},
+{
+  "model": "accounts.department",
+  "pk": 7,
+  "fields": {
+    "created_at": "2025-07-31T08:19:55.586Z",
+    "updated_at": "2025-07-31T08:19:55.586Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "name": "Registration",
+    "code": "REGISTRATION",
+    "description": "",
+    "is_active": true,
+    "display_order": 100
+  }
+},
+{
+  "model": "accounts.department",
+  "pk": 8,
+  "fields": {
+    "created_at": "2025-07-31T08:20:09.744Z",
+    "updated_at": "2025-07-31T08:20:09.744Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "name": "Registrar",
+    "code": "REGISTRAR",
+    "description": "",
+    "is_active": true,
+    "display_order": 100
+  }
+},
+{
+  "model": "accounts.department",
+  "pk": 9,
+  "fields": {
+    "created_at": "2025-07-31T08:20:18.216Z",
+    "updated_at": "2025-07-31T08:20:18.216Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "name": "Library",
+    "code": "LIBRARY",
+    "description": "",
+    "is_active": true,
+    "display_order": 100
+  }
+},
+{
+  "model": "accounts.department",
+  "pk": 10,
+  "fields": {
+    "created_at": "2025-07-31T08:20:28.478Z",
+    "updated_at": "2025-07-31T08:20:28.478Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "name": "Bookstore",
+    "code": "BOOKSTORE",
+    "description": "",
+    "is_active": true,
+    "display_order": 100
+  }
+},
+{
+  "model": "accounts.department",
+  "pk": 11,
+  "fields": {
+    "created_at": "2025-07-31T08:20:51.901Z",
+    "updated_at": "2025-07-31T08:20:51.901Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "name": "Testing",
+    "code": "TESTING",
+    "description": "",
+    "is_active": true,
+    "display_order": 100
+  }
+},
+{
+  "model": "accounts.department",
+  "pk": 12,
+  "fields": {
+    "created_at": "2025-07-31T08:21:28.988Z",
+    "updated_at": "2025-07-31T08:21:28.988Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "name": "Academic Faculty",
+    "code": "APD-FACULTY",
+    "description": "",
+    "is_active": true,
+    "display_order": 100
+  }
+},
+{
+  "model": "accounts.department",
+  "pk": 13,
+  "fields": {
+    "created_at": "2025-07-31T08:21:45.519Z",
+    "updated_at": "2025-07-31T08:21:45.519Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "name": "Language Faculty",
+    "code": "LPD-FACULTY",
+    "description": "",
+    "is_active": true,
+    "display_order": 100
+  }
+},
+{
+  "model": "accounts.department",
+  "pk": 14,
+  "fields": {
+    "created_at": "2025-07-31T08:21:59.119Z",
+    "updated_at": "2025-07-31T08:21:59.119Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "name": "Audit",
+    "code": "AUDIT",
+    "description": "",
+    "is_active": true,
+    "display_order": 100
+  }
+},
+{
+  "model": "accounts.department",
+  "pk": 15,
+  "fields": {
+    "created_at": "2025-07-31T08:22:12.674Z",
+    "updated_at": "2025-07-31T08:22:12.674Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "name": "Information Technology",
+    "code": "IT",
+    "description": "",
+    "is_active": true,
+    "display_order": 100
+  }
+}
+]

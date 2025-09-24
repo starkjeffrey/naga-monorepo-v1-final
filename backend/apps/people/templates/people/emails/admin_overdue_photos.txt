@@ -1,0 +1,40 @@
+STUDENT PHOTO UPDATE ALERT
+
+{{ overdue_count }} students have overdue photos
+
+This automated check was performed on {{ check_date|date:"F j, Y" }} at {{ check_date|time:"g:i A" }}.
+
+REQUIRED ACTIONS:
+
+1. Review the list of students with overdue photos in the admin panel
+2. Follow up with students who have not responded to automated reminders
+3. Consider blocking services for students who are significantly overdue
+4. Update exemptions for students with valid reasons for delays
+
+PHOTO UPDATE REQUIREMENTS:
+- Regular Students: Every 6 months
+- Monks: Every 12 months
+- Overdue Definition: More than 30 days past update deadline
+
+AUTOMATED REMINDER STATUS:
+
+The system has been sending automated reminders to students:
+- First reminder: 30 days before expiration
+- Second reminder: At expiration date
+- Final reminder: 30 days after expiration
+
+Students on this list have either:
+- Not responded to multiple automated reminders
+- Technical issues preventing photo updates
+- Special circumstances requiring manual intervention
+
+Note: This notification is sent daily when overdue photos are detected. You will receive another notification tomorrow if the situation persists.
+
+For questions about the photo update process or to modify notification settings, please contact the IT department.
+
+Best regards,
+PUCSR Student Information System
+
+--
+This is an automated administrative alert from the PUCSR Student Information System.
+To unsubscribe from these notifications, please update your admin preferences.

@@ -1,0 +1,396 @@
+{% extends "web_interface/base/dashboard_base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "User & Permission Management" %}{% endblock %}
+
+{% block dashboard_content %}
+<div class="max-w-7xl mx-auto px-4 py-6">
+  <!-- Header -->
+  <div class="bg-white shadow-sm rounded-lg mb-6">
+    <div class="px-6 py-4">
+      <div class="flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-gray-900">{% trans "User & Permission Management" %}</h1>
+        <div class="flex space-x-2">
+          <button class="btn btn-secondary"
+                  hx-get="{% url 'users:audit_log' %}"
+                  hx-target="#modal-content"
+                  onclick="openModal()">
+            <i class="fas fa-history mr-2"></i>
+            {% trans "View Audit Log" %}
+          </button>
+          <button class="btn btn-primary"
+                  hx-get="{% url 'users:create_role' %}"
+                  hx-target="#modal-content"
+                  onclick="openModal()">
+            <i class="fas fa-plus mr-2"></i>
+            {% trans "Create New Role" %}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-3 gap-6">
+    <!-- Left: Roles List -->
+    <div class="col-span-1">
+      <div class="bg-white rounded-lg shadow-sm">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h3 class="font-semibold text-gray-900">{% trans "System Roles" %}</h3>
+        </div>
+        <div class="p-6 space-y-2">
+          {% for role in roles %}
+          <div class="border rounded-lg p-3 hover:bg-gray-50 cursor-pointer transition-colors"
+               onclick="loadRoleDetails('{{ role.id }}')"
+               id="role-{{ role.id }}">
+            <div class="flex justify-between items-start">
+              <div>
+                <h4 class="font-medium text-gray-900">{{ role.name }}</h4>
+                <p class="text-xs text-gray-500 mt-1">
+                  {{ role_stats|get_item:role.name.users|default:0 }} {% trans "users" %} | 
+                  {{ role_stats|get_item:role.name.permissions|default:0 }} {% trans "permissions" %}
+                </p>
+              </div>
+              <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium
+                    {% if role.name == 'Admin' %}bg-red-100 text-red-800
+                    {% elif role.name == 'Staff' %}bg-blue-100 text-blue-800
+                    {% elif role.name == 'Teacher' %}bg-green-100 text-green-800
+                    {% elif role.name == 'Student' %}bg-purple-100 text-purple-800
+                    {% else %}bg-gray-100 text-gray-800{% endif %}">
+                {{ role.name }}
+              </span>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Middle: Role Details -->
+    <div class="col-span-1">
+      <div class="bg-white rounded-lg shadow-sm">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h3 class="font-semibold text-gray-900">{% trans "Role Details" %}</h3>
+        </div>
+        <div class="p-6" id="role-details">
+          <div class="text-center py-12 text-gray-500">
+            <i class="fas fa-users text-4xl mb-4"></i>
+            <p>{% trans "Select a role to view details" %}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: User Assignment -->
+    <div class="col-span-1">
+      <div class="bg-white rounded-lg shadow-sm">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h3 class="font-semibold text-gray-900">{% trans "User Assignment" %}</h3>
+        </div>
+        <div class="p-6">
+          <!-- Search -->
+          <div class="mb-4">
+            <input type="search"
+                   placeholder="{% trans 'Search users...' %}"
+                   hx-get="{% url 'users:search_users' %}"
+                   hx-trigger="keyup changed delay:500ms"
+                   hx-target="#user-list"
+                   class="w-full rounded-md border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500"
+                   id="user-search">
+          </div>
+          
+          <!-- User List -->
+          <div id="user-list" class="space-y-2 max-h-96 overflow-y-auto">
+            {% for user in users %}
+            <div class="flex items-center justify-between p-2 hover:bg-gray-50 rounded transition-colors">
+              <div class="flex items-center">
+                <div class="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center mr-3">
+                  <span class="text-xs font-medium text-gray-700">
+                    {{ user.first_name|first|default:user.username|first }}
+                  </span>
+                </div>
+                <div>
+                  <div class="text-sm font-medium cursor-pointer" 
+                       onclick="showUserProfile({{ user.id }})"
+                       title="{% trans 'Click to view profile' %}">
+                    {{ user.get_full_name|default:user.username }}
+                  </div>
+                  <div class="text-xs text-gray-500">{{ user.username }}</div>
+                </div>
+              </div>
+              <div class="flex items-center space-x-1">
+                {% for group in user.groups.all %}
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
+                  {{ group.name }}
+                </span>
+                {% endfor %}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Permission Matrix -->
+  <div class="mt-6 bg-white rounded-lg shadow-sm">
+    <div class="px-6 py-4 border-b border-gray-200">
+      <div class="flex justify-between items-center">
+        <h3 class="text-lg font-medium text-gray-900">{% trans "Permission Matrix" %}</h3>
+        <div class="text-sm text-gray-500">
+          {% trans "Click checkboxes to toggle permissions" %}
+        </div>
+      </div>
+    </div>
+    <div class="p-6">
+      <div class="overflow-x-auto">
+        <table class="min-w-full">
+          <thead>
+            <tr>
+              <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase sticky left-0 bg-white">
+                {% trans "Module" %}
+              </th>
+              {% for role in roles %}
+              <th class="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase min-w-20">
+                {{ role.name }}
+              </th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <!-- Students Module -->
+            <tr>
+              <td class="px-3 py-2 text-sm font-medium sticky left-0 bg-white">
+                <i class="fas fa-user-graduate mr-2 text-purple-600"></i>
+                {% trans "Students" %}
+              </td>
+              {% for role in roles %}
+              <td class="px-3 py-2 text-center">
+                <input type="checkbox" 
+                       class="rounded text-indigo-600 focus:ring-indigo-500"
+                       {% if role.permissions.filter(codename='view_studentprofile').exists %}checked{% endif %}
+                       onchange="togglePermission('{{ role.id }}', 'view_studentprofile', this)">
+              </td>
+              {% endfor %}
+            </tr>
+            
+            <!-- Enrollment Module -->
+            <tr>
+              <td class="px-3 py-2 text-sm font-medium sticky left-0 bg-white">
+                <i class="fas fa-user-plus mr-2 text-blue-600"></i>
+                {% trans "Enrollment" %}
+              </td>
+              {% for role in roles %}
+              <td class="px-3 py-2 text-center">
+                <input type="checkbox" 
+                       class="rounded text-indigo-600 focus:ring-indigo-500"
+                       {% if role.permissions.filter(codename='add_classheaderenrollment').exists %}checked{% endif %}
+                       onchange="togglePermission('{{ role.id }}', 'add_classheaderenrollment', this)">
+              </td>
+              {% endfor %}
+            </tr>
+            
+            <!-- Finance Module -->
+            <tr>
+              <td class="px-3 py-2 text-sm font-medium sticky left-0 bg-white">
+                <i class="fas fa-dollar-sign mr-2 text-green-600"></i>
+                {% trans "Finance" %}
+              </td>
+              {% for role in roles %}
+              <td class="px-3 py-2 text-center">
+                <input type="checkbox" 
+                       class="rounded text-indigo-600 focus:ring-indigo-500"
+                       {% if role.permissions.filter(codename='add_payment').exists %}checked{% endif %}
+                       onchange="togglePermission('{{ role.id }}', 'add_payment', this)">
+              </td>
+              {% endfor %}
+            </tr>
+            
+            <!-- Grading Module -->
+            <tr>
+              <td class="px-3 py-2 text-sm font-medium sticky left-0 bg-white">
+                <i class="fas fa-clipboard-list mr-2 text-yellow-600"></i>
+                {% trans "Grading" %}
+              </td>
+              {% for role in roles %}
+              <td class="px-3 py-2 text-center">
+                <input type="checkbox" 
+                       class="rounded text-indigo-600 focus:ring-indigo-500"
+                       {% if role.permissions.filter(codename='add_classpartgrade').exists %}checked{% endif %}
+                       onchange="togglePermission('{{ role.id }}', 'add_classpartgrade', this)">
+              </td>
+              {% endfor %}
+            </tr>
+            
+            <!-- Attendance Module -->
+            <tr>
+              <td class="px-3 py-2 text-sm font-medium sticky left-0 bg-white">
+                <i class="fas fa-clipboard-check mr-2 text-indigo-600"></i>
+                {% trans "Attendance" %}
+              </td>
+              {% for role in roles %}
+              <td class="px-3 py-2 text-center">
+                <input type="checkbox" 
+                       class="rounded text-indigo-600 focus:ring-indigo-500"
+                       {% if role.permissions.filter(codename='add_attendancerecord').exists %}checked{% endif %}
+                       onchange="togglePermission('{{ role.id }}', 'add_attendancerecord', this)">
+              </td>
+              {% endfor %}
+            </tr>
+            
+            <!-- Scheduling Module -->
+            <tr>
+              <td class="px-3 py-2 text-sm font-medium sticky left-0 bg-white">
+                <i class="fas fa-calendar mr-2 text-red-600"></i>
+                {% trans "Scheduling" %}
+              </td>
+              {% for role in roles %}
+              <td class="px-3 py-2 text-center">
+                <input type="checkbox" 
+                       class="rounded text-indigo-600 focus:ring-indigo-500"
+                       {% if role.permissions.filter(codename='add_classheader').exists %}checked{% endif %}
+                       onchange="togglePermission('{{ role.id }}', 'add_classheader', this)">
+              </td>
+              {% endfor %}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for forms and details -->
+<div id="permission-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+  <div class="flex items-center justify-center min-h-screen px-4">
+    <div class="bg-white rounded-lg max-w-2xl w-full max-h-96 overflow-y-auto">
+      <div class="p-6" id="modal-content">
+        <!-- Modal content will be loaded here -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let selectedRole = null;
+
+function loadRoleDetails(roleId) {
+  // Highlight selected role
+  document.querySelectorAll('[id^="role-"]').forEach(el => {
+    el.classList.remove('bg-blue-50', 'border-blue-200');
+  });
+  document.getElementById(`role-${roleId}`).classList.add('bg-blue-50', 'border-blue-200');
+  
+  selectedRole = roleId;
+  htmx.ajax('GET', `/users/role/${roleId}/details/`, '#role-details');
+}
+
+function togglePermission(roleId, permission, checkbox) {
+  const isChecked = checkbox.checked;
+  
+  fetch('{% url "users:toggle_permission" %}', {
+    method: 'POST',
+    headers: {
+      'X-CSRFToken': getCookie('csrftoken'),
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      role_id: roleId,
+      permission: permission
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      showToast(data.message, 'success');
+      
+      // Refresh role details if this role is selected
+      if (selectedRole === roleId) {
+        loadRoleDetails(roleId);
+      }
+    } else {
+      // Revert checkbox if failed
+      checkbox.checked = !isChecked;
+      showToast(data.error || 'Failed to update permission', 'error');
+    }
+  })
+  .catch(error => {
+    // Revert checkbox if failed
+    checkbox.checked = !isChecked;
+    showToast('Network error', 'error');
+  });
+}
+
+function showUserProfile(userId) {
+  htmx.ajax('GET', `/users/user/${userId}/profile/`, '#modal-content')
+    .then(() => openModal());
+}
+
+function openModal() {
+  document.getElementById('permission-modal').classList.remove('hidden');
+}
+
+function closeModal() {
+  document.getElementById('permission-modal').classList.add('hidden');
+  document.getElementById('modal-content').innerHTML = '';
+}
+
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+function showToast(message, type = 'info') {
+  const toast = document.createElement('div');
+  toast.className = `fixed top-4 right-4 px-4 py-2 rounded-lg shadow-lg z-50 transition-opacity ${
+    type === 'success' ? 'bg-green-500 text-white' : 
+    type === 'error' ? 'bg-red-500 text-white' : 
+    'bg-blue-500 text-white'
+  }`;
+  toast.textContent = message;
+  
+  document.body.appendChild(toast);
+  
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
+}
+
+// Close modal when clicking outside
+document.getElementById('permission-modal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    closeModal();
+  }
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    closeModal();
+  }
+});
+
+// Auto-load first role details
+document.addEventListener('DOMContentLoaded', function() {
+  const firstRole = document.querySelector('[id^="role-"]');
+  if (firstRole) {
+    const roleId = firstRole.id.split('-')[1];
+    loadRoleDetails(roleId);
+  }
+});
+</script>
+
+<!-- Add CSRF token for JavaScript -->
+{% csrf_token %}
+{% endblock %}

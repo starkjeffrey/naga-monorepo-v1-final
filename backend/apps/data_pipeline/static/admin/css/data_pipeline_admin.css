@@ -1,0 +1,271 @@
+/* Data Pipeline Admin Custom Styles */
+
+/* Status indicators */
+.pipeline-status-running {
+    color: #1976d2;
+    font-weight: bold;
+}
+
+.pipeline-status-completed {
+    color: #388e3c;
+    font-weight: bold;
+}
+
+.pipeline-status-failed {
+    color: #d32f2f;
+    font-weight: bold;
+}
+
+.pipeline-status-pending {
+    color: #f57c00;
+    font-weight: bold;
+}
+
+/* Success rate styling */
+.success-rate-high {
+    color: #4caf50;
+    font-weight: bold;
+}
+
+.success-rate-medium {
+    color: #ff9800;
+    font-weight: bold;
+}
+
+.success-rate-low {
+    color: #f44336;
+    font-weight: bold;
+}
+
+/* Data quality indicators */
+.quality-score {
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.quality-excellent {
+    background-color: #e8f5e8;
+    color: #2e7d32;
+}
+
+.quality-good {
+    background-color: #fff8e1;
+    color: #f57c00;
+}
+
+.quality-poor {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+/* Error message styling */
+.error-details {
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 12px;
+    background-color: #fff5f5;
+    border: 1px solid #fed7d7;
+    border-radius: 4px;
+    padding: 8px;
+    margin: 4px 0;
+}
+
+/* Pipeline progress indicators */
+.stage-indicator {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 5px;
+    text-align: center;
+    line-height: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+}
+
+.stage-completed {
+    background-color: #4caf50;
+}
+
+.stage-current {
+    background-color: #2196f3;
+}
+
+.stage-pending {
+    background-color: #9e9e9e;
+}
+
+.stage-failed {
+    background-color: #f44336;
+}
+
+/* Table statistics */
+.table-stats {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.stats-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0;
+}
+
+.stats-label {
+    font-weight: 600;
+    color: #495057;
+}
+
+.stats-value {
+    font-family: monospace;
+    font-weight: bold;
+}
+
+/* JSON formatting */
+pre.json-display {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 11px;
+    max-height: 300px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+}
+
+/* Responsive tables */
+@media (max-width: 768px) {
+    .table-responsive {
+        font-size: 12px;
+    }
+    
+    .table-responsive th,
+    .table-responsive td {
+        padding: 4px;
+    }
+}
+
+/* Dashboard widgets */
+.dashboard-widget {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+    margin: 10px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.widget-header {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.metric-large {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin: 10px 0;
+}
+
+/* Action buttons */
+.pipeline-actions {
+    margin: 10px 0;
+}
+
+.action-button {
+    background-color: #007cba;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.action-button:hover {
+    background-color: #005a87;
+    color: white;
+}
+
+.action-button.danger {
+    background-color: #dc3545;
+}
+
+.action-button.danger:hover {
+    background-color: #c82333;
+}
+
+/* Progress bars */
+.progress-bar {
+    width: 100%;
+    height: 20px;
+    background-color: #e9ecef;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 5px 0;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: #28a745;
+    transition: width 0.3s ease;
+    text-align: center;
+    line-height: 20px;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.progress-fill.warning {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.progress-fill.danger {
+    background-color: #dc3545;
+}
+
+/* Tooltip styling */
+[title] {
+    position: relative;
+    cursor: help;
+}
+
+/* Data type badges */
+.data-type-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.data-type-string {
+    background-color: #e3f2fd;
+    color: #1565c0;
+}
+
+.data-type-number {
+    background-color: #e8f5e8;
+    color: #2e7d32;
+}
+
+.data-type-date {
+    background-color: #fff8e1;
+    color: #f57c00;
+}
+
+.data-type-boolean {
+    background-color: #f3e5f5;
+    color: #7b1fa2;
+}

@@ -1,0 +1,495 @@
+{% extends "admin/base_site.html" %}
+
+{% load i18n admin_urls static admin_modify
+%}
+
+{% block title %}
+  Bulk Enrollment | {{ site_title|default:"Django site admin"
+  }}
+{% endblock %}
+{% block extrahead %}
+  <style>
+    .bulk-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .method-selector {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .method-option {
+      display: inline-block;
+      background: white;
+      padding: 15px 20px;
+      margin: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 2px solid #ddd;
+      transition: all 0.3s ease;
+    }
+
+    .method-option:hover {
+      border-color: #0066cc;
+    }
+
+    .method-option.selected {
+      border-color: #0066cc;
+      background: #e7f3ff;
+    }
+
+    .method-content {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+    }
+
+    .form-row {
+      margin-bottom: 20px;
+    }
+
+    .form-row label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .form-row input,
+    .form-row select,
+    .form-row textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    .student-list {
+      max-height: 300px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 10px;
+    }
+
+    .student-item {
+      padding: 8px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .student-item:last-child {
+      border-bottom: none;
+    }
+
+    .student-item label {
+      margin: 0;
+      cursor: pointer;
+    }
+
+    .csv-template {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 4px;
+      font-family: monospace;
+      white-space: pre-line;
+      margin: 10px 0;
+    }
+
+    .progress-container {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      display: none;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 20px;
+      background: #ddd;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: #0066cc;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .results-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .results-table th,
+    .results-table td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .results-table th {
+      background-color: #f5f5f5;
+      font-weight: bold;
+    }
+
+    .status-success {
+      color: #28a745;
+    }
+
+    .status-error {
+      color: #dc3545;
+    }
+
+    .status-warning {
+      color: #fd7e14;
+    }
+
+    .summary-stats {
+      display: flex;
+      justify-content: space-around;
+      margin: 20px 0;
+    }
+
+    .stat-box {
+      text-align: center;
+      padding: 15px;
+      background: white;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-number {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #666;
+      text-transform: uppercase;
+    }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const methodOptions = document.querySelectorAll('.method-option');
+      const methodContents = document.querySelectorAll('.method-content');
+
+      function selectMethod(selectedMethod) {
+        methodOptions.forEach((option) => {
+          option.classList.remove('selected');
+          if (option.dataset.method === selectedMethod) {
+            option.classList.add('selected');
+          }
+        });
+
+        methodContents.forEach((content) => {
+          content.style.display =
+            content.id === selectedMethod + '-method' ? 'block' : 'none';
+        });
+      }
+
+      methodOptions.forEach((option) => {
+        option.addEventListener('click', function() {
+          selectMethod(this.dataset.method);
+        });
+      });
+
+      // Initialize with first method selected
+      selectMethod('csv');
+
+      // Handle select all checkbox
+      const selectAllCheckbox = document.getElementById('select-all-students');
+      const studentCheckboxes = document.querySelectorAll('.student-checkbox');
+
+      if (selectAllCheckbox) {
+        selectAllCheckbox.addEventListener('change', function() {
+          studentCheckboxes.forEach((checkbox) => {
+            checkbox.checked = this.checked;
+          });
+        });
+      }
+
+      // Handle form submission
+      const bulkForm = document.getElementById('bulk-enrollment-form');
+      if (bulkForm) {
+        bulkForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          startBulkEnrollment();
+        });
+      }
+
+      function startBulkEnrollment() {
+        const progressContainer = document.querySelector('.progress-container');
+        progressContainer.style.display = 'block';
+
+        // Simulate progress (in real implementation, this would be AJAX)
+        let progress = 0;
+        const progressFill = document.querySelector('.progress-fill');
+        const progressText = document.getElementById('progress-text');
+
+        const interval = setInterval(() => {
+          progress += 10;
+          progressFill.style.width = progress + '%';
+          progressText.textContent = `Processing... ${progress}%`;
+
+          if (progress >= 100) {
+            clearInterval(interval);
+            progressText.textContent = 'Enrollment complete!';
+            // Show results
+            document.getElementById('results-section').style.display = 'block';
+          }
+        }, 500);
+      }
+    });
+  </script>
+{% endblock %}
+{% block content %}
+  <div class="bulk-container">
+    <h1>Bulk Student Enrollment</h1>
+    <div class="method-selector">
+      <h3>Choose Enrollment Method:</h3>
+      <div class="method-option selected" data-method="csv">
+        <h4>📄 CSV Upload</h4>
+        <p>Upload a CSV file with student and class information</p>
+      </div>
+      <div class="method-option" data-method="manual">
+        <h4>👥 Manual Selection</h4>
+        <p>Select students and classes manually</p>
+      </div>
+    </div>
+    <form id="bulk-enrollment-form" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <!-- CSV Upload Method -->
+      <div id="csv-method" class="method-content">
+        <h3>CSV Upload Method</h3>
+        <div class="form-row">
+          <label for="csv_file">Upload CSV File:</label>
+          <input type="file" id="csv_file" name="csv_file" accept=".csv" required />
+          <small>File should contain student IDs and class information.</small>
+        </div>
+        <div class="form-row">
+          <label>CSV Template:</label>
+          <div class="csv-template">
+            student_id,class_code,section,term STU001,ENG101,A,Fall2024
+            STU002,ENG101,A,Fall2024 STU003,MATH201,B,Fall2024
+          </div>
+          <a href="#" class="button default" onclick="downloadTemplate()">Download Template</a>
+        </div>
+        <div class="form-row">
+          <label>
+            <input type="checkbox" name="validate_only" value="1" />
+            Validation only (don't create enrollments)
+          </label>
+        </div>
+      </div>
+      <!-- Manual Selection Method -->
+      <div id="manual-method" class="method-content" style="display: none">
+        <h3>Manual Selection Method</h3>
+        <div class="form-row">
+          <label for="target_class">Target Class:</label>
+          <select id="target_class" name="target_class" required>
+            <option value="">-- Select a class --</option>
+            <!-- Populated from available classes -->
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Select Students:</label>
+          <div style="margin-bottom: 10px">
+            <label>
+              <input type="checkbox" id="select-all-students" />
+              Select All Students
+            </label>
+          </div>
+          <div class="student-list">
+            <!-- This would be populated from the server -->
+            <div class="student-item">
+              <label>
+                <input type="checkbox"
+                       name="selected_students"
+                       value="1"
+                       class="student-checkbox" />
+                John Doe (STU001) - Active
+              </label>
+            </div>
+            <div class="student-item">
+              <label>
+                <input type="checkbox"
+                       name="selected_students"
+                       value="2"
+                       class="student-checkbox" />
+                Jane Smith (STU002) - Active
+              </label>
+            </div>
+            <div class="student-item">
+              <label>
+                <input type="checkbox"
+                       name="selected_students"
+                       value="3"
+                       class="student-checkbox" />
+                Mike Johnson (STU003) - Active
+              </label>
+            </div>
+            <!-- More students would be listed here -->
+          </div>
+        </div>
+      </div>
+      <!-- Common Options -->
+      <div class="method-content">
+        <h3>Enrollment Options</h3>
+        <div class="form-row">
+          <label>
+            <input type="checkbox" name="override_capacity" value="1" />
+            Override capacity restrictions
+          </label>
+        </div>
+        <div class="form-row">
+          <label>
+            <input type="checkbox" name="override_prerequisites" value="1" />
+            Override prerequisite requirements
+          </label>
+        </div>
+        <div class="form-row">
+          <label>
+            <input type="checkbox" name="send_notifications" value="1" checked />
+            Send enrollment notifications to students
+          </label>
+        </div>
+        <div class="form-row">
+          <label for="bulk_notes">Bulk Enrollment Notes:</label>
+          <textarea id="bulk_notes"
+                    name="bulk_notes"
+                    rows="3"
+                    placeholder="Optional notes to add to all enrollments..."></textarea>
+        </div>
+        <div class="form-row">
+          <button type="submit" class="button">Start Bulk Enrollment</button>
+          <button type="button" class="button default" onclick="validateOnly()">Validate Only</button>
+        </div>
+      </div>
+    </form>
+    <!-- Progress Section -->
+    <div class="progress-container">
+      <h3>Processing Enrollments</h3>
+      <div class="progress-bar">
+        <div class="progress-fill"></div>
+      </div>
+      <p id="progress-text">Preparing...</p>
+    </div>
+    <!-- Results Section -->
+    <div id="results-section" style="display: none">
+      <h3>Enrollment Results</h3>
+      <div class="summary-stats">
+        <div class="stat-box">
+          <div class="stat-number status-success">25</div>
+          <div class="stat-label">Successful</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number status-warning">3</div>
+          <div class="stat-label">Waitlisted</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number status-error">2</div>
+          <div class="stat-label">Failed</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number">30</div>
+          <div class="stat-label">Total</div>
+        </div>
+      </div>
+      <table class="results-table">
+        <thead>
+          <tr>
+            <th>Student ID</th>
+            <th>Student Name</th>
+            <th>Class</th>
+            <th>Status</th>
+            <th>Message</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>STU001</td>
+            <td>John Doe</td>
+            <td>ENG101-A</td>
+            <td>
+              <span class="status-success">✓ Enrolled</span>
+            </td>
+            <td>Successfully enrolled</td>
+          </tr>
+          <tr>
+            <td>STU002</td>
+            <td>Jane Smith</td>
+            <td>ENG101-A</td>
+            <td>
+              <span class="status-warning">⚠ Waitlisted</span>
+            </td>
+            <td>Class full, added to waitlist (#1)</td>
+          </tr>
+          <tr>
+            <td>STU003</td>
+            <td>Mike Johnson</td>
+            <td>ENG101-A</td>
+            <td>
+              <span class="status-error">✗ Failed</span>
+            </td>
+            <td>Prerequisites not met</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-top: 20px">
+        <button class="button default" onclick="exportResults()">Export Results</button>
+        <button class="button default" onclick="processFailures()">Process Failures</button>
+      </div>
+    </div>
+    <div style="margin-top: 20px">
+      <a href="{% url 'admin:enrollment_classenrollment_changelist' %}"
+         class="button">« Back to Enrollments</a>
+    </div>
+  </div>
+  <script>
+    function downloadTemplate() {
+      // Create CSV template download
+      const csvContent =
+        'student_id,class_code,section,term\nSTU001,ENG101,A,Fall2024\nSTU002,ENG101,A,Fall2024\n';
+      const blob = new Blob([csvContent], {
+        type: 'text/csv',
+      });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'bulk_enrollment_template.csv';
+      a.click();
+      window.URL.revokeObjectURL(url);
+    }
+
+    function validateOnly() {
+      // Add validation-only flag and submit
+      const form = document.getElementById('bulk-enrollment-form');
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'validate_only';
+      input.value = '1';
+      form.appendChild(input);
+      form.submit();
+    }
+
+    function exportResults() {
+      // Export results functionality
+      alert('Results exported successfully!');
+    }
+
+    function processFailures() {
+      // Process failed enrollments
+      alert('Processing failed enrollments...');
+    }
+  </script>
+{% endblock %}

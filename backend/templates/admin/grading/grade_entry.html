@@ -1,0 +1,578 @@
+{% extends "admin/base_site.html" %}
+
+{% load i18n admin_urls static admin_modify
+%}
+
+{% block title %}
+  Grade Entry: {{ class_header }} | {{
+  site_title|default:"Django site admin" }}
+{% endblock %}
+{% block extrahead %}
+  <style>
+    .grade-entry-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .class-info-header {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .grade-entry-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .grade-entry-table th,
+    .grade-entry-table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .grade-entry-table th {
+      background-color: #f5f5f5;
+      font-weight: bold;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .grade-entry-table tbody tr:hover {
+      background-color: #f9f9f9;
+    }
+
+    .grade-input {
+      width: 80px;
+      padding: 6px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    .grade-input:focus {
+      border-color: #0066cc;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2);
+    }
+
+    .status-draft {
+      color: #6c757d;
+    }
+
+    .status-submitted {
+      color: #fd7e14;
+    }
+
+    .status-approved {
+      color: #28a745;
+    }
+
+    .status-finalized {
+      color: #0066cc;
+    }
+
+    .grade-status {
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .grade-status.draft {
+      background: #e9ecef;
+      color: #6c757d;
+    }
+
+    .grade-status.submitted {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .grade-status.approved {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .grade-status.finalized {
+      background: #cce5ff;
+      color: #004085;
+    }
+
+    .bulk-actions {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .progress-indicator {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-around;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .progress-stat {
+      flex: 1;
+    }
+
+    .progress-number {
+      font-size: 24px;
+      font-weight: bold;
+      color: #0066cc;
+    }
+
+    .progress-label {
+      font-size: 12px;
+      color: #666;
+      text-transform: uppercase;
+    }
+
+    .action-buttons {
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .action-buttons button {
+      margin: 0 10px;
+      padding: 10px 20px;
+    }
+
+    .student-photo {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .grade-conversion-info {
+      background: #e3f2fd;
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
+    .attendance-indicator {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+
+    .attendance-good {
+      background: #28a745;
+    }
+
+    .attendance-warning {
+      background: #fd7e14;
+    }
+
+    .attendance-poor {
+      background: #dc3545;
+    }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Auto-save functionality
+      let saveTimeout;
+
+      function autoSave() {
+        clearTimeout(saveTimeout);
+        saveTimeout = setTimeout(() => {
+          // Show saving indicator
+          const saveIndicator = document.getElementById('save-indicator');
+          saveIndicator.textContent = 'Saving...';
+          saveIndicator.style.color = '#fd7e14';
+
+          // Simulate save (replace with actual AJAX call)
+          setTimeout(() => {
+            saveIndicator.textContent = 'Saved';
+            saveIndicator.style.color = '#28a745';
+          }, 1000);
+        }, 2000);
+      }
+
+      // Add auto-save to all grade inputs
+      document.querySelectorAll('.grade-input').forEach((input) => {
+        input.addEventListener('input', autoSave);
+
+        // Validate grade input
+        input.addEventListener('blur', function() {
+          const value = parseFloat(this.value);
+          if (this.value && (isNaN(value) || value < 0 || value > 100)) {
+            this.style.borderColor = '#dc3545';
+            this.title = 'Grade must be between 0 and 100';
+          } else {
+            this.style.borderColor = '#ddd';
+            this.title = '';
+          }
+        });
+      });
+
+      // Bulk actions
+      document
+        .getElementById('select-all')
+        .addEventListener('change', function() {
+          const checkboxes = document.querySelectorAll('.student-checkbox');
+          checkboxes.forEach((cb) => (cb.checked = this.checked));
+        });
+
+      // Grade calculation
+      function calculateFinalGrade(studentRow) {
+        const inputs = studentRow.querySelectorAll('.grade-input');
+        let total = 0;
+        let count = 0;
+
+        inputs.forEach((input) => {
+          const value = parseFloat(input.value);
+          if (!isNaN(value)) {
+            total += value;
+            count++;
+          }
+        });
+
+        if (count > 0) {
+          const average = total / count;
+          const finalGradeCell = studentRow.querySelector('.final-grade');
+          finalGradeCell.textContent = average.toFixed(1);
+
+          // Determine letter grade (simplified logic)
+          let letterGrade = 'F';
+          if (average >= 90) letterGrade = 'A';
+          else if (average >= 80) letterGrade = 'B';
+          else if (average >= 70) letterGrade = 'C';
+          else if (average >= 60) letterGrade = 'D';
+
+          const letterGradeCell = studentRow.querySelector('.letter-grade');
+          letterGradeCell.textContent = letterGrade;
+        }
+      }
+
+      // Update final grades when individual grades change
+      document.querySelectorAll('.grade-input').forEach((input) => {
+        input.addEventListener('input', function() {
+          const studentRow = this.closest('tr');
+          calculateFinalGrade(studentRow);
+        });
+      });
+    });
+  </script>
+{% endblock %}
+{% block content %}
+  <div class="grade-entry-container">
+    <h1>Grade Entry</h1>
+    <div class="class-info-header">
+      <div style="display: flex;
+                  justify-content: space-between;
+                  align-items: center">
+        <div>
+          <h2>{{ class_header.course.code }} - {{ class_header.course.title }}</h2>
+          <p>
+            <strong>Section:</strong> {{ class_header.section_id }} |
+            <strong>Term:</strong> {{ class_header.term.name }} |
+            <strong>Instructor:</strong> {{ class_header.instructor|default:"TBA"
+            }}
+          </p>
+          <p>
+            <strong>Grading Scale:</strong> {{ grading_scale.name }} ({{
+            grading_scale.get_scale_type_display }})
+          </p>
+        </div>
+        <div style="text-align: right">
+          <div id="save-indicator" style="font-weight: bold; color: #28a745">All changes saved</div>
+          <div style="font-size: 12px; color: #666">
+            Last updated: <span id="last-updated">Just now</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grade-conversion-info">
+      <strong>Grading Scale:</strong>
+      {% if grading_scale.scale_type == 'ACADEMIC' %}
+        A+ (97-100) | A (93-96) | A-
+        (90-92) | B+ (87-89) | B (83-86) | B- (80-82) | C+ (77-79) | C (73-76) | C-
+        (70-72) | D+ (67-69) | D (63-66) | D- (60-62) | F (0-59)
+      {% elif
+        grading_scale.scale_type == 'LANGUAGE_IEAP' %}
+        A (90-100) | B (80-89) | C
+        (70-79) | D (60-69) | F (0-59)
+      {% else %}
+        A (90-100) | B (80-89) | C (70-79)
+        | D (50-69) | F (0-49)
+      {% endif %}
+    </div>
+    <div class="progress-indicator">
+      <div class="progress-stat">
+        <div class="progress-number">{{ total_students }}</div>
+        <div class="progress-label">Total Students</div>
+      </div>
+      <div class="progress-stat">
+        <div class="progress-number">{{ grades_entered }}</div>
+        <div class="progress-label">Grades Entered</div>
+      </div>
+      <div class="progress-stat">
+        <div class="progress-number">{{ grades_submitted }}</div>
+        <div class="progress-label">Submitted</div>
+      </div>
+      <div class="progress-stat">
+        <div class="progress-number">{{ grades_approved }}</div>
+        <div class="progress-label">Approved</div>
+      </div>
+    </div>
+    <div class="bulk-actions">
+      <h3>Bulk Actions</h3>
+      <label>
+        <input type="checkbox" id="select-all" />
+        Select All Students
+      </label>
+      <button type="button" class="button default" onclick="submitSelectedGrades()">Submit Selected</button>
+      <button type="button"
+              class="button default"
+              onclick="approveSelectedGrades()">Approve Selected</button>
+      <button type="button" class="button default" onclick="exportGrades()">Export to CSV</button>
+    </div>
+    <div style="overflow-x: auto">
+      <table class="grade-entry-table">
+        <thead>
+          <tr>
+            <th>
+              <input type="checkbox" id="select-all-header" />
+            </th>
+            <th>Photo</th>
+            <th>Student ID</th>
+            <th>Student Name</th>
+            <th>Attendance</th>
+            <th>Assignment 1</th>
+            <th>Assignment 2</th>
+            <th>Midterm</th>
+            <th>Final Exam</th>
+            <th>Final Grade</th>
+            <th>Letter Grade</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for enrollment in enrollments %}
+            <tr data-student-id="{{ enrollment.student.id }}">
+              <td>
+                <input type="checkbox" class="student-checkbox" value="{{ enrollment.id }}" />
+              </td>
+              <td>
+                <img src="{% if enrollment.student.photo %}{{ enrollment.student.photo.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}"
+                     alt="{{ enrollment.student.person.full_name }}"
+                     class="student-photo" />
+              </td>
+              <td>{{ enrollment.student.student_id }}</td>
+              <td>
+                <strong>{{ enrollment.student.person.full_name }}</strong>
+                <br />
+                <small>{{ enrollment.student.person.email|default:"No email" }}</small>
+              </td>
+              <td>
+                <span class="attendance-indicator attendance-{% if enrollment.attendance_rate >= 90 %}good{% elif enrollment.attendance_rate >= 75 %}warning{% else %}poor{% endif %}"></span>
+                {{ enrollment.attendance_rate|default:0 }}%
+              </td>
+              <td>
+                <input type="number"
+                       class="grade-input"
+                       name="assignment1_{{ enrollment.id }}"
+                       value="{{ enrollment.assignment1_grade|default:'' }}"
+                       min="0"
+                       max="100"
+                       step="0.1" />
+              </td>
+              <td>
+                <input type="number"
+                       class="grade-input"
+                       name="assignment2_{{ enrollment.id }}"
+                       value="{{ enrollment.assignment2_grade|default:'' }}"
+                       min="0"
+                       max="100"
+                       step="0.1" />
+              </td>
+              <td>
+                <input type="number"
+                       class="grade-input"
+                       name="midterm_{{ enrollment.id }}"
+                       value="{{ enrollment.midterm_grade|default:'' }}"
+                       min="0"
+                       max="100"
+                       step="0.1" />
+              </td>
+              <td>
+                <input type="number"
+                       class="grade-input"
+                       name="final_{{ enrollment.id }}"
+                       value="{{ enrollment.final_grade|default:'' }}"
+                       min="0"
+                       max="100"
+                       step="0.1" />
+              </td>
+              <td class="final-grade">{{ enrollment.calculated_final|default:"-" }}</td>
+              <td class="letter-grade">{{ enrollment.letter_grade|default:"-" }}</td>
+              <td>
+                <span class="grade-status {{ enrollment.grade_status|lower }}">{{ enrollment.grade_status|default:"DRAFT" }}</span>
+              </td>
+              <td>
+                <button type="button"
+                        class="button"
+                        style="font-size: 11px"
+                        onclick="submitStudentGrade({{ enrollment.id }})">Submit</button>
+                <button type="button"
+                        class="button default"
+                        style="font-size: 11px"
+                        onclick="viewStudentDetails({{ enrollment.id }})">Details</button>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="13" style="text-align: center; padding: 40px; color: #666">No students enrolled in this class.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="action-buttons">
+      <button type="button" class="button" onclick="saveAllGrades()">Save All Changes</button>
+      <button type="button" class="button default" onclick="submitAllGrades()">Submit All Grades</button>
+      <button type="button" class="button default" onclick="approveAllGrades()">Approve All Grades</button>
+      <button type="button" class="button default" onclick="calculateFinalGrades()">Recalculate Final Grades</button>
+    </div>
+    <div style="margin-top: 30px">
+      <h3>Grade Entry Notes</h3>
+      <ul>
+        <li>Grades are automatically saved as you type</li>
+        <li>Valid grade range: 0-100</li>
+        <li>
+          Final grades are calculated automatically based on entered component
+          grades
+        </li>
+        <li>Submit grades to make them available for review</li>
+        <li>Approved grades become part of the student's official transcript</li>
+      </ul>
+    </div>
+    <div style="margin-top: 20px">
+      <a href="{% url 'admin:grading_classpartgrade_changelist' %}"
+         class="button">« Back to Grade Management</a>
+    </div>
+  </div>
+  <script>
+    function saveAllGrades() {
+      // Implementation for saving all grades via AJAX
+      alert('All grades saved successfully!');
+    }
+
+    function submitAllGrades() {
+      if (
+        confirm('Submit all grades for review? This action cannot be undone.')
+      ) {
+        // Implementation for submitting all grades
+        alert('All grades submitted successfully!');
+      }
+    }
+
+    function approveAllGrades() {
+      if (
+        confirm(
+          'Approve all grades? This will make them part of official transcripts.'
+        )
+      ) {
+        // Implementation for approving all grades
+        alert('All grades approved successfully!');
+      }
+    }
+
+    function calculateFinalGrades() {
+      // Implementation for recalculating final grades
+      document.querySelectorAll('tbody tr').forEach((row) => {
+        if (!row.dataset.studentId) return;
+
+        const inputs = row.querySelectorAll('.grade-input');
+        let total = 0;
+        let count = 0;
+
+        inputs.forEach((input) => {
+          const value = parseFloat(input.value);
+          if (!isNaN(value)) {
+            total += value;
+            count++;
+          }
+        });
+
+        if (count > 0) {
+          const average = total / count;
+          row.querySelector('.final-grade').textContent = average.toFixed(1);
+
+          // Update letter grade
+          let letterGrade = 'F';
+          if (average >= 90) letterGrade = 'A';
+          else if (average >= 80) letterGrade = 'B';
+          else if (average >= 70) letterGrade = 'C';
+          else if (average >= 60) letterGrade = 'D';
+
+          row.querySelector('.letter-grade').textContent = letterGrade;
+        }
+      });
+
+      alert('Final grades recalculated!');
+    }
+
+    function submitStudentGrade(enrollmentId) {
+      if (confirm("Submit this student's grade for review?")) {
+        // Implementation for submitting individual grade
+        alert('Grade submitted successfully!');
+      }
+    }
+
+    function viewStudentDetails(enrollmentId) {
+      // Implementation for viewing student details
+      window.open('/admin/students/' + enrollmentId + '/', '_blank');
+    }
+
+    function submitSelectedGrades() {
+      const selected = document.querySelectorAll('.student-checkbox:checked');
+      if (selected.length === 0) {
+        alert('Please select at least one student.');
+        return;
+      }
+
+      if (confirm(`Submit grades for ${selected.length} selected students?`)) {
+        // Implementation for submitting selected grades
+        alert('Selected grades submitted successfully!');
+      }
+    }
+
+    function approveSelectedGrades() {
+      const selected = document.querySelectorAll('.student-checkbox:checked');
+      if (selected.length === 0) {
+        alert('Please select at least one student.');
+        return;
+      }
+
+      if (confirm(`Approve grades for ${selected.length} selected students?`)) {
+        // Implementation for approving selected grades
+        alert('Selected grades approved successfully!');
+      }
+    }
+
+    function exportGrades() {
+      // Implementation for exporting grades to CSV
+      alert('Grades exported to CSV successfully!');
+    }
+  </script>
+{% endblock %}

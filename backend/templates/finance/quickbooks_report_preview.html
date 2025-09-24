@@ -1,0 +1,56 @@
+{% extends "base_minimal.html" %}
+
+{% load i18n %}
+
+{% block title %}{{ title }} -\nPreview{% endblock %}
+{% block content %}
+  \n
+  <div class="container mx-auto px-4 py-8">
+    \n
+    <div class="bg-white rounded-lg shadow-md p-6">
+      \n
+      <div class="flex justify-between items-center mb-6">
+        \n
+        <h1 class="text-2xl font-bold">{{ title }}</h1>
+        \n
+        <button\n onclick="window.print()"\n        class="bg-gray-600 text-white py-2 px-4 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"\n>
+          \n        <i class="fas fa-print mr-2"></i>\n        {% trans "Print" %}\n
+        </button>
+        \n
+      </div>
+      \n\n
+      <div\n class="font-mono whitespace-pre-wrap bg-gray-50 p-6 rounded border border-gray-200 overflow-x-auto"\n>
+        \n      {{ content }}\n
+      </div>
+      \n\n
+      <div class="mt-6 flex justify-center space-x-4">
+        \n
+        <button\n onclick="copyToClipboard()"\n        class="bg-blue-600 text-white py-2 px-6 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"\n>
+          \n        <i class="fas fa-copy mr-2"></i>\n        {% trans "Copy to Clipboard" %}\n
+        </button>
+        \n
+        <button\n onclick="window.close()"\n        class="bg-gray-600 text-white py-2 px-6 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"\n>
+          \n        <i class="fas fa-times mr-2"></i>\n        {% trans "Close" %}\n
+        </button>
+        \n
+      </div>
+      \n
+    </div>
+    \n
+  </div>
+  \n\n<script>
+  \
+  n
+
+  function copyToClipboard() {
+    \
+    n
+    const content = document.querySelector('.font-mono').innerText;\
+    n\ n
+    if (navigator.clipboard && window.isSecureContext) {
+      \
+      n // Modern way\n      navigator.clipboard.writeText(content).then(\n        function () {\n          showNotification('Report copied to clipboard!');\n        },\n        function (err) {\n          console.error('Could not copy text: ', err);\n          fallbackCopyToClipboard(content);\n        }\n      );\n    } else {\n      // Fallback\n      fallbackCopyToClipboard(content);\n    }\n  }\n\n  function fallbackCopyToClipboard(text) {\n    const textArea = document.createElement('textarea');\n    textArea.value = text;\n    textArea.style.position = 'fixed';\n    textArea.style.left = '-999999px';\n    document.body.appendChild(textArea);\n    textArea.focus();\n    textArea.select();\n\n    try {\n      document.execCommand('copy');\n      showNotification('Report copied to clipboard!');\n    } catch (err) {\n      showNotification(\n        'Failed to copy. Please select and copy manually.',\n        'error'\n      );\n    }\n\n    document.body.removeChild(textArea);\n  }\n\n  function showNotification(message, type = 'success') {\n    const notification = document.createElement('div');\n    notification.className = `fixed top-4 right-4 px-6 py-3 rounded-md shadow-lg z-50 ${\n      type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'\n    }`;\n    notification.innerHTML = `\n        <div class="flex items-center">\n            <i class="fas fa-${\n              type === 'success' ? 'check-circle' : 'exclamation-circle'\n            } mr-2"></i>\n            ${message}\n        </div>\n    `;\n\n    document.body.appendChild(notification);\n\n    setTimeout(() => {\n      notification.remove();\n    }, 3000);\n  }\n\n  // Print styles\n  const style = document.createElement('style');\n  style.textContent = `\n    @media print {\n        body { margin: 0; }\n        .container { max-width: 100%; }\n        button { display: none !important; }\n        .bg-gray-50 { background: white !important; }\n        .shadow-md { box-shadow: none !important; }\n    }\n`;\n  document.head.appendChild(style);\n
+</script>
+  \n\n
+{% endblock %}
+\n

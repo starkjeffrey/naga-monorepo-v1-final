@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+echo "Starting evaluation server setup..."
+
+# Run migrations
+echo "Running migrations..."
+python manage.py migrate --noinput
+
+# Collect static files
+echo "Collecting static files..."
+python manage.py collectstatic --noinput --clear
+
+# Run deployment checks (these validate security and production readiness)
+echo "Running deployment checks..."
+python manage.py check --deploy || echo "Warning: Deployment checks found issues - review for production readiness"
+
+# Start the server
+echo "Starting evaluation server..."
+exec python manage.py runserver 0.0.0.0:8000 --noreload --insecure

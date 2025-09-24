@@ -1,0 +1,57 @@
+http:
+  middlewares:
+    # Admin authentication middleware
+    admin-auth:
+      basicAuth:
+        users:
+          # admin:admin (change this!)
+          # Generate with: htpasswd -nb admin your-secure-password
+          - "admin:$2y$10$3K8qx4e1.vZ5N2Hv7zD8.uJ9Qw2X5Y6Z8A1B3C4D5E6F7G8H9I0J1K"
+    
+    # Security headers
+    security-headers:
+      headers:
+        accessControlAllowMethods:
+          - GET
+          - OPTIONS
+          - PUT
+          - POST
+          - DELETE
+        accessControlMaxAge: 100
+        hostsProxyHeaders:
+          - "X-Forwarded-Host"
+        sslRedirect: true
+        stsSeconds: 63072000
+        stsIncludeSubdomains: true
+        stsPreload: true
+        forceSTSHeader: true
+        contentTypeNosniff: true
+        browserXssFilter: true
+        referrerPolicy: "strict-origin-when-cross-origin"
+        customFrameOptionsValue: "SAMEORIGIN"
+    
+    # Rate limiting
+    rate-limit:
+      rateLimit:
+        average: 100
+        burst: 50
+        period: 1m
+    
+    # CORS for API endpoints
+    cors:
+      headers:
+        accessControlAllowOriginList:
+          - "https://sis-dev.pucsr.edu.kh"
+          - "https://sis-eval.pucsr.edu.kh"
+        accessControlAllowMethods:
+          - "GET"
+          - "POST"
+          - "PUT"
+          - "DELETE"
+          - "OPTIONS"
+        accessControlAllowHeaders:
+          - "Content-Type"
+          - "Authorization"
+          - "X-Requested-With"
+        accessControlMaxAge: 100
+        addVaryHeader: true

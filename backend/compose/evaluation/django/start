@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+# Disable file logging by setting console-only logging
+export DJANGO_LOG_LEVEL=INFO
+export DJANGO_USE_CONSOLE_LOGGING=1
+
+# Run migrations
+python manage.py migrate
+
+# Start server with uvicorn for evaluation environment (4 workers for better performance)
+exec uvicorn config.asgi:application --host 0.0.0.0 --port 8000 --workers 4

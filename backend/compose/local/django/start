@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+# Skip all database operations since we restored from backup
+echo "Using restored database - starting server directly"
+
+# Skip Django shell test - start server directly
+
+# Start development server directly
+uv run python manage.py runserver 0.0.0.0:8000 --noreload --skip-checks

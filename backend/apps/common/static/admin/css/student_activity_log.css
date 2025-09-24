@@ -1,0 +1,228 @@
+/* Custom styles for StudentActivityLog admin interface */
+
+/* Visibility badges */
+.visibility-badge {
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.visibility-staff-only {
+  background-color: #dc3545;
+  color: white;
+}
+
+.visibility-student-visible {
+  background-color: #28a745;
+  color: white;
+}
+
+.visibility-public {
+  background-color: #007bff;
+  color: white;
+}
+
+/* Activity type colors */
+.activity-enrollment {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.activity-withdrawal {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.activity-completion {
+  color: #007bff;
+  font-weight: bold;
+}
+
+.activity-promotion {
+  color: #17a2b8;
+  font-weight: bold;
+}
+
+.activity-grade {
+  color: #6c757d;
+  font-weight: bold;
+}
+
+.activity-override {
+  color: #e83e8c;
+  font-weight: bold;
+}
+
+/* Summary statistics styling */
+.activity-summary {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background-color: white;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.stat-card h3 {
+  margin-top: 0;
+  color: #333;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+/* Quick filter buttons */
+.quick-filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.quick-filter-btn {
+  padding: 5px 15px;
+  border-radius: 3px;
+  text-decoration: none;
+  border: 1px solid transparent;
+  display: inline-block;
+  font-size: 13px;
+  line-height: 1.5;
+  transition: all 0.15s;
+  cursor: pointer;
+}
+
+.quick-filter-btn:hover {
+  opacity: 0.8;
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+
+/* Tooltip styling */
+.tooltip-text {
+  position: relative;
+  cursor: help;
+  border-bottom: 1px dotted #666;
+}
+
+.tooltip-text:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 3px;
+  white-space: nowrap;
+  font-size: 12px;
+  z-index: 1000;
+}
+
+/* Table improvements */
+#result_list td {
+  vertical-align: middle;
+}
+
+#result_list tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* System generated indicator */
+.system-generated {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #6c757d;
+  margin-left: 5px;
+  vertical-align: middle;
+}
+
+.system-generated.true {
+  background-color: #17a2b8;
+}
+
+/* Responsive improvements */
+@media (max-width: 1024px) {
+  .stat-card {
+    margin-bottom: 10px;
+  }
+
+  .quick-filters {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 767px) {
+  .activity-summary {
+    padding: 10px;
+  }
+
+  .stat-value {
+    font-size: 20px;
+  }
+
+  #result_list {
+    font-size: 12px;
+  }
+
+  .visibility-badge {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+}
+
+/* Loading indicator */
+.loading-indicator {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-left: 10px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Export button styling */
+.export-button {
+  background-color: #28a745;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 3px;
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.export-button:hover {
+  background-color: #218838;
+  color: white;
+  text-decoration: none;
+}

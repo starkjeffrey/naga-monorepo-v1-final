@@ -1,0 +1,668 @@
+name: Deploy (VPS/Linode)
+
+on:
+  workflow_run:
+    workflows: ["CI/CD Pipeline"]
+    types:
+      - completed
+    branches: [main, develop]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+      force_deploy:
+        description: 'Force deployment even if no changes'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  REGISTRY: docker.io
+  IMAGE_NAME: naga-sis
+
+jobs:
+  determine-environment:
+    runs-on: self-hosted
+    outputs:
+      environment: ${{ steps.env.outputs.environment }}
+      should_deploy: ${{ steps.env.outputs.should_deploy }}
+    steps:
+      - name: Determine deployment environment
+        id: env
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "environment=${{ github.event.inputs.environment }}" >> $GITHUB_OUTPUT
+            echo "should_deploy=true" >> $GITHUB_OUTPUT
+          elif [ "${{ github.ref }}" = "refs/heads/main" ] && [ "${{ github.event.workflow_run.conclusion }}" = "success" ]; then
+            echo "environment=production" >> $GITHUB_OUTPUT
+            echo "should_deploy=true" >> $GITHUB_OUTPUT
+          elif [ "${{ github.ref }}" = "refs/heads/develop" ] && [ "${{ github.event.workflow_run.conclusion }}" = "success" ]; then
+            echo "environment=staging" >> $GITHUB_OUTPUT
+            echo "should_deploy=true" >> $GITHUB_OUTPUT
+          else
+            echo "should_deploy=false" >> $GITHUB_OUTPUT
+          fi
+
+  prepare-deployment:
+    runs-on: self-hosted
+    needs: determine-environment
+    if: needs.determine-environment.outputs.should_deploy == 'true'
+    environment: ${{ needs.determine-environment.outputs.environment }}
+    outputs:
+      backend_url: ${{ steps.urls.outputs.backend_url }}
+      frontend_url: ${{ steps.urls.outputs.frontend_url }}
+      server_host: ${{ steps.urls.outputs.server_host }}
+      server_user: ${{ steps.urls.outputs.server_user }}
+    steps:
+      - name: Set deployment URLs and server details
+        id: urls
+        run: |
+          if [ "${{ needs.determine-environment.outputs.environment }}" = "production" ]; then
+            echo "backend_url=https://api.naga-sis.com" >> $GITHUB_OUTPUT
+            echo "frontend_url=https://naga-sis.com" >> $GITHUB_OUTPUT
+            echo "server_host=${{ vars.PRODUCTION_SERVER_HOST }}" >> $GITHUB_OUTPUT
+            echo "server_user=${{ vars.PRODUCTION_SERVER_USER }}" >> $GITHUB_OUTPUT
+          else
+            echo "backend_url=https://api-staging.naga-sis.com" >> $GITHUB_OUTPUT
+            echo "frontend_url=https://staging.naga-sis.com" >> $GITHUB_OUTPUT
+            echo "server_host=${{ vars.STAGING_SERVER_HOST }}" >> $GITHUB_OUTPUT
+            echo "server_user=${{ vars.STAGING_SERVER_USER }}" >> $GITHUB_OUTPUT
+          fi
+
+  build-and-deploy:
+    runs-on: self-hosted
+    needs: [determine-environment, prepare-deployment]
+    if: needs.determine-environment.outputs.should_deploy == 'true'
+    environment: ${{ needs.determine-environment.outputs.environment }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./backend/compose/production/django/Dockerfile
+          push: true
+          tags: |
+            ${{ env.IMAGE_NAME }}/backend:${{ github.sha }}
+            ${{ env.IMAGE_NAME }}/backend:latest
+            ${{ env.IMAGE_NAME }}/backend:${{ needs.determine-environment.outputs.environment }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64
+
+      - name: Setup SSH connection
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.LINODE_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ needs.prepare-deployment.outputs.server_host }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to VPS
+        env:
+          SERVER_HOST: ${{ needs.prepare-deployment.outputs.server_host }}
+          SERVER_USER: ${{ needs.prepare-deployment.outputs.server_user }}
+          ENVIRONMENT: ${{ needs.determine-environment.outputs.environment }}
+          BACKEND_IMAGE: ${{ env.IMAGE_NAME }}/backend:${{ github.sha }}
+        run: |
+          # Create deployment script that will run on the server
+          cat > deploy-script.sh << 'EOF'
+          #!/bin/bash
+          set -e
+          
+          ENVIRONMENT="${1}"
+          BACKEND_IMAGE="${2}"
+          
+          echo "🚀 Deploying Naga SIS to ${ENVIRONMENT} environment..."
+          
+          # Create application directory
+          sudo mkdir -p /opt/naga-sis/${ENVIRONMENT}
+          sudo chown ${USER}:${USER} /opt/naga-sis/${ENVIRONMENT}
+          cd /opt/naga-sis/${ENVIRONMENT}
+          
+          # Create data directories
+          mkdir -p data/postgres data/redis logs nginx/ssl
+          
+          # Create production docker-compose file
+          cat > docker-compose.yml << 'COMPOSE_EOF'
+          version: '3.8'
+          
+          services:
+            postgres:
+              image: postgres:15-alpine
+              environment:
+                POSTGRES_DB: naga_${ENVIRONMENT}
+                POSTGRES_USER: naga_user
+                POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+              volumes:
+                - ./data/postgres:/var/lib/postgresql/data
+              restart: unless-stopped
+              networks:
+                - naga-network
+              healthcheck:
+                test: ["CMD-SHELL", "pg_isready -U naga_user -d naga_${ENVIRONMENT}"]
+                interval: 10s
+                timeout: 5s
+                retries: 5
+          
+            redis:
+              image: redis:8.2-alpine
+              volumes:
+                - ./data/redis:/data
+              restart: unless-stopped
+              networks:
+                - naga-network
+              command: redis-server --appendonly yes
+              healthcheck:
+                test: ["CMD", "redis-cli", "ping"]
+                interval: 10s
+                timeout: 5s
+                retries: 5
+          
+            backend:
+              image: ${BACKEND_IMAGE}
+              environment:
+                DATABASE_URL: postgres://naga_user:${DATABASE_PASSWORD}@postgres:5432/naga_${ENVIRONMENT}
+                REDIS_URL: redis://redis:6379/0
+                DJANGO_SETTINGS_MODULE: config.settings.production
+                DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+                ENVIRONMENT: ${ENVIRONMENT}
+                ALLOWED_HOSTS: ${BACKEND_URL},${FRONTEND_URL}
+              depends_on:
+                postgres:
+                  condition: service_healthy
+                redis:
+                  condition: service_healthy
+              restart: unless-stopped
+              networks:
+                - naga-network
+              ports:
+                - "8000:8000"
+              volumes:
+                - ./logs:/app/logs
+              healthcheck:
+                test: ["CMD", "python", "manage.py", "check"]
+                interval: 30s
+                timeout: 10s
+                retries: 3
+          
+          networks:
+            naga-network:
+              driver: bridge
+          COMPOSE_EOF
+          
+          # Pull latest image
+          docker-compose pull backend
+          
+          # Stop existing services gracefully
+          if [ -f "docker-compose.yml" ]; then
+            echo "🛑 Stopping existing services..."
+            docker-compose down --timeout 30
+          fi
+          
+          # Start database services first
+          echo "🗄️ Starting database services..."
+          docker-compose up -d postgres redis
+          
+          # Wait for services to be healthy
+          echo "⏳ Waiting for services to be ready..."
+          docker-compose exec postgres sh -c 'until pg_isready -U naga_user; do sleep 1; done'
+          docker-compose exec redis sh -c 'until redis-cli ping; do sleep 1; done'
+          
+          # Run migrations
+          echo "🔄 Running database migrations..."
+          docker-compose run --rm backend python manage.py migrate
+          
+          # Collect static files
+          echo "📦 Collecting static files..."
+          docker-compose run --rm backend python manage.py collectstatic --noinput
+          
+          # Start backend service
+          echo "🚀 Starting backend service..."
+          docker-compose up -d backend
+          
+          # Wait and verify deployment
+          echo "🏥 Verifying deployment..."
+          sleep 30
+          if docker-compose exec backend python manage.py check; then
+            echo "✅ Deployment successful!"
+          else
+            echo "❌ Health check failed"
+            docker-compose logs backend
+            exit 1
+          fi
+          
+          echo "🎉 Deployment completed!"
+          EOF
+          
+          # Copy deployment script to server
+          scp deploy-script.sh $SERVER_USER@$SERVER_HOST:/tmp/deploy-script.sh
+          
+          # Execute deployment on server with environment variables
+          ssh $SERVER_USER@$SERVER_HOST \
+            "DATABASE_PASSWORD='${{ secrets.DATABASE_PASSWORD }}' \
+             DJANGO_SECRET_KEY='${{ secrets.DJANGO_SECRET_KEY }}' \
+             BACKEND_URL='${{ needs.prepare-deployment.outputs.backend_url }}' \
+             FRONTEND_URL='${{ needs.prepare-deployment.outputs.frontend_url }}' \
+             bash /tmp/deploy-script.sh '$ENVIRONMENT' '$BACKEND_IMAGE'"
+
+      - name: Cleanup
+        if: always()
+        run: |
+          rm -f ~/.ssh/id_rsa
+          rm -f deploy-script.sh
+
+  deploy-frontend:
+    runs-on: self-hosted
+    needs: [determine-environment, prepare-deployment]
+    if: needs.determine-environment.outputs.should_deploy == 'true'
+    environment: ${{ needs.determine-environment.outputs.environment }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build frontend
+        env:
+          VITE_API_BASE_URL: ${{ needs.prepare-deployment.outputs.backend_url }}
+          VITE_ENVIRONMENT: ${{ needs.determine-environment.outputs.environment }}
+        run: npx nx build frontend --prod
+
+      - name: Setup SSH connection
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.LINODE_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ needs.prepare-deployment.outputs.server_host }} >> ~/.ssh/known_hosts
+
+      - name: Deploy frontend to VPS
+        env:
+          SERVER_HOST: ${{ needs.prepare-deployment.outputs.server_host }}
+          SERVER_USER: ${{ needs.prepare-deployment.outputs.server_user }}
+          ENVIRONMENT: ${{ needs.determine-environment.outputs.environment }}
+        run: |
+          # Create frontend deployment script
+          cat > deploy-frontend.sh << 'EOF'
+          #!/bin/bash
+          set -e
+          
+          ENVIRONMENT="${1}"
+          
+          echo "🎨 Deploying frontend to ${ENVIRONMENT} environment..."
+          
+          # Create nginx directory structure
+          sudo mkdir -p /etc/nginx/sites-available
+          sudo mkdir -p /etc/nginx/sites-enabled
+          sudo mkdir -p /var/www/naga-sis/${ENVIRONMENT}
+          sudo chown -R ${USER}:${USER} /var/www/naga-sis
+          
+          # Install nginx if not present
+          if ! command -v nginx &> /dev/null; then
+            sudo apt-get update
+            sudo apt-get install -y nginx
+          fi
+          
+          # Create nginx configuration
+          sudo tee /etc/nginx/sites-available/naga-sis-${ENVIRONMENT} > /dev/null << 'NGINX_EOF'
+          server {
+              listen 80;
+              server_name ${FRONTEND_DOMAIN};
+              root /var/www/naga-sis/${ENVIRONMENT};
+              index index.html;
+          
+              # Enable gzip compression
+              gzip on;
+              gzip_vary on;
+              gzip_min_length 1024;
+              gzip_types
+                  application/javascript
+                  application/json
+                  text/css
+                  text/javascript
+                  text/plain;
+          
+              # Handle Vue.js router (history mode)
+              location / {
+                  try_files $uri $uri/ /index.html;
+              }
+          
+              # API proxy to backend
+              location /api/ {
+                  proxy_pass http://localhost:8000;
+                  proxy_set_header Host $host;
+                  proxy_set_header X-Real-IP $remote_addr;
+                  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                  proxy_set_header X-Forwarded-Proto $scheme;
+              }
+          
+              # Static assets caching
+              location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2)$ {
+                  expires 1y;
+                  add_header Cache-Control "public, immutable";
+              }
+          
+              # Security headers
+              add_header X-Frame-Options "SAMEORIGIN" always;
+              add_header X-Content-Type-Options "nosniff" always;
+              add_header X-XSS-Protection "1; mode=block" always;
+          }
+          NGINX_EOF
+          
+          # Enable site
+          sudo ln -sf /etc/nginx/sites-available/naga-sis-${ENVIRONMENT} /etc/nginx/sites-enabled/
+          
+          # Test nginx configuration
+          sudo nginx -t
+          
+          # Reload nginx
+          sudo systemctl reload nginx
+          sudo systemctl enable nginx
+          
+          echo "✅ Frontend deployment completed!"
+          EOF
+          
+          # Copy built frontend files to server
+          echo "📦 Uploading frontend files..."
+          rsync -avz --delete frontend/dist/ $SERVER_USER@$SERVER_HOST:/tmp/frontend-build/
+          
+          # Copy deployment script and execute
+          scp deploy-frontend.sh $SERVER_USER@$SERVER_HOST:/tmp/deploy-frontend.sh
+          
+          # Set domain based on environment
+          if [ "$ENVIRONMENT" = "production" ]; then
+            FRONTEND_DOMAIN="naga-sis.com"
+          else
+            FRONTEND_DOMAIN="staging.naga-sis.com"
+          fi
+          
+          # Execute frontend deployment
+          ssh $SERVER_USER@$SERVER_HOST \
+            "FRONTEND_DOMAIN='$FRONTEND_DOMAIN' bash /tmp/deploy-frontend.sh '$ENVIRONMENT'"
+          
+          # Move files to web directory
+          ssh $SERVER_USER@$SERVER_HOST \
+            "sudo cp -r /tmp/frontend-build/* /var/www/naga-sis/$ENVIRONMENT/ && 
+             sudo chown -R www-data:www-data /var/www/naga-sis/$ENVIRONMENT"
+
+      - name: Cleanup
+        if: always()
+        run: |
+          rm -f ~/.ssh/id_rsa
+          rm -f deploy-frontend.sh
+
+  setup-monitoring:
+    runs-on: self-hosted
+    needs: [determine-environment, build-and-deploy, deploy-frontend]
+    if: needs.determine-environment.outputs.should_deploy == 'true'
+    environment: ${{ needs.determine-environment.outputs.environment }}
+    steps:
+      - name: Setup SSH connection
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.LINODE_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ needs.prepare-deployment.outputs.server_host }} >> ~/.ssh/known_hosts
+
+      - name: Setup basic monitoring
+        env:
+          SERVER_HOST: ${{ needs.prepare-deployment.outputs.server_host }}
+          SERVER_USER: ${{ needs.prepare-deployment.outputs.server_user }}
+          ENVIRONMENT: ${{ needs.determine-environment.outputs.environment }}
+        run: |
+          # Create monitoring setup script
+          cat > setup-monitoring.sh << 'EOF'
+          #!/bin/bash
+          set -e
+          
+          ENVIRONMENT="${1}"
+          
+          echo "📊 Setting up basic monitoring for ${ENVIRONMENT}..."
+          
+          # Install monitoring tools
+          sudo apt-get update
+          sudo apt-get install -y htop curl wget
+          
+          # Setup log rotation for application logs
+          sudo tee /etc/logrotate.d/naga-sis > /dev/null << 'LOGROTATE_EOF'
+          /opt/naga-sis/*/logs/*.log {
+              daily
+              missingok
+              rotate 30
+              compress
+              notifempty
+              create 0644 root root
+              postrotate
+                  docker-compose -f /opt/naga-sis/${ENVIRONMENT}/docker-compose.yml restart backend
+              endscript
+          }
+          LOGROTATE_EOF
+          
+          # Create health check script
+          sudo tee /usr/local/bin/naga-health-check > /dev/null << 'HEALTH_EOF'
+          #!/bin/bash
+          # Simple health check script for Naga SIS
+          
+          ENVIRONMENT="${1:-staging}"
+          
+          echo "🏥 Running health check for ${ENVIRONMENT}..."
+          
+          # Check Docker services
+          cd /opt/naga-sis/${ENVIRONMENT}
+          if ! docker-compose ps | grep -q "Up"; then
+              echo "❌ Some Docker services are down"
+              exit 1
+          fi
+          
+          # Check backend health endpoint
+          if ! curl -f http://localhost:8000/health/ > /dev/null 2>&1; then
+              echo "❌ Backend health check failed"
+              exit 1
+          fi
+          
+          # Check disk space
+          DISK_USAGE=$(df / | tail -1 | awk '{print $5}' | sed 's/%//')
+          if [ $DISK_USAGE -gt 85 ]; then
+              echo "⚠️  Disk usage is high: ${DISK_USAGE}%"
+          fi
+          
+          # Check memory usage
+          MEM_USAGE=$(free | grep Mem | awk '{printf("%.0f", $3/$2 * 100.0)}')
+          if [ $MEM_USAGE -gt 85 ]; then
+              echo "⚠️  Memory usage is high: ${MEM_USAGE}%"
+          fi
+          
+          echo "✅ Health check passed"
+          EOF
+          
+          sudo chmod +x /usr/local/bin/naga-health-check
+          
+          # Setup cron job for regular health checks
+          (crontab -l 2>/dev/null; echo "*/5 * * * * /usr/local/bin/naga-health-check ${ENVIRONMENT} >> /var/log/naga-health.log 2>&1") | crontab -
+          
+          echo "✅ Basic monitoring setup completed!"
+          EOF
+          
+          # Copy and execute monitoring setup
+          scp setup-monitoring.sh $SERVER_USER@$SERVER_HOST:/tmp/setup-monitoring.sh
+          ssh $SERVER_USER@$SERVER_HOST "bash /tmp/setup-monitoring.sh '$ENVIRONMENT'"
+
+      - name: Cleanup
+        if: always()
+        run: |
+          rm -f ~/.ssh/id_rsa
+          rm -f setup-monitoring.sh
+
+  health-check:
+    runs-on: self-hosted
+    needs: [determine-environment, build-and-deploy, deploy-frontend]
+    if: needs.determine-environment.outputs.should_deploy == 'true'
+    steps:
+      - name: Wait for deployment to stabilize
+        run: sleep 60
+
+      - name: Health check backend
+        run: |
+          for i in {1..10}; do
+            if curl -f "${{ needs.prepare-deployment.outputs.backend_url }}/health/"; then
+              echo "✅ Backend health check passed"
+              break
+            fi
+            echo "Attempt $i failed, retrying in 30 seconds..."
+            sleep 30
+          done
+
+      - name: Health check frontend
+        run: |
+          for i in {1..10}; do
+            if curl -f "${{ needs.prepare-deployment.outputs.frontend_url }}"; then
+              echo "✅ Frontend health check passed"
+              break
+            fi
+            echo "Attempt $i failed, retrying in 30 seconds..."
+            sleep 30
+          done
+
+      - name: Run basic connectivity tests
+        run: |
+          echo "🧪 Running basic connectivity tests..."
+          
+          # Test backend API health endpoint
+          if curl -f "${{ needs.prepare-deployment.outputs.backend_url }}/health/"; then
+            echo "✅ Backend API accessible"
+          else
+            echo "❌ Backend API not accessible"
+            exit 1
+          fi
+          
+          # Test frontend accessibility
+          if curl -f "${{ needs.prepare-deployment.outputs.frontend_url }}"; then
+            echo "✅ Frontend accessible"
+          else
+            echo "❌ Frontend not accessible"
+            exit 1
+          fi
+          
+          echo "✅ All connectivity tests passed"
+
+  rollback:
+    runs-on: self-hosted
+    needs: [determine-environment, build-and-deploy, deploy-frontend, health-check]
+    if: failure() && needs.determine-environment.outputs.environment == 'production'
+    environment: production
+    steps:
+      - name: Setup SSH for rollback
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.LINODE_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ needs.prepare-deployment.outputs.server_host }} >> ~/.ssh/known_hosts
+
+      - name: Rollback deployment
+        env:
+          SERVER_HOST: ${{ needs.prepare-deployment.outputs.server_host }}
+          SERVER_USER: ${{ needs.prepare-deployment.outputs.server_user }}
+          ENVIRONMENT: ${{ needs.determine-environment.outputs.environment }}
+        run: |
+          echo "🔄 Deployment failed, initiating rollback..."
+          
+          # Create rollback script
+          cat > rollback.sh << 'EOF'
+          #!/bin/bash
+          set -e
+          
+          ENVIRONMENT="${1}"
+          
+          echo "🚨 Rolling back Naga SIS ${ENVIRONMENT} deployment..."
+          
+          cd /opt/naga-sis/${ENVIRONMENT}
+          
+          # Stop current services
+          echo "🛑 Stopping current services..."
+          docker-compose down --timeout 30
+          
+          # Check if there's a previous backup
+          if [ -f "docker-compose.yml.backup" ]; then
+            echo "♻️ Restoring previous configuration..."
+            mv docker-compose.yml.backup docker-compose.yml
+            
+            # Start with previous configuration
+            docker-compose up -d
+            
+            # Verify rollback
+            sleep 30
+            if docker-compose exec backend python manage.py check; then
+              echo "✅ Rollback successful!"
+            else
+              echo "❌ Rollback failed - manual intervention required"
+              exit 1
+            fi
+          else
+            echo "⚠️ No backup configuration found - manual intervention required"
+            # Keep services down for manual investigation
+            exit 1
+          fi
+          EOF
+          
+          # Copy and execute rollback script
+          scp rollback.sh $SERVER_USER@$SERVER_HOST:/tmp/rollback.sh
+          ssh $SERVER_USER@$SERVER_HOST "bash /tmp/rollback.sh '$ENVIRONMENT'"
+          
+          echo "🔔 Production deployment rolled back due to health check failure"
+
+      - name: Cleanup rollback artifacts
+        if: always()
+        run: |
+          rm -f ~/.ssh/id_rsa
+          rm -f rollback.sh
+
+  notify-deployment:
+    runs-on: self-hosted
+    needs: [determine-environment, prepare-deployment, health-check]
+    if: always() && needs.determine-environment.outputs.should_deploy == 'true'
+    steps:
+      - name: Notify deployment status
+        run: |
+          if [ "${{ needs.health-check.result }}" = "success" ]; then
+            echo "✅ Deployment to ${{ needs.determine-environment.outputs.environment }} successful"
+            echo "🌐 Backend URL: ${{ needs.prepare-deployment.outputs.backend_url }}"
+            echo "🎨 Frontend URL: ${{ needs.prepare-deployment.outputs.frontend_url }}"
+            echo "🖥️ Server: ${{ needs.prepare-deployment.outputs.server_host }}"
+            echo ""
+            echo "📊 Deployment completed successfully on Linode VPS!"
+            # Add success notification logic (Slack, Discord, email, etc.)
+            # echo "Notification webhook: ${{ secrets.DEPLOYMENT_WEBHOOK_URL }}"
+          else
+            echo "❌ Deployment to ${{ needs.determine-environment.outputs.environment }} failed"
+            echo "🚨 Check the workflow logs for details"
+            
+            if [ "${{ needs.rollback.result }}" = "success" ]; then
+              echo "♻️ Automatic rollback completed successfully"
+            elif [ "${{ needs.rollback.result }}" = "failure" ]; then
+              echo "🆘 Automatic rollback failed - manual intervention required"
+            fi
+            # Add failure notification logic
+          fi

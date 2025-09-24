@@ -1,0 +1,23 @@
+# Add soft delete fields to StudentPhoto
+
+from django.db import migrations, models
+
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        ("people", "0007_studentphoto_managers"),
+    ]
+
+    operations = [
+        migrations.AddField(
+            model_name="studentphoto",
+            name="is_deleted",
+            field=models.BooleanField(default=False, verbose_name="Is Deleted"),
+        ),
+        migrations.AddField(
+            model_name="studentphoto",
+            name="deleted_at",
+            field=models.DateTimeField(blank=True, null=True, verbose_name="Deleted At"),
+        ),
+    ]

@@ -1,0 +1,188 @@
+{% extends "base_new.html" %}
+
+{% load i18n static %}
+
+{% block title %}
+  {% trans "Class Scheduling" %} - {{ block.super }}
+{% endblock %}
+{% block extra_css %}
+  <style>
+    /* Scheduling-specific styles */
+    .schedule-grid {
+      display: grid;
+      grid-template-columns: 80px repeat(7, 1fr);
+      gap: 1px;
+      background-color: #e5e7eb;
+    }
+
+    .schedule-cell {
+      background-color: white;
+      min-height: 60px;
+      position: relative;
+    }
+
+    .time-slot {
+      font-size: 0.75rem;
+      color: #6b7280;
+      padding: 0.5rem;
+      text-align: right;
+      background-color: #f9fafb;
+    }
+
+    .class-block {
+      position: absolute;
+      background-color: #dbeafe;
+      border: 1px solid #60a5fa;
+      border-radius: 0.25rem;
+      padding: 0.25rem;
+      font-size: 0.75rem;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .class-block:hover {
+      background-color: #bfdbfe;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      z-index: 10;
+    }
+
+    .htmx-indicator {
+      display: none;
+    }
+
+    .htmx-request .htmx-indicator {
+      display: inline-block;
+    }
+  </style>
+{% endblock %}
+{% block content %}
+  <!-- Header -->
+  <header class="bg-white shadow-sm border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center py-6">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">
+            {% block page_title %}
+              {% trans "Class Scheduling" %}
+            {% endblock %}
+          </h1>
+          {% block page_subtitle %}{% endblock %}
+        </div>
+        <div class="flex items-center space-x-4">
+          {% block header_actions %}
+            <!-- Term Selector -->
+            {% include 'scheduling/components/term_selector.html' %}
+            <!-- Primary Action -->
+            {% if perms.scheduling.can_create_class %}
+              <a href="{% url 'scheduling:class_create' %}"
+                 class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                <svg class="h-4 w-4 mr-1.5"
+                     fill="none"
+                     stroke="currentColor"
+                     viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                {% trans "Create Class" %}
+              </a>
+            {% endif %}
+          {% endblock %}
+        </div>
+      </div>
+      <!-- Navigation Tabs -->
+      <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+        <a href="{% url 'scheduling:dashboard' %}"
+           class="{% if request.resolver_match.url_name == 'dashboard' %}border-blue-500 text-blue-600{% else %}border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300{% endif %} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+          {% trans "Dashboard" %}
+        </a>
+        <a href="{% url 'scheduling:class_list' %}"
+           class="{% if request.resolver_match.url_name == 'class_list' %}border-blue-500 text-blue-600{% else %}border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300{% endif %} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+          {% trans "Classes" %}
+        </a>
+        <a href="{% url 'scheduling:enrollments' %}"
+           class="{% if request.resolver_match.url_name == 'enrollments' %}border-blue-500 text-blue-600{% else %}border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300{% endif %} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+          {% trans "Enrollments" %}
+        </a>
+        <a href="{% url 'scheduling:schedule_view' %}"
+           class="{% if request.resolver_match.url_name == 'schedule_view' %}border-blue-500 text-blue-600{% else %}border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300{% endif %} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+          {% trans "Schedule" %}
+        </a>
+        <a href="{% url 'scheduling:reports' %}"
+           class="{% if request.resolver_match.url_name == 'reports' %}border-blue-500 text-blue-600{% else %}border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300{% endif %} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+          {% trans "Reports" %}
+        </a>
+      </nav>
+    </div>
+  </header>
+  <!-- Main Content -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
+       id="scheduling-main-content">
+    <!-- Flash Messages -->
+    {% if messages %}
+      <div class="mb-6 space-y-2">
+        {% for message in messages %}
+          {% include 'components/alerts.html' with type=message.tags message=message dismissible=True auto_dismiss=5000 %}
+        {% endfor %}
+      </div>
+    {% endif %}
+    <!-- Loading Indicator -->
+    <div id="loading-indicator"
+         class="htmx-indicator fixed top-4 right-4 z-50">
+      <div class="bg-white rounded-lg shadow-lg px-4 py-3 flex items-center space-x-3">
+        <svg class="animate-spin h-5 w-5 text-blue-600"
+             fill="none"
+             viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+          </path>
+        </svg>
+        <span class="text-sm text-gray-600">{% trans "Loading..." %}</span>
+      </div>
+    </div>
+    {% block scheduling_content %}{% endblock %}
+  </div>
+  <!-- Modals -->
+  <div id="modal-container">
+    {% include 'components/modal.html' with modal_id="detail-modal" size="lg" %}
+    {% include 'components/modal.html' with modal_id="copy-modal" size="md" %}
+    {% include 'components/modal.html' with modal_id="enrollment-modal" size="lg" %}
+  </div>
+{% endblock %}
+{% block extra_js %}
+  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+  <script>
+    // HTMX configuration
+    document.body.addEventListener('htmx:configRequest', (event) => {
+      event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+    });
+
+    // Handle HTMX errors
+    document.body.addEventListener('htmx:responseError', (event) => {
+      console.error('HTMX request failed:', event.detail);
+      // Show error message
+      const alertHtml = `
+            <div class="rounded-md p-4 mb-4 bg-red-50 border border-red-200">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-sm font-medium text-red-800">
+                            {% trans "An error occurred" %}
+                        </h3>
+                        <div class="mt-2 text-sm text-red-700">
+                            {% trans "Please try again or contact support if the problem persists." %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+      const container = document.createElement('div');
+      container.innerHTML = alertHtml;
+      document.querySelector('main').prepend(container.firstElementChild);
+    });
+  </script>
+  {% block scheduling_js %}{% endblock %}
+{% endblock %}

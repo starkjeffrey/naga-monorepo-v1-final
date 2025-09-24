@@ -1,0 +1,234 @@
+{# Reusable Data Table Component with HTMX Support #} {# Usage: {% include
+'components/data_table.html' with table_id="my-table" columns=columns rows=rows
+%} #}
+{% load i18n %}
+{% load scheduling_extras %}
+
+<div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+  <div class="min-w-full">
+    <!-- Mobile View -->
+    <div class="sm:hidden">
+      {% for row in rows %}
+        <div class="bg-white px-4 py-5 border-b border-gray-200">
+          {% for column in columns %}
+            <div class="flex justify-between py-1">
+              <dt class="text-sm font-medium text-gray-500">{{ column.label }}</dt>
+              <dd class="text-sm text-gray-900 text-right">
+                {% if column.template %}
+                  {% include column.template with row=row %}
+                {% else %}
+                  {{ row|lookup:column.field }}
+                {% endif %}
+              </dd>
+            </div>
+          {% endfor %}
+        </div>
+      {% empty %}
+        <div class="bg-white px-4 py-5 text-center text-gray-500">{{ empty_message|default:"No data available" }}</div>
+      {% endfor %}
+    </div>
+    <!-- Desktop View -->
+    <table class="min-w-full divide-y divide-gray-300 hidden sm:table"
+           id="{{ table_id|default:'data-table' }}">
+      <thead class="bg-gray-50">
+        <tr>
+          {% if selectable %}
+            <th scope="col" class="relative w-12 px-6 sm:w-16 sm:px-8">
+              <input type="checkbox"
+                     class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                     onclick="toggleAllCheckboxes(this, '{{ table_id|default:'data-table' }}')"
+                     aria-label="{% trans 'Select all' %}" />
+            </th>
+          {% endif %}
+          {% for column in columns %}
+            <th
+              scope="col"
+              class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 {% if column.sortable %}cursor-pointer hover:bg-gray-100{% endif %}"
+              {%
+              if
+              column.sortable
+              %}
+              hx-get="{{ request.path }}?sort={{ column.field }}&order={% if current_sort == column.field and current_order == 'asc' %}desc{% else %}asc{% endif %}"
+              hx-target="#{{ table_id|default:'data-table' }}-container"
+              hx-swap="outerHTML"
+              hx-indicator="#loading-indicator"
+              {%
+              endif
+              %}
+              >
+              <div class="flex items-center space-x-1">
+                <span>{{ column.label }}</span>
+                {% if column.sortable %}
+                  {% if current_sort == column.field %}
+                    {%
+                    if current_order == 'asc' %}
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                    </svg>
+                  {% else %}
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                  {% endif %}
+                {% else %}
+                  <svg class="w-4 h-4 text-gray-400"
+                       fill="none"
+                       stroke="currentColor"
+                       viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4"></path>
+                  </svg>
+                {% endif %}
+              {% endif %}
+            </div>
+          </th>
+        {% endfor %}
+        {% if actions_column %}
+          <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
+            <span class="sr-only">{% trans "Actions" %}</span>
+          </th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-200 bg-white">
+      {% for row in rows %}
+        <tr
+          class="hover:bg-gray-50 transition-colors"
+          {%
+          if
+          row_click_url
+          %}
+          hx-get="{{ row_click_url }}{{ row.pk }}/"
+          hx-target="#modal-content"
+          hx-swap="innerHTML"
+          hx-trigger="click"
+          hx-on::after-request="openModal('detail-modal')"
+          style="cursor: pointer"
+          {%
+          endif
+          %}
+          >
+          {% if selectable %}
+            <td class="relative w-12 px-6 sm:w-16 sm:px-8">
+              <input type="checkbox"
+                     name="selected_items[]"
+                     value="{{ row.pk }}"
+                     class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 row-checkbox" />
+            </td>
+          {% endif %}
+          {% for column in columns %}
+            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900">
+              {% if column.template %}
+                {% include column.template with row=row %}
+              {% elif column.field == 'status' %}
+                <span class="inline-flex rounded-full px-2 text-xs font-semibold leading-5 {% if row.status == 'ACTIVE' %}bg-green-100 text-green-800 {% elif row.status == 'DRAFT' %}bg-gray-100 text-gray-800 {% elif row.status == 'CANCELLED' %}bg-red-100 text-red-800 {% else %}bg-yellow-100 text-yellow-800{% endif %}">
+                  {{ row.get_status_display|default:row.status }}
+                </span>
+              {% else %}
+                {{ row|lookup:column.field }}
+              {% endif %}
+            </td>
+          {% endfor %}
+          {% if actions_column %}
+            <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+              <div class="flex justify-end space-x-2">
+                {% for action in actions %}
+                  {% include
+                  'components/table_action.html' with action=action row=row %}
+                  {%
+                  endfor %}
+                </div>
+              </td>
+            {% endif %}
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="{{ columns|length|add:actions_column|add:selectable }}"
+                class="px-3 py-4 text-sm text-gray-500 text-center">
+              {{ empty_message|default:"No data available" }}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% if show_pagination %}
+    <!-- Pagination -->
+    <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
+      <div class="flex items-center justify-between">
+        <div class="flex flex-1 justify-between sm:hidden">
+          {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}"
+               class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+              {% trans "Previous" %}
+            </a>
+          {% endif %}
+          {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}"
+               class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+              {% trans "Next" %}
+            </a>
+          {% endif %}
+        </div>
+        <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+          <div>
+            <p class="text-sm text-gray-700">
+              {% trans "Showing" %}
+              <span class="font-medium">{{ page_obj.start_index }}</span>
+              {% trans "to" %}
+              <span class="font-medium">{{ page_obj.end_index }}</span>
+              {% trans "of" %}
+              <span class="font-medium">{{ page_obj.paginator.count }}</span>
+              {% trans "results" %}
+            </p>
+          </div>
+          <div>
+            <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm"
+                 aria-label="Pagination">
+              {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}"
+                   class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+                  <span class="sr-only">{% trans "Previous" %}</span>
+                  <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
+                  </svg>
+                </a>
+              {% endif %}
+              {% for num in page_obj.paginator.page_range %}
+                {% if
+                  page_obj.number == num %}
+                  <span class="relative z-10 inline-flex items-center bg-blue-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">{{ num }}</span>
+                {% else %}
+                  <a href="?page={{ num }}"
+                     class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">{{ num }}</a>
+                {% endif %}
+              {% endfor %}
+              {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}"
+                   class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+                  <span class="sr-only">{% trans "Next" %}</span>
+                  <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+                  </svg>
+                </a>
+              {% endif %}
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</div>
+<script>
+  function toggleAllCheckboxes(source, tableId) {
+    const checkboxes = document.querySelectorAll(`#${tableId} .row-checkbox`);
+    checkboxes.forEach((checkbox) => {
+      checkbox.checked = source.checked;
+    });
+  }
+
+  // Custom template tag filter to lookup dictionary values
+  // This would normally be in a templatetags file
+  document.addEventListener('DOMContentLoaded', function() {
+    // Add any table-specific JavaScript here
+  });
+</script>

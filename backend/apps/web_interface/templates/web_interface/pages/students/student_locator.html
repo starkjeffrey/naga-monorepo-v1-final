@@ -1,0 +1,577 @@
+{% extends "web_interface/base/dashboard_page.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}Student Locator - {{ block.super }}{% endblock %}
+
+{% block page_title %}Student Locator{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+    /* Enhanced styles for the student locator */
+    .locator-container {
+        padding: 1.5rem;
+        min-height: auto;
+    }
+    
+    .stats-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 1.5rem;
+    }
+    
+    .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1rem;
+    }
+    
+    .stat-item {
+        background: linear-gradient(135deg, #f6f8fb 0%, #e9ecef 100%);
+        padding: 1rem;
+        border-radius: 8px;
+        transition: transform 0.2s;
+    }
+    
+    .stat-item:hover {
+        transform: translateY(-2px);
+    }
+    
+    .stat-label {
+        font-size: 0.75rem;
+        color: #718096;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.25rem;
+    }
+    
+    .stat-value {
+        font-size: 1.75rem;
+        font-weight: bold;
+        color: #2d3748;
+    }
+    
+    .search-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 1.5rem;
+    }
+    
+    .search-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.25rem;
+        margin-bottom: 1.25rem;
+    }
+    
+    .form-group label {
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: #4a5568;
+        margin-bottom: 0.375rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        display: block;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 0.625rem 0.75rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        transition: all 0.3s ease;
+        background: white;
+    }
+    
+    .form-control:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .date-range, .number-range {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.625rem;
+    }
+    
+    .checkbox-group {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.625rem;
+        background: #f7fafc;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    
+    .checkbox-group:hover {
+        background: #e6f2ff;
+    }
+    
+    .checkbox-group input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+    }
+    
+    .checkbox-group label {
+        cursor: pointer;
+        font-size: 0.875rem;
+        color: #4a5568;
+        margin: 0;
+    }
+    
+    .btn-gradient {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 0.625rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.875rem;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-gradient:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+    
+    .advanced-toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #667eea;
+        font-weight: 600;
+        cursor: pointer;
+        margin-bottom: 1rem;
+        padding: 0.5rem;
+        border-radius: 6px;
+        transition: all 0.2s;
+    }
+    
+    .advanced-toggle:hover {
+        color: #764ba2;
+        background: rgba(102, 126, 234, 0.05);
+    }
+    
+    .results-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .results-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .results-header h3 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin: 0;
+    }
+    
+    .export-buttons {
+        display: flex;
+        gap: 0.5rem;
+    }
+    
+    .export-btn {
+        padding: 0.375rem 0.75rem;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 6px;
+        font-size: 0.8125rem;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    
+    .export-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+    
+    .status-badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+    
+    .status-active {
+        background: #c6f6d5;
+        color: #22543d;
+    }
+    
+    .status-inactive {
+        background: #fed7d7;
+        color: #742a2a;
+    }
+    
+    .status-graduated {
+        background: #e9d8fd;
+        color: #44337a;
+    }
+    
+    .status-suspended {
+        background: #fef5e7;
+        color: #744210;
+    }
+    
+    .action-btn {
+        padding: 0.25rem 0.625rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .btn-view {
+        background: #e6fffa;
+        color: #234e52;
+    }
+    
+    .btn-view:hover {
+        background: #b2f5ea;
+    }
+    
+    .btn-edit {
+        background: #fef5e7;
+        color: #744210;
+    }
+    
+    .btn-edit:hover {
+        background: #fdeaa8;
+    }
+    
+    #advancedSection {
+        display: none;
+    }
+    
+    #advancedSection.active {
+        display: block;
+        animation: slideDown 0.3s ease;
+    }
+    
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .loading-indicator {
+        text-align: center;
+        padding: 3rem;
+        color: #718096;
+    }
+    
+    .no-results {
+        text-align: center;
+        padding: 4rem;
+        color: #a0aec0;
+    }
+    
+    .no-results h3 {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+        color: #718096;
+    }
+</style>
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="locator-container">
+    <!-- Stats Card -->
+    <div class="stats-card">
+        <h1 style="color: #2d3748; font-size: 1.75rem; margin-bottom: 1rem;">
+            {% trans "Student Locator System" %}
+        </h1>
+        <div class="stat-grid">
+            <div class="stat-item">
+                <div class="stat-label">{% trans "Total Students" %}</div>
+                <div class="stat-value" id="totalCount">{{ total_students|default:"0" }}</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">{% trans "Active" %}</div>
+                <div class="stat-value" id="activeCount">{{ active_students|default:"0" }}</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">{% trans "This Term" %}</div>
+                <div class="stat-value" id="termCount">{{ term_students|default:"0" }}</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">{% trans "Search Results" %}</div>
+                <div class="stat-value" id="resultCount">0</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Card -->
+    <div class="search-card">
+        <h2 style="margin-bottom: 1.25rem; color: #2d3748;">{% trans "Search Students" %}</h2>
+        
+        <form id="student-search-form"
+              hx-get="{% url 'web_interface:student-locator-results' %}"
+              hx-target="#search-results"
+              hx-trigger="submit"
+              hx-indicator="#loading-indicator">
+            {% csrf_token %}
+            
+            <!-- Basic Search Grid -->
+            <div class="search-grid">
+                <div class="form-group">
+                    <label for="student_id">{% trans "Student ID" %}</label>
+                    <input type="text" 
+                           name="student_id" 
+                           id="student_id"
+                           class="form-control"
+                           placeholder="{% trans 'Enter student ID' %}">
+                </div>
+                
+                <div class="form-group">
+                    <label for="name">{% trans "Name" %}</label>
+                    <input type="text" 
+                           name="name" 
+                           id="name"
+                           class="form-control"
+                           placeholder="{% trans 'Search by name' %}">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">{% trans "Email" %}</label>
+                    <input type="email" 
+                           name="email" 
+                           id="email"
+                           class="form-control"
+                           placeholder="student@example.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="program">{% trans "Program" %}</label>
+                    <select name="program" id="program" class="form-control">
+                        <option value="">{% trans "All Programs" %}</option>
+                        {% for program in programs %}
+                        <option value="{{ program.id }}">{{ program.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="status">{% trans "Status" %}</label>
+                    <select name="status" id="status" class="form-control">
+                        <option value="">{% trans "All Status" %}</option>
+                        <option value="active">{% trans "Active" %}</option>
+                        <option value="inactive">{% trans "Inactive" %}</option>
+                        <option value="graduated">{% trans "Graduated" %}</option>
+                        <option value="suspended">{% trans "Suspended" %}</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="study_time">{% trans "Study Time" %}</label>
+                    <select name="study_time" id="study_time" class="form-control">
+                        <option value="">{% trans "All Times" %}</option>
+                        <option value="morning">{% trans "Morning" %}</option>
+                        <option value="afternoon">{% trans "Afternoon" %}</option>
+                        <option value="evening">{% trans "Evening" %}</option>
+                        <option value="weekend">{% trans "Weekend" %}</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Advanced Filters Toggle -->
+            <div class="advanced-toggle" onclick="toggleAdvanced()">
+                <span id="toggleIcon">▶</span>
+                <span>{% trans "Advanced Filters" %}</span>
+            </div>
+
+            <!-- Advanced Filters Section -->
+            <div id="advancedSection">
+                <div class="search-grid">
+                    <div class="form-group">
+                        <label for="gender">{% trans "Gender" %}</label>
+                        <select name="gender" id="gender" class="form-control">
+                            <option value="">{% trans "All Genders" %}</option>
+                            <option value="M">{% trans "Male" %}</option>
+                            <option value="F">{% trans "Female" %}</option>
+                            <option value="O">{% trans "Other" %}</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>{% trans "Age Range" %}</label>
+                        <div class="number-range">
+                            <input type="number" 
+                                   name="age_min" 
+                                   class="form-control"
+                                   placeholder="{% trans 'Min' %}" 
+                                   min="16" max="100">
+                            <input type="number" 
+                                   name="age_max" 
+                                   class="form-control"
+                                   placeholder="{% trans 'Max' %}" 
+                                   min="16" max="100">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>{% trans "Balance Range" %} ($)</label>
+                        <div class="number-range">
+                            <input type="number" 
+                                   name="balance_min" 
+                                   class="form-control"
+                                   placeholder="{% trans 'Min' %}" 
+                                   min="0" step="0.01">
+                            <input type="number" 
+                                   name="balance_max" 
+                                   class="form-control"
+                                   placeholder="{% trans 'Max' %}" 
+                                   min="0" step="0.01">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>{% trans "Enrollment Date" %}</label>
+                        <div class="date-range">
+                            <input type="date" 
+                                   name="enrolled_from"
+                                   class="form-control">
+                            <input type="date" 
+                                   name="enrolled_to"
+                                   class="form-control">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="citizenship">{% trans "Citizenship" %}</label>
+                        <select name="citizenship" id="citizenship" class="form-control">
+                            <option value="">{% trans "All" %}</option>
+                            <option value="cambodian">{% trans "Cambodian" %}</option>
+                            <option value="international">{% trans "International" %}</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="has_balance">{% trans "Payment Status" %}</label>
+                        <select name="has_balance" id="has_balance" class="form-control">
+                            <option value="">{% trans "All" %}</option>
+                            <option value="yes">{% trans "Has Balance" %}</option>
+                            <option value="no">{% trans "No Balance" %}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="margin-top: 1rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="missing_email" name="missing_email" value="1">
+                        <label for="missing_email">{% trans "Missing Email" %}</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="missing_phone" name="missing_phone" value="1">
+                        <label for="missing_phone">{% trans "Missing Phone" %}</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="has_invoices" name="has_invoices" value="1">
+                        <label for="has_invoices">{% trans "Has Invoices" %}</label>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 2px solid #e2e8f0;">
+                <button type="button" 
+                        class="btn btn-secondary"
+                        onclick="clearFilters()">
+                    {% trans "Clear All" %}
+                </button>
+                <button type="submit" 
+                        class="btn-gradient">
+                    {% trans "Search Students" %}
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div id="loading-indicator" class="loading-indicator" style="display: none;">
+        <div class="spinner"></div>
+        <p>{% trans "Searching students..." %}</p>
+    </div>
+
+    <!-- Results Container -->
+    <div id="search-results">
+        <!-- Results will be loaded here via HTMX -->
+    </div>
+</div>
+
+<script>
+    function toggleAdvanced() {
+        const section = document.getElementById('advancedSection');
+        const icon = document.getElementById('toggleIcon');
+        
+        if (section.classList.contains('active')) {
+            section.classList.remove('active');
+            icon.textContent = '▶';
+        } else {
+            section.classList.add('active');
+            icon.textContent = '▼';
+        }
+    }
+
+    function clearFilters() {
+        const form = document.getElementById('student-search-form');
+        
+        // Clear all text inputs
+        form.querySelectorAll('input[type="text"], input[type="email"], input[type="number"], input[type="date"]').forEach(input => {
+            input.value = '';
+        });
+        
+        // Reset all selects
+        form.querySelectorAll('select').forEach(select => {
+            select.selectedIndex = 0;
+        });
+        
+        // Uncheck all checkboxes
+        form.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.checked = false;
+        });
+        
+        // Clear results
+        document.getElementById('search-results').innerHTML = '';
+        document.getElementById('resultCount').textContent = '0';
+    }
+
+    // Auto-search on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof htmx !== 'undefined') {
+            // Trigger initial search
+            htmx.trigger(document.getElementById('student-search-form'), 'submit');
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,329 @@
+                                                                  List of relations
+ Schema |                              Name                               |   Type   | Owner | Persistence | Access method |    Size    | Description 
+--------+-----------------------------------------------------------------+----------+-------+-------------+---------------+------------+-------------
+ public | academic_canonicalrequirement                                   | table    | debug | permanent   | heap          | 80 kB      | 
+ public | academic_canonicalrequirement_id_seq                            | sequence | debug | permanent   |               | 8192 bytes | 
+ public | academic_canonicalrequirementfulfillment_id_seq                 | sequence | debug | permanent   |               | 8192 bytes | 
+ public | academic_courseequivalency                                      | table    | debug | permanent   | heap          | 16 kB      | 
+ public | academic_courseequivalency_id_seq                               | sequence | debug | permanent   |               | 8192 bytes | 
+ public | academic_records_document_quota                                 | table    | debug | permanent   | heap          | 0 bytes    | 
+ public | academic_records_document_quota_id_seq                          | sequence | debug | permanent   |               | 8192 bytes | 
+ public | academic_records_document_quota_usage                           | table    | debug | permanent   | heap          | 0 bytes    | 
+ public | academic_records_document_quota_usage_id_seq                    | sequence | debug | permanent   |               | 8192 bytes | 
+ public | academic_records_documentrequest                                | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | academic_records_documentrequest_id_seq                         | sequence | debug | permanent   |               | 8192 bytes | 
+ public | academic_records_documentrequestcomment                         | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | academic_records_documentrequestcomment_id_seq                  | sequence | debug | permanent   |               | 8192 bytes | 
+ public | academic_records_documenttypeconfig                             | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | academic_records_documenttypeconfig_id_seq                      | sequence | debug | permanent   |               | 8192 bytes | 
+ public | academic_records_documentusagetracker                           | table    | debug | permanent   | heap          | 0 bytes    | 
+ public | academic_records_documentusagetracker_id_seq                    | sequence | debug | permanent   |               | 8192 bytes | 
+ public | academic_records_generateddocument                              | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | academic_records_generateddocument_id_seq                       | sequence | debug | permanent   |               | 8192 bytes | 
+ public | academic_studentcourseoverride                                  | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | academic_studentcourseoverride_id_seq                           | sequence | debug | permanent   |               | 8192 bytes | 
+ public | academic_studentdegreeprogress                                  | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | academic_studentrequirementexception                            | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | academic_studentrequirementexception_id_seq                     | sequence | debug | permanent   |               | 8192 bytes | 
+ public | academic_transfercredit                                         | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | academic_transfercredit_id_seq                                  | sequence | debug | permanent   |               | 8192 bytes | 
+ public | account_emailaddress                                            | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | account_emailaddress_id_seq                                     | sequence | debug | permanent   |               | 8192 bytes | 
+ public | account_emailconfirmation                                       | table    | debug | permanent   | heap          | 0 bytes    | 
+ public | account_emailconfirmation_id_seq                                | sequence | debug | permanent   |               | 8192 bytes | 
+ public | accounts_department                                             | table    | debug | permanent   | heap          | 16 kB      | 
+ public | accounts_department_id_seq                                      | sequence | debug | permanent   |               | 8192 bytes | 
+ public | accounts_permission                                             | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | accounts_permission_id_seq                                      | sequence | debug | permanent   |               | 8192 bytes | 
+ public | accounts_position                                               | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | accounts_position_id_seq                                        | sequence | debug | permanent   |               | 8192 bytes | 
+ public | accounts_positionassignment                                     | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | accounts_positionassignment_id_seq                              | sequence | debug | permanent   |               | 8192 bytes | 
+ public | accounts_role                                                   | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | accounts_role_id_seq                                            | sequence | debug | permanent   |               | 8192 bytes | 
+ public | accounts_rolepermission                                         | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | accounts_rolepermission_id_seq                                  | sequence | debug | permanent   |               | 8192 bytes | 
+ public | accounts_teachingassignment                                     | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | accounts_teachingassignment_id_seq                              | sequence | debug | permanent   |               | 8192 bytes | 
+ public | accounts_userrole                                               | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | accounts_userrole_id_seq                                        | sequence | debug | permanent   |               | 8192 bytes | 
+ public | attendance_attendancearchive                                    | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | attendance_attendancearchive_id_seq                             | sequence | debug | permanent   |               | 8192 bytes | 
+ public | attendance_attendancerecord                                     | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | attendance_attendancerecord_id_seq                              | sequence | debug | permanent   |               | 8192 bytes | 
+ public | attendance_attendancesession                                    | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | attendance_attendancesession_id_seq                             | sequence | debug | permanent   |               | 8192 bytes | 
+ public | attendance_attendancesettings                                   | table    | debug | permanent   | heap          | 0 bytes    | 
+ public | attendance_attendancesettings_id_seq                            | sequence | debug | permanent   |               | 8192 bytes | 
+ public | attendance_permissionrequest                                    | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | attendance_permissionrequest_id_seq                             | sequence | debug | permanent   |               | 8192 bytes | 
+ public | attendance_rostersync                                           | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | attendance_rostersync_id_seq                                    | sequence | debug | permanent   |               | 8192 bytes | 
+ public | auth_group                                                      | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | auth_group_id_seq                                               | sequence | debug | permanent   |               | 8192 bytes | 
+ public | auth_group_permissions                                          | table    | debug | permanent   | heap          | 0 bytes    | 
+ public | auth_group_permissions_id_seq                                   | sequence | debug | permanent   |               | 8192 bytes | 
+ public | auth_permission                                                 | table    | debug | permanent   | heap          | 88 kB      | 
+ public | auth_permission_id_seq                                          | sequence | debug | permanent   |               | 8192 bytes | 
+ public | common_activitylog                                              | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | common_activitylog_id_seq                                       | sequence | debug | permanent   |               | 8192 bytes | 
+ public | common_holiday                                                  | table    | debug | permanent   | heap          | 16 kB      | 
+ public | common_holiday_id_seq                                           | sequence | debug | permanent   |               | 8192 bytes | 
+ public | common_notification                                             | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | common_notification_id_seq                                      | sequence | debug | permanent   |               | 8192 bytes | 
+ public | common_room                                                     | table    | debug | permanent   | heap          | 16 kB      | 
+ public | common_room_id_seq                                              | sequence | debug | permanent   |               | 8192 bytes | 
+ public | common_studentactivitylog                                       | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | common_studentactivitylog_id_seq                                | sequence | debug | permanent   |               | 8192 bytes | 
+ public | common_systemauditlog                                           | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | common_systemauditlog_id_seq                                    | sequence | debug | permanent   |               | 8192 bytes | 
+ public | constance_constance                                             | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | constance_constance_id_seq                                      | sequence | debug | permanent   |               | 8192 bytes | 
+ public | curriculum_course                                               | table    | debug | permanent   | heap          | 64 kB      | 
+ public | curriculum_course_id_seq                                        | sequence | debug | permanent   |               | 8192 bytes | 
+ public | curriculum_course_majors                                        | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | curriculum_course_majors_id_seq                                 | sequence | debug | permanent   |               | 8192 bytes | 
+ public | curriculum_courseparttemplate                                   | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | curriculum_courseparttemplate_id_seq                            | sequence | debug | permanent   |               | 8192 bytes | 
+ public | curriculum_courseparttemplate_textbooks                         | table    | debug | permanent   | heap          | 0 bytes    | 
+ public | curriculum_courseparttemplate_textbooks_id_seq                  | sequence | debug | permanent   |               | 8192 bytes | 
+ public | curriculum_courseprerequisite                                   | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | curriculum_courseprerequisite_id_seq                            | sequence | debug | permanent   |               | 8192 bytes | 
+ public | curriculum_cycle                                                | table    | debug | permanent   | heap          | 16 kB      | 
+ public | curriculum_cycle_id_seq                                         | sequence | debug | permanent   |               | 8192 bytes | 
+ public | curriculum_division                                             | table    | debug | permanent   | heap          | 16 kB      | 
+ public | curriculum_division_id_seq                                      | sequence | debug | permanent   |               | 8192 bytes | 
+ public | curriculum_major                                                | table    | debug | permanent   | heap          | 16 kB      | 
+ public | curriculum_major_id_seq                                         | sequence | debug | permanent   |               | 8192 bytes | 
+ public | curriculum_seniorprojectgroup                                   | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | curriculum_seniorprojectgroup_id_seq                            | sequence | debug | permanent   |               | 8192 bytes | 
+ public | curriculum_seniorprojectgroup_students                          | table    | debug | permanent   | heap          | 0 bytes    | 
+ public | curriculum_seniorprojectgroup_students_id_seq                   | sequence | debug | permanent   |               | 8192 bytes | 
+ public | curriculum_term                                                 | table    | debug | permanent   | heap          | 56 kB      | 
+ public | curriculum_term_id_seq                                          | sequence | debug | permanent   |               | 8192 bytes | 
+ public | curriculum_textbook                                             | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | curriculum_textbook_id_seq                                      | sequence | debug | permanent   |               | 8192 bytes | 
+ public | debug_toolbar_historyentry                                      | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | django_admin_log                                                | table    | debug | permanent   | heap          | 64 kB      | 
+ public | django_admin_log_id_seq                                         | sequence | debug | permanent   |               | 8192 bytes | 
+ public | django_content_type                                             | table    | debug | permanent   | heap          | 40 kB      | 
+ public | django_content_type_id_seq                                      | sequence | debug | permanent   |               | 8192 bytes | 
+ public | django_dramatiq_task                                            | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | django_migrations                                               | table    | debug | permanent   | heap          | 56 kB      | 
+ public | django_migrations_id_seq                                        | sequence | debug | permanent   |               | 8192 bytes | 
+ public | django_session                                                  | table    | debug | permanent   | heap          | 48 kB      | 
+ public | django_site                                                     | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | django_site_id_seq                                              | sequence | debug | permanent   |               | 8192 bytes | 
+ public | enrollment_academicjourney                                      | table    | debug | permanent   | heap          | 2784 kB    | 
+ public | enrollment_academicjourney_id_seq                               | sequence | debug | permanent   |               | 8192 bytes | 
+ public | enrollment_academicprogression                                  | table    | debug | permanent   | heap          | 3112 kB    | 
+ public | enrollment_certificateissuance                                  | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | enrollment_certificateissuance_id_seq                           | sequence | debug | permanent   |               | 8192 bytes | 
+ public | enrollment_classheaderenrollment                                | table    | debug | permanent   | heap          | 344 kB     | 
+ public | enrollment_classheaderenrollment_id_seq                         | sequence | debug | permanent   |               | 8192 bytes | 
+ public | enrollment_classpartenrollment                                  | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | enrollment_classpartenrollment_id_seq                           | sequence | debug | permanent   |               | 8192 bytes | 
+ public | enrollment_classsessionexemption                                | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | enrollment_classsessionexemption_id_seq                         | sequence | debug | permanent   |               | 8192 bytes | 
+ public | enrollment_majordeclaration                                     | table    | debug | permanent   | heap          | 456 kB     | 
+ public | enrollment_majordeclaration_id_seq                              | sequence | debug | permanent   |               | 8192 bytes | 
+ public | enrollment_programenrollment                                    | table    | debug | permanent   | heap          | 2024 kB    | 
+ public | enrollment_programenrollment_id_seq                             | sequence | debug | permanent   |               | 8192 bytes | 
+ public | enrollment_programmilestone                                     | table    | debug | permanent   | heap          | 2048 kB    | 
+ public | enrollment_programmilestone_id_seq                              | sequence | debug | permanent   |               | 8192 bytes | 
+ public | enrollment_programperiod                                        | table    | debug | permanent   | heap          | 16 kB      | 
+ public | enrollment_programperiod_id_seq                                 | sequence | debug | permanent   |               | 8192 bytes | 
+ public | enrollment_programtransition                                    | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | enrollment_programtransition_id_seq                             | sequence | debug | permanent   |               | 8192 bytes | 
+ public | enrollment_seniorprojectgroup                                   | table    | debug | permanent   | heap          | 56 kB      | 
+ public | enrollment_seniorprojectgroup_id_seq                            | sequence | debug | permanent   |               | 8192 bytes | 
+ public | enrollment_seniorprojectgroup_students                          | table    | debug | permanent   | heap          | 48 kB      | 
+ public | enrollment_seniorprojectgroup_students_id_seq                   | sequence | debug | permanent   |               | 8192 bytes | 
+ public | enrollment_student_cycle_status                                 | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | enrollment_student_cycle_status_id_seq                          | sequence | debug | permanent   |               | 8192 bytes | 
+ public | enrollment_studentcourseeligibility                             | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | enrollment_studentcourseeligibility_id_seq                      | sequence | debug | permanent   |               | 8192 bytes | 
+ public | enrollment_studentcourseeligibility_missing_prerequisite_id_seq | sequence | debug | permanent   |               | 8192 bytes | 
+ public | enrollment_studentcourseeligibility_missing_prerequisites       | table    | debug | permanent   | heap          | 0 bytes    | 
+ public | finance_administrative_fee_config                               | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | finance_administrative_fee_config_id_seq                        | sequence | debug | permanent   |               | 8192 bytes | 
+ public | finance_ar_reconstruction_batch                                 | table    | debug | permanent   | heap          | 48 kB      | 
+ public | finance_ar_reconstruction_batch_id_seq                          | sequence | debug | permanent   |               | 8192 bytes | 
+ public | finance_cashier_session                                         | table    | debug | permanent   | heap          | 16 kB      | 
+ public | finance_cashier_session_backup                                  | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | finance_cashiersession_id_seq                                   | sequence | debug | permanent   |               | 8192 bytes | 
+ public | finance_clerk_identification                                    | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | finance_clerk_identification_id_seq                             | sequence | debug | permanent   |               | 8192 bytes | 
+ public | finance_course_fixed_pricing                                    | table    | debug | permanent   | heap          | 48 kB      | 
+ public | finance_coursefixedpricing_id_seq                               | sequence | debug | permanent   |               | 8192 bytes | 
+ public | finance_default_pricing                                         | table    | debug | permanent   | heap          | 16 kB      | 
+ public | finance_defaultpricing_id_seq                                   | sequence | debug | permanent   |               | 8192 bytes | 
+ public | finance_discount_application                                    | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | finance_discount_application_id_seq                             | sequence | debug | permanent   |               | 8192 bytes | 
+ public | finance_discount_rule                                           | table    | debug | permanent   | heap          | 16 kB      | 
+ public | finance_discount_rule_id_seq                                    | sequence | debug | permanent   |               | 8192 bytes | 
+ public | finance_document_excess_fee                                     | table    | debug | permanent   | heap          | 0 bytes    | 
+ public | finance_document_excess_fee_id_seq                              | sequence | debug | permanent   |               | 8192 bytes | 
+ public | finance_fee_gl_mapping                                          | table    | debug | permanent   | heap          | 0 bytes    | 
+ public | finance_fee_pricing                                             | table    | debug | permanent   | heap          | 16 kB      | 
+ public | finance_feeglmapping_id_seq                                     | sequence | debug | permanent   |               | 8192 bytes | 
+ public | finance_feepricing_id_seq                                       | sequence | debug | permanent   |               | 8192 bytes | 
+ public | finance_financialtransaction                                    | table    | debug | permanent   | heap          | 1072 kB    | 
+ public | finance_financialtransaction_id_seq                             | sequence | debug | permanent   |               | 8192 bytes | 
+ public | finance_gl_account                                              | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | finance_gl_batch                                                | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | finance_glaccount_id_seq                                        | sequence | debug | permanent   |               | 8192 bytes | 
+ public | finance_glbatch_id_seq                                          | sequence | debug | permanent   |               | 8192 bytes | 
+ public | finance_invoice                                                 | table    | debug | permanent   | heap          | 288 kB     | 
+ public | finance_invoice_id_seq                                          | sequence | debug | permanent   |               | 8192 bytes | 
+ public | finance_invoice_line_item                                       | table    | debug | permanent   | heap          | 160 kB     | 
+ public | finance_invoicelineitem_id_seq                                  | sequence | debug | permanent   |               | 8192 bytes | 
+ public | finance_journal_entry                                           | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | finance_journal_entry_line                                      | table    | debug | permanent   | heap          | 0 bytes    | 
+ public | finance_journalentry_id_seq                                     | sequence | debug | permanent   |               | 8192 bytes | 
+ public | finance_journalentryline_id_seq                                 | sequence | debug | permanent   |               | 8192 bytes | 
+ public | finance_legacy_receipt_mapping                                  | table    | debug | permanent   | heap          | 544 kB     | 
+ public | finance_legacy_receipt_mapping_id_seq                           | sequence | debug | permanent   |               | 8192 bytes | 
+ public | finance_materiality_threshold                                   | table    | debug | permanent   | heap          | 16 kB      | 
+ public | finance_materiality_threshold_id_seq                            | sequence | debug | permanent   |               | 8192 bytes | 
+ public | finance_payment                                                 | table    | debug | permanent   | heap          | 288 kB     | 
+ public | finance_payment_id_seq                                          | sequence | debug | permanent   |               | 8192 bytes | 
+ public | finance_reading_class_pricing                                   | table    | debug | permanent   | heap          | 16 kB      | 
+ public | finance_readingclasspricing_id_seq                              | sequence | debug | permanent   |               | 8192 bytes | 
+ public | finance_reconciliation_adjustment                               | table    | debug | permanent   | heap          | 0 bytes    | 
+ public | finance_reconciliation_adjustment_id_seq                        | sequence | debug | permanent   |               | 8192 bytes | 
+ public | finance_reconciliation_batch                                    | table    | debug | permanent   | heap          | 104 kB     | 
+ public | finance_reconciliation_batch_id_seq                             | sequence | debug | permanent   |               | 8192 bytes | 
+ public | finance_reconciliation_rule                                     | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | finance_reconciliation_rule_id_seq                              | sequence | debug | permanent   |               | 8192 bytes | 
+ public | finance_reconciliation_status                                   | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | finance_reconciliation_status_id_seq                            | sequence | debug | permanent   |               | 8192 bytes | 
+ public | finance_reconciliation_status_matched_enrollments               | table    | debug | permanent   | heap          | 0 bytes    | 
+ public | finance_reconciliation_status_matched_enrollments_id_seq        | sequence | debug | permanent   |               | 8192 bytes | 
+ public | finance_reconstruction_scholarship_entry                        | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | finance_reconstruction_scholarship_entry_id_seq                 | sequence | debug | permanent   |               | 8192 bytes | 
+ public | finance_senior_project_course                                   | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | finance_senior_project_pricing                                  | table    | debug | permanent   | heap          | 16 kB      | 
+ public | finance_seniorprojectcourse_id_seq                              | sequence | debug | permanent   |               | 8192 bytes | 
+ public | finance_seniorprojectpricing_id_seq                             | sequence | debug | permanent   |               | 8192 bytes | 
+ public | grading_classpartgrade                                          | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | grading_classpartgrade_id_seq                                   | sequence | debug | permanent   |               | 8192 bytes | 
+ public | grading_classsessiongrade                                       | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | grading_classsessiongrade_id_seq                                | sequence | debug | permanent   |               | 8192 bytes | 
+ public | grading_gparecord                                               | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | grading_gparecord_id_seq                                        | sequence | debug | permanent   |               | 8192 bytes | 
+ public | grading_gradechangehistory                                      | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | grading_gradechangehistory_id_seq                               | sequence | debug | permanent   |               | 8192 bytes | 
+ public | grading_gradeconversion                                         | table    | debug | permanent   | heap          | 0 bytes    | 
+ public | grading_gradeconversion_id_seq                                  | sequence | debug | permanent   |               | 8192 bytes | 
+ public | grading_gradingscale                                            | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | grading_gradingscale_id_seq                                     | sequence | debug | permanent   |               | 8192 bytes | 
+ public | language_languagelevelskiprequest                               | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | language_languagelevelskiprequest_id_seq                        | sequence | debug | permanent   |               | 8192 bytes | 
+ public | language_languageprogrampromotion                               | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | language_languageprogrampromotion_id_seq                        | sequence | debug | permanent   |               | 8192 bytes | 
+ public | language_languagestudentpromotion                               | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | language_languagestudentpromotion_id_seq                        | sequence | debug | permanent   |               | 8192 bytes | 
+ public | legacy_academic_classes                                         | table    | debug | permanent   | heap          | 5736 kB    | 
+ public | legacy_course_takers                                            | table    | debug | permanent   | heap          | 112 MB     | 
+ public | legacy_et_results                                               | table    | debug | permanent   | heap          | 8808 kB    | 
+ public | legacy_receipt_headers                                          | table    | debug | permanent   | heap          | 37 MB      | 
+ public | legacy_students                                                 | table    | debug | permanent   | heap          | 18 MB      | 
+ public | legacy_students_validated                                       | table    | debug | permanent   | heap          | 7208 kB    | 
+ public | level_testing_duplicatecandidate                                | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | level_testing_duplicatecandidate_id_seq                         | sequence | debug | permanent   |               | 8192 bytes | 
+ public | level_testing_placementtest                                     | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | level_testing_placementtest_id_seq                              | sequence | debug | permanent   |               | 8192 bytes | 
+ public | level_testing_potentialstudent                                  | table    | debug | permanent   | heap          | 16 kB      | 
+ public | level_testing_potentialstudent_id_seq                           | sequence | debug | permanent   |               | 8192 bytes | 
+ public | level_testing_testaccesstoken                                   | table    | debug | permanent   | heap          | 16 kB      | 
+ public | level_testing_testaccesstoken_id_seq                            | sequence | debug | permanent   |               | 8192 bytes | 
+ public | level_testing_testattempt                                       | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | level_testing_testattempt_id_seq                                | sequence | debug | permanent   |               | 8192 bytes | 
+ public | level_testing_testcompletion                                    | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | level_testing_testcompletion_id_seq                             | sequence | debug | permanent   |               | 8192 bytes | 
+ public | level_testing_testpayment                                       | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | level_testing_testpayment_id_seq                                | sequence | debug | permanent   |               | 8192 bytes | 
+ public | level_testing_testsession                                       | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | level_testing_testsession_id_seq                                | sequence | debug | permanent   |               | 8192 bytes | 
+ public | mfa_authenticator                                               | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | mfa_authenticator_id_seq                                        | sequence | debug | permanent   |               | 8192 bytes | 
+ public | mobile_auth_attempts                                            | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | mobile_auth_attempts_id_seq                                     | sequence | debug | permanent   |               | 8192 bytes | 
+ public | mobile_auth_tokens                                              | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | mobile_auth_tokens_id_seq                                       | sequence | debug | permanent   |               | 8192 bytes | 
+ public | people_emergencycontact                                         | table    | debug | permanent   | heap          | 2600 kB    | 
+ public | people_emergencycontact_id_seq                                  | sequence | debug | permanent   |               | 8192 bytes | 
+ public | people_person                                                   | table    | debug | permanent   | heap          | 3496 kB    | 
+ public | people_person_id_seq                                            | sequence | debug | permanent   |               | 8192 bytes | 
+ public | people_personeventlog                                           | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | people_personeventlog_id_seq                                    | sequence | debug | permanent   |               | 8192 bytes | 
+ public | people_phonenumber                                              | table    | debug | permanent   | heap          | 0 bytes    | 
+ public | people_phonenumber_id_seq                                       | sequence | debug | permanent   |               | 8192 bytes | 
+ public | people_staffprofile                                             | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | people_staffprofile_id_seq                                      | sequence | debug | permanent   |               | 8192 bytes | 
+ public | people_studentauditlog                                          | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | people_studentauditlog_id_seq                                   | sequence | debug | permanent   |               | 8192 bytes | 
+ public | people_studentphoto                                             | table    | debug | permanent   | heap          | 3672 kB    | 
+ public | people_studentphoto_id_seq                                      | sequence | debug | permanent   |               | 8192 bytes | 
+ public | people_studentprofile                                           | table    | debug | permanent   | heap          | 1832 kB    | 
+ public | people_studentprofile_id_seq                                    | sequence | debug | permanent   |               | 8192 bytes | 
+ public | people_teacherleaverequest                                      | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | people_teacherleaverequest_affected_class_parts                 | table    | debug | permanent   | heap          | 0 bytes    | 
+ public | people_teacherleaverequest_affected_class_parts_id_seq          | sequence | debug | permanent   |               | 8192 bytes | 
+ public | people_teacherleaverequest_id_seq                               | sequence | debug | permanent   |               | 8192 bytes | 
+ public | people_teacherprofile                                           | table    | debug | permanent   | heap          | 40 kB      | 
+ public | people_teacherprofile_id_seq                                    | sequence | debug | permanent   |               | 8192 bytes | 
+ public | scheduling_classheader                                          | table    | debug | permanent   | heap          | 56 kB      | 
+ public | scheduling_classheader_id_seq                                   | sequence | debug | permanent   |               | 8192 bytes | 
+ public | scheduling_classpart                                            | table    | debug | permanent   | heap          | 72 kB      | 
+ public | scheduling_classpart_id_seq                                     | sequence | debug | permanent   |               | 8192 bytes | 
+ public | scheduling_classpart_textbooks                                  | table    | debug | permanent   | heap          | 0 bytes    | 
+ public | scheduling_classpart_textbooks_id_seq                           | sequence | debug | permanent   |               | 8192 bytes | 
+ public | scheduling_classparttemplate                                    | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | scheduling_classparttemplate_default_textbooks                  | table    | debug | permanent   | heap          | 0 bytes    | 
+ public | scheduling_classparttemplate_default_textbooks_id_seq           | sequence | debug | permanent   |               | 8192 bytes | 
+ public | scheduling_classparttemplate_id_seq                             | sequence | debug | permanent   |               | 8192 bytes | 
+ public | scheduling_classparttemplateset                                 | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | scheduling_classparttemplateset_id_seq                          | sequence | debug | permanent   |               | 8192 bytes | 
+ public | scheduling_classpromotionrule                                   | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | scheduling_classpromotionrule_id_seq                            | sequence | debug | permanent   |               | 8192 bytes | 
+ public | scheduling_classsession                                         | table    | debug | permanent   | heap          | 56 kB      | 
+ public | scheduling_classsession_id_seq                                  | sequence | debug | permanent   |               | 8192 bytes | 
+ public | scheduling_combinedclassgroup                                   | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | scheduling_combinedclassgroup_id_seq                            | sequence | debug | permanent   |               | 8192 bytes | 
+ public | scheduling_combinedclassinstance                                | table    | debug | permanent   | heap          | 16 kB      | 
+ public | scheduling_combinedclassinstance_id_seq                         | sequence | debug | permanent   |               | 8192 bytes | 
+ public | scheduling_combinedcoursetemplate                               | table    | debug | permanent   | heap          | 16 kB      | 
+ public | scheduling_combinedcoursetemplate_courses                       | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | scheduling_combinedcoursetemplate_courses_id_seq                | sequence | debug | permanent   |               | 8192 bytes | 
+ public | scheduling_combinedcoursetemplate_id_seq                        | sequence | debug | permanent   |               | 8192 bytes | 
+ public | scheduling_readingclass                                         | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | scheduling_readingclass_id_seq                                  | sequence | debug | permanent   |               | 8192 bytes | 
+ public | scheduling_testperiodreset                                      | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | scheduling_testperiodreset_id_seq                               | sequence | debug | permanent   |               | 8192 bytes | 
+ public | scheduling_testperiodreset_specific_classes                     | table    | debug | permanent   | heap          | 0 bytes    | 
+ public | scheduling_testperiodreset_specific_classes_id_seq              | sequence | debug | permanent   |               | 8192 bytes | 
+ public | scholarships_scholarship                                        | table    | debug | permanent   | heap          | 160 kB     | 
+ public | scholarships_scholarship_id_seq                                 | sequence | debug | permanent   |               | 8192 bytes | 
+ public | scholarships_sponsor                                            | table    | debug | permanent   | heap          | 16 kB      | 
+ public | scholarships_sponsor_id_seq                                     | sequence | debug | permanent   |               | 8192 bytes | 
+ public | scholarships_sponsoredstudent                                   | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | scholarships_sponsoredstudent_id_seq                            | sequence | debug | permanent   |               | 8192 bytes | 
+ public | socialaccount_socialaccount                                     | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | socialaccount_socialaccount_id_seq                              | sequence | debug | permanent   |               | 8192 bytes | 
+ public | socialaccount_socialapp                                         | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | socialaccount_socialapp_id_seq                                  | sequence | debug | permanent   |               | 8192 bytes | 
+ public | socialaccount_socialapp_sites                                   | table    | debug | permanent   | heap          | 0 bytes    | 
+ public | socialaccount_socialapp_sites_id_seq                            | sequence | debug | permanent   |               | 8192 bytes | 
+ public | socialaccount_socialtoken                                       | table    | debug | permanent   | heap          | 8192 bytes | 
+ public | socialaccount_socialtoken_id_seq                                | sequence | debug | permanent   |               | 8192 bytes | 
+ public | student_number_seq                                              | sequence | debug | permanent   |               | 8192 bytes | 
+ public | users_user                                                      | table    | debug | permanent   | heap          | 64 kB      | 
+ public | users_user_groups                                               | table    | debug | permanent   | heap          | 0 bytes    | 
+ public | users_user_groups_id_seq                                        | sequence | debug | permanent   |               | 8192 bytes | 
+ public | users_user_id_seq                                               | sequence | debug | permanent   |               | 8192 bytes | 
+ public | users_user_user_permissions                                     | table    | debug | permanent   | heap          | 0 bytes    | 
+ public | users_user_user_permissions_id_seq                              | sequence | debug | permanent   |               | 8192 bytes | 
+(324 rows)
+

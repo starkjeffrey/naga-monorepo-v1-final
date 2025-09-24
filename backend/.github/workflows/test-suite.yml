@@ -1,0 +1,619 @@
+name: Naga SIS Test Suite
+
+on:
+  push:
+    branches: [ main, develop, staging ]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/test-suite.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'backend/**'
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      debug_enabled:
+        description: 'Enable debug mode'
+        required: false
+        default: 'false'
+
+env:
+  PYTHON_VERSION: '3.13'
+  POSTGRES_VERSION: '16'
+  REDIS_VERSION: '7'
+  NODE_VERSION: '20'
+  UV_VERSION: 'latest'
+  COVERAGE_THRESHOLD: 85
+  CRITICAL_COVERAGE_THRESHOLD: 95
+
+defaults:
+  run:
+    working-directory: backend
+
+jobs:
+  # ============================================================================
+  # LINTING AND CODE QUALITY
+  # ============================================================================
+  
+  lint:
+    name: Lint and Format Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          
+      - name: Install uv
+        run: |
+          pip install --upgrade pip
+          pip install uv
+          
+      - name: Cache uv dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/uv
+          key: ${{ runner.os }}-uv-${{ hashFiles('**/pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-uv-
+            
+      - name: Install dependencies
+        run: |
+          uv pip install -e .[dev]
+          
+      - name: Run Ruff linting
+        run: |
+          uv run ruff check apps/ api/ tests/
+          
+      - name: Check code formatting
+        run: |
+          uv run ruff format --check apps/ api/ tests/
+          
+      - name: Check import sorting
+        run: |
+          uv run ruff check --select I apps/ api/
+
+  # ============================================================================
+  # TYPE CHECKING
+  # ============================================================================
+  
+  typecheck:
+    name: Type Checking
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          
+      - name: Install uv
+        run: pip install uv
+        
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/uv
+          key: ${{ runner.os }}-uv-typecheck-${{ hashFiles('**/pyproject.toml') }}
+          
+      - name: Install dependencies
+        run: |
+          uv pip install -e .[dev]
+          
+      - name: Run mypy
+        run: |
+          uv run mypy apps/ api/ --ignore-missing-imports
+
+  # ============================================================================
+  # UNIT TESTS
+  # ============================================================================
+  
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: [lint, typecheck]
+    
+    strategy:
+      matrix:
+        python-version: ['3.12', '3.13']
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          
+      - name: Install uv
+        run: pip install uv
+        
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/uv
+          key: ${{ runner.os }}-uv-test-${{ matrix.python-version }}-${{ hashFiles('**/pyproject.toml') }}
+          
+      - name: Install test dependencies
+        run: |
+          uv pip install -e .[test]
+          
+      - name: Run unit tests
+        run: |
+          uv run pytest tests/unit -n auto \
+            --cov=apps --cov=api \
+            --cov-report=xml \
+            --cov-report=term-missing \
+            --junit-xml=unit-test-results.xml
+            
+      - name: Upload unit test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-results-${{ matrix.python-version }}
+          path: backend/unit-test-results.xml
+          
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          file: backend/coverage.xml
+          flags: unit
+          name: unit-tests-${{ matrix.python-version }}
+
+  # ============================================================================
+  # INTEGRATION TESTS
+  # ============================================================================
+  
+  integration-tests:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: [lint, typecheck]
+    
+    services:
+      postgres:
+        image: postgres:${{ env.POSTGRES_VERSION }}-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: naga_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+          
+      redis:
+        image: redis:${{ env.REDIS_VERSION }}-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/naga_test
+      REDIS_URL: redis://localhost:6379/0
+      DJANGO_SETTINGS_MODULE: config.settings.test
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libpq-dev \
+            postgresql-client \
+            redis-tools
+            
+      - name: Install uv
+        run: pip install uv
+        
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/uv
+          key: ${{ runner.os }}-uv-integration-${{ hashFiles('**/pyproject.toml') }}
+          
+      - name: Install dependencies
+        run: |
+          uv pip install -e .[test,prod]
+          
+      - name: Check database connection
+        run: |
+          PGPASSWORD=postgres psql -h localhost -U postgres -d naga_test -c "SELECT 1"
+          
+      - name: Check Redis connection
+        run: |
+          redis-cli -h localhost ping
+          
+      - name: Run migrations
+        run: |
+          uv run python manage.py migrate --run-syncdb
+          
+      - name: Run integration tests
+        run: |
+          uv run pytest tests/integration -n auto \
+            --cov=apps --cov=api \
+            --cov-report=xml \
+            --junit-xml=integration-test-results.xml
+            
+      - name: Upload integration test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-test-results
+          path: backend/integration-test-results.xml
+          
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          file: backend/coverage.xml
+          flags: integration
+          name: integration-tests
+
+  # ============================================================================
+  # CONTRACT/API TESTS
+  # ============================================================================
+  
+  contract-tests:
+    name: Contract/API Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: [lint, typecheck]
+    
+    services:
+      postgres:
+        image: postgres:${{ env.POSTGRES_VERSION }}-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: naga_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/naga_test
+      DJANGO_SETTINGS_MODULE: config.settings.test
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          
+      - name: Install uv
+        run: pip install uv
+        
+      - name: Install dependencies
+        run: |
+          uv pip install -e .[test]
+          
+      - name: Run migrations
+        run: |
+          uv run python manage.py migrate --run-syncdb
+          
+      - name: Generate OpenAPI schema
+        run: |
+          uv run python manage.py export_openapi_schema > openapi.json
+          
+      - name: Validate OpenAPI schema
+        run: |
+          npx @apidevtools/swagger-cli validate openapi.json
+          
+      - name: Run contract tests
+        run: |
+          uv run pytest tests/contract \
+            --cov=api \
+            --cov-report=xml \
+            --junit-xml=contract-test-results.xml
+            
+      - name: Upload contract test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: contract-test-results
+          path: backend/contract-test-results.xml
+          
+      - name: Upload OpenAPI schema
+        uses: actions/upload-artifact@v4
+        with:
+          name: openapi-schema
+          path: backend/openapi.json
+
+  # ============================================================================
+  # SECURITY TESTS
+  # ============================================================================
+  
+  security-tests:
+    name: Security Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: [lint]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          
+      - name: Install dependencies
+        run: |
+          pip install uv
+          uv pip install -e .[test]
+          pip install safety bandit
+          
+      - name: Run security tests
+        run: |
+          uv run pytest tests/unit tests/integration -m security
+          
+      - name: Check for known vulnerabilities
+        run: |
+          safety check --json
+          
+      - name: Run Bandit security linter
+        run: |
+          bandit -r apps/ api/ -f json -o bandit-report.json
+          
+      - name: Upload security reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-reports
+          path: |
+            backend/bandit-report.json
+
+  # ============================================================================
+  # PERFORMANCE TESTS
+  # ============================================================================
+  
+  performance-tests:
+    name: Performance Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: [unit-tests]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    services:
+      postgres:
+        image: postgres:${{ env.POSTGRES_VERSION }}-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: naga_test
+        ports:
+          - 5432:5432
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          
+      - name: Install dependencies
+        run: |
+          pip install uv
+          uv pip install -e .[test]
+          
+      - name: Run performance benchmarks
+        run: |
+          uv run pytest tests/unit \
+            --benchmark-only \
+            --benchmark-json=benchmark-results.json
+            
+      - name: Upload benchmark results
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results
+          path: backend/benchmark-results.json
+          
+      - name: Comment benchmark results on PR
+        if: github.event_name == 'pull_request'
+        uses: benchmark-action/github-action-benchmark@v1
+        with:
+          tool: 'pytest'
+          output-file-path: backend/benchmark-results.json
+          comment-on-alert: true
+          alert-threshold: '150%'
+
+  # ============================================================================
+  # COVERAGE AGGREGATION
+  # ============================================================================
+  
+  coverage:
+    name: Coverage Report
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [unit-tests, integration-tests, contract-tests]
+    if: always()
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          
+      - name: Install coverage tool
+        run: |
+          pip install coverage[toml]
+          
+      - name: Download all coverage reports
+        uses: actions/download-artifact@v4
+        with:
+          pattern: '*coverage*'
+          
+      - name: Combine coverage reports
+        run: |
+          coverage combine coverage*.xml
+          coverage report --fail-under=${{ env.COVERAGE_THRESHOLD }}
+          coverage html
+          
+      - name: Upload combined coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: combined-coverage-report
+          path: backend/htmlcov/
+          
+      - name: Check critical module coverage
+        run: |
+          coverage report --include="apps/finance/*,apps/academic/*" \
+            --fail-under=${{ env.CRITICAL_COVERAGE_THRESHOLD }}
+
+  # ============================================================================
+  # E2E TESTS (Optional - runs on schedule)
+  # ============================================================================
+  
+  e2e-tests:
+    name: End-to-End Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    
+    services:
+      postgres:
+        image: postgres:${{ env.POSTGRES_VERSION }}
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: naga_test
+        ports:
+          - 5432:5432
+          
+      redis:
+        image: redis:${{ env.REDIS_VERSION }}
+        ports:
+          - 6379:6379
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          
+      - name: Install dependencies
+        run: |
+          pip install uv
+          uv pip install -e .[test,prod]
+          npm ci
+          npx playwright install chromium
+          
+      - name: Build frontend
+        run: |
+          npm run build
+          
+      - name: Run Django server
+        run: |
+          uv run python manage.py migrate
+          uv run python manage.py collectstatic --noinput
+          uv run python manage.py runserver &
+          sleep 5
+          
+      - name: Run E2E tests
+        run: |
+          uv run pytest tests/e2e -m e2e \
+            --junit-xml=e2e-test-results.xml
+            
+      - name: Upload E2E test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-test-results
+          path: backend/e2e-test-results.xml
+
+  # ============================================================================
+  # FINAL STATUS CHECK
+  # ============================================================================
+  
+  test-suite-status:
+    name: Test Suite Status
+    runs-on: ubuntu-latest
+    needs: [unit-tests, integration-tests, contract-tests, security-tests, coverage]
+    if: always()
+    
+    steps:
+      - name: Check test results
+        run: |
+          if [[ "${{ needs.unit-tests.result }}" != "success" || \
+                "${{ needs.integration-tests.result }}" != "success" || \
+                "${{ needs.contract-tests.result }}" != "success" || \
+                "${{ needs.security-tests.result }}" != "success" || \
+                "${{ needs.coverage.result }}" != "success" ]]; then
+            echo "❌ Test suite failed"
+            exit 1
+          else
+            echo "✅ All tests passed successfully!"
+          fi
+          
+      - name: Create test summary
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const summary = `## Test Suite Results
+            
+            | Test Type | Status |
+            |-----------|--------|
+            | Unit Tests | ${{ needs.unit-tests.result }} |
+            | Integration Tests | ${{ needs.integration-tests.result }} |
+            | Contract Tests | ${{ needs.contract-tests.result }} |
+            | Security Tests | ${{ needs.security-tests.result }} |
+            | Coverage Check | ${{ needs.coverage.result }} |
+            
+            View full test reports in the workflow artifacts.`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: summary
+            });

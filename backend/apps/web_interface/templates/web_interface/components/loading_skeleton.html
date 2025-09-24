@@ -1,0 +1,17 @@
+<!-- templates/web_interface/components/loading_skeleton.html -->
+<!-- Loading Skeleton Component -->
+<!-- Usage: {% include "web_interface/components/loading_skeleton.html" with rows=5 %} -->
+<div class="animate-pulse">
+  {% if rows %}
+    {% for i in "x"|rjust:rows %}
+      <div class="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
+    {% endfor %}
+  {% else %}
+    <!-- Default 5 rows -->
+    <div class="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
+    <div class="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
+    <div class="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
+    <div class="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
+    <div class="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
+  {% endif %}
+</div>

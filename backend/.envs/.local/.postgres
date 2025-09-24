@@ -1,0 +1,13 @@
+# PostgreSQL configuration for local development
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=naga_local
+POSTGRES_USER=debug
+POSTGRES_PASSWORD=debug
+
+# Database URLs
+DATABASE_URL=postgres://debug:debug@postgres:5432/naga_local
+
+# Connection pooling
+DB_CONN_MAX_AGE=3600
+DB_CONN_HEALTH_CHECKS=true

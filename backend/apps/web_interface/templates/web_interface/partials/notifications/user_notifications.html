@@ -1,0 +1,189 @@
+{% load i18n %}
+
+{% if notifications %}
+    {% for notification in notifications %}
+        <div class="notification-item flex items-start p-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0"
+             data-notification-id="{{ notification.id }}">
+            <!-- Icon -->
+            <div class="flex-shrink-0 mr-3 mt-1">
+                {% if notification.notification_type == "SUCCESS" %}
+                    <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-check text-green-600 text-sm"></i>
+                    </div>
+                {% elif notification.notification_type == "WARNING" %}
+                    <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-exclamation-triangle text-yellow-600 text-sm"></i>
+                    </div>
+                {% elif notification.notification_type == "ERROR" %}
+                    <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-exclamation-circle text-red-600 text-sm"></i>
+                    </div>
+                {% elif notification.notification_type == "FINANCE" %}
+                    <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-dollar-sign text-green-600 text-sm"></i>
+                    </div>
+                {% elif notification.notification_type == "ACADEMIC" %}
+                    <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-graduation-cap text-blue-600 text-sm"></i>
+                    </div>
+                {% elif notification.notification_type == "ENROLLMENT" %}
+                    <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user-plus text-purple-600 text-sm"></i>
+                    </div>
+                {% elif notification.notification_type == "GRADING" %}
+                    <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-edit text-indigo-600 text-sm"></i>
+                    </div>
+                {% elif notification.notification_type == "SYSTEM" %}
+                    <div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-cog text-gray-600 text-sm"></i>
+                    </div>
+                {% else %}
+                    <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-info-circle text-blue-600 text-sm"></i>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Content -->
+            <div class="flex-1 min-w-0">
+                <div class="flex items-start justify-between">
+                    <div class="flex-1">
+                        <!-- Title -->
+                        <div class="font-medium text-gray-900 text-sm">
+                            {{ notification.title }}
+                        </div>
+                        
+                        <!-- Message -->
+                        <div class="text-gray-600 text-sm mt-1 line-clamp-2">
+                            {{ notification.message }}
+                        </div>
+                        
+                        <!-- Time and Priority -->
+                        <div class="flex items-center mt-2 text-xs text-gray-500">
+                            <span>{{ notification.created_at|timesince }} {% trans "ago" %}</span>
+                            {% if notification.priority == "HIGH" or notification.priority == "URGENT" %}
+                                <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium
+                                           {% if notification.priority == 'URGENT' %}bg-red-100 text-red-800{% else %}bg-orange-100 text-orange-800{% endif %}">
+                                    {{ notification.get_priority_display }}
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex items-center ml-2 space-x-1">
+                        {% if notification.action_url %}
+                            <a href="{{ notification.action_url }}" 
+                               class="text-blue-600 hover:text-blue-800 text-xs font-medium"
+                               onclick="markNotificationRead({{ notification.id }})">
+                                {{ notification.action_text|default:"View" }}
+                            </a>
+                        {% endif %}
+                        
+                        <button onclick="markNotificationRead({{ notification.id }})"
+                                class="text-gray-400 hover:text-gray-600 p-1">
+                            <i class="fas fa-times text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    
+    <!-- Footer actions -->
+    <div class="p-3 border-t border-gray-200 bg-gray-50">
+        <div class="flex justify-between items-center">
+            <button onclick="markAllNotificationsRead()"
+                    class="text-sm text-blue-600 hover:text-blue-800 font-medium">
+                {% trans "Mark all as read" %}
+            </button>
+            <a href="#" class="text-sm text-gray-600 hover:text-gray-800">
+                {% trans "View all notifications" %}
+            </a>
+        </div>
+    </div>
+{% else %}
+    <div class="p-6 text-center text-gray-500">
+        <i class="fas fa-bell-slash text-2xl mb-2"></i>
+        <div class="text-sm">{% trans "No new notifications" %}</div>
+    </div>
+{% endif %}
+
+<script>
+function markNotificationRead(notificationId) {
+    fetch(`{% url 'web_interface:mark-notification-read' notification_id=0 %}`.replace('0', notificationId), {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Remove notification from UI
+            const notification = document.querySelector(`[data-notification-id="${notificationId}"]`);
+            if (notification) {
+                notification.remove();
+            }
+            
+            // Update notification count
+            updateNotificationCount();
+        }
+    })
+    .catch(error => {
+        console.error('Error marking notification as read:', error);
+    });
+}
+
+function markAllNotificationsRead() {
+    fetch('{% url "web_interface:mark-all-notifications-read" %}', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Clear all notifications from UI
+            document.querySelectorAll('.notification-item').forEach(item => {
+                item.remove();
+            });
+            
+            // Show empty state
+            const container = document.querySelector('#notifications-dropdown');
+            if (container) {
+                container.innerHTML = `
+                    <div class="p-6 text-center text-gray-500">
+                        <i class="fas fa-bell-slash text-2xl mb-2"></i>
+                        <div class="text-sm">No new notifications</div>
+                    </div>
+                `;
+            }
+            
+            // Update notification count
+            updateNotificationCount();
+        }
+    })
+    .catch(error => {
+        console.error('Error marking all notifications as read:', error);
+    });
+}
+
+function updateNotificationCount() {
+    const badge = document.querySelector('#notification-count');
+    const remaining = document.querySelectorAll('.notification-item').length;
+    
+    if (badge) {
+        if (remaining === 0) {
+            badge.classList.add('hidden');
+        } else {
+            badge.textContent = remaining;
+            badge.classList.remove('hidden');
+        }
+    }
+}
+</script>

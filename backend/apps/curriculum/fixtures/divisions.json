@@ -1,0 +1,32 @@
+[
+{
+  "model": "curriculum.division",
+  "pk": 1,
+  "fields": {
+    "created_at": "2024-01-01T10:00:00Z",
+    "updated_at": "2024-01-01T10:00:00Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "name": "Language Division",
+    "short_name": "LANG",
+    "description": "English language learning programs",
+    "is_active": true,
+    "display_order": 10
+  }
+},
+{
+  "model": "curriculum.division",
+  "pk": 2,
+  "fields": {
+    "created_at": "2024-01-01T10:00:00Z",
+    "updated_at": "2024-01-01T10:00:00Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "name": "Academic Division",
+    "short_name": "ACAD",
+    "description": "Bachelor's degree and academic programs",
+    "is_active": true,
+    "display_order": 20
+  }
+}
+]

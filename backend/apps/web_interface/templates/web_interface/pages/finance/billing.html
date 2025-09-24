@@ -1,0 +1,12 @@
+{% extends "web_interface/base/dashboard_page.html" %}
+
+{% load i18n %}
+{% load static %}
+{% load web_interface_tags %}
+
+{% block title %}
+  {% trans "Billing & Invoices" %} - {{ block.super }}
+{% endblock %}
+{% block dashboard_content %}
+  {% include "web_interface/pages/finance/billing_content.html" %}
+{% endblock %}

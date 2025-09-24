@@ -1,0 +1,1254 @@
+UP040 Type alias `UserType` uses `TypeAlias` annotation instead of the `type` keyword
+  --> apps/academic/services/exceptions.py:23:5
+   |
+21 | if TYPE_CHECKING:
+22 |     from django.contrib.auth.models import AbstractUser
+23 |     UserType: TypeAlias = AbstractUser
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+24 | else:
+25 |     UserType: TypeAlias = get_user_model()
+   |
+help: Use the `type` keyword
+
+UP040 Type alias `UserType` uses `TypeAlias` annotation instead of the `type` keyword
+  --> apps/academic/services/exceptions.py:25:5
+   |
+23 |     UserType: TypeAlias = AbstractUser
+24 | else:
+25 |     UserType: TypeAlias = get_user_model()
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: Use the `type` keyword
+
+E501 Line too long (125 > 119)
+   --> apps/academic/services/exceptions.py:352:120
+    |
+350 |             target_app="academic",
+351 |             target_model="StudentCourseOverride",
+352 |             override_reason=f"Course override approved: {override.original_course.code} → {override.substitute_course.code}",
+    |                                                                                                                        ^^^^^^
+353 |             original_restriction="Course requirement completion",
+354 |             override_details={
+    |
+
+I001 [*] Import block is un-sorted or un-formatted
+  --> apps/academic/services/transfer.py:19:5
+   |
+18 |   if TYPE_CHECKING:
+19 | /     from django.contrib.auth.models import AbstractUser
+20 | |     from users.models import User
+   | |_________________________________^
+21 |   else:
+22 |       User = get_user_model()
+   |
+help: Organize imports
+
+F401 [*] `apps.finance.models.DocumentExcessFee` imported but unused
+    --> apps/academic_records/services.py:1133:45
+     |
+1132 |             # Apply excess charge
+1133 |             from apps.finance.models import DocumentExcessFee
+     |                                             ^^^^^^^^^^^^^^^^^
+1134 |             from apps.finance.models.administrative import AdministrativeFeeConfig
+1135 |             from apps.finance.services.administrative import AdministrativeFeeService
+     |
+help: Remove unused import: `apps.finance.models.DocumentExcessFee`
+
+RUF001 String contains ambiguous `ℹ` (INFORMATION SOURCE). Did you mean `i` (LATIN SMALL LETTER I)?
+  --> apps/common/management/commands/analyze_extra_columns.py:98:28
+   |
+96 |         """Enhanced logging with timestamps"""
+97 |         timestamp = datetime.now().strftime("%H:%M:%S")
+98 |         prefix = {"INFO": "ℹ️", "ERROR": "❌", "SUCCESS": "✅", "WARNING": "⚠️"}.get(level, "ℹ️")
+   |                            ^
+99 |         self.stdout.write(f"[{timestamp}] {prefix} {message}")
+   |
+
+RUF001 String contains ambiguous `ℹ` (INFORMATION SOURCE). Did you mean `i` (LATIN SMALL LETTER I)?
+  --> apps/common/management/commands/analyze_extra_columns.py:98:92
+   |
+96 |         """Enhanced logging with timestamps"""
+97 |         timestamp = datetime.now().strftime("%H:%M:%S")
+98 |         prefix = {"INFO": "ℹ️", "ERROR": "❌", "SUCCESS": "✅", "WARNING": "⚠️"}.get(level, "ℹ️")
+   |                                                                                            ^
+99 |         self.stdout.write(f"[{timestamp}] {prefix} {message}")
+   |
+
+E501 Line too long (127 > 119)
+   --> apps/common/management/commands/analyze_extra_columns.py:329:120
+    |
+327 |                 "priority": "MEDIUM",
+328 |                 "risk": "LOW",
+329 |                 "description": f"Drop unused experimental column {column} (fill rate: {usage_stats.get('fill_rate', 0):.1f}%)",
+    |                                                                                                                        ^^^^^^^^
+330 |                 "sql": f'ALTER TABLE "{table}" DROP COLUMN "{column}";',
+331 |             },
+    |
+
+B007 Loop control variable `category` not used within loop body
+   --> apps/common/management/commands/analyze_extra_columns.py:379:13
+    |
+377 |         # Group by priority
+378 |         priority_groups = defaultdict(list)
+379 |         for category, columns in self.categorized_columns.items():
+    |             ^^^^^^^^
+380 |             for col in columns:
+381 |                 priority = col["recommendation"]["priority"]
+    |
+help: Rename unused `category` to `_category`
+
+E501 Line too long (131 > 119)
+   --> apps/common/management/commands/deep_integrity_analysis.py:191:120
+    |
+189 |                             "model_nullable": model_nullable,
+190 |                             "has_null_data": has_null_data,
+191 |                             "description": f"NULL constraint mismatch: DB nullable={db_nullable}, Model nullable={model_nullable}",
+    |                                                                                                                        ^^^^^^^^^^^^
+192 |                         }
+193 |                     )
+    |
+
+B007 Loop control variable `migration_name` not used within loop body
+   --> apps/common/management/commands/detect_circular_migrations.py:312:24
+    |
+310 |         app_stats: defaultdict[str, dict[str, int]] = defaultdict(lambda: {"migrations": 0, "dependencies": 0})
+311 |
+312 |         for (app_name, migration_name), dependencies in graph.items():
+    |                        ^^^^^^^^^^^^^^
+313 |             app_stats[app_name]["migrations"] += 1
+314 |             app_stats[app_name]["dependencies"] += len(dependencies)
+    |
+help: Rename unused `migration_name` to `_migration_name`
+
+RUF001 String contains ambiguous `ℹ` (INFORMATION SOURCE). Did you mean `i` (LATIN SMALL LETTER I)?
+  --> apps/common/management/commands/reconcile_models.py:52:28
+   |
+50 |         """Enhanced logging with timestamps"""
+51 |         timestamp = datetime.now().strftime("%H:%M:%S")
+52 |         prefix = {"INFO": "ℹ️", "ERROR": "❌", "SUCCESS": "✅", "WARNING": "⚠️"}.get(level, "ℹ️")
+   |                            ^
+53 |         self.stdout.write(f"[{timestamp}] {prefix} {message}")
+   |
+
+RUF001 String contains ambiguous `ℹ` (INFORMATION SOURCE). Did you mean `i` (LATIN SMALL LETTER I)?
+  --> apps/common/management/commands/reconcile_models.py:52:92
+   |
+50 |         """Enhanced logging with timestamps"""
+51 |         timestamp = datetime.now().strftime("%H:%M:%S")
+52 |         prefix = {"INFO": "ℹ️", "ERROR": "❌", "SUCCESS": "✅", "WARNING": "⚠️"}.get(level, "ℹ️")
+   |                                                                                            ^
+53 |         self.stdout.write(f"[{timestamp}] {prefix} {message}")
+   |
+
+RUF001 String contains ambiguous `ℹ` (INFORMATION SOURCE). Did you mean `i` (LATIN SMALL LETTER I)?
+   --> apps/common/management/commands/reconcile_models.py:257:28
+    |
+255 |             # Check if null=True already exists
+256 |             if "null=True" in field_definition:
+257 |                 self.log(f"ℹ️ Field {field_name} is already nullable")
+    |                            ^
+258 |                 return True
+    |
+
+S103 `os.chmod` setting a permissive mask `0o755` on file or directory
+   --> apps/common/management/commands/reconcile_models.py:429:33
+    |
+427 |             f.write(rollback_script)
+428 |
+429 |         os.chmod(rollback_file, 0o755)
+    |                                 ^^^^^
+430 |         self.log(f"📄 Rollback script created: {rollback_file}")
+    |
+
+E501 Line too long (143 > 119)
+   --> apps/common/management/commands/reconcile_models.py:475:120
+    |
+473 | …ritical"]
+474 | …
+475 | …if i['type'] == 'null_constraint_mismatch'])} critical NULL constraint issues"
+    |                                                        ^^^^^^^^^^^^^^^^^^^^^^^^
+476 | …
+477 | …o apply changes.")
+    |
+
+E501 Line too long (132 > 119)
+   --> apps/common/management/commands/validate_schema.py:130:120
+    |
+128 |                             "expected": expected_column,
+129 |                             "actual": model_field_name,
+130 |                             "fix_sql": f"ALTER TABLE {model._meta.db_table} RENAME COLUMN {model_field_name} TO {expected_column};",
+    |                                                                                                                        ^^^^^^^^^^^^^
+131 |                         }
+132 |                     )
+    |
+
+PLW0603 Using the global statement to update `_policy_engine` is discouraged
+   --> apps/common/policies/base.py:374:12
+    |
+372 | def get_policy_engine() -> PolicyEngine:
+373 |     """Get the global policy engine instance."""
+374 |     global _policy_engine
+    |            ^^^^^^^^^^^^^^
+375 |     if _policy_engine is None:
+376 |         _policy_engine = PolicyEngine()
+    |
+
+W292 [*] No newline at end of file
+ --> apps/common/services/__init__.py:6:4
+  |
+4 | This package contains shared business logic and services that can be used
+5 | across multiple Django apps in the project.
+6 | """
+  |    ^
+  |
+help: Add trailing newline
+
+UP035 `typing.Dict` is deprecated, use `dict` instead
+  --> apps/common/services/student_search.py:8:1
+   |
+ 6 | """
+ 7 |
+ 8 | from typing import Dict, Any, Optional
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 9 | from django.db.models import Q, QuerySet
+10 | from apps.people.models import StudentProfile
+   |
+
+I001 [*] Import block is un-sorted or un-formatted
+  --> apps/common/services/student_search.py:8:1
+   |
+ 6 |   """
+ 7 |
+ 8 | / from typing import Dict, Any, Optional
+ 9 | | from django.db.models import Q, QuerySet
+10 | | from apps.people.models import StudentProfile
+   | |_____________________________________________^
+   |
+help: Organize imports
+
+W293 Blank line contains whitespace
+  --> apps/common/services/student_search.py:16:1
+   |
+14 |     """
+15 |     Centralized service for student search operations.
+16 |     
+   | ^^^^
+17 |     Provides consistent search logic, query optimization, and eliminates
+18 |     code duplication across different views and endpoints.
+   |
+help: Remove whitespace from blank line
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+  --> apps/common/services/student_search.py:24:23
+   |
+22 |     def get_optimized_search_queryset(
+23 |         cls,
+24 |         query_params: Dict[str, Any],
+   |                       ^^^^
+25 |         for_list_view: bool = False,
+26 |         limit: Optional[int] = None
+   |
+help: Replace with `dict`
+
+UP045 [*] Use `X | None` for type annotations
+  --> apps/common/services/student_search.py:26:16
+   |
+24 |         query_params: Dict[str, Any],
+25 |         for_list_view: bool = False,
+26 |         limit: Optional[int] = None
+   |                ^^^^^^^^^^^^^
+27 |     ) -> QuerySet[StudentProfile]:
+28 |         """
+   |
+help: Convert to `X | None`
+
+W293 Blank line contains whitespace
+  --> apps/common/services/student_search.py:30:1
+   |
+28 |         """
+29 |         Get optimized queryset for student search with advanced filtering.
+30 |         
+   | ^^^^^^^^
+31 |         Args:
+32 |             query_params: Dictionary of search parameters from request.GET
+   |
+help: Remove whitespace from blank line
+
+W293 Blank line contains whitespace
+  --> apps/common/services/student_search.py:35:1
+   |
+33 |             for_list_view: Whether this is for a list view (affects prefetching)
+34 |             limit: Optional limit on number of results
+35 |             
+   | ^^^^^^^^^^^^
+36 |         Returns:
+37 |             Optimized QuerySet for StudentProfile objects
+   |
+help: Remove whitespace from blank line
+
+W293 [*] Blank line contains whitespace
+  --> apps/common/services/student_search.py:41:1
+   |
+39 |         # Start with base queryset
+40 |         queryset = StudentProfile.objects.filter(is_deleted=False).select_related("person")
+41 |         
+   | ^^^^^^^^
+42 |         # Apply search filters
+43 |         search_query = query_params.get("search", "").strip()
+   |
+help: Remove whitespace from blank line
+
+W293 [*] Blank line contains whitespace
+  --> apps/common/services/student_search.py:52:1
+   |
+50 |                 | Q(person__personal_email__icontains=search_query)
+51 |             )
+52 |         
+   | ^^^^^^^^
+53 |         # Status filter
+54 |         status = query_params.get("status", "").strip()
+   |
+help: Remove whitespace from blank line
+
+W293 [*] Blank line contains whitespace
+  --> apps/common/services/student_search.py:57:1
+   |
+55 |         if status:
+56 |             queryset = queryset.filter(current_status=status)
+57 |             
+   | ^^^^^^^^^^^^
+58 |         # Add prefetching for list views
+59 |         if for_list_view:
+   |
+help: Remove whitespace from blank line
+
+W293 [*] Blank line contains whitespace
+  --> apps/common/services/student_search.py:61:1
+   |
+59 |         if for_list_view:
+60 |             queryset = queryset.prefetch_related("program_enrollments__program")
+61 |         
+   | ^^^^^^^^
+62 |         # Apply limit if specified
+63 |         if limit:
+   |
+help: Remove whitespace from blank line
+
+W293 [*] Blank line contains whitespace
+  --> apps/common/services/student_search.py:65:1
+   |
+63 |         if limit:
+64 |             queryset = queryset[:limit]
+65 |             
+   | ^^^^^^^^^^^^
+66 |         return queryset
+   |
+help: Remove whitespace from blank line
+
+W293 [*] Blank line contains whitespace
+  --> apps/common/services/student_search.py:67:1
+   |
+66 |         return queryset
+67 |     
+   | ^^^^
+68 |     @classmethod
+69 |     def quick_search(
+   |
+help: Remove whitespace from blank line
+
+W293 Blank line contains whitespace
+  --> apps/common/services/student_search.py:78:1
+   |
+76 |         """
+77 |         Quick search for students with optimized performance.
+78 |         
+   | ^^^^^^^^
+79 |         Args:
+80 |             search_term: Search term to match against student fields
+   |
+help: Remove whitespace from blank line
+
+W293 Blank line contains whitespace
+  --> apps/common/services/student_search.py:84:1
+   |
+82 |             active_only: Whether to filter by active status only
+83 |             include_phone: Whether to include phone number in search (if available)
+84 |             
+   | ^^^^^^^^^^^^
+85 |         Returns:
+86 |             QuerySet of matching StudentProfile objects
+   |
+help: Remove whitespace from blank line
+
+W293 [*] Blank line contains whitespace
+  --> apps/common/services/student_search.py:90:1
+   |
+88 |         if not search_term or len(search_term.strip()) < 2:
+89 |             return StudentProfile.objects.none()
+90 |         
+   | ^^^^^^^^
+91 |         search_term = search_term.strip()
+   |
+help: Remove whitespace from blank line
+
+W293 [*] Blank line contains whitespace
+  --> apps/common/services/student_search.py:92:1
+   |
+91 |         search_term = search_term.strip()
+92 |         
+   | ^^^^^^^^
+93 |         # Base queryset
+94 |         queryset = StudentProfile.objects.filter(is_deleted=False)
+   |
+help: Remove whitespace from blank line
+
+W293 [*] Blank line contains whitespace
+  --> apps/common/services/student_search.py:95:1
+   |
+93 |         # Base queryset
+94 |         queryset = StudentProfile.objects.filter(is_deleted=False)
+95 |         
+   | ^^^^^^^^
+96 |         # Build search filters
+97 |         search_filters = Q(
+   |
+help: Remove whitespace from blank line
+
+W293 [*] Blank line contains whitespace
+   --> apps/common/services/student_search.py:104:1
+    |
+102 |             | Q(person__personal_email__icontains=search_term)
+103 |         )
+104 |         
+    | ^^^^^^^^
+105 |         # Add phone search if requested and available
+106 |         # Note: Person model may not have phone field - this is defensive coding
+    |
+help: Remove whitespace from blank line
+
+W293 [*] Blank line contains whitespace
+   --> apps/common/services/student_search.py:116:1
+    |
+114 |                 # Silently ignore if phone field doesn't exist
+115 |                 pass
+116 |         
+    | ^^^^^^^^
+117 |         queryset = queryset.filter(search_filters)
+    |
+help: Remove whitespace from blank line
+
+W293 [*] Blank line contains whitespace
+   --> apps/common/services/student_search.py:118:1
+    |
+117 |         queryset = queryset.filter(search_filters)
+118 |         
+    | ^^^^^^^^
+119 |         # Filter by active status if requested
+120 |         if active_only:
+    |
+help: Remove whitespace from blank line
+
+W293 [*] Blank line contains whitespace
+   --> apps/common/services/student_search.py:122:1
+    |
+120 |         if active_only:
+121 |             queryset = queryset.filter(current_status__iexact="active")
+122 |         
+    | ^^^^^^^^
+123 |         # Optimize query with related data
+124 |         queryset = queryset.select_related("person").prefetch_related("program_enrollments__program")
+    |
+help: Remove whitespace from blank line
+
+W293 [*] Blank line contains whitespace
+   --> apps/common/services/student_search.py:125:1
+    |
+123 |         # Optimize query with related data
+124 |         queryset = queryset.select_related("person").prefetch_related("program_enrollments__program")
+125 |         
+    | ^^^^^^^^
+126 |         # Apply limit
+127 |         return queryset[:limit]
+    |
+help: Remove whitespace from blank line
+
+W293 [*] Blank line contains whitespace
+   --> apps/common/services/student_search.py:128:1
+    |
+126 |         # Apply limit
+127 |         return queryset[:limit]
+128 |     
+    | ^^^^
+129 |     @classmethod
+130 |     def search_by_id_prefix(cls, id_prefix: str, limit: int = 10) -> QuerySet[StudentProfile]:
+    |
+help: Remove whitespace from blank line
+
+W293 Blank line contains whitespace
+   --> apps/common/services/student_search.py:133:1
+    |
+131 |         """
+132 |         Search students by student ID prefix (most optimized search).
+133 |         
+    | ^^^^^^^^
+134 |         Args:
+135 |             id_prefix: Prefix to match against student_id
+    |
+help: Remove whitespace from blank line
+
+W293 Blank line contains whitespace
+   --> apps/common/services/student_search.py:137:1
+    |
+135 |             id_prefix: Prefix to match against student_id
+136 |             limit: Maximum number of results
+137 |             
+    | ^^^^^^^^^^^^
+138 |         Returns:
+139 |             QuerySet of matching students
+    |
+help: Remove whitespace from blank line
+
+W293 [*] Blank line contains whitespace
+   --> apps/common/services/student_search.py:143:1
+    |
+141 |         if not id_prefix:
+142 |             return StudentProfile.objects.none()
+143 |             
+    | ^^^^^^^^^^^^
+144 |         return (
+145 |             StudentProfile.objects
+    |
+help: Remove whitespace from blank line
+
+W292 [*] No newline at end of file
+   --> apps/common/services/student_search.py:148:10
+    |
+146 |             .filter(is_deleted=False, student_id__startswith=id_prefix)
+147 |             .select_related("person")[:limit]
+148 |         )
+    |          ^
+    |
+help: Add trailing newline
+
+RUF001 String contains ambiguous `´` (ACUTE ACCENT). Did you mean ``` (GRAVE ACCENT)?
+  --> apps/common/utils/limon_to_unicode.py:93:6
+   |
+91 |     ">": ".",
+92 |     "°": "%",
+93 |     "´": "ខ្ញុំ",
+   |      ^
+94 |     "¬": "(",
+95 |     "¦": ")",
+   |
+
+B904 Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling
+  --> apps/curriculum/management/commands/import_legacy_terms.py:53:13
+   |
+51 |                 self._import_terms(f, dry_run, update_existing)
+52 |         except FileNotFoundError:
+53 |             raise CommandError(f"CSV file not found: {csv_file}")
+   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+54 |         except Exception as e:
+55 |             raise CommandError(f"Error importing terms: {e}")
+   |
+
+B904 Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling
+  --> apps/curriculum/management/commands/import_legacy_terms.py:55:13
+   |
+53 |             raise CommandError(f"CSV file not found: {csv_file}")
+54 |         except Exception as e:
+55 |             raise CommandError(f"Error importing terms: {e}")
+   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+56 |
+57 |     def _import_terms(self, csv_file, dry_run: bool, update_existing: bool):
+   |
+
+B904 Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling
+   --> apps/curriculum/management/commands/import_legacy_terms.py:178:17
+    |
+176 |                 return datetime.strptime(date_str, "%Y-%m-%d").date()
+177 |             except ValueError as e:
+178 |                 raise ValueError(f"Could not parse date '{date_str}': {e}")
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+179 |
+180 |     def _parse_optional_date(self, date_str: str | None) -> date | None:
+    |
+
+RUF001 String contains ambiguous `´` (ACUTE ACCENT). Did you mean ``` (GRAVE ACCENT)?
+   --> apps/data_pipeline/core/transformations/text_encodings.py:144:14
+    |
+142 |             ":": "៉",
+143 |             "°": "%",
+144 |             "´": "ខ្ញុំ",
+    |              ^
+145 |             "¬": "(",
+146 |             "¦": ")",
+    |
+
+RUF001 String contains ambiguous `´` (ACUTE ACCENT). Did you mean ``` (GRAVE ACCENT)?
+   --> apps/data_pipeline/core/transformations/text_encodings.py:201:14
+    |
+199 |             ">": ".",
+200 |             "°": "%",
+201 |             "´": "ខ្ញុំ",
+    |              ^
+202 |             "¬": "(",
+203 |             "¦": ")",
+    |
+
+B904 Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling
+  --> apps/data_pipeline/management/commands/profile_raw_data.py:86:13
+   |
+85 |         except Exception as e:
+86 |             raise CommandError(f"Profiling failed: {e!s}")
+   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+87 |
+88 |     def _table_exists(self, table_name: str) -> bool:
+   |
+
+B904 Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling
+   --> apps/data_pipeline/management/commands/run_pipeline.py:109:25
+    |
+108 |                     if not options["continue_on_error"]:
+109 |                         raise CommandError(f"Pipeline failed for {table_name}: {e!s}")
+    |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+110 |
+111 |             # Show final summary
+    |
+
+B904 Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling
+  --> apps/data_pipeline/management/commands/validate_configs.py:55:13
+   |
+54 |         except Exception as e:
+55 |             raise CommandError(f"Validation failed: {e!s}")
+   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+56 |
+57 |     def _validate_single_table(self, table_name: str, options: dict) -> dict:
+   |
+
+B904 Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling
+  --> apps/data_pipeline/validators/terms.py:83:17
+   |
+81 |         except ValueError as e:
+82 |             if "invalid literal" in str(e):
+83 |                 raise ValueError(f"payment_period '{v}' must be a valid integer")
+   |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+84 |             raise
+   |
+
+F401 [*] `django.db.models.QuerySet` imported but unused
+  --> apps/enrollment/progression_builder.py:28:34
+   |
+27 | if TYPE_CHECKING:
+28 |     from django.db.models import QuerySet
+   |                                  ^^^^^^^^
+29 |
+30 | logger = logging.getLogger(__name__)
+   |
+help: Remove unused import: `django.db.models.QuerySet`
+
+F401 [*] `apps.curriculum.models.Major` imported but unused
+    --> apps/enrollment/services.py:1126:44
+     |
+1124 |         # We'll check if the course is available in the student's major requirements
+1125 |         from apps.academic.models import CanonicalRequirement
+1126 |         from apps.curriculum.models import Major
+     |                                            ^^^^^
+1127 |
+1128 |         program = cast("Major", current_program.program)
+     |
+help: Remove unused import: `apps.curriculum.models.Major`
+
+RUF100 [*] Unused `noqa` directive (unused: `F821`)
+  --> apps/enrollment/services_audit_example.py:9:1
+   |
+ 7 | """
+ 8 |
+ 9 | # ruff: noqa: F821
+   | ^^^^^^^^^^^^^^^^^^
+10 |
+11 | from datetime import date, datetime, timedelta
+   |
+help: Remove unused `noqa` directive
+
+I001 [*] Import block is un-sorted or un-formatted
+  --> apps/enrollment/services_audit_example.py:18:5
+   |
+17 |   if TYPE_CHECKING:
+18 | /     from django.contrib.auth.models import AbstractUser
+19 | |     from typing import Any
+   | |__________________________^
+20 |       
+21 |       User = AbstractUser
+   |
+help: Organize imports
+
+TC004 Move import `typing.Any` out of type-checking block. Import is used for more than type hinting.
+  --> apps/enrollment/services_audit_example.py:19:24
+   |
+17 | if TYPE_CHECKING:
+18 |     from django.contrib.auth.models import AbstractUser
+19 |     from typing import Any
+   |                        ^^^
+20 |     
+21 |     User = AbstractUser
+   |
+help: Move out of type-checking block
+
+W293 [*] Blank line contains whitespace
+  --> apps/enrollment/services_audit_example.py:20:1
+   |
+18 |     from django.contrib.auth.models import AbstractUser
+19 |     from typing import Any
+20 |     
+   | ^^^^
+21 |     User = AbstractUser
+   |
+help: Remove whitespace from blank line
+
+W293 [*] Blank line contains whitespace
+  --> apps/enrollment/services_audit_example.py:22:1
+   |
+21 |     User = AbstractUser
+22 |     
+   | ^^^^
+23 |     # Placeholder models for template/example purposes
+24 |     class Grade:
+   |
+help: Remove whitespace from blank line
+
+W293 [*] Blank line contains whitespace
+  --> apps/enrollment/services_audit_example.py:26:1
+   |
+24 |     class Grade:
+25 |         pass
+26 |     
+   | ^^^^
+27 |     class GradeType:
+28 |         pass
+   |
+help: Remove whitespace from blank line
+
+F811 Redefinition of unused `TermFactory` from line 36
+  --> apps/enrollment/tests/integration/test_enrollment_workflows.py:61:86
+   |
+59 | from apps.grading.tests.factories import GradeFactory
+60 | from apps.people.tests.factories import StudentProfileFactory
+61 | from apps.scheduling.tests.factories import ClassHeaderFactory, ClassSessionFactory, TermFactory
+   |                                                                                      ^^^^^^^^^^^ `TermFactory` redefined here
+   |
+  ::: apps/enrollment/tests/integration/test_enrollment_workflows.py:36:5
+   |
+34 |     CycleFactory,
+35 |     MajorFactory,
+36 |     TermFactory,
+   |     ----------- previous definition of `TermFactory` here
+37 | )
+38 | from apps.enrollment.models import (
+   |
+help: Remove definition: `TermFactory`
+
+B007 Loop control variable `i` not used within loop body
+   --> apps/enrollment/tests/integration/test_enrollment_workflows.py:702:13
+    |
+701 |         # Step 1: Enroll students up to capacity
+702 |         for i, student in enumerate(students[:2]):
+    |             ^
+703 |             result = EnrollmentService.enroll_student_in_class(
+704 |                 student=student, class_header=self.class_header, enrolled_by=self.user
+    |
+help: Rename unused `i` to `_i`
+
+E501 Line too long (122 > 119)
+   --> apps/finance/management/commands/production/analyze_legacy_data.py:380:120
+    |
+378 | ## Recommended Approach
+379 |
+380 | 1. **Automated Fixes**: Run bulk fixing tools to address {analysis["students"]["existing_students"]:,} processable records
+    |                                                                                                                        ^^^
+381 | 2. **Manual Review**: Address {analysis["students"]["missing_students"]:,} missing students systematically
+382 | 3. **Batch Processing**: Process in chunks of {analysis["processing_estimates"]["recommended_batch_size"]} records
+    |
+
+E501 Line too long (130 > 119)
+   --> apps/finance/management/commands/production/analyze_legacy_data.py:388:120
+    |
+386 | - **Total Value**: ${analysis["financial"]["total_net_amount"]:,.2f}
+387 | - **Average Payment**: ${analysis["financial"]["average_payment"]:.2f}
+388 | - **Discount Rate**: {(analysis["financial"]["total_discounts"] / max(analysis["financial"]["total_gross_amount"], 1) * 100):.1f}%
+    |                                                                                                                        ^^^^^^^^^^^
+389 |
+390 | ---
+    |
+
+E501 Line too long (122 > 119)
+   --> apps/finance/management/commands/transitional/import_language_pricing.py:294:120
+    |
+292 |                 end_date_display = end_date if end_date else "current/active"
+293 |                 self.stdout.write(
+294 |                     f"[DRY RUN] Would create pricing for {course_code}: ${price} ({effective_date} to {end_date_display})"
+    |                                                                                                                        ^^^
+295 |                 )
+    |
+
+E501 Line too long (122 > 119)
+   --> apps/finance/management/commands/transitional/process_receipt_notes.py:644:120
+    |
+642 |                 self.stdout.write(f"   {note_type.upper()}:")
+643 |                 self.stdout.write(
+644 |                     f'     Original: "{result["original_note"][:60]}{"..." if len(result["original_note"]) > 60 else ""}"'
+    |                                                                                                                        ^^^
+645 |                 )
+    |
+
+W293 [*] Blank line contains whitespace
+   --> apps/finance/management/commands/transitional/smart_batch_processor.py:643:1
+    |
+642 |                 invoice, payment, duplicate_handled = result
+643 |                 
+    | ^^^^^^^^^^^^^^^^
+644 |                 # These should not be None due to the check above, but satisfy mypy
+645 |                 assert invoice is not None, "invoice should not be None after validation"
+    |
+help: Remove whitespace from blank line
+
+E501 Line too long (134 > 119)
+   --> apps/finance/management/commands/transitional/update_dropped_enrollment_status.py:111:120
+    |
+109 |                     self.stdout.write(
+110 |                         self.style.WARNING(
+111 |                             f"Found {len(matching_enrollments)} enrollments for student {student_id}, class {class_id} - updating all"
+    |                                                                                                                        ^^^^^^^^^^^^^^^
+112 |                         )
+113 |                     )
+    |
+
+UP040 Type alias `User` uses `TypeAlias` annotation instead of the `type` keyword
+  --> apps/finance/services/comprehensive_reconciliation_service.py:36:1
+   |
+35 | logger = logging.getLogger(__name__)
+36 | User: TypeAlias = get_user_model()
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: Use the `type` keyword
+
+RUF005 Consider `[f"{percentage}%", *key_words[:3]]` instead of concatenation
+   --> apps/finance/services/discount_pattern_inference.py:330:25
+    |
+329 |         # Include percentage and generic terms
+330 |         pattern_parts = [f"{percentage}%"] + key_words[:3]  # Limit to avoid overly long patterns
+    |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+331 |
+332 |         return " ".join(pattern_parts)
+    |
+help: Replace with `[f"{percentage}%", *key_words[:3]]`
+
+E501 Line too long (132 > 119)
+   --> apps/finance/services/enhanced_reconciliation_service.py:307:120
+    |
+305 |                             (variance / payment.amount * 100) if payment.amount > 0 else Decimal("0")
+306 |                         ),
+307 |                         "notes": f"Senior project {tier_result.courses_priced[0]['tier']} + {len(other_enrollments)} other courses",
+    |                                                                                                                        ^^^^^^^^^^^^^
+308 |                     }
+    |
+
+W293 [*] Blank line contains whitespace
+   --> apps/finance/services/payment_service.py:351:1
+    |
+349 |         # invoices should not be None at this point due to the logic above
+350 |         assert invoices is not None, "invoices should be set by the logic above"
+351 |             
+    | ^^^^^^^^^^^^
+352 |         for invoice in invoices:
+353 |             if remaining_amount <= 0:
+    |
+help: Remove whitespace from blank line
+
+E501 Line too long (134 > 119)
+   --> apps/finance/services/reconciliation_service.py:396:120
+    |
+394 |                     "type": "MATERIAL_VARIANCE",
+395 |                     "severity": "WARNING",
+396 |                     "message": f"Variance ${reconciliation_status.variance_amount} exceeds threshold ${threshold.absolute_threshold}",
+    |                                                                                                                        ^^^^^^^^^^^^^^^
+397 |                 }
+398 |             )
+    |
+
+E501 Line too long (127 > 119)
+   --> apps/finance/tests/critical_path_factories.py:359:120
+    |
+357 |             lambda obj: {
+358 |                 "payment_method": "CASH",
+359 |                 "receipt_number": f"RCT-{timezone.now().strftime('%Y%m%d')}-{factory.Faker('random_int', min=1000, max=9999)}",
+    |                                                                                                                        ^^^^^^^^
+360 |                 "cashier_session": f"CS-{timezone.now().strftime('%Y%m%d')}-01",
+361 |             }
+    |
+
+B007 Loop control variable `i` not used within loop body
+   --> apps/finance/tests/critical_path_factories.py:550:13
+    |
+549 |         # Create refunds
+550 |         for i in range(config["refunds"]):
+    |             ^
+551 |             if audit_data["payments"]:
+552 |                 original_payment = factory.Faker("random_element", elements=audit_data["payments"])
+    |
+help: Rename unused `i` to `_i`
+
+E402 Module level import not at top of file
+   --> apps/finance/tests/test_comprehensive_models.py:724:1
+    |
+723 | # Import Django models for aggregation
+724 | from django.db import models
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+
+E501 Line too long (174 > 119)
+   --> apps/grading/gpa.py:496:120
+    |
+494 | …
+495 | …
+496 | …cenario['required_avg_grade']:.1f} average grade to reach {best_scenario['target_gpa']} GPA",
+    |                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+497 | …
+    |
+
+E501 Line too long (151 > 119)
+   --> apps/grading/management/commands/transitional/load_v0_academic_conversions.py:152:119
+    |
+150 | …
+151 | …
+152 | …in_percentage']}-{conv_data['max_percentage']}% = {conv_data['gpa_points']} GPA",
+    |                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+153 | …
+154 | …
+    |
+
+E501 Line too long (163 > 119)
+  --> apps/grading/management/commands/transitional/load_v0_grading_scales.py:66:120
+   |
+64 | …
+65 | …
+66 | …MA programs. Passing grade is D (1.00). Grades below D do not receive academic credit.",
+   |                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+67 | …
+68 | …
+   |
+
+E501 Line too long (129 > 119)
+  --> apps/grading/management/commands/transitional/setup_grading_scales.py:66:120
+   |
+64 |             name="Language Standard",
+65 |             scale_type=GradingScale.ScaleType.LANGUAGE_STANDARD,
+66 |             description="Standard language grading scale used for EHSS, GESL, and WKEND programs. F grade for scores below 50%.",
+   |                                                                                                                        ^^^^^^^^^^
+67 |             is_active=True,
+68 |         )
+   |
+
+B904 Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling
+   --> apps/language/services.py:439:13
+    |
+437 |             level_number = int(parts[1])
+438 |         except ValueError:
+439 |             raise LanguageTemplateError(f"Invalid level number in course code: {course.code}")
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+440 |
+441 |         # Get current template for this level
+    |
+
+W505 Doc line too long (134 > 119)
+   --> apps/people/models.py:503:120
+    |
+502 |         Architecture note: This property violates clean architecture by calling service from model.
+503 |         Future refactor: Move this logic to service layer and access via MajorDeclarationService.get_enrollment_history_major(student)
+    |                                                                                                                        ^^^^^^^^^^^^^^^
+504 |         """
+505 |         from apps.enrollment.services import MajorDeclarationService
+    |
+
+E501 Line too long (134 > 119)
+   --> apps/people/models.py:503:120
+    |
+502 |         Architecture note: This property violates clean architecture by calling service from model.
+503 |         Future refactor: Move this logic to service layer and access via MajorDeclarationService.get_enrollment_history_major(student)
+    |                                                                                                                        ^^^^^^^^^^^^^^^
+504 |         """
+505 |         from apps.enrollment.services import MajorDeclarationService
+    |
+
+W291 [*] Trailing whitespace
+  --> apps/web_interface/examples/django-views-urls.py:86:34
+   |
+84 |         # Current complex filter handles legacy data inconsistencies
+85 |         queryset = queryset.filter(
+86 |             Q(email__isnull=True) 
+   |                                  ^
+87 |             | Q(email="") 
+88 |             | Q(email="NULL") 
+   |
+help: Remove trailing whitespace
+
+W291 [*] Trailing whitespace
+  --> apps/web_interface/examples/django-views-urls.py:87:26
+   |
+85 |         queryset = queryset.filter(
+86 |             Q(email__isnull=True) 
+87 |             | Q(email="") 
+   |                          ^
+88 |             | Q(email="NULL") 
+89 |             | Q(email="No email")
+   |
+help: Remove trailing whitespace
+
+W291 [*] Trailing whitespace
+  --> apps/web_interface/examples/django-views-urls.py:88:30
+   |
+86 |             Q(email__isnull=True) 
+87 |             | Q(email="") 
+88 |             | Q(email="NULL") 
+   |                              ^
+89 |             | Q(email="No email")
+90 |         )
+   |
+help: Remove trailing whitespace
+
+E402 Module level import not at top of file
+   --> apps/web_interface/examples/django-views-urls.py:199:1
+    |
+198 | # urls.py
+199 | from django.urls import path
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+200 |
+201 | from . import views
+    |
+
+E402 Module level import not at top of file
+   --> apps/web_interface/examples/django-views-urls.py:201:1
+    |
+199 | from django.urls import path
+200 |
+201 | from . import views
+    | ^^^^^^^^^^^^^^^^^^^
+202 |
+203 | urlpatterns = [
+    |
+
+E402 Module level import not at top of file
+   --> apps/web_interface/examples/django-views-urls.py:213:1
+    |
+212 | # models.py (example)
+213 | from django.db import models
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+
+F811 Redefinition of unused `Student` from line 11
+   --> apps/web_interface/examples/django-views-urls.py:216:7
+    |
+216 | class Student(models.Model):
+    |       ^^^^^^^ `Student` redefined here
+217 |     student_id = models.CharField(max_length=20, unique=True)
+218 |     first_name = models.CharField(max_length=100)
+    |
+   ::: apps/web_interface/examples/django-views-urls.py:11:21
+    |
+  9 | from django.shortcuts import render
+ 10 |
+ 11 | from .models import Student
+    |                     ------- previous definition of `Student` here
+    |
+help: Remove definition: `Student`
+
+B904 Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling
+   --> apps/web_interface/forms/auth_forms.py:142:21
+    |
+140 |                   except User.DoesNotExist:
+141 |                       # Email doesn't exist
+142 | /                     raise ValidationError(
+143 | |                         self.error_messages["invalid_login"],
+144 | |                         code="invalid_login",
+145 | |                     )
+    | |_____________________^
+146 |               else:
+147 |                   self.confirm_login_allowed(self.user_cache)
+    |
+
+S324 Probable use of insecure hash functions in `hashlib`: `md5`
+  --> apps/web_interface/performance.py:43:27
+   |
+41 |         full_key = ":".join(key_parts)
+42 |         if len(full_key) > 250:  # Django cache key limit
+43 |             hash_suffix = hashlib.md5(full_key.encode()).hexdigest()[:8]
+   |                           ^^^^^^^^^^^
+44 |             full_key = f"{prefix}:{hash_suffix}"
+   |
+
+B007 Loop control variable `i` not used within loop body
+  --> apps/web_interface/tests/test_statistics.py:81:13
+   |
+80 |         # Full class: 10 students
+81 |         for i in range(10):
+   |             ^
+82 |             ClassHeaderEnrollment.objects.create(
+83 |                 student=students[student_index], class_header=class1, status="ENROLLED"
+   |
+help: Rename unused `i` to `_i`
+
+B007 Loop control variable `i` not used within loop body
+  --> apps/web_interface/tests/test_statistics.py:88:13
+   |
+87 |         # Nearly full class: 8 students
+88 |         for i in range(8):
+   |             ^
+89 |             ClassHeaderEnrollment.objects.create(
+90 |                 student=students[student_index], class_header=class2, status="ENROLLED"
+   |
+help: Rename unused `i` to `_i`
+
+B007 Loop control variable `i` not used within loop body
+  --> apps/web_interface/tests/test_statistics.py:95:13
+   |
+94 |         # Half full class: 5 students
+95 |         for i in range(5):
+   |             ^
+96 |             ClassHeaderEnrollment.objects.create(
+97 |                 student=students[student_index], class_header=class3, status="ENROLLED"
+   |
+help: Rename unused `i` to `_i`
+
+E402 Module level import not at top of file
+   --> apps/web_interface/utils.py:465:1
+    |
+463 | # WebSocket and HTMX Testing Utilities
+464 |
+465 | import logging
+    | ^^^^^^^^^^^^^^
+466 | import os
+467 | from typing import Any
+    |
+
+E402 Module level import not at top of file
+   --> apps/web_interface/utils.py:466:1
+    |
+465 | import logging
+466 | import os
+    | ^^^^^^^^^
+467 | from typing import Any
+    |
+
+E402 Module level import not at top of file
+   --> apps/web_interface/utils.py:467:1
+    |
+465 | import logging
+466 | import os
+467 | from typing import Any
+    | ^^^^^^^^^^^^^^^^^^^^^^
+468 |
+469 | from channels.routing import URLRouter
+    |
+
+E402 Module level import not at top of file
+   --> apps/web_interface/utils.py:469:1
+    |
+467 | from typing import Any
+468 |
+469 | from channels.routing import URLRouter
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+470 | from channels.testing import WebsocketCommunicator
+471 | from django.test import Client
+    |
+
+E402 Module level import not at top of file
+   --> apps/web_interface/utils.py:470:1
+    |
+469 | from channels.routing import URLRouter
+470 | from channels.testing import WebsocketCommunicator
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+471 | from django.test import Client
+    |
+
+E402 Module level import not at top of file
+   --> apps/web_interface/utils.py:471:1
+    |
+469 | from channels.routing import URLRouter
+470 | from channels.testing import WebsocketCommunicator
+471 | from django.test import Client
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+472 |
+473 | logger = logging.getLogger(__name__)
+    |
+
+E501 Line too long (136 > 119)
+   --> apps/web_interface/views/student_locator_views.py:255:120
+    |
+253 | …     student.person.full_name,
+254 | …     student.person.khmer_name or "",
+255 | …     student.person.school_email or student.person.personal_email or "",  # Clean: use empty string instead of "No email"
+    |                                                                                                          ^^^^^^^^^^^^^^^^^
+256 | …     "No phone",  # Person model doesn't have phone field
+257 | …     student.current_program or "TBD",
+    |
+
+E501 Line too long (152 > 119)
+   --> apps/web_interface/views/student_locator_views.py:299:120
+    |
+297 | …
+298 | …
+299 | …dent.person.personal_email or "")  # Clean: use empty string instead of "No email"
+    |                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+300 | …t have phone field
+301 | …
+    |
+
+I001 [*] Import block is un-sorted or un-formatted
+  --> apps/web_interface/views/student_views.py:7:1
+   |
+ 5 |   """
+ 6 |
+ 7 | / from django.contrib import messages
+ 8 | | from django.db.models import Prefetch, Q
+ 9 | | from django.http import JsonResponse
+10 | | from django.urls import reverse_lazy
+11 | | from django.utils.translation import gettext as _
+12 | | from django.views.generic import CreateView, DetailView, ListView, UpdateView
+13 | |
+14 | | from apps.enrollment.models import ClassHeaderEnrollment, ProgramEnrollment
+15 | | from apps.people.forms import StudentProfileForm
+16 | | from apps.people.models import StudentProfile
+17 | | from apps.common.services.student_search import StudentSearchService
+18 | |
+19 | | from ..performance import QueryOptimizer
+20 | | from ..permissions import StaffRequiredMixin
+21 | | from ..utils import is_htmx_request
+   | |___________________________________^
+   |
+help: Organize imports
+
+F401 [*] `django.db.models.Q` imported but unused
+  --> apps/web_interface/views/student_views.py:8:40
+   |
+ 7 | from django.contrib import messages
+ 8 | from django.db.models import Prefetch, Q
+   |                                        ^
+ 9 | from django.http import JsonResponse
+10 | from django.urls import reverse_lazy
+   |
+help: Remove unused import: `django.db.models.Q`
+
+W293 [*] Blank line contains whitespace
+  --> apps/web_interface/views/student_views.py:40:1
+   |
+38 |             limit=None  # Pagination handles limiting
+39 |         )
+40 |         
+   | ^^^^^^^^
+41 |         # Additional optimization for list view
+42 |         queryset = QueryOptimizer.optimize_student_queryset(queryset, for_list=True)
+   |
+help: Remove whitespace from blank line
+
+Found 111 errors.
+[*] 38 fixable with the `--fix` option (11 hidden fixes can be enabled with the `--unsafe-fixes` option).

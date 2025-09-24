@@ -1,0 +1,937 @@
+{% extends "web_interface/base/admin_base.html" %}
+{% load i18n %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Schedule Builder Specific Styles */
+    .schedule-grid {
+        display: grid;
+        grid-template-columns: 80px repeat(7, 1fr);
+        gap: 1px;
+        background-color: #e2e8f0;
+        border: 1px solid #e2e8f0;
+        border-radius: 0.5rem;
+        overflow: hidden;
+    }
+    
+    .time-slot {
+        background-color: #f8fafc;
+        padding: 0.5rem 0.25rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+        text-align: center;
+        border-right: 1px solid #e2e8f0;
+    }
+    
+    .day-header {
+        background-color: #f1f5f9;
+        padding: 0.75rem 0.5rem;
+        font-weight: 600;
+        text-align: center;
+        border-bottom: 2px solid #e2e8f0;
+    }
+    
+    .schedule-cell {
+        background-color: white;
+        min-height: 60px;
+        position: relative;
+        padding: 2px;
+        transition: all 0.15s ease;
+    }
+    
+    .schedule-cell:hover {
+        background-color: #f0f9ff;
+    }
+    
+    .schedule-cell.drop-target {
+        background-color: #dbeafe;
+        border: 2px dashed #3b82f6;
+    }
+    
+    .class-block {
+        background: linear-gradient(135deg, #3b82f6, #1e40af);
+        color: white;
+        padding: 0.5rem;
+        border-radius: 0.375rem;
+        cursor: move;
+        font-size: 0.75rem;
+        line-height: 1.2;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: all 0.15s ease;
+        position: relative;
+        height: 100%;
+        min-height: 56px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    
+    .class-block:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        transform: translateY(-1px);
+    }
+    
+    .class-block.dragging {
+        opacity: 0.7;
+        transform: rotate(5deg);
+        z-index: 1000;
+    }
+    
+    .class-block.conflict {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        box-shadow: 0 0 0 2px #fecaca;
+    }
+    
+    .class-title {
+        font-weight: 600;
+        font-size: 0.75rem;
+        line-height: 1.1;
+        margin-bottom: 0.25rem;
+    }
+    
+    .class-details {
+        font-size: 0.625rem;
+        opacity: 0.9;
+        line-height: 1.1;
+    }
+    
+    .class-time {
+        font-weight: 500;
+    }
+    
+    .resource-panel {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        height: fit-content;
+    }
+    
+    .resource-item {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 0.375rem;
+        padding: 0.75rem;
+        margin-bottom: 0.5rem;
+        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+    
+    .resource-item:hover {
+        background: #f1f5f9;
+        border-color: #cbd5e1;
+    }
+    
+    .resource-item.selected {
+        background: #eff6ff;
+        border-color: #3b82f6;
+    }
+    
+    .floating-toolbar {
+        position: fixed;
+        top: 50%;
+        right: 1rem;
+        transform: translateY(-50%);
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        z-index: 20;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+    
+    .floating-toolbar.show {
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    .toolbar-btn {
+        display: block;
+        width: 100%;
+        margin-bottom: 0.25rem;
+        padding: 0.5rem;
+        text-align: center;
+        border: none;
+        background: #f8fafc;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        transition: background-color 0.15s ease;
+    }
+    
+    .toolbar-btn:hover {
+        background: #f1f5f9;
+    }
+    
+    .conflict-indicator {
+        position: absolute;
+        top: -2px;
+        right: -2px;
+        width: 12px;
+        height: 12px;
+        background: #ef4444;
+        border-radius: 50%;
+        border: 2px solid white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .conflict-indicator i {
+        font-size: 6px;
+        color: white;
+    }
+    
+    .time-indicator {
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #ef4444;
+        z-index: 10;
+        transition: top 0.1s ease;
+    }
+    
+    .term-selector {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 0.375rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Schedule Builder JavaScript
+class ScheduleBuilder {
+    constructor() {
+        this.currentTerm = null;
+        this.scheduleData = [];
+        this.selectedBlock = null;
+        this.draggedBlock = null;
+        this.conflicts = [];
+        
+        this.init();
+    }
+    
+    init() {
+        this.bindEvents();
+        this.setupDragAndDrop();
+        this.loadScheduleData();
+        this.startTimeIndicator();
+    }
+    
+    bindEvents() {
+        // Term selection
+        document.getElementById('term-selector').addEventListener('change', (e) => {
+            this.loadScheduleData(e.target.value);
+        });
+        
+        // Resource panel events
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.resource-item')) {
+                this.selectResource(e.target.closest('.resource-item'));
+            }
+        });
+        
+        // Create new class
+        document.getElementById('create-class-btn')?.addEventListener('click', () => {
+            this.showCreateClassModal();
+        });
+        
+        // Delete selected
+        document.getElementById('delete-selected-btn')?.addEventListener('click', () => {
+            this.deleteSelectedClass();
+        });
+        
+        // Save schedule
+        document.getElementById('save-schedule-btn')?.addEventListener('click', () => {
+            this.saveSchedule();
+        });
+        
+        // Conflict resolution
+        document.getElementById('resolve-conflicts-btn')?.addEventListener('click', () => {
+            this.showConflictResolution();
+        });
+    }
+    
+    setupDragAndDrop() {
+        // Make class blocks draggable
+        document.addEventListener('mousedown', (e) => {
+            const classBlock = e.target.closest('.class-block');
+            if (classBlock) {
+                this.startDrag(classBlock, e);
+            }
+        });
+        
+        // Handle drag over schedule cells
+        document.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            const cell = e.target.closest('.schedule-cell');
+            if (cell && this.draggedBlock) {
+                this.highlightDropTarget(cell);
+            }
+        });
+        
+        // Handle drop
+        document.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const cell = e.target.closest('.schedule-cell');
+            if (cell && this.draggedBlock) {
+                this.handleDrop(cell);
+            }
+        });
+        
+        // Clean up drag state
+        document.addEventListener('dragend', () => {
+            this.endDrag();
+        });
+    }
+    
+    startDrag(classBlock, e) {
+        this.draggedBlock = classBlock;
+        classBlock.classList.add('dragging');
+        
+        // Create drag image
+        const dragImage = classBlock.cloneNode(true);
+        dragImage.style.transform = 'rotate(5deg)';
+        document.body.appendChild(dragImage);
+        
+        // Set drag data
+        const classData = {
+            id: classBlock.dataset.classId,
+            sessionId: classBlock.dataset.sessionId,
+            partId: classBlock.dataset.partId,
+        };
+        
+        if (e.dataTransfer) {
+            e.dataTransfer.setData('text/plain', JSON.stringify(classData));
+            e.dataTransfer.effectAllowed = 'move';
+        }
+        
+        this.showFloatingToolbar();
+    }
+    
+    highlightDropTarget(cell) {
+        // Remove previous highlights
+        document.querySelectorAll('.schedule-cell.drop-target').forEach(c => {
+            c.classList.remove('drop-target');
+        });
+        
+        // Check if drop is valid
+        if (this.isValidDropTarget(cell)) {
+            cell.classList.add('drop-target');
+        }
+    }
+    
+    isValidDropTarget(cell) {
+        // Check if cell is empty or if we can resolve conflicts
+        const existingBlock = cell.querySelector('.class-block');
+        if (existingBlock && existingBlock !== this.draggedBlock) {
+            return false; // Cell occupied
+        }
+        
+        // Additional validation logic here
+        return true;
+    }
+    
+    handleDrop(cell) {
+        if (!this.isValidDropTarget(cell)) {
+            return;
+        }
+        
+        // Get time and day from cell position
+        const timeSlot = this.getCellTimeSlot(cell);
+        const day = this.getCellDay(cell);
+        
+        // Move the class block
+        cell.appendChild(this.draggedBlock);
+        this.draggedBlock.classList.remove('dragging');
+        
+        // Update schedule data
+        this.updateClassSchedule(this.draggedBlock, timeSlot, day);
+        
+        // Check for conflicts
+        this.checkConflicts();
+    }
+    
+    endDrag() {
+        if (this.draggedBlock) {
+            this.draggedBlock.classList.remove('dragging');
+            this.draggedBlock = null;
+        }
+        
+        // Remove drop targets
+        document.querySelectorAll('.schedule-cell.drop-target').forEach(c => {
+            c.classList.remove('drop-target');
+        });
+        
+        this.hideFloatingToolbar();
+    }
+    
+    getCellTimeSlot(cell) {
+        const row = cell.parentElement;
+        const timeCell = row.querySelector('.time-slot');
+        return timeCell ? timeCell.textContent.trim() : null;
+    }
+    
+    getCellDay(cell) {
+        const cellIndex = Array.from(cell.parentElement.children).indexOf(cell);
+        const dayHeaders = document.querySelectorAll('.day-header');
+        return dayHeaders[cellIndex - 1]?.dataset.day || null;
+    }
+    
+    async loadScheduleData(termId = null) {
+        const selector = document.getElementById('term-selector');
+        if (!termId) {
+            termId = selector.value;
+        }
+        
+        if (!termId) {
+            this.clearScheduleGrid();
+            return;
+        }
+        
+        try {
+            this.showLoading();
+            
+            const response = await fetch(`{% url "web_interface:schedule-data" term_id=0 %}`.replace('0', termId), {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                }
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                this.scheduleData = data.schedule_data;
+                this.currentTerm = data.term;
+                this.renderSchedule();
+                this.checkConflicts();
+            } else {
+                throw new Error('Failed to load schedule data');
+            }
+        } catch (error) {
+            this.showToast('Error loading schedule data', 'error');
+        } finally {
+            this.hideLoading();
+        }
+    }
+    
+    renderSchedule() {
+        this.clearScheduleGrid();
+        
+        this.scheduleData.forEach(item => {
+            item.meeting_days.forEach(day => {
+                const cell = this.findScheduleCell(day, item.start_time);
+                if (cell) {
+                    const classBlock = this.createClassBlock(item);
+                    cell.appendChild(classBlock);
+                }
+            });
+        });
+        
+        this.updateStatistics();
+    }
+    
+    createClassBlock(item) {
+        const block = document.createElement('div');
+        block.className = 'class-block';
+        block.draggable = true;
+        block.dataset.classId = item.class_header_id;
+        block.dataset.sessionId = item.session_id;
+        block.dataset.partId = item.part_id;
+        
+        block.innerHTML = `
+            <div class="class-title">${item.title}</div>
+            <div class="class-details">
+                <div class="class-time">${item.start_time} - ${item.end_time}</div>
+                <div>${item.instructor || 'No instructor'}</div>
+                <div>${item.room || 'No room'}</div>
+                <div>${item.current_enrollment}/${item.max_enrollment} students</div>
+            </div>
+        `;
+        
+        // Add conflict indicator if needed
+        if (this.hasConflict(item)) {
+            const indicator = document.createElement('div');
+            indicator.className = 'conflict-indicator';
+            indicator.innerHTML = '<i class="fas fa-exclamation"></i>';
+            indicator.title = 'Scheduling conflict detected';
+            block.appendChild(indicator);
+            block.classList.add('conflict');
+        }
+        
+        return block;
+    }
+    
+    findScheduleCell(day, time) {
+        const dayIndex = this.getDayIndex(day);
+        const timeIndex = this.getTimeIndex(time);
+        
+        if (dayIndex === -1 || timeIndex === -1) {
+            return null;
+        }
+        
+        const rows = document.querySelectorAll('.schedule-grid > div');
+        const targetRow = rows[timeIndex + 1]; // +1 for header row
+        
+        if (targetRow) {
+            return targetRow.children[dayIndex + 1]; // +1 for time column
+        }
+        
+        return null;
+    }
+    
+    getDayIndex(day) {
+        const dayMap = {
+            'monday': 0, 'tuesday': 1, 'wednesday': 2, 'thursday': 3,
+            'friday': 4, 'saturday': 5, 'sunday': 6
+        };
+        return dayMap[day.toLowerCase()] || -1;
+    }
+    
+    getTimeIndex(time) {
+        const timeSlots = document.querySelectorAll('.time-slot');
+        for (let i = 0; i < timeSlots.length; i++) {
+            if (timeSlots[i].dataset.time === time) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    
+    async updateClassSchedule(classBlock, timeSlot, day) {
+        const classHeaderId = classBlock.dataset.classId;
+        const partId = classBlock.dataset.partId;
+        
+        try {
+            const response = await fetch(`{% url "web_interface:update-class-schedule" class_header_id=0 %}`.replace('0', classHeaderId), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                body: JSON.stringify({
+                    operation: 'move',
+                    part_id: partId,
+                    start_time: timeSlot.split(' - ')[0],
+                    end_time: timeSlot.split(' - ')[1],
+                    meeting_days: [day]
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                this.showToast(data.message, 'success');
+            } else {
+                this.showToast(data.error, 'error');
+                // Revert the move
+                this.renderSchedule();
+            }
+        } catch (error) {
+            this.showToast('Network error occurred', 'error');
+            this.renderSchedule();
+        }
+    }
+    
+    async checkConflicts() {
+        // Implementation for conflict detection
+        this.conflicts = [];
+        
+        // Check teacher conflicts
+        this.checkTeacherConflicts();
+        
+        // Check room conflicts  
+        this.checkRoomConflicts();
+        
+        // Update conflict indicators
+        this.updateConflictIndicators();
+    }
+    
+    checkTeacherConflicts() {
+        const teacherSchedules = {};
+        
+        this.scheduleData.forEach(item => {
+            if (!item.instructor) return;
+            
+            if (!teacherSchedules[item.instructor]) {
+                teacherSchedules[item.instructor] = [];
+            }
+            
+            teacherSchedules[item.instructor].push(item);
+        });
+        
+        Object.entries(teacherSchedules).forEach(([teacher, classes]) => {
+            if (classes.length > 1) {
+                // Check for time/day overlaps
+                for (let i = 0; i < classes.length; i++) {
+                    for (let j = i + 1; j < classes.length; j++) {
+                        if (this.hasTimeOverlap(classes[i], classes[j])) {
+                            this.conflicts.push({
+                                type: 'teacher',
+                                resource: teacher,
+                                classes: [classes[i], classes[j]]
+                            });
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    checkRoomConflicts() {
+        const roomSchedules = {};
+        
+        this.scheduleData.forEach(item => {
+            if (!item.room) return;
+            
+            if (!roomSchedules[item.room]) {
+                roomSchedules[item.room] = [];
+            }
+            
+            roomSchedules[item.room].push(item);
+        });
+        
+        Object.entries(roomSchedules).forEach(([room, classes]) => {
+            if (classes.length > 1) {
+                // Check for time/day overlaps
+                for (let i = 0; i < classes.length; i++) {
+                    for (let j = i + 1; j < classes.length; j++) {
+                        if (this.hasTimeOverlap(classes[i], classes[j])) {
+                            this.conflicts.push({
+                                type: 'room',
+                                resource: room,
+                                classes: [classes[i], classes[j]]
+                            });
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    hasTimeOverlap(class1, class2) {
+        // Check if classes have overlapping days
+        const daysOverlap = class1.meeting_days.some(day => 
+            class2.meeting_days.includes(day)
+        );
+        
+        if (!daysOverlap) return false;
+        
+        // Check if times overlap
+        const start1 = this.timeToMinutes(class1.start_time);
+        const end1 = this.timeToMinutes(class1.end_time);
+        const start2 = this.timeToMinutes(class2.start_time);
+        const end2 = this.timeToMinutes(class2.end_time);
+        
+        return start1 < end2 && start2 < end1;
+    }
+    
+    timeToMinutes(timeStr) {
+        const [hours, minutes] = timeStr.split(':').map(Number);
+        return hours * 60 + minutes;
+    }
+    
+    hasConflict(item) {
+        return this.conflicts.some(conflict => 
+            conflict.classes.some(cls => 
+                cls.id === item.id
+            )
+        );
+    }
+    
+    updateConflictIndicators() {
+        document.querySelectorAll('.class-block').forEach(block => {
+            const indicator = block.querySelector('.conflict-indicator');
+            const itemId = block.dataset.classId;
+            
+            const hasConflict = this.conflicts.some(conflict =>
+                conflict.classes.some(cls => cls.class_header_id == itemId)
+            );
+            
+            if (hasConflict && !indicator) {
+                const newIndicator = document.createElement('div');
+                newIndicator.className = 'conflict-indicator';
+                newIndicator.innerHTML = '<i class="fas fa-exclamation"></i>';
+                newIndicator.title = 'Scheduling conflict detected';
+                block.appendChild(newIndicator);
+                block.classList.add('conflict');
+            } else if (!hasConflict && indicator) {
+                indicator.remove();
+                block.classList.remove('conflict');
+            }
+        });
+    }
+    
+    startTimeIndicator() {
+        const indicator = document.createElement('div');
+        indicator.className = 'time-indicator';
+        document.querySelector('.schedule-grid').appendChild(indicator);
+        
+        const updateIndicator = () => {
+            const now = new Date();
+            const currentTime = now.getHours() * 60 + now.getMinutes();
+            
+            // Find appropriate time slot
+            const timeSlots = document.querySelectorAll('.time-slot');
+            let targetSlot = null;
+            
+            timeSlots.forEach(slot => {
+                const slotTime = this.timeToMinutes(slot.dataset.time);
+                if (slotTime <= currentTime) {
+                    targetSlot = slot;
+                }
+            });
+            
+            if (targetSlot) {
+                const rect = targetSlot.getBoundingClientRect();
+                const gridRect = document.querySelector('.schedule-grid').getBoundingClientRect();
+                indicator.style.top = (rect.bottom - gridRect.top) + 'px';
+                indicator.style.display = 'block';
+            } else {
+                indicator.style.display = 'none';
+            }
+        };
+        
+        updateIndicator();
+        setInterval(updateIndicator, 60000); // Update every minute
+    }
+    
+    showFloatingToolbar() {
+        const toolbar = document.querySelector('.floating-toolbar');
+        if (toolbar) {
+            toolbar.classList.add('show');
+        }
+    }
+    
+    hideFloatingToolbar() {
+        const toolbar = document.querySelector('.floating-toolbar');
+        if (toolbar) {
+            toolbar.classList.remove('show');
+        }
+    }
+    
+    clearScheduleGrid() {
+        document.querySelectorAll('.class-block').forEach(block => {
+            block.remove();
+        });
+    }
+    
+    showLoading() {
+        const grid = document.querySelector('.schedule-grid');
+        grid.style.opacity = '0.5';
+        grid.style.pointerEvents = 'none';
+    }
+    
+    hideLoading() {
+        const grid = document.querySelector('.schedule-grid');
+        grid.style.opacity = '1';
+        grid.style.pointerEvents = 'auto';
+    }
+    
+    updateStatistics() {
+        const stats = {
+            totalClasses: this.scheduleData.length,
+            conflicts: this.conflicts.length,
+            utilizationRate: this.calculateUtilizationRate()
+        };
+        
+        // Update statistics display
+        document.getElementById('total-classes').textContent = stats.totalClasses;
+        document.getElementById('total-conflicts').textContent = stats.conflicts;
+        document.getElementById('utilization-rate').textContent = `${stats.utilizationRate}%`;
+    }
+    
+    calculateUtilizationRate() {
+        // Calculate room/time utilization
+        const totalSlots = 7 * 30; // 7 days * 30 time slots
+        const usedSlots = this.scheduleData.reduce((acc, item) => {
+            return acc + item.meeting_days.length;
+        }, 0);
+        
+        return Math.round((usedSlots / totalSlots) * 100);
+    }
+    
+    showToast(message, type = 'info') {
+        // Create toast notification
+        const toast = document.createElement('div');
+        toast.className = `sis-alert sis-alert-${type} fixed top-4 right-4 z-50 max-w-sm`;
+        toast.innerHTML = `
+            <div class="flex items-center">
+                <span>${message}</span>
+                <button onclick="this.parentElement.parentElement.remove()" class="ml-2 text-current opacity-70 hover:opacity-100">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        `;
+        
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            if (toast.parentElement) {
+                toast.remove();
+            }
+        }, 5000);
+    }
+}
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    new ScheduleBuilder();
+});
+</script>
+{% endblock %}
+
+{% block page_header %}
+<div class="page-header">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="page-title">{{ page_title }}</h1>
+            <p class="page-description">Build and manage class schedules with drag-and-drop interface</p>
+        </div>
+        <div class="flex space-x-2">
+            <button id="create-class-btn" class="sis-btn sis-btn-primary">
+                <i class="fas fa-plus mr-2"></i>
+                {% trans "Create Class" %}
+            </button>
+            <button id="resolve-conflicts-btn" class="sis-btn sis-btn-warning">
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                {% trans "Resolve Conflicts" %}
+            </button>
+            <button id="save-schedule-btn" class="sis-btn sis-btn-success">
+                <i class="fas fa-save mr-2"></i>
+                {% trans "Save Schedule" %}
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+    <!-- Schedule Grid (Main Area) -->
+    <div class="lg:col-span-3">
+        <!-- Term Selector -->
+        <div class="term-selector">
+            <label for="term-selector" class="block text-sm font-medium text-gray-700 mb-2">
+                {% trans "Select Term" %}
+            </label>
+            <select id="term-selector" class="sis-select w-full max-w-md">
+                <option value="">{% trans "Choose a term..." %}</option>
+                {% for term in all_terms %}
+                    <option value="{{ term.id }}" {% if term == current_term %}selected{% endif %}>
+                        {{ term }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Schedule Grid -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">{% trans "Weekly Schedule" %}</h3>
+                <div class="flex space-x-4 text-sm text-gray-600">
+                    <span>Classes: <strong id="total-classes">0</strong></span>
+                    <span>Conflicts: <strong id="total-conflicts">0</strong></span>
+                    <span>Utilization: <strong id="utilization-rate">0%</strong></span>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="schedule-grid">
+                    <!-- Header Row -->
+                    <div class="time-slot"></div>
+                    {% for day in weekdays %}
+                        <div class="day-header" data-day="{{ day.value }}">
+                            <div class="font-bold">{{ day.display }}</div>
+                            <div class="text-xs opacity-75">{{ day.short }}</div>
+                        </div>
+                    {% endfor %}
+                    
+                    <!-- Time Slots -->
+                    {% for slot in time_slots %}
+                        <div class="time-slot" data-time="{{ slot.value }}">
+                            {{ slot.display }}
+                        </div>
+                        {% for day in weekdays %}
+                            <div class="schedule-cell" data-day="{{ day.value }}" data-time="{{ slot.value }}">
+                                <!-- Class blocks will be dynamically inserted here -->
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resource Panel (Sidebar) -->
+    <div class="lg:col-span-1">
+        <!-- Courses -->
+        <div class="resource-panel mb-6">
+            <h4 class="font-bold mb-3">{% trans "Courses" %}</h4>
+            <div class="max-h-48 overflow-y-auto">
+                {% for course in courses %}
+                    <div class="resource-item" data-type="course" data-id="{{ course.id }}">
+                        <div class="font-medium">{{ course.course_code }}</div>
+                        <div class="text-xs text-gray-600">{{ course.course_name }}</div>
+                        <div class="text-xs text-gray-500">{{ course.credit_hours }} credits</div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Rooms -->
+        <div class="resource-panel mb-6">
+            <h4 class="font-bold mb-3">{% trans "Rooms" %}</h4>
+            <div class="max-h-48 overflow-y-auto">
+                {% for room in rooms %}
+                    <div class="resource-item" data-type="room" data-id="{{ room.id }}">
+                        <div class="font-medium">{{ room.room_code }}</div>
+                        <div class="text-xs text-gray-600">{{ room.room_name }}</div>
+                        <div class="text-xs text-gray-500">Capacity: {{ room.capacity }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Teachers -->
+        <div class="resource-panel">
+            <h4 class="font-bold mb-3">{% trans "Teachers" %}</h4>
+            <div class="max-h-48 overflow-y-auto">
+                {% for teacher in teachers %}
+                    <div class="resource-item" data-type="teacher" data-id="{{ teacher.id }}">
+                        <div class="font-medium">{{ teacher.person.full_name }}</div>
+                        <div class="text-xs text-gray-600">{{ teacher.person.email }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Floating Toolbar -->
+<div class="floating-toolbar">
+    <button class="toolbar-btn" onclick="editSelectedClass()" title="Edit Class">
+        <i class="fas fa-edit"></i>
+    </button>
+    <button class="toolbar-btn" onclick="duplicateSelectedClass()" title="Duplicate Class">
+        <i class="fas fa-copy"></i>
+    </button>
+    <button class="toolbar-btn" onclick="deleteSelectedClass()" title="Delete Class">
+        <i class="fas fa-trash"></i>
+    </button>
+    <button class="toolbar-btn" onclick="viewEnrollment()" title="View Enrollment">
+        <i class="fas fa-users"></i>
+    </button>
+</div>
+
+{% csrf_token %}
+{% endblock %}

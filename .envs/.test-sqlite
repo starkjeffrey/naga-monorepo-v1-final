@@ -1,0 +1,31 @@
+# Test SQLite Environment Variables
+# No database credentials needed for SQLite
+
+# Django
+DJANGO_DEBUG=False
+DJANGO_SECRET_KEY=test-sqlite-secret-key-migration-squashing-abc123
+DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,django
+
+# SQLite Database (in-memory or file-based)
+DATABASE_URL=sqlite:///app/test_data/test_migrations.sqlite3
+
+# Email (test mode)
+EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
+
+# No Redis needed for SQLite-only testing
+# But include dummy values to prevent errors
+REDIS_URL=redis://127.0.0.1:6379/0
+CELERY_BROKER_URL=redis://127.0.0.1:6379/0
+DRAMATIQ_BROKER_URL=redis://127.0.0.1:6379/0
+
+# Testing flags
+USE_DOCKER=no
+IPYTHONDIR=/app/.ipython
+
+# Ensure we're in test mode
+TESTING_ENVIRONMENT=true
+MIGRATION_TESTING=true
+USE_SQLITE=true
+
+# Disable features that require PostgreSQL
+DISABLE_POSTGRES_FEATURES=true

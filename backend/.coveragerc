@@ -1,0 +1,86 @@
+[run]
+source = apps
+omit =
+    */migrations/*
+    */tests/*
+    */test_*.py
+    */__pycache__/*
+    */settings/*
+    */config/*
+    */venv/*
+    */virtualenv/*
+    */.venv/*
+    */site-packages/*
+    */distutils/*
+    */management/commands/*
+    */apps.py
+    */admin.py
+    */urls.py
+    */wsgi.py
+    */asgi.py
+    */static/*
+    */media/*
+    */templates/*
+
+# Use SQLite for coverage runs
+parallel = true
+concurrency = multiprocessing
+context = test
+
+[report]
+precision = 2
+show_missing = true
+skip_covered = false
+skip_empty = true
+
+# Fail if coverage is below this percentage
+fail_under = 80
+
+exclude_lines =
+    # Standard pragma
+    pragma: no cover
+
+    # Don't complain about debug code
+    def __repr__
+    def __str__
+
+    # Don't complain if tests don't hit defensive assertion code
+    raise AssertionError
+    raise NotImplementedError
+
+    # Don't complain if non-runnable code isn't run
+    if __name__ == .__main__.:
+    if TYPE_CHECKING:
+    if typing.TYPE_CHECKING:
+
+    # Don't complain about abstract methods
+    @abstractmethod
+    @abc.abstractmethod
+
+    # Defensive programming
+    if False:
+    if 0:
+
+    # Platform specific code
+    if sys.platform
+
+    # Deprecated code
+    warnings.warn
+
+    # Type checking imports
+    from typing import
+
+ignore_errors = false
+
+[html]
+directory = htmlcov
+title = Naga SIS Backend Coverage Report
+show_contexts = true
+
+[xml]
+output = coverage.xml
+
+[json]
+output = coverage.json
+pretty_print = true
+show_contexts = true

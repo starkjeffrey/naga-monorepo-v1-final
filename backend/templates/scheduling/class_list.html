@@ -1,0 +1,311 @@
+{% extends "scheduling/base_scheduling.html" %}
+
+{% load i18n static %}
+
+{% block page_title %}
+  {% trans "Classes" %}
+{% endblock %}
+{% block page_subtitle %}
+  <p class="mt-1 text-sm text-gray-500">
+    {% trans "Showing" %} {{ page_obj.paginator.count }} {% trans "classes for" %} {{ current_term.name }}
+  </p>
+{% endblock %}
+{% block scheduling_content %}
+  <!-- Filters -->
+  <div class="mb-6 bg-white shadow-sm rounded-lg p-4">
+    <form method="get"
+          action="{% url 'scheduling:class_list' %}"
+          id="filter-form">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <!-- Search -->
+        <div>
+          <label for="search" class="block text-sm font-medium text-gray-700">{% trans "Search" %}</label>
+          <input type="text"
+                 name="search"
+                 id="search"
+                 value="{{ request.GET.search }}"
+                 placeholder="{% trans 'Course code, title, or teacher' %}"
+                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                 hx-get="{% url 'scheduling:class_list' %}"
+                 hx-trigger="keyup changed delay:300ms"
+                 hx-target="#class-list-container"
+                 hx-select="#class-list-container"
+                 hx-indicator="#loading-indicator" />
+        </div>
+        <!-- Status Filter -->
+        <div>
+          <label for="status" class="block text-sm font-medium text-gray-700">{% trans "Status" %}</label>
+          <select name="status"
+                  id="status"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                  hx-get="{% url 'scheduling:class_list' %}"
+                  hx-trigger="change"
+                  hx-target="#class-list-container"
+                  hx-select="#class-list-container"
+                  hx-indicator="#loading-indicator">
+            <option value="">{% trans "All Statuses" %}</option>
+            {% for value, label in status_choices %}
+              <option value="{{ value }}"
+                      {% if request.GET.status == value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <!-- Time of Day Filter -->
+        <div>
+          <label for="time_of_day" class="block text-sm font-medium text-gray-700">{% trans "Time of Day" %}</label>
+          <select name="time_of_day"
+                  id="time_of_day"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                  hx-get="{% url 'scheduling:class_list' %}"
+                  hx-trigger="change"
+                  hx-target="#class-list-container"
+                  hx-select="#class-list-container"
+                  hx-indicator="#loading-indicator">
+            <option value="">{% trans "All Times" %}</option>
+            {% for value, label in time_choices %}
+              <option value="{{ value }}"
+                      {% if request.GET.time_of_day == value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <!-- Class Type Filter -->
+        <div>
+          <label for="class_type" class="block text-sm font-medium text-gray-700">{% trans "Class Type" %}</label>
+          <select name="class_type"
+                  id="class_type"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                  hx-get="{% url 'scheduling:class_list' %}"
+                  hx-trigger="change"
+                  hx-target="#class-list-container"
+                  hx-select="#class-list-container"
+                  hx-indicator="#loading-indicator">
+            <option value="">{% trans "All Types" %}</option>
+            {% for value, label in type_choices %}
+              <option value="{{ value }}"
+                      {% if request.GET.class_type == value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <!-- Advanced Filters (Collapsible) -->
+      <div class="mt-4">
+        <button type="button"
+                onclick="toggleAdvancedFilters()"
+                class="text-sm font-medium text-blue-600 hover:text-blue-500 flex items-center">
+          <svg id="advanced-filters-icon"
+               class="h-4 w-4 mr-1 transition-transform"
+               fill="none"
+               stroke="currentColor"
+               viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+          {% trans "Advanced Filters" %}
+        </button>
+        <div id="advanced-filters"
+             class="hidden mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <!-- Teacher Filter -->
+          <div>
+            <label for="teacher" class="block text-sm font-medium text-gray-700">{% trans "Teacher" %}</label>
+            <select name="teacher"
+                    id="teacher"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+              <option value="">{% trans "All Teachers" %}</option>
+              {% for teacher in teachers %}
+                <option value="{{ teacher.pk }}"
+                        {% if request.GET.teacher == teacher.pk|stringformat:"s" %}selected{% endif %}>
+                  {{ teacher.person.get_full_name }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+          <!-- Room Filter -->
+          <div>
+            <label for="room" class="block text-sm font-medium text-gray-700">{% trans "Room" %}</label>
+            <select name="room"
+                    id="room"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+              <option value="">{% trans "All Rooms" %}</option>
+              {% for room in rooms %}
+                <option value="{{ room.pk }}"
+                        {% if request.GET.room == room.pk|stringformat:"s" %}selected{% endif %}>
+                  {{ room.building.short_name }} {{ room.room_number }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+          <!-- Combined Classes Only -->
+          <div>
+            <label class="flex items-center mt-6">
+              <input type="checkbox"
+                     name="combined_only"
+                     value="1"
+                     {% if request.GET.combined_only %}checked{% endif %}
+                     class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+              <span class="ml-2 text-sm text-gray-700">{% trans "Combined Classes Only" %}</span>
+            </label>
+          </div>
+          <!-- Has Enrollments -->
+          <div>
+            <label class="flex items-center mt-6">
+              <input type="checkbox"
+                     name="has_enrollments"
+                     value="1"
+                     {% if request.GET.has_enrollments %}checked{% endif %}
+                     class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+              <span class="ml-2 text-sm text-gray-700">{% trans "Has Enrollments" %}</span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <!-- Filter Actions -->
+      <div class="mt-4 flex items-center justify-between">
+        <button type="submit"
+                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          <svg class="h-4 w-4 mr-1.5"
+               fill="none"
+               stroke="currentColor"
+               viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+          </svg>
+          {% trans "Apply Filters" %}
+        </button>
+        <a href="{% url 'scheduling:class_list' %}"
+           class="text-sm font-medium text-gray-600 hover:text-gray-500">{% trans "Clear Filters" %}</a>
+      </div>
+    </form>
+  </div>
+  <!-- View Toggle -->
+  <div class="mb-4 flex justify-between items-center">
+    <div class="flex items-center space-x-2">
+      <span class="text-sm text-gray-700">{% trans "View:" %}</span>
+      <button type="button"
+              onclick="setView('grid')"
+              class="p-2 text-gray-400 hover:text-gray-500 {% if view_mode == 'grid' %}text-blue-600{% endif %}">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+        </svg>
+      </button>
+      <button type="button"
+              onclick="setView('list')"
+              class="p-2 text-gray-400 hover:text-gray-500 {% if view_mode == 'list' %}text-blue-600{% endif %}">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+    <!-- Bulk Actions -->
+    {% if perms.scheduling.can_manage_class_scheduling %}
+      <div class="flex items-center space-x-2">
+        <select id="bulk-action"
+                class="rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+          <option value="">{% trans "Bulk Actions" %}</option>
+          <option value="export">{% trans "Export Selected" %}</option>
+          <option value="update-status">{% trans "Update Status" %}</option>
+          <option value="delete">{% trans "Delete Selected" %}</option>
+        </select>
+        <button type="button"
+                onclick="performBulkAction()"
+                class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          {% trans "Apply" %}
+        </button>
+      </div>
+    {% endif %}
+  </div>
+  <!-- Class List Container -->
+  <div id="class-list-container">
+    {% if view_mode == 'grid' %}
+      <!-- Grid View -->
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {% for class in page_obj %}
+          {% include 'scheduling/components/class_card.html' with class=class %}
+        {% empty %}
+          <div class="col-span-full text-center py-12">
+            <svg class="mx-auto h-12 w-12 text-gray-400"
+                 fill="none"
+                 stroke="currentColor"
+                 viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+            <h3 class="mt-2 text-sm font-medium text-gray-900">{% trans "No classes found" %}</h3>
+            <p class="mt-1 text-sm text-gray-500">{% trans "Try adjusting your filters or create a new class." %}</p>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <!-- List View -->
+      {% include 'components/data_table.html' with
+      table_id="classes-table"
+      columns=table_columns
+      rows=page_obj
+      selectable=True
+      actions_column=True
+      actions=table_actions
+      show_pagination=True
+      page_obj=page_obj
+      current_sort=current_sort
+      current_order=current_order
+      row_click_url="/scheduling/classes/"
+      %}
+    {% endif %}
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+      <div class="mt-6">{% include 'components/pagination.html' with page_obj=page_obj %}</div>
+    {% endif %}
+  </div>
+{% endblock %}
+{% block scheduling_js %}
+  <script>
+    function toggleAdvancedFilters() {
+      const filters = document.getElementById('advanced-filters');
+      const icon = document.getElementById('advanced-filters-icon');
+
+      filters.classList.toggle('hidden');
+      icon.classList.toggle('rotate-180');
+    }
+
+    function setView(mode) {
+      // Add view mode to URL params and reload
+      const url = new URL(window.location);
+      url.searchParams.set('view', mode);
+      window.location = url.toString();
+    }
+
+    function performBulkAction() {
+      const action = document.getElementById('bulk-action').value;
+      const selectedItems = document.querySelectorAll('input[name="selected_items[]"]:checked');
+
+      if (!action) {
+        alert('{% trans "Please select an action" %}');
+        return;
+      }
+
+      if (selectedItems.length === 0) {
+        alert('{% trans "Please select at least one class" %}');
+        return;
+      }
+
+      // Collect selected IDs
+      const ids = Array.from(selectedItems).map(cb => cb.value);
+
+      // Perform action based on selection
+      switch (action) {
+        case 'export':
+          window.location.href = `{% url 'scheduling:export_classes' %}?ids=${ids.join(',')}`;
+          break;
+        case 'update-status':
+          openBulkStatusModal(ids);
+          break;
+        case 'delete':
+          if (confirm('{% trans "Are you sure you want to delete the selected classes?" %}')) {
+            // Perform bulk delete via HTMX
+          }
+          break;
+      }
+    }
+
+    function openBulkStatusModal(ids) {
+      // Open modal for bulk status update
+      // This would load a form via HTMX
+    }
+  </script>
+{% endblock %}

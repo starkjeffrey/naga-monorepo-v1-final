@@ -1,0 +1,46 @@
+Dear {{ person.full_name }},
+
+{% if reminder_type == "overdue" %}
+YOUR STUDENT PHOTO IS OVERDUE FOR AN UPDATE.
+{% elif reminder_type == "urgent" %}
+YOUR STUDENT PHOTO WILL EXPIRE SOON.
+{% else %}
+It's time to update your student photo.
+{% endif %}
+
+Your current student photo was uploaded on {{ upload_date|date:"F j, Y" }} and is now {{ photo_age_months }} months old.
+
+{% if is_monk %}As a monk, your photo needs to be updated every 12 months.{% else %}Student photos need to be updated every 6 months.{% endif %}
+
+HOW TO UPDATE YOUR PHOTO:
+
+1. Open the PUCSR Student app on your mobile device
+2. Navigate to your profile section
+3. Tap on "Update Photo"
+4. Take a new selfie following the guidelines:
+   - Face the camera directly
+   - Ensure good lighting
+   - Plain background preferred
+   - Remove sunglasses or hats
+5. Submit your new photo
+
+WHY UPDATE YOUR PHOTO?
+
+An up-to-date photo ensures:
+- Accurate identification for exams and campus services
+- Valid digital student ID on your mobile device
+- Security and access to university facilities
+- Compliance with university regulations
+
+{% if reminder_type == "overdue" %}
+Please update your photo as soon as possible to avoid any disruption to your student services.
+{% endif %}
+
+If you have any questions or need assistance, please contact the Student Affairs Office.
+
+Best regards,
+PUCSR Student Affairs
+
+--
+This is an automated reminder from the PUCSR Student Information System.
+Pannasastra University of Cambodia, Siem Reap Campus

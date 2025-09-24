@@ -1,0 +1,81 @@
+{% load i18n %}
+{% load web_interface_tags %}
+
+<div class="page-content">
+  <!-- Enhanced Filter Bar -->
+  <div class="action-bar">
+    {% include "web_interface/components/filters/filter_bar.html" with target_url="/web/students/" target_element="#student-table-container" %}
+    <div class="action-buttons">
+      <button class="btn btn-primary"
+              data-modal-url="{% url 'web_interface:modal-student-create' %}">
+        <i class="fas fa-plus"></i>
+        {% trans "Add Student" %}
+      </button>
+    </div>
+  </div>
+  <!-- Student Table -->
+  <div id="student-table-container" class="table-container">
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>{% trans "ID" %}</th>
+            <th>{% trans "Name" %}</th>
+            <th>{% trans "Status" %}</th>
+            <th>{% trans "Study Time" %}</th>
+            <th>{% trans "Created" %}</th>
+            <th>{% trans "Actions" %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for student in students %}
+            <tr>
+              <td>{{ student.student_id }}</td>
+              <td>
+                <div class="student-info">
+                  <div class="student-name">{{ student.person.full_name }}</div>
+                  {% if student.person.khmer_name %}<div class="student-khmer-name">{{ student.person.khmer_name }}</div>{% endif %}
+                </div>
+              </td>
+              <td>
+                <span class="badge {% status_badge student.current_status %}">{{ student.get_current_status_display }}</span>
+              </td>
+              <td>{{ student.get_study_time_preference_display }}</td>
+              <td>{{ student.created_at|date:"M d, Y" }}</td>
+              <td>
+                <div class="action-buttons">
+                  <a href="{% url 'web_interface:student-detail' pk=student.pk %}"
+                     class="btn btn-sm btn-outline-primary"
+                     title="{% trans 'View Details' %}">
+                    <i class="fas fa-eye"></i>
+                  </a>
+                  <a href="{% url 'web_interface:student-update' pk=student.pk %}"
+                     class="btn btn-sm btn-outline-secondary"
+                     title="{% trans 'Edit Student' %}">
+                    <i class="fas fa-edit"></i>
+                  </a>
+                  <button class="btn btn-sm btn-outline-success"
+                          data-modal-url="{% url 'web_interface:modal-invoice-create' %}?student_id={{ student.pk }}"
+                          title="{% trans 'Generate Invoice' %}">
+                    <i class="fas fa-file-invoice"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="6" class="text-center text-muted py-4">
+                <i class="fas fa-users fa-3x mb-3"></i>
+                <p>{% trans "No students found" %}</p>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <!-- Pagination -->
+    {% if is_paginated %}
+      {% pagination page_obj %}
+    {% endif %}
+  </div>
+</div>

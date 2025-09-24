@@ -1,0 +1,79 @@
+{% load i18n %}
+
+{% for transcript in transcripts %}
+<tr class="hover:bg-gray-50">
+  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+    {{ transcript.request_id|truncatechars:8 }}
+  </td>
+  <td class="px-6 py-4 whitespace-nowrap">
+    <div>
+      <div class="text-sm font-medium text-gray-900">{{ transcript.student.person.name_en }}</div>
+      <div class="text-sm text-gray-500">{{ transcript.student.student_id }}</div>
+    </div>
+  </td>
+  <td class="px-6 py-4 whitespace-nowrap">
+    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+      {{ transcript.document_type.name }}
+    </span>
+  </td>
+  <td class="px-6 py-4 whitespace-nowrap">
+    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+          {% if transcript.request_status == 'PENDING' %}bg-yellow-100 text-yellow-800
+          {% elif transcript.request_status == 'IN_PROGRESS' %}bg-blue-100 text-blue-800
+          {% elif transcript.request_status == 'COMPLETED' %}bg-green-100 text-green-800
+          {% elif transcript.request_status == 'CANCELLED' %}bg-red-100 text-red-800
+          {% else %}bg-gray-100 text-gray-800{% endif %}">
+      {{ transcript.get_request_status_display }}
+    </span>
+  </td>
+  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+    {{ transcript.requested_date|date:"M d, Y" }}
+    <div class="text-xs text-gray-400">{{ transcript.requested_date|time:"H:i" }}</div>
+  </td>
+  <td class="px-6 py-4 whitespace-nowrap text-sm">
+    <div class="flex space-x-2">
+      <button class="text-indigo-600 hover:text-indigo-900"
+              hx-get="{% url 'academic_records:transcript_preview' transcript.id %}"
+              hx-target="#modal-content"
+              title="{% trans 'Preview Transcript' %}">
+        <i class="fas fa-eye"></i>
+        {% trans "Preview" %}
+      </button>
+      
+      {% if transcript.request_status == 'PENDING' %}
+      <button class="text-green-600 hover:text-green-900"
+              hx-post="{% url 'academic_records:generate_transcript' transcript.student.id %}"
+              hx-confirm="{% trans 'Generate transcript for' %} {{ transcript.student.person.name_en }}?"
+              hx-target="#transcript-list"
+              title="{% trans 'Generate Transcript' %}">
+        <i class="fas fa-file-pdf"></i>
+        {% trans "Generate" %}
+      </button>
+      {% elif transcript.request_status == 'COMPLETED' %}
+      <a href="{% url 'academic_records:generate_transcript' transcript.student.id %}?format=pdf"
+         class="text-blue-600 hover:text-blue-900"
+         title="{% trans 'Download PDF' %}">
+        <i class="fas fa-download"></i>
+        {% trans "Download" %}
+      </a>
+      {% endif %}
+      
+      <button class="text-gray-600 hover:text-gray-900"
+              hx-get="{% url 'academic_records:transcript_detail' transcript.id %}"
+              hx-target="#modal-content"
+              title="{% trans 'View Details' %}">
+        <i class="fas fa-info-circle"></i>
+        {% trans "Details" %}
+      </button>
+    </div>
+  </td>
+</tr>
+{% empty %}
+<tr>
+  <td colspan="6" class="px-6 py-8 text-center text-gray-500">
+    <i class="fas fa-file-alt text-4xl mb-4"></i>
+    <div class="text-lg">{% trans "No transcript requests found" %}</div>
+    <div class="text-sm">{% trans "Create a new transcript request to get started" %}</div>
+  </td>
+</tr>
+{% endfor %}

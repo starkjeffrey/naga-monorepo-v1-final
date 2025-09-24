@@ -1,0 +1,4 @@
+<a href="{{ url }}" class="{{ classes }}" {% for key, value in attrs.items %}{{ key }}="{{ value }}"{% endfor %}>
+  {% if icon %}<span class="icon">{{ icon }}</span>{% endif %}
+  {{ text }}
+</a>

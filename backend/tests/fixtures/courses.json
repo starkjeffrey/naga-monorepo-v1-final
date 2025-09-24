@@ -1,0 +1,77 @@
+[
+  {
+    "model": "curriculum.course",
+    "pk": 1,
+    "fields": {
+      "code": "ENG101",
+      "title": "English Composition I", 
+      "description": "Introduction to college-level writing and composition.",
+      "credit_hours": 3,
+      "level": "UNDERGRADUATE",
+      "department": "English",
+      "is_active": true,
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "curriculum.course",
+    "pk": 2,
+    "fields": {
+      "code": "MATH101",
+      "title": "College Algebra",
+      "description": "Fundamental algebraic concepts and problem solving.",
+      "credit_hours": 3,
+      "level": "UNDERGRADUATE", 
+      "department": "Mathematics",
+      "is_active": true,
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "curriculum.course",
+    "pk": 3,
+    "fields": {
+      "code": "SCI101",
+      "title": "Introduction to Science",
+      "description": "Basic scientific principles and methodology.",
+      "credit_hours": 4,
+      "level": "UNDERGRADUATE",
+      "department": "Science",
+      "is_active": true, 
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "curriculum.course",
+    "pk": 4,
+    "fields": {
+      "code": "HIST101",
+      "title": "World History I",
+      "description": "Survey of world history from ancient times to 1500 CE.",
+      "credit_hours": 3,
+      "level": "UNDERGRADUATE",
+      "department": "History",
+      "is_active": true,
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "curriculum.course", 
+    "pk": 5,
+    "fields": {
+      "code": "CS101",
+      "title": "Introduction to Computer Science",
+      "description": "Basic programming concepts and computational thinking.",
+      "credit_hours": 4,
+      "level": "UNDERGRADUATE",
+      "department": "Computer Science",
+      "is_active": true,
+      "created_at": "2025-01-01T00:00:00Z", 
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  }
+]

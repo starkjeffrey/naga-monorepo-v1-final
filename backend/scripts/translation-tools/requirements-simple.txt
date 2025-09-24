@@ -1,0 +1,4 @@
+# Lightweight translation tools without heavy dependencies
+polib  # For working with .po files
+googletrans==4.0.0-rc1  # Google Translate (no API key needed for basic use)
+# Alternative: deep-translator (supports multiple providers)

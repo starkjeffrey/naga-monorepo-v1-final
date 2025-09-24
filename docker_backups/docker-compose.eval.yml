@@ -1,0 +1,348 @@
+name: naga-evaluation
+
+volumes:
+  naga_evaluation_postgres_data: {}
+  naga_evaluation_postgres_data_backups: {}
+  naga_evaluation_django_media: {}
+  naga_evaluation_django_static: {}
+  naga_evaluation_django_logs: {}
+  naga_evaluation_redis_data: {}
+  naga_evaluation_netdata_config: {}
+  naga_evaluation_netdata_lib: {}
+  naga_evaluation_netdata_cache: {}
+  naga_evaluation_mailpit_data: {}
+
+services:
+  django: &django
+    build:
+      context: .
+      dockerfile: ./compose/evaluation/django/Dockerfile
+    image: naga_evaluation_django
+    container_name: naga_evaluation_django
+    ports:
+      - "8005:8000"  # Match system nginx proxy target
+    volumes:
+      - naga_evaluation_django_media:/app/mediafiles
+      - naga_evaluation_django_static:/app/staticfiles
+      - naga_evaluation_django_logs:/var/log/naga-evaluation
+      # Mount select source code for hot-reloading in debug mode
+      - ./apps:/app/apps:ro
+      - ./config:/app/config:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file:
+      - ./.envs/.evaluation/.django
+      - ./.envs/.evaluation/.postgres
+    environment:
+      # Override Django settings to disable problematic logging
+      - LOGGING_CONFIG=None
+      - DJANGO_DISABLE_FILE_LOGGING=1
+      # Disable SSL redirect for local development access
+      - DJANGO_SECURE_SSL_REDIRECT=False
+    command: /start
+    # Resource constraints to prevent OOM and runaway situations
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+    restart: unless-stopped
+    ulimits:
+      nofile:
+        soft: 1024
+        hard: 2048
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:8000/admin-evaluation/']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    labels:
+      - "evaluation.service=django"
+      - "evaluation.description=Main Django application server"
+      - "traefik.enable=true"
+      - "traefik.docker.network=web"
+      - "traefik.http.routers.eval-django.rule=Host(`sis-eval.pucsr.edu.kh`)"
+      - "traefik.http.routers.eval-django.entrypoints=websecure"
+      - "traefik.http.routers.eval-django.tls.certresolver=letsencrypt"
+      - "traefik.http.services.eval-django.loadbalancer.server.port=8000"
+    networks:
+      - web
+      - evaluation
+
+  postgres:
+    build:
+      context: .
+      dockerfile: ./compose/production/postgres/Dockerfile
+    image: naga_evaluation_postgres
+    container_name: naga_evaluation_postgres
+    ports:
+      - "5432:5432"  # Expose PostgreSQL port for remote access
+    volumes:
+      - naga_evaluation_postgres_data:/var/lib/postgresql/data
+      - naga_evaluation_postgres_data_backups:/backups
+    env_file:
+      - ./.envs/.evaluation/.postgres
+    environment:
+      # Performance optimizations balanced for evaluation
+      - POSTGRES_INITDB_ARGS=--data-checksums --locale=en_US.utf8
+    command: >
+      postgres
+      -c shared_preload_libraries=pg_stat_statements
+      -c shared_buffers=256MB
+      -c effective_cache_size=1GB
+      -c maintenance_work_mem=64MB
+      -c checkpoint_completion_target=0.9
+      -c wal_buffers=16MB
+      -c default_statistics_target=100
+      -c random_page_cost=1.1
+      -c effective_io_concurrency=200
+      -c work_mem=4MB
+      -c min_wal_size=1GB
+      -c max_wal_size=4GB
+      -c log_min_duration_statement=1000
+      -c log_connections=on
+      -c log_disconnections=on
+      -c log_lock_waits=on
+      -c log_statement=ddl
+    # Resource constraints to prevent database OOM
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'
+          memory: 2G
+        reservations:
+          cpus: '0.25'
+          memory: 512M
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    labels:
+      - "evaluation.service=database"
+      - "evaluation.description=PostgreSQL database with performance monitoring"
+    networks:
+      - evaluation
+
+  redis:
+    image: docker.io/redis:8.2-alpine
+    container_name: naga_evaluation_redis
+    volumes:
+      - naga_evaluation_redis_data:/data
+    command: >
+      redis-server
+      --appendonly yes
+      --appendfsync everysec
+      --maxmemory 256mb
+      --maxmemory-policy allkeys-lru
+    # Resource constraints for Redis cache
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.1'
+          memory: 128M
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    labels:
+      - "evaluation.service=cache"
+      - "evaluation.description=Redis cache and session store"
+    networks:
+      - evaluation
+
+  dramatiq:
+    <<: *django
+    image: naga_evaluation_dramatiq
+    container_name: naga_evaluation_dramatiq
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      django:
+        condition: service_healthy
+    ports: []
+    command: /start-dramatiq
+    # Resource constraints for background worker
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 768M
+        reservations:
+          cpus: '0.25'
+          memory: 192M
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'python',
+          'manage.py',
+          'shell',
+          '-c',
+          "import dramatiq; print('OK')",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    labels:
+      - "evaluation.service=worker"
+      - "evaluation.description=Background task processor"
+    networks:
+      - evaluation
+
+
+  # Email testing service (manual start only)
+  mailpit:
+    image: docker.io/axllent/mailpit:latest
+    container_name: naga_evaluation_mailpit
+    restart: "no"
+    profiles: ["manual"]
+    volumes:
+      - naga_evaluation_mailpit_data:/data
+    ports:
+      - "8125:8025"   # Web UI port
+      - "8126:1025"   # SMTP port still needed for Django
+    environment:
+      - MP_MAX_MESSAGES=5000
+      - MP_DATABASE=/data/mailpit.db
+      - MP_SMTP_AUTH_ACCEPT_ANY=1
+      - MP_SMTP_AUTH_ALLOW_INSECURE=1
+    # Resource constraints for email testing
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 256M
+        reservations:
+          cpus: '0.05'
+          memory: 64M
+    labels:
+      - "evaluation.service=email"
+      - "evaluation.description=Email testing and debugging tool"
+    networks:
+      - evaluation
+
+  # MONITORING SERVICES
+  # ====================
+
+  netdata:
+    image: netdata/netdata:latest
+    container_name: naga_evaluation_netdata
+    restart: unless-stopped
+    pid: host
+    network_mode: host
+    volumes:
+      - naga_evaluation_netdata_config:/etc/netdata
+      - naga_evaluation_netdata_lib:/var/lib/netdata
+      - naga_evaluation_netdata_cache:/var/cache/netdata
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/os-release:/host/etc/os-release:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - NETDATA_CLAIM_TOKEN=${NETDATA_CLAIM_TOKEN:-}
+      - NETDATA_CLAIM_URL=${NETDATA_CLAIM_URL:-https://app.netdata.cloud}
+      - NETDATA_CLAIM_ROOMS=${NETDATA_CLAIM_ROOMS:-}
+      # Limit data retention to 2 hours (256MB max disk)
+      - NETDATA_DBENGINE_MULTIHOST_DISK_SPACE=256
+      - NETDATA_DBENGINE_DISK_SPACE=256
+      - NETDATA_DBENGINE_PAGE_CACHE_SIZE=32
+      - NETDATA_DBENGINE_TIER0_RETENTION=7200  # 2 hours in seconds
+      - PGID=999
+      - DOCKER_USR=root
+      # Telegram bot configuration
+      - NETDATA_TELEGRAM_BOT_TOKEN=8378757895:AAECZiGgXls8uQlz4vh_roijr1sL_4oXf7I
+      - NETDATA_TELEGRAM_CHAT_ID=50685496
+      # Email configuration
+      - NETDATA_ADMIN_EMAIL=admin@pucsr.edu.kh
+      # Re-enable notifications now that we have proper channels
+      - NETDATA_DISABLE_CLOUD=0
+      - NETDATA_HEALTH_NOTIFICATIONS=1
+    cap_add:
+      - SYS_PTRACE
+      - SYS_ADMIN
+      - NET_ADMIN
+    security_opt:
+      - apparmor:unconfined
+    privileged: true
+    healthcheck:
+      disable: true
+    labels:
+      - "evaluation.service=monitoring"
+      - "evaluation.description=Real-time system performance metrics"
+
+  # DATABASE DEBUGGING TOOLS (manual start only)
+  # ==============================================
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: naga_evaluation_pgadmin
+    restart: "no"
+    profiles: ["manual"]
+    ports:
+      - "8181:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@evaluation.pucsr.edu.kh
+      - PGADMIN_DEFAULT_PASSWORD=evaluation2024
+      - PGADMIN_CONFIG_SERVER_MODE=False
+      - PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED=False
+    depends_on:
+      - postgres
+    volumes:
+      - ./monitoring/pgadmin/servers.json:/pgadmin4/servers.json:ro
+    labels:
+      - "evaluation.service=debugging"
+      - "evaluation.description=PostgreSQL administration interface"
+    networks:
+      - evaluation
+
+# HEALTH CHECK MONITORING
+# ========================
+  healthcheck:
+    image: docker.io/curlimages/curl:latest
+    container_name: naga_evaluation_healthcheck
+    depends_on:
+      - django
+      - postgres
+      - redis
+    command: >
+      sh -c "
+      while true; do
+        echo '=== Health Check Report ===' 
+        echo 'Django:' $$(curl -s -o /dev/null -w '%{http_code}' http://django:8000/admin-evaluation/ || echo 'FAILED')
+        echo 'PostgreSQL:' $$(if nc -z postgres 5432; then echo 'OK'; else echo 'FAILED'; fi)
+        echo 'Redis:' $$(if nc -z redis 6379; then echo 'OK'; else echo 'FAILED'; fi)
+        echo '=========================='
+        sleep 300
+      done"
+    restart: unless-stopped
+    labels:
+      - "evaluation.service=monitoring"
+      - "evaluation.description=Periodic health status reporting"
+    networks:
+      - evaluation
+
+networks:
+  web:
+    external: true  # Connects to Traefik
+  evaluation:
+    driver: bridge

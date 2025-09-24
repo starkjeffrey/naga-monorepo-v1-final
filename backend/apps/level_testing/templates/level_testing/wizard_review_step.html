@@ -1,0 +1,319 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% load form_tags %}
+
+{% block title %}
+  {{ step_title }} - {% trans "Level Testing Application" %} - {{ block.super }}
+{% endblock %}
+{% block content %}
+  <div class="min-h-screen bg-gray-50 py-4">
+    <div class="max-w-md mx-auto px-4 sm:max-w-lg sm:px-6 lg:max-w-2xl lg:px-8">
+      <!-- Mobile-First Progress Header -->
+      <div class="bg-white rounded-lg shadow-sm border p-4 mb-4">
+        <div class="flex justify-between items-center mb-3">
+          <h1 class="text-lg font-semibold text-gray-900 sm:text-xl">{{ step_title }}</h1>
+          <span class="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
+            {{ step_number }}/{{ total_steps }}
+          </span>
+        </div>
+        <!-- Simple Progress Bar -->
+        <div class="w-full bg-gray-200 rounded-full h-1.5 mb-3">
+          <div class="bg-blue-600 h-1.5 rounded-full transition-all duration-300"
+               style="width: {{ progress_percent }}%"></div>
+        </div>
+        <p class="text-sm text-gray-600">{{ step_description }}</p>
+      </div>
+      <!-- Application Summary - Mobile Optimized -->
+      <div class="bg-white rounded-lg shadow-sm border p-4 mb-4">
+        <h2 class="text-base font-semibold text-gray-900 mb-4">{% trans "Application Summary" %}</h2>
+        <!-- Personal Information -->
+        <div class="mb-4">
+          <h3 class="text-sm font-semibold text-gray-800 mb-2 flex items-center">
+            <svg class="h-4 w-4 text-blue-600 mr-1"
+                 fill="none"
+                 stroke="currentColor"
+                 viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
+              </path>
+            </svg>
+            {% trans "Personal Info" %}
+          </h3>
+          <div class="bg-gray-50 rounded-lg p-3 text-sm space-y-2">
+            <div class="flex justify-between">
+              <span class="text-gray-600">{% trans "Name" %}</span>
+              <span class="text-gray-900 font-medium">{{ application_data.personal_name_eng }} {{ application_data.family_name_eng }}</span>
+            </div>
+            {% if application_data.personal_name_khm %}
+              <div class="flex justify-between">
+                <span class="text-gray-600">{% trans "Khmer" %}</span>
+                <span class="text-gray-900">{{ application_data.personal_name_khm }} {{ application_data.family_name_khm }}</span>
+              </div>
+            {% endif %}
+            <div class="flex justify-between">
+              <span class="text-gray-600">{% trans "DOB" %}</span>
+              <span class="text-gray-900">{{ application_data.date_of_birth }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">{% trans "Gender" %}</span>
+              <span class="text-gray-900">{{ application_data.get_preferred_gender_display }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">{% trans "Phone" %}</span>
+              <span class="text-gray-900">{{ application_data.phone_number }}</span>
+            </div>
+            {% if application_data.personal_email %}
+              <div class="flex justify-between">
+                <span class="text-gray-600">{% trans "Email" %}</span>
+                <span class="text-gray-900 text-xs">{{ application_data.personal_email }}</span>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+        <!-- Educational Background -->
+        <div class="mb-4">
+          <h3 class="text-sm font-semibold text-gray-800 mb-2 flex items-center">
+            <svg class="h-4 w-4 text-green-600 mr-1"
+                 fill="none"
+                 stroke="currentColor"
+                 viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
+              </path>
+            </svg>
+            {% trans "Education" %}
+          </h3>
+          <div class="bg-gray-50 rounded-lg p-3 text-sm space-y-2">
+            {% if application_data.current_study_status %}
+              <div class="flex justify-between">
+                <span class="text-gray-600">{% trans "Study Status" %}</span>
+                <span class="text-gray-900">{{ application_data.get_current_study_status_display }}</span>
+              </div>
+            {% endif %}
+            {% if application_data.current_high_school %}
+              <div class="flex justify-between">
+                <span class="text-gray-600">{% trans "High School" %}</span>
+                <span class="text-gray-900">{{ application_data.get_current_high_school_display }}</span>
+              </div>
+            {% endif %}
+            {% if application_data.current_university %}
+              <div class="flex justify-between">
+                <span class="text-gray-600">{% trans "University" %}</span>
+                <span class="text-gray-900">{{ application_data.get_current_university_display }}</span>
+              </div>
+            {% endif %}
+            {% if application_data.work_field %}
+              <div class="flex justify-between">
+                <span class="text-gray-600">{% trans "Work Field" %}</span>
+                <span class="text-gray-900">{{ application_data.get_work_field_display }}</span>
+              </div>
+            {% endif %}
+            {% if application_data.current_grade %}
+              <div class="flex justify-between">
+                <span class="text-gray-600">{% trans "Grade" %}</span>
+                <span class="text-gray-900">{{ application_data.current_grade }}</span>
+              </div>
+            {% endif %}
+            {% if application_data.other_school_name %}
+              <div class="flex justify-between">
+                <span class="text-gray-600">{% trans "Other School" %}</span>
+                <span class="text-gray-900">{{ application_data.other_school_name }}</span>
+              </div>
+            {% endif %}
+            {% if application_data.last_english_school %}
+              <div class="flex justify-between">
+                <span class="text-gray-600">{% trans "Last English School" %}</span>
+                <span class="text-gray-900 text-right text-xs">{{ application_data.last_english_school }}</span>
+              </div>
+            {% endif %}
+            {% if application_data.last_english_level %}
+              <div class="flex justify-between">
+                <span class="text-gray-600">{% trans "Last Level" %}</span>
+                <span class="text-gray-900">{{ application_data.last_english_level }}</span>
+              </div>
+            {% endif %}
+            {% if application_data.last_english_study_period %}
+              <div class="flex justify-between">
+                <span class="text-gray-600">{% trans "Last English Study" %}</span>
+                <span class="text-gray-900">{{ application_data.get_last_english_study_period_display }}</span>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+        <!-- Program Preferences -->
+        <div class="mb-4">
+          <h3 class="text-sm font-semibold text-gray-800 mb-2 flex items-center">
+            <svg class="h-4 w-4 text-purple-600 mr-1"
+                 fill="none"
+                 stroke="currentColor"
+                 viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v6a2 2 0 002 2h6a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
+              </path>
+            </svg>
+            {% trans "Preferences" %}
+          </h3>
+          <div class="bg-gray-50 rounded-lg p-3 text-sm space-y-2">
+            <div class="flex justify-between">
+              <span class="text-gray-600">{% trans "Program" %}</span>
+              <span class="text-gray-900">{{ application_data.get_preferred_program_display }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">{% trans "Time" %}</span>
+              <span class="text-gray-900">{{ application_data.get_preferred_time_slot_display }}</span>
+            </div>
+            {% if application_data.preferred_start_term %}
+              <div class="flex justify-between">
+                <span class="text-gray-600">{% trans "Start Term" %}</span>
+                <span class="text-gray-900">{{ application_data.preferred_start_term }}</span>
+              </div>
+            {% endif %}
+            {% if application_data.how_did_you_hear %}
+              <div class="flex justify-between">
+                <span class="text-gray-600">{% trans "How heard" %}</span>
+                <span class="text-gray-900 text-right text-xs">{{ application_data.how_did_you_hear }}</span>
+              </div>
+            {% endif %}
+          </div>
+          {% if application_data.comments %}
+            <div class="mt-2">
+              <span class="text-xs text-gray-600 font-medium">{% trans "Comments" %}</span>
+              <p class="text-xs text-gray-900 mt-1 bg-gray-50 p-2 rounded">{{ application_data.comments }}</p>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+      <!-- Next Steps Info -->
+      <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+        <h3 class="text-sm font-semibold text-blue-900 mb-2 flex items-center">
+          <svg class="h-4 w-4 text-blue-600 mr-1"
+               fill="currentColor"
+               viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd">
+            </path>
+          </svg>
+          {% trans "What happens next?" %}
+        </h3>
+        <div class="text-xs text-blue-800 space-y-1">
+          <p>• {% trans "You'll receive a test number" %}</p>
+          <p>• {% trans "Bring $5.00 fee to our office" %}</p>
+          <p>• {% trans "Staff schedules your test" %}</p>
+          <p>• {% trans "Take test and get results" %}</p>
+        </div>
+      </div>
+      <!-- Confirmation Form -->
+      <div class="bg-white rounded-lg shadow-sm border">
+        <form method="post" class="p-4">
+          {% csrf_token %}
+          <!-- Compact Error Display -->
+          {% if form.non_field_errors %}
+            <div class="bg-red-50 border border-red-200 rounded-md p-3 text-sm mb-4">
+              <div class="flex">
+                <svg class="h-4 w-4 text-red-400 mt-0.5 mr-2 flex-shrink-0"
+                     fill="currentColor"
+                     viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd">
+                  </path>
+                </svg>
+                <div>
+                  <p class="font-medium text-red-800">{% trans "Please correct errors" %}</p>
+                  <div class="mt-1 text-red-700">{{ form.non_field_errors }}</div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+          <!-- Confirmation Checkboxes -->
+          <div class="space-y-3 mb-6">
+            {% for field in form %}
+              <div class="flex items-start">
+                <div class="flex items-center h-5">
+                  {{ field|add_class:"h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" }}
+                </div>
+                <div class="ml-3">
+                  <label for="{{ field.id_for_label }}" class="text-sm text-gray-700">{{ field.label }}</label>
+                  {% if field.help_text %}<p class="text-xs text-gray-500 mt-1">{{ field.help_text }}</p>{% endif %}
+                  {% if field.errors %}
+                    <div class="mt-1 text-xs text-red-600">
+                      {% for error in field.errors %}<p>{{ error }}</p>{% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          <!-- Mobile-First Navigation with Enhanced Touch Targets -->
+          <div class="pt-6 border-t border-gray-200">
+            <div class="flex justify-between items-center gap-4">
+              <a href="{{ prev_step_url }}"
+                 class="inline-flex items-center px-5 py-4 border-2 border-gray-300 text-base font-semibold rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-3 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 min-w-[100px] justify-center">
+                <svg class="h-5 w-5 mr-2"
+                     fill="none"
+                     stroke="currentColor"
+                     viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                {% trans "Back" %}
+              </a>
+              <button type="submit"
+                      id="submit-btn"
+                      class="inline-flex items-center px-6 py-4 border-2 border-transparent text-base font-bold rounded-lg text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-3 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 min-w-[120px] justify-center shadow-lg">
+                <svg class="h-5 w-5 mr-2"
+                     fill="none"
+                     stroke="currentColor"
+                     viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
+                  </path>
+                </svg>
+                {% trans "Submit" %}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- Simplified Step Indicators -->
+      <div class="mt-4 flex justify-center">
+        <div class="flex space-x-2">
+          {% for i in "12345"|make_list %}
+            {% if forloop.counter <= step_number %}
+              <div class="w-2 h-2 bg-blue-600 rounded-full"></div>
+            {% else %}
+              <div class="w-2 h-2 bg-gray-300 rounded-full"></div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      <!-- Mobile Progress Text -->
+      <div class="mt-2 text-center">
+        <span class="text-xs text-gray-500 font-medium">{{ progress_percent }}% {% trans "Complete" %}</span>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block extra_js %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.querySelector('form');
+      const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+      const submitButton = document.getElementById('submit-btn');
+
+      function updateSubmitButton() {
+        const allChecked = Array.from(checkboxes).every((cb) => cb.checked);
+        submitButton.disabled = !allChecked;
+      }
+
+      checkboxes.forEach((cb) => {
+        cb.addEventListener('change', updateSubmitButton);
+      });
+
+      // Initial check
+      updateSubmitButton();
+
+      // Edit functionality for summary sections
+      const summaryCards = document.querySelectorAll('.bg-gray-50');
+      summaryCards.forEach((card) => {
+        card.addEventListener('click', function() {
+          // Could implement edit functionality here
+          console.log('Edit section clicked');
+        });
+      });
+    });
+  </script>
+{% endblock %}

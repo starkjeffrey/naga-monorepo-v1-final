@@ -1,0 +1,203 @@
+{% extends "admin/base_site.html" %}
+
+{% load i18n admin_urls static admin_modify
+%}
+
+{% block title %}
+  Class Capacity: {{ class_header }} | {{
+  site_title|default:"Django site admin" }}
+{% endblock %}
+{% block extrahead %}
+  <style>
+    .capacity-overview {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .capacity-stat {
+      display: inline-block;
+      background: white;
+      padding: 15px;
+      margin: 10px;
+      border-radius: 6px;
+      text-align: center;
+      min-width: 120px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .capacity-stat .number {
+      font-size: 24px;
+      font-weight: bold;
+      color: #0066cc;
+    }
+
+    .capacity-stat .label {
+      font-size: 12px;
+      color: #666;
+      text-transform: uppercase;
+    }
+
+    .enrollment-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .enrollment-table th,
+    .enrollment-table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .enrollment-table th {
+      background-color: #f5f5f5;
+      font-weight: bold;
+    }
+
+    .status-enrolled {
+      color: #28a745;
+    }
+
+    .status-waitlisted {
+      color: #fd7e14;
+    }
+
+    .status-dropped {
+      color: #dc3545;
+    }
+
+    .status-completed {
+      color: #6f42c1;
+    }
+
+    .alert {
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid transparent;
+      border-radius: 4px;
+    }
+
+    .alert-warning {
+      color: #856404;
+      background-color: #fff3cd;
+      border-color: #ffeaa7;
+    }
+
+    .alert-success {
+      color: #155724;
+      background-color: #d4edda;
+      border-color: #c3e6cb;
+    }
+  </style>
+{% endblock %}
+{% block content %}
+  <h1>Class Capacity Management</h1>
+  <div class="capacity-overview">
+    <h2>{{ class_header.course.code }} - Section {{ class_header.section_id }}</h2>
+    <p>
+      <strong>Course:</strong> {{ class_header.course.title }}
+    </p>
+    <p>
+      <strong>Term:</strong> {{ class_header.term.name }}
+    </p>
+    <p>
+      <strong>Instructor:</strong> {{ class_header.instructor|default:"TBA" }}
+    </p>
+    <div class="capacity-stats">
+      <div class="capacity-stat">
+        <div class="number">{{ capacity_data.enrolled_count }}</div>
+        <div class="label">Enrolled</div>
+      </div>
+      <div class="capacity-stat">
+        <div class="number">{{ capacity_data.max_enrollment }}</div>
+        <div class="label">Max Capacity</div>
+      </div>
+      <div class="capacity-stat">
+        <div class="number">{{ capacity_data.available_spots }}</div>
+        <div class="label">Available</div>
+      </div>
+      <div class="capacity-stat">
+        <div class="number">{{ capacity_data.waitlisted_count }}</div>
+        <div class="label">Waitlisted</div>
+      </div>
+    </div>
+    {% if capacity_data.is_full %}
+      <div class="alert alert-warning">
+        <strong>Class is Full!</strong> Students will be placed on the waitlist.
+      </div>
+    {% else %}
+      <div class="alert alert-success">
+        <strong>Space Available:</strong> {{ capacity_data.available_spots }} spots
+        remaining.
+      </div>
+    {% endif %}
+  </div>
+  <div class="enrollment-details">
+    <h3>Current Enrollments</h3>
+    {% if enrollment_details.enrollments %}
+      <table class="enrollment-table">
+        <thead>
+          <tr>
+            <th>Student ID</th>
+            <th>Student Name</th>
+            <th>Status</th>
+            <th>Enrollment Date</th>
+            <th>Waitlist Position</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for enrollment in enrollment_details.enrollments %}
+            <tr>
+              <td>{{ enrollment.student_id }}</td>
+              <td>{{ enrollment.student_name }}</td>
+              <td>
+                <span class="status-{{ enrollment.status|lower }}">{{ enrollment.status }}</span>
+              </td>
+              <td>{{ enrollment.enrollment_date }}</td>
+              <td>
+                {% if enrollment.waitlist_position %}
+                  #{{ enrollment.waitlist_position
+                  }}
+                {% else %}
+                  -
+                {% endif %}
+              </td>
+              <td>
+                {% if enrollment.status == 'WAITLISTED' and capacity_data.can_enroll
+                  %}
+                  <a href="{% url 'admin:enrollment_classenrollment_change' enrollment.id %}"
+                     class="button"
+                     style="font-size: 11px">Promote</a>
+                {% endif %}
+                <a href="{% url 'admin:enrollment_classenrollment_change' enrollment.id %}"
+                   class="button"
+                   style="font-size: 11px">Edit</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>
+        <em>No enrollments found for this class.</em>
+      </p>
+    {% endif %}
+  </div>
+  <div class="quick-actions" style="margin-top: 30px">
+    <h3>Quick Actions</h3>
+    <a href="{% url 'admin:enrollment_enrollment_wizard' %}"
+       class="button default">Enroll Student</a>
+    <a href="{% url 'admin:enrollment_bulk_enroll' %}"
+       class="button default">Bulk Enroll</a>
+    <a href="{% url 'admin:enrollment_classenrollment_changelist' %}"
+       class="button default">View All Enrollments</a>
+  </div>
+  <div style="margin-top: 20px">
+    <a href="{% url 'admin:enrollment_classenrollment_changelist' %}"
+       class="button">« Back to Enrollments</a>
+  </div>
+{% endblock %}

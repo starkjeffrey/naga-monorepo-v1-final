@@ -1,0 +1,534 @@
+[
+{
+  "model": "scheduling.combinedclassinstance",
+  "pk": 1,
+  "fields": {
+    "created_at": "2025-07-20T01:28:44.403Z",
+    "updated_at": "2025-07-20T01:28:44.403Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "template": 1,
+    "term": 35,
+    "primary_teacher": null,
+    "primary_room": null,
+    "status": "DRAFT",
+    "section_id": "1E603",
+    "max_enrollment": 30,
+    "notes": "",
+    "auto_created": true
+  }
+},
+{
+  "model": "scheduling.combinedclassinstance",
+  "pk": 2,
+  "fields": {
+    "created_at": "2025-07-20T01:29:25.831Z",
+    "updated_at": "2025-07-20T01:29:25.831Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "template": 1,
+    "term": 43,
+    "primary_teacher": null,
+    "primary_room": null,
+    "status": "DRAFT",
+    "section_id": "E2980",
+    "max_enrollment": 30,
+    "notes": "",
+    "auto_created": true
+  }
+},
+{
+  "model": "scheduling.combinedclassinstance",
+  "pk": 3,
+  "fields": {
+    "created_at": "2025-07-20T01:30:16.880Z",
+    "updated_at": "2025-07-20T01:30:16.880Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "template": 1,
+    "term": 49,
+    "primary_teacher": null,
+    "primary_room": null,
+    "status": "DRAFT",
+    "section_id": "39C77",
+    "max_enrollment": 30,
+    "notes": "",
+    "auto_created": true
+  }
+},
+{
+  "model": "scheduling.combinedclassinstance",
+  "pk": 4,
+  "fields": {
+    "created_at": "2025-07-20T01:31:02.803Z",
+    "updated_at": "2025-07-20T01:31:02.803Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "template": 1,
+    "term": 69,
+    "primary_teacher": null,
+    "primary_room": null,
+    "status": "DRAFT",
+    "section_id": "04D78",
+    "max_enrollment": 30,
+    "notes": "",
+    "auto_created": true
+  }
+},
+{
+  "model": "scheduling.combinedclassinstance",
+  "pk": 5,
+  "fields": {
+    "created_at": "2025-07-20T01:31:07.841Z",
+    "updated_at": "2025-07-20T01:31:07.841Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "template": 1,
+    "term": 59,
+    "primary_teacher": null,
+    "primary_room": null,
+    "status": "DRAFT",
+    "section_id": "29E24",
+    "max_enrollment": 30,
+    "notes": "",
+    "auto_created": true
+  }
+},
+{
+  "model": "scheduling.combinedclassinstance",
+  "pk": 6,
+  "fields": {
+    "created_at": "2025-07-20T01:31:26.861Z",
+    "updated_at": "2025-07-20T01:31:26.861Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "template": 1,
+    "term": 52,
+    "primary_teacher": null,
+    "primary_room": null,
+    "status": "DRAFT",
+    "section_id": "A8726",
+    "max_enrollment": 30,
+    "notes": "",
+    "auto_created": true
+  }
+},
+{
+  "model": "scheduling.combinedclassinstance",
+  "pk": 7,
+  "fields": {
+    "created_at": "2025-07-20T01:31:40.477Z",
+    "updated_at": "2025-07-20T01:31:40.477Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "template": 1,
+    "term": 55,
+    "primary_teacher": null,
+    "primary_room": null,
+    "status": "DRAFT",
+    "section_id": "46BF2",
+    "max_enrollment": 30,
+    "notes": "",
+    "auto_created": true
+  }
+},
+{
+  "model": "scheduling.combinedclassinstance",
+  "pk": 8,
+  "fields": {
+    "created_at": "2025-07-20T01:31:59.581Z",
+    "updated_at": "2025-07-20T01:31:59.581Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "template": 1,
+    "term": 76,
+    "primary_teacher": null,
+    "primary_room": null,
+    "status": "DRAFT",
+    "section_id": "3B5E2",
+    "max_enrollment": 30,
+    "notes": "",
+    "auto_created": true
+  }
+},
+{
+  "model": "scheduling.combinedclassinstance",
+  "pk": 9,
+  "fields": {
+    "created_at": "2025-07-20T01:32:07.706Z",
+    "updated_at": "2025-07-20T01:32:07.706Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "template": 1,
+    "term": 81,
+    "primary_teacher": null,
+    "primary_room": null,
+    "status": "DRAFT",
+    "section_id": "271BB",
+    "max_enrollment": 30,
+    "notes": "",
+    "auto_created": true
+  }
+},
+{
+  "model": "scheduling.combinedclassinstance",
+  "pk": 10,
+  "fields": {
+    "created_at": "2025-07-20T01:32:55.374Z",
+    "updated_at": "2025-07-20T01:32:55.374Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "template": 1,
+    "term": 89,
+    "primary_teacher": null,
+    "primary_room": null,
+    "status": "DRAFT",
+    "section_id": "6AF1D",
+    "max_enrollment": 30,
+    "notes": "",
+    "auto_created": true
+  }
+},
+{
+  "model": "scheduling.combinedclassinstance",
+  "pk": 11,
+  "fields": {
+    "created_at": "2025-07-20T01:32:58.753Z",
+    "updated_at": "2025-07-20T01:32:58.753Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "template": 1,
+    "term": 93,
+    "primary_teacher": null,
+    "primary_room": null,
+    "status": "DRAFT",
+    "section_id": "64010",
+    "max_enrollment": 30,
+    "notes": "",
+    "auto_created": true
+  }
+},
+{
+  "model": "scheduling.combinedclassinstance",
+  "pk": 12,
+  "fields": {
+    "created_at": "2025-07-20T01:33:36.751Z",
+    "updated_at": "2025-07-20T01:33:36.751Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "template": 1,
+    "term": 105,
+    "primary_teacher": null,
+    "primary_room": null,
+    "status": "DRAFT",
+    "section_id": "92478",
+    "max_enrollment": 30,
+    "notes": "",
+    "auto_created": true
+  }
+},
+{
+  "model": "scheduling.combinedclassinstance",
+  "pk": 13,
+  "fields": {
+    "created_at": "2025-07-20T01:33:45.357Z",
+    "updated_at": "2025-07-20T01:33:45.357Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "template": 1,
+    "term": 102,
+    "primary_teacher": null,
+    "primary_room": null,
+    "status": "DRAFT",
+    "section_id": "D07B4",
+    "max_enrollment": 30,
+    "notes": "",
+    "auto_created": true
+  }
+},
+{
+  "model": "scheduling.combinedclassinstance",
+  "pk": 14,
+  "fields": {
+    "created_at": "2025-07-20T01:33:47.835Z",
+    "updated_at": "2025-07-20T01:33:47.835Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "template": 1,
+    "term": 96,
+    "primary_teacher": null,
+    "primary_room": null,
+    "status": "DRAFT",
+    "section_id": "C81E2",
+    "max_enrollment": 30,
+    "notes": "",
+    "auto_created": true
+  }
+},
+{
+  "model": "scheduling.combinedclassinstance",
+  "pk": 15,
+  "fields": {
+    "created_at": "2025-07-20T01:34:21.224Z",
+    "updated_at": "2025-07-20T01:34:21.224Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "template": 1,
+    "term": 114,
+    "primary_teacher": null,
+    "primary_room": null,
+    "status": "DRAFT",
+    "section_id": "DCDF3",
+    "max_enrollment": 30,
+    "notes": "",
+    "auto_created": true
+  }
+},
+{
+  "model": "scheduling.combinedclassinstance",
+  "pk": 16,
+  "fields": {
+    "created_at": "2025-07-20T01:34:27.715Z",
+    "updated_at": "2025-07-20T01:34:27.715Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "template": 1,
+    "term": 112,
+    "primary_teacher": null,
+    "primary_room": null,
+    "status": "DRAFT",
+    "section_id": "488A3",
+    "max_enrollment": 30,
+    "notes": "",
+    "auto_created": true
+  }
+},
+{
+  "model": "scheduling.combinedclassinstance",
+  "pk": 17,
+  "fields": {
+    "created_at": "2025-07-20T01:35:01.604Z",
+    "updated_at": "2025-07-20T01:35:01.604Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "template": 1,
+    "term": 117,
+    "primary_teacher": null,
+    "primary_room": null,
+    "status": "DRAFT",
+    "section_id": "05DCF",
+    "max_enrollment": 30,
+    "notes": "",
+    "auto_created": true
+  }
+},
+{
+  "model": "scheduling.combinedclassinstance",
+  "pk": 18,
+  "fields": {
+    "created_at": "2025-07-20T01:35:13.954Z",
+    "updated_at": "2025-07-20T01:35:13.954Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "template": 1,
+    "term": 108,
+    "primary_teacher": null,
+    "primary_room": null,
+    "status": "DRAFT",
+    "section_id": "B2F0F",
+    "max_enrollment": 30,
+    "notes": "",
+    "auto_created": true
+  }
+},
+{
+  "model": "scheduling.combinedclassinstance",
+  "pk": 19,
+  "fields": {
+    "created_at": "2025-07-20T01:35:46.576Z",
+    "updated_at": "2025-07-20T01:35:46.576Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "template": 1,
+    "term": 133,
+    "primary_teacher": null,
+    "primary_room": null,
+    "status": "DRAFT",
+    "section_id": "72044",
+    "max_enrollment": 30,
+    "notes": "",
+    "auto_created": true
+  }
+},
+{
+  "model": "scheduling.combinedclassinstance",
+  "pk": 20,
+  "fields": {
+    "created_at": "2025-07-20T01:35:58.496Z",
+    "updated_at": "2025-07-20T01:35:58.496Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "template": 1,
+    "term": 120,
+    "primary_teacher": null,
+    "primary_room": null,
+    "status": "DRAFT",
+    "section_id": "EFD88",
+    "max_enrollment": 30,
+    "notes": "",
+    "auto_created": true
+  }
+},
+{
+  "model": "scheduling.combinedclassinstance",
+  "pk": 21,
+  "fields": {
+    "created_at": "2025-07-20T01:36:06.202Z",
+    "updated_at": "2025-07-20T01:36:06.202Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "template": 1,
+    "term": 122,
+    "primary_teacher": null,
+    "primary_room": null,
+    "status": "DRAFT",
+    "section_id": "DAA47",
+    "max_enrollment": 30,
+    "notes": "",
+    "auto_created": true
+  }
+},
+{
+  "model": "scheduling.combinedclassinstance",
+  "pk": 22,
+  "fields": {
+    "created_at": "2025-07-20T01:36:32.211Z",
+    "updated_at": "2025-07-20T01:36:32.211Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "template": 1,
+    "term": 127,
+    "primary_teacher": null,
+    "primary_room": null,
+    "status": "DRAFT",
+    "section_id": "90F87",
+    "max_enrollment": 30,
+    "notes": "",
+    "auto_created": true
+  }
+},
+{
+  "model": "scheduling.combinedclassinstance",
+  "pk": 23,
+  "fields": {
+    "created_at": "2025-07-20T01:37:15.895Z",
+    "updated_at": "2025-07-20T01:37:15.895Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "template": 1,
+    "term": 139,
+    "primary_teacher": null,
+    "primary_room": null,
+    "status": "DRAFT",
+    "section_id": "D00A6",
+    "max_enrollment": 30,
+    "notes": "",
+    "auto_created": true
+  }
+},
+{
+  "model": "scheduling.combinedclassinstance",
+  "pk": 24,
+  "fields": {
+    "created_at": "2025-07-20T01:37:44.081Z",
+    "updated_at": "2025-07-20T01:37:44.081Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "template": 1,
+    "term": 149,
+    "primary_teacher": null,
+    "primary_room": null,
+    "status": "DRAFT",
+    "section_id": "41382",
+    "max_enrollment": 30,
+    "notes": "",
+    "auto_created": true
+  }
+},
+{
+  "model": "scheduling.combinedclassinstance",
+  "pk": 25,
+  "fields": {
+    "created_at": "2025-07-20T01:38:09.575Z",
+    "updated_at": "2025-07-20T01:38:09.575Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "template": 1,
+    "term": 155,
+    "primary_teacher": null,
+    "primary_room": null,
+    "status": "DRAFT",
+    "section_id": "7E80E",
+    "max_enrollment": 30,
+    "notes": "",
+    "auto_created": true
+  }
+},
+{
+  "model": "scheduling.combinedclassinstance",
+  "pk": 26,
+  "fields": {
+    "created_at": "2025-07-20T01:38:18.354Z",
+    "updated_at": "2025-07-20T01:38:18.354Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "template": 1,
+    "term": 158,
+    "primary_teacher": null,
+    "primary_room": null,
+    "status": "DRAFT",
+    "section_id": "7ED93",
+    "max_enrollment": 30,
+    "notes": "",
+    "auto_created": true
+  }
+},
+{
+  "model": "scheduling.combinedclassinstance",
+  "pk": 27,
+  "fields": {
+    "created_at": "2025-07-20T01:38:45.095Z",
+    "updated_at": "2025-07-20T01:38:45.095Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "template": 1,
+    "term": 166,
+    "primary_teacher": null,
+    "primary_room": null,
+    "status": "DRAFT",
+    "section_id": "2FC83",
+    "max_enrollment": 30,
+    "notes": "",
+    "auto_created": true
+  }
+},
+{
+  "model": "scheduling.combinedclassinstance",
+  "pk": 28,
+  "fields": {
+    "created_at": "2025-07-20T01:38:57.597Z",
+    "updated_at": "2025-07-20T01:38:57.597Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "template": 1,
+    "term": 170,
+    "primary_teacher": null,
+    "primary_room": null,
+    "status": "DRAFT",
+    "section_id": "BACCA",
+    "max_enrollment": 30,
+    "notes": "",
+    "auto_created": true
+  }
+}
+]

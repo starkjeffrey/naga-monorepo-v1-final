@@ -1,0 +1,204 @@
+{% extends "web_interface/base/dashboard_base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Transcript Preview" %} - {{ student.person.name_en }}{% endblock %}
+
+{% block dashboard_content %}
+<div class="max-w-4xl mx-auto px-4 py-6">
+  <!-- Header -->
+  <div class="bg-white shadow-sm rounded-lg mb-6">
+    <div class="px-6 py-4">
+      <div class="flex justify-between items-center">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">{% trans "Transcript Preview" %}</h1>
+          <p class="text-sm text-gray-500 mt-1">{{ student.person.name_en }} ({{ student.student_id }})</p>
+        </div>
+        <div class="flex space-x-2">
+          <a href="{% url 'academic_records:generate_transcript' student.id %}?format=pdf"
+             class="btn btn-secondary">
+            <i class="fas fa-download mr-2"></i>
+            {% trans "Download PDF" %}
+          </a>
+          <button onclick="window.print()" class="btn btn-primary">
+            <i class="fas fa-print mr-2"></i>
+            {% trans "Print" %}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Transcript Document -->
+  <div class="bg-white shadow-sm rounded-lg p-8 print:shadow-none" id="transcript-content">
+    <!-- Institution Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">NAGA UNIVERSITY</h1>
+      <h2 class="text-xl font-semibold text-gray-700 mb-4">OFFICIAL ACADEMIC TRANSCRIPT</h2>
+      <div class="text-sm text-gray-600">
+        <p>Academic Records Office</p>
+        <p>Phnom Penh, Cambodia</p>
+      </div>
+    </div>
+
+    <!-- Student Information -->
+    <div class="grid grid-cols-2 gap-8 mb-8 border-t border-b border-gray-200 py-6">
+      <div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">{% trans "Student Information" %}</h3>
+        <div class="space-y-2">
+          <div class="flex">
+            <span class="font-medium text-gray-700 w-32">{% trans "Name:" %}</span>
+            <span>{{ student.person.name_en }}</span>
+          </div>
+          {% if student.person.name_km %}
+          <div class="flex">
+            <span class="font-medium text-gray-700 w-32">{% trans "Khmer Name:" %}</span>
+            <span>{{ student.person.name_km }}</span>
+          </div>
+          {% endif %}
+          <div class="flex">
+            <span class="font-medium text-gray-700 w-32">{% trans "Student ID:" %}</span>
+            <span>{{ student.student_id }}</span>
+          </div>
+          {% if student.person.date_of_birth %}
+          <div class="flex">
+            <span class="font-medium text-gray-700 w-32">{% trans "Date of Birth:" %}</span>
+            <span>{{ student.person.date_of_birth|date:"F d, Y" }}</span>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      <div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">{% trans "Transcript Information" %}</h3>
+        <div class="space-y-2">
+          <div class="flex">
+            <span class="font-medium text-gray-700 w-32">{% trans "Issue Date:" %}</span>
+            <span>{{ "now"|date:"F d, Y" }}</span>
+          </div>
+          <div class="flex">
+            <span class="font-medium text-gray-700 w-32">{% trans "Status:" %}</span>
+            <span class="font-semibold text-blue-600">{% trans "OFFICIAL" %}</span>
+          </div>
+          {% if document_request %}
+          <div class="flex">
+            <span class="font-medium text-gray-700 w-32">{% trans "Request ID:" %}</span>
+            <span>{{ document_request.request_id|truncatechars:8 }}</span>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Academic Record -->
+    <div class="mb-8">
+      <h3 class="text-lg font-semibold text-gray-900 mb-6">{% trans "Academic Record" %}</h3>
+      
+      {% if grades %}
+        {% regroup grades by enrollment.class_header.term as term_groups %}
+        {% for term_group in term_groups %}
+          <div class="mb-6">
+            <!-- Term Header -->
+            <div class="bg-gray-50 px-4 py-2 border-l-4 border-blue-500 mb-4">
+              <h4 class="font-semibold text-gray-900">{{ term_group.grouper.name }}</h4>
+              <p class="text-sm text-gray-600">
+                {{ term_group.grouper.start_date|date:"F Y" }} - {{ term_group.grouper.end_date|date:"F Y" }}
+              </p>
+            </div>
+            
+            <!-- Courses Table -->
+            <div class="overflow-x-auto">
+              <table class="min-w-full">
+                <thead>
+                  <tr class="border-b border-gray-200">
+                    <th class="text-left py-2 px-4 text-sm font-medium text-gray-700">{% trans "Course Code" %}</th>
+                    <th class="text-left py-2 px-4 text-sm font-medium text-gray-700">{% trans "Course Title" %}</th>
+                    <th class="text-center py-2 px-4 text-sm font-medium text-gray-700">{% trans "Credits" %}</th>
+                    <th class="text-center py-2 px-4 text-sm font-medium text-gray-700">{% trans "Grade" %}</th>
+                    <th class="text-center py-2 px-4 text-sm font-medium text-gray-700">{% trans "Points" %}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for grade in term_group.list %}
+                  <tr class="border-b border-gray-100">
+                    <td class="py-2 px-4 text-sm">{{ grade.enrollment.class_header.course.code }}</td>
+                    <td class="py-2 px-4 text-sm">{{ grade.enrollment.class_header.course.name }}</td>
+                    <td class="py-2 px-4 text-sm text-center">
+                      {{ grade.enrollment.class_header.course.credits|default:"3" }}
+                    </td>
+                    <td class="py-2 px-4 text-sm text-center font-medium">
+                      {% if grade.letter_grade %}
+                        {{ grade.letter_grade }}
+                      {% elif grade.numeric_score %}
+                        {{ grade.numeric_score|floatformat:1 }}%
+                      {% else %}
+                        {% trans "N/A" %}
+                      {% endif %}
+                    </td>
+                    <td class="py-2 px-4 text-sm text-center">
+                      {% if grade.gpa_points %}
+                        {{ grade.gpa_points|floatformat:2 }}
+                      {% else %}
+                        -
+                      {% endif %}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            
+            <!-- Term GPA -->
+            <div class="mt-2 text-right">
+              <span class="text-sm font-medium text-gray-700">
+                {% trans "Term GPA:" %} 
+                <span class="font-bold">{{ term_gpas|get_item:term_group.grouper.name|default:"0.00" }}</span>
+              </span>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="text-center py-8 text-gray-500">
+          <i class="fas fa-graduation-cap text-4xl mb-4"></i>
+          <p>{% trans "No academic records found for this student." %}</p>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Academic Summary -->
+    <div class="border-t border-gray-200 pt-6">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4">{% trans "Academic Summary" %}</h3>
+      <div class="grid grid-cols-3 gap-6">
+        <div class="text-center p-4 bg-gray-50 rounded-lg">
+          <div class="text-2xl font-bold text-blue-600">{{ cumulative_gpa|floatformat:2 }}</div>
+          <div class="text-sm text-gray-600">{% trans "Cumulative GPA" %}</div>
+        </div>
+        <div class="text-center p-4 bg-gray-50 rounded-lg">
+          <div class="text-2xl font-bold text-green-600">{{ grades|length|default:0 }}</div>
+          <div class="text-sm text-gray-600">{% trans "Courses Completed" %}</div>
+        </div>
+        <div class="text-center p-4 bg-gray-50 rounded-lg">
+          <div class="text-2xl font-bold text-purple-600">
+            {% widthratio grades|length 1 3 %}
+          </div>
+          <div class="text-sm text-gray-600">{% trans "Credits Earned" %}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-8 pt-6 border-t border-gray-200 text-center text-sm text-gray-600">
+      <p>{% trans "This is an official transcript issued by Naga University Academic Records Office." %}</p>
+      <p class="mt-2">
+        {% trans "Generated on" %} {{ "now"|date:"F d, Y \a\t g:i A" }}
+      </p>
+    </div>
+  </div>
+</div>
+
+<style>
+@media print {
+  body { margin: 0; }
+  .no-print { display: none; }
+  .print\\:shadow-none { box-shadow: none; }
+}
+</style>
+{% endblock %}

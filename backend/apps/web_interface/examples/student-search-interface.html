@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Search System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            color: #2d3748;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 24px;
+            margin-top: 16px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4a5568;
+        }
+
+        .search-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 10px 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .date-range {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px;
+            background: #f7fafc;
+            border-radius: 8px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            cursor: pointer;
+            font-size: 14px;
+            color: #4a5568;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        button {
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+
+        .results-table {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        th {
+            padding: 16px;
+            text-align: left;
+            color: white;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 16px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #4a5568;
+            font-size: 14px;
+        }
+
+        tbody tr {
+            transition: background 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background: #f7fafc;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .status-inactive {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-view {
+            background: #e6fffa;
+            color: #234e52;
+        }
+
+        .btn-view:hover {
+            background: #b2f5ea;
+        }
+
+        .btn-edit {
+            background: #fef5e7;
+            color: #744210;
+        }
+
+        .btn-edit:hover {
+            background: #fdeaa8;
+        }
+
+        .advanced-filters {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .toggle-advanced {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #667eea;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 16px;
+        }
+
+        .toggle-advanced:hover {
+            color: #764ba2;
+        }
+
+        #advancedSection {
+            display: none;
+        }
+
+        #advancedSection.active {
+            display: block;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #718096;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px;
+            color: #a0aec0;
+        }
+
+        .no-results h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Student Management System</h1>
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <span class="stat-label">Total Students</span>
+                    <span class="stat-value" id="totalCount">17,674</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Active</span>
+                    <span class="stat-value" id="activeCount">10,784</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Search Results</span>
+                    <span class="stat-value" id="resultCount">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Panel -->
+        <div class="search-panel">
+            <h2 style="margin-bottom: 20px; color: #2d3748;">Search Students</h2>
+            
+            <div class="search-grid">
+                <div class="form-group">
+                    <label>Student ID</label>
+                    <input type="text" id="studentId" placeholder="Enter student ID">
+                </div>
+                
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="studentName" placeholder="Search by name">
+                </div>
+                
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="email" placeholder="student@example.com">
+                </div>
+                
+                <div class="form-group">
+                    <label>Program</label>
+                    <select id="program">
+                        <option value="">All Programs</option>
+                        <option value="tbd-evening">TBD Evening</option>
+                        <option value="mba">MBA</option>
+                        <option value="bba">BBA</option>
+                        <option value="cs">Computer Science</option>
+                        <option value="engineering">Engineering</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="status">
+                        <option value="">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                        <option value="graduated">Graduated</option>
+                        <option value="suspended">Suspended</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Study Time</label>
+                    <select id="studyTime">
+                        <option value="">All Times</option>
+                        <option value="morning">Morning</option>
+                        <option value="afternoon">Afternoon</option>
+                        <option value="evening">Evening</option>
+                        <option value="weekend">Weekend</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Advanced Filters Toggle -->
+            <div class="toggle-advanced" onclick="toggleAdvanced()">
+                <span id="toggleIcon">▶</span>
+                <span>Advanced Filters</span>
+            </div>
+
+            <!-- Advanced Filters Section -->
+            <div id="advancedSection">
+                <div class="search-grid">
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <select id="gender">
+                            <option value="">All Genders</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Age Range</label>
+                        <div class="date-range">
+                            <input type="number" id="ageMin" placeholder="Min" min="16" max="100">
+                            <input type="number" id="ageMax" placeholder="Max" min="16" max="100">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Balance Range ($)</label>
+                        <div class="date-range">
+                            <input type="number" id="balanceMin" placeholder="Min" min="0">
+                            <input type="number" id="balanceMax" placeholder="Max" min="0">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Enrollment Date</label>
+                        <div class="date-range">
+                            <input type="date" id="enrollFrom">
+                            <input type="date" id="enrollTo">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Citizenship</label>
+                        <select id="citizenship">
+                            <option value="">All</option>
+                            <option value="domestic">Domestic</option>
+                            <option value="international">International</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Payment Status</label>
+                        <select id="paymentStatus">
+                            <option value="">All</option>
+                            <option value="paid">Paid</option>
+                            <option value="pending">Pending</option>
+                            <option value="overdue">Overdue</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="margin-top: 16px; display: flex; gap: 16px;">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="missingEmail">
+                        <label for="missingEmail">Missing Email</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="missingPhone">
+                        <label for="missingPhone">Missing Phone</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="hasInvoices">
+                        <label for="hasInvoices">Has Invoices</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-group" style="margin-top: 24px;">
+                <button class="btn-secondary" onclick="clearFilters()">Clear All</button>
+                <button class="btn-primary" onclick="searchStudents()">Apply Filters</button>
+            </div>
+        </div>
+
+        <!-- Results Table -->
+        <div class="results-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Program</th>
+                        <th>Status</th>
+                        <th>Balance</th>
+                        <th>Enrolled</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="resultsBody">
+                    <!-- Results will be populated here -->
+                </tbody>
+            </table>
+            <div id="loadingMessage" class="loading" style="display: none;">
+                Searching students...
+            </div>
+            <div id="noResults" class="no-results" style="display: none;">
+                <h3>No students found</h3>
+                <p>Try adjusting your search criteria</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data for demonstration
+        const sampleStudents = [
+            {
+                id: '18282',
+                name: 'AA AE LYORUL',
+                email: 'NULL',
+                program: 'Program TBD Evening',
+                status: 'Active',
+                balance: '$0.00',
+                enrolled: 'Jul 15, 2025',
+                hasInvoices: false
+            },
+            {
+                id: '10346',
+                name: 'AEM CHANA មាន ម៉ែន',
+                email: 'No email',
+                program: 'Program TBD',
+                status: 'Active',
+                balance: '$0.00',
+                enrolled: 'Jul 15, 2025',
+                hasInvoices: false
+            },
+            {
+                id: '16679',
+                name: 'AETH PHORLLOUNG អាត ផលុង',
+                email: 'No email',
+                program: 'Program TBD Evening',
+                status: 'Active',
+                balance: '$0.00',
+                enrolled: 'Jul 15, 2025',
+                hasInvoices: false
+            },
+            {
+                id: '5121',
+                name: 'AI ATH អ៊ី អាត',
+                email: 'aiath736@gmail.com',
+                program: 'Program TBD Evening',
+                status: 'Active',
+                balance: '$0.00',
+                enrolled: 'Jul 15, 2025',
+                hasInvoices: true
+            },
+            {
+                id: '17827',
+                name: 'AIE LYHOUNG អៀ លីហួង',
+                email: 'No email',
+                program: 'Program TBD Evening',
+                status: 'Active',
+                balance: '$0.00',
+                enrolled: 'Jul 15, 2025',
+                hasInvoices: true
+            }
+        ];
+
+        function toggleAdvanced() {
+            const section = document.getElementById('advancedSection');
+            const icon = document.getElementById('toggleIcon');
+            
+            if (section.classList.contains('active')) {
+                section.classList.remove('active');
+                icon.textContent = '▶';
+            } else {
+                section.classList.add('active');
+                icon.textContent = '▼';
+            }
+        }
+
+        function clearFilters() {
+            // Clear all input fields
+            document.querySelectorAll('input').forEach(input => {
+                if (input.type === 'checkbox') {
+                    input.checked = false;
+                } else {
+                    input.value = '';
+                }
+            });
+            
+            // Reset all select fields
+            document.querySelectorAll('select').forEach(select => {
+                select.selectedIndex = 0;
+            });
+            
+            // Clear results
+            document.getElementById('resultsBody').innerHTML = '';
+            document.getElementById('resultCount').textContent = '0';
+            document.getElementById('noResults').style.display = 'block';
+        }
+
+        function searchStudents() {
+            const loadingMsg = document.getElementById('loadingMessage');
+            const noResultsMsg = document.getElementById('noResults');
+            const resultsBody = document.getElementById('resultsBody');
+            
+            // Show loading
+            loadingMsg.style.display = 'block';
+            noResultsMsg.style.display = 'none';
+            resultsBody.innerHTML = '';
+            
+            // Simulate search delay
+            setTimeout(() => {
+                loadingMsg.style.display = 'none';
+                
+                // Get filter values
+                const filters = {
+                    studentId: document.getElementById('studentId').value.toLowerCase(),
+                    name: document.getElementById('studentName').value.toLowerCase(),
+                    email: document.getElementById('email').value.toLowerCase(),
+                    program: document.getElementById('program').value,
+                    status: document.getElementById('status').value,
+                    missingEmail: document.getElementById('missingEmail').checked,
+                    hasInvoices: document.getElementById('hasInvoices').checked
+                };
+                
+                // Filter students based on criteria
+                let filteredStudents = sampleStudents.filter(student => {
+                    if (filters.studentId && !student.id.includes(filters.studentId)) return false;
+                    if (filters.name && !student.name.toLowerCase().includes(filters.name)) return false;
+                    if (filters.email && !student.email.toLowerCase().includes(filters.email)) return false;
+                    if (filters.program && !student.program.toLowerCase().includes(filters.program)) return false;
+                    if (filters.status && student.status.toLowerCase() !== filters.status) return false;
+                    if (filters.missingEmail && student.email !== 'No email' && student.email !== 'NULL') return false;
+                    if (filters.hasInvoices && !student.hasInvoices) return false;
+                    return true;
+                });
+                
+                // Display results
+                if (filteredStudents.length > 0) {
+                    document.getElementById('resultCount').textContent = filteredStudents.length;
+                    
+                    filteredStudents.forEach(student => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td><strong>${student.id}</strong></td>
+                            <td>${student.name}</td>
+                            <td>${student.email}</td>
+                            <td>${student.program}</td>
+                            <td><span class="status-badge status-${student.status.toLowerCase()}">${student.status}</span></td>
+                            <td>${student.balance}</td>
+                            <td>${student.enrolled}</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="action-btn btn-view" onclick="viewStudent('${student.id}')">View</button>
+                                    <button class="action-btn btn-edit" onclick="editStudent('${student.id}')">Edit</button>
+                                </div>
+                            </td>
+                        `;
+                        resultsBody.appendChild(row);
+                    });
+                } else {
+                    document.getElementById('resultCount').textContent = '0';
+                    noResultsMsg.style.display = 'block';
+                }
+            }, 500);
+        }
+
+        function viewStudent(id) {
+            alert(`View details for student ID: ${id}`);
+        }
+
+        function editStudent(id) {
+            alert(`Edit student ID: ${id}`);
+        }
+
+        // Initialize with sample data on load
+        window.addEventListener('load', () => {
+            searchStudents();
+        });
+    </script>
+</body>
+</html>

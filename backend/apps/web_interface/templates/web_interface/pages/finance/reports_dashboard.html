@@ -1,0 +1,178 @@
+{% extends "web_interface/base/admin_base.html" %}
+{% load i18n %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .metric-card {
+        @apply bg-white rounded-lg shadow-sm border border-gray-200 p-6 transition-all duration-200;
+    }
+    
+    .metric-card:hover {
+        @apply shadow-md;
+    }
+    
+    .metric-icon {
+        @apply w-12 h-12 rounded-lg flex items-center justify-center;
+    }
+    
+    .metric-value {
+        @apply text-2xl font-bold text-gray-900;
+    }
+    
+    .metric-label {
+        @apply text-sm font-medium text-gray-500;
+    }
+    
+    .metric-change {
+        @apply text-sm font-semibold flex items-center;
+    }
+    
+    .metric-change.positive {
+        @apply text-green-600;
+    }
+    
+    .metric-change.negative {
+        @apply text-red-600;
+    }
+    
+    .chart-container {
+        @apply bg-white rounded-lg shadow-sm border border-gray-200 p-6;
+    }
+    
+    .report-link {
+        @apply flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors duration-200;
+    }
+    
+    .report-icon {
+        @apply w-10 h-10 text-gray-400 mr-4 flex-shrink-0;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Revenue Chart
+    const revenueData = {{ daily_revenue|safe }};
+    const revenueChart = new Chart(document.getElementById('revenueChart'), {
+        type: 'line',
+        data: {
+            labels: revenueData.map(d => {
+                const date = new Date(d.date);
+                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            }),
+            datasets: [{
+                label: 'Daily Revenue',
+                data: revenueData.map(d => d.total),
+                borderColor: 'rgb(79, 70, 229)',
+                backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return '$' + value.toLocaleString();
+                        }
+                    }
+                }
+            },
+            interaction: {
+                intersect: false,
+                mode: 'index'
+            }
+        }
+    });
+
+    // Payment Methods Chart
+    const paymentMethodsData = {{ payment_methods|safe }};
+    const paymentMethodChart = new Chart(document.getElementById('paymentMethodChart'), {
+        type: 'doughnut',
+        data: {
+            labels: paymentMethodsData.map(d => d.label),
+            datasets: [{
+                data: paymentMethodsData.map(d => d.total),
+                backgroundColor: [
+                    '#3B82F6', // Blue
+                    '#10B981', // Green
+                    '#F59E0B', // Yellow
+                    '#EF4444', // Red
+                    '#8B5CF6', // Purple
+                    '#06B6D4', // Cyan
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}
+
+{% block page_header %}
+<div class="page-header">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="page-title">{{ page_title }}</h1>
+            <p class="page-description">Financial overview and key performance metrics</p>
+        </div>
+        <div class="flex space-x-2">
+            <!-- Date Range Selector -->
+            <select hx-get="{% url 'web_interface:reports-dashboard-data' %}"
+                    hx-target="#report-content"
+                    hx-trigger="change"
+                    name="range"
+                    class="sis-select">
+                <option value="7" {% if date_range == "7" %}selected{% endif %}>Last 7 days</option>
+                <option value="30" {% if date_range == "30" %}selected{% endif %}>Last 30 days</option>
+                <option value="90" {% if date_range == "90" %}selected{% endif %}>Last 90 days</option>
+                <option value="365" {% if date_range == "365" %}selected{% endif %}>Last year</option>
+            </select>
+            
+            <!-- Export Options -->
+            <button onclick="exportReport('pdf')" class="sis-btn sis-btn-secondary">
+                <i class="fas fa-file-pdf mr-2"></i>
+                {% trans "Export PDF" %}
+            </button>
+            <button onclick="exportReport('excel')" class="sis-btn sis-btn-secondary">
+                <i class="fas fa-file-excel mr-2"></i>
+                {% trans "Export Excel" %}
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="report-content">
+    {% include "web_interface/partials/reports/dashboard_content.html" %}
+</div>
+
+<script>
+function exportReport(format) {
+    const range = document.querySelector('select[name="range"]').value;
+    window.open(`{% url 'web_interface:export-report' report_type='dashboard' %}?format=${format}&range=${range}`, '_blank');
+}
+</script>
+{% endblock %}

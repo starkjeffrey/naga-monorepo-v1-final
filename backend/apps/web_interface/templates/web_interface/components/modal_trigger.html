@@ -1,0 +1,3 @@
+<button class="{{ classes }}" data-modal="{{ modal_type }}" hx-get="{% url 'web_interface:htmx-modal' modal_type=modal_type %}" hx-target="#modal .modal-content" hx-ext="naga-modal" {% for key, value in attrs.items %}{{ key }}="{{ value }}"{% endfor %}>
+  {{ text }}
+</button>

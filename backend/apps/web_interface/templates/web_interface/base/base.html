@@ -1,0 +1,198 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="{% if LANGUAGE_CODE == 'km' %}km{% else %}en{% endif %}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrf_token }}" />
+    <title>{% block title %}Naga SIS{% endblock %}</title>
+    
+    <!-- Preconnect to improve performance -->
+    <link rel="dns-prefetch" href="//localhost:8000">
+    <link rel="preconnect" href="//localhost:8000">
+    
+    <!-- Critical CSS inline for immediate rendering -->
+    <style>
+      /* Critical above-the-fold styles */
+      body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+      .loading { display: flex; justify-content: center; align-items: center; height: 100vh; }
+      .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; animation: spin 1s linear infinite; }
+      @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+    
+    <!-- Design System Components -->
+    {% include "web_interface/base/base_components_minimal.html" %}
+    
+    <!-- Main CSS - Load synchronously to prevent flash of unstyled content -->
+    <link rel="stylesheet" href="{% static 'web_interface/css/dashboard-optimized.css' %}">
+    
+    {% block extra_css %}{% endblock %}
+    
+    <!-- Dragon Favicon -->
+    <link rel="icon" href="{% static 'favicon.ico' %}" />
+    <link rel="apple-touch-icon" href="{% static 'images/naga-trans.png' %}" />
+    
+    <!-- Initialize CSRF token for HTMX -->
+    <script>
+        window.DashboardApp = window.DashboardApp || {};
+        window.DashboardApp.csrfToken = '{{ csrf_token }}';
+    </script>
+    
+    <!-- HTMX with CDN fallback -->
+    <script src="https://unpkg.com/htmx.org@2.0.3"></script>
+    <script src="{% static 'web_interface/js/htmx-extensions.js' %}" defer></script>
+    
+    <!-- Layout JavaScript for sidebar, language toggle, and theme -->
+    <script src="{% static 'js/layout.js' %}" defer></script>
+    
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js" defer></script>
+    
+    {% block extra_head %}{% endblock %}
+  </head>
+  <body class="{% block body_class %}{% endblock %}">
+    <!-- Alert Container -->
+    <div id="alerts" class="alert-container"></div>
+    
+    <!-- Main Content -->
+    {% block content %}
+      <div class="loading">
+        <div class="spinner"></div>
+      </div>
+    {% endblock %}
+    
+    <!-- Optimized Script Loading -->
+    <script src="{% static 'web_interface/js/dashboard-core.js' %}" defer></script>
+    
+    <!-- Additional Scripts -->
+    {% block extra_js %}{% endblock %}
+    
+    <!-- Django Messages (optimized) -->
+    {% if messages %}
+      <script>
+        window.__messages = [
+          {% for message in messages %}
+            {text: "{{ message|escapejs }}", tags: "{{ message.tags|default:'info' }}"}
+            {%if not forloop.last%},{%endif%}
+          {% endfor %}
+        ];
+      </script>
+    {% endif %}
+    
+    <!-- Enhanced HTMX & WebSocket Configuration -->
+    <script>
+      // CSRF Token Helper Function
+      function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+          const cookies = document.cookie.split(';');
+          for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
+      
+      // HTMX Configuration
+      document.body.addEventListener('htmx:configRequest', (event) => {
+        event.detail.headers['X-CSRFToken'] = getCookie('csrftoken');
+        event.detail.headers['X-Requested-With'] = 'XMLHttpRequest';
+      });
+      
+      // WebSocket Connection Manager
+      window.WebSocketManager = {
+        connections: {},
+        
+        connect: function(endpoint, onMessage, onOpen, onClose) {
+          if (this.connections[endpoint]) {
+            return this.connections[endpoint];
+          }
+          
+          const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+          const wsUrl = `${protocol}//${window.location.host}/ws/${endpoint}/`;
+          
+          const ws = new WebSocket(wsUrl);
+          
+          ws.onopen = function(event) {
+            console.log(`WebSocket connected to ${endpoint}`);
+            if (onOpen) onOpen(event);
+          };
+          
+          ws.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            if (onMessage) onMessage(data);
+          };
+          
+          ws.onclose = function(event) {
+            console.log(`WebSocket disconnected from ${endpoint}`);
+            delete window.WebSocketManager.connections[endpoint];
+            if (onClose) onClose(event);
+          };
+          
+          ws.onerror = function(error) {
+            console.error(`WebSocket error on ${endpoint}:`, error);
+          };
+          
+          this.connections[endpoint] = ws;
+          return ws;
+        },
+        
+        disconnect: function(endpoint) {
+          if (this.connections[endpoint]) {
+            this.connections[endpoint].close();
+            delete this.connections[endpoint];
+          }
+        },
+        
+        send: function(endpoint, message) {
+          if (this.connections[endpoint] && this.connections[endpoint].readyState === WebSocket.OPEN) {
+            this.connections[endpoint].send(JSON.stringify(message));
+          }
+        }
+      };
+      
+      // Initialize WebSocket connections when document is ready
+      document.addEventListener('DOMContentLoaded', function() {
+        // Connect to general notifications
+        window.WebSocketManager.connect('notifications', function(data) {
+          if (data.type === 'notification' || data.type === 'system' || data.type === 'user_message') {
+            window.DashboardApp.showAlert(data.message, data.level || 'info');
+          }
+        });
+        
+        // HTMX Configuration
+        if (typeof htmx !== 'undefined') {
+          htmx.config.defaultSwapStyle = 'innerHTML';
+          htmx.config.defaultSwapDelay = 0;
+          htmx.config.defaultSettleDelay = 20;
+          htmx.config.includeIndicatorStyles = false;
+          htmx.config.requestClass = 'htmx-request';
+        }
+        
+        // Process Django messages
+        if (window.__messages && window.DashboardApp) {
+          window.__messages.forEach(m => window.DashboardApp.showAlert(m.text, m.tags));
+        }
+        
+        // Initialize modal functionality
+        window.addEventListener('htmx:afterSwap', function(event) {
+          // Re-initialize any JavaScript components in swapped content
+          if (window.DashboardApp && window.DashboardApp.initializeComponents) {
+            window.DashboardApp.initializeComponents(event.detail.target);
+          }
+        });
+      });
+      
+      // Cleanup WebSocket connections on page unload
+      window.addEventListener('beforeunload', function() {
+        Object.keys(window.WebSocketManager.connections).forEach(endpoint => {
+          window.WebSocketManager.disconnect(endpoint);
+        });
+      });
+    </script>
+  </body>
+</html>

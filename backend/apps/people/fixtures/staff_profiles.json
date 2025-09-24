@@ -1,0 +1,302 @@
+[
+{
+  "model": "people.staffprofile",
+  "pk": 1,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.805Z",
+    "updated_at": "2025-07-30T06:24:44.805Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 52248,
+    "position": "Head of Administration and HR Office",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 2,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.809Z",
+    "updated_at": "2025-07-30T06:24:44.809Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 61167,
+    "position": "Head of English Program Department",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 3,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.810Z",
+    "updated_at": "2025-07-30T06:24:44.810Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 52587,
+    "position": "Head of Enrollment and Registrar's Office",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 4,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.813Z",
+    "updated_at": "2025-07-30T06:24:44.813Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 52586,
+    "position": "Head of Bookstore",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 5,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.815Z",
+    "updated_at": "2025-07-30T06:24:44.815Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 55241,
+    "position": "Head of Academic Program Department",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 6,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.816Z",
+    "updated_at": "2025-07-30T06:24:44.816Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 55229,
+    "position": "Head of Accounting Office",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 7,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.817Z",
+    "updated_at": "2025-07-30T06:24:44.817Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 54359,
+    "position": "Head of the Information and Testing Center",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 8,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.818Z",
+    "updated_at": "2025-07-30T06:24:44.818Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 59384,
+    "position": "Coordinator of Security & Maintenance Service",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 9,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.820Z",
+    "updated_at": "2025-07-30T06:24:44.820Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 53180,
+    "position": "Cashier",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 10,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.821Z",
+    "updated_at": "2025-07-30T06:24:44.821Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 58909,
+    "position": "Junior Accountant",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 11,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.823Z",
+    "updated_at": "2025-07-30T06:24:44.823Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 60230,
+    "position": "Coordinator, Language Program Department",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 12,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.824Z",
+    "updated_at": "2025-07-30T06:24:44.824Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 62583,
+    "position": "APD Assistant & Community Service Coordinator",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 13,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.825Z",
+    "updated_at": "2025-07-30T06:24:44.825Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 62627,
+    "position": "Librarian",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 14,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.827Z",
+    "updated_at": "2025-07-30T06:24:44.827Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 65026,
+    "position": "Front Desk Assistant",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 15,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.828Z",
+    "updated_at": "2025-07-30T06:24:44.828Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 58326,
+    "position": "Maintenance Assistant",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 16,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.831Z",
+    "updated_at": "2025-07-30T06:24:44.831Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 62749,
+    "position": "Adminstrative Assistant of ITC",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 17,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.832Z",
+    "updated_at": "2025-07-30T06:24:44.832Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 65038,
+    "position": "Enrollment Assistant",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 18,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.834Z",
+    "updated_at": "2025-07-30T06:24:44.834Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 65573,
+    "position": "HR Assistant",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 19,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.837Z",
+    "updated_at": "2025-07-30T06:24:44.837Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 63595,
+    "position": "Librarian Assistant",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+},
+{
+  "model": "people.staffprofile",
+  "pk": 20,
+  "fields": {
+    "created_at": "2025-07-30T06:24:44.838Z",
+    "updated_at": "2025-07-30T06:24:44.838Z",
+    "is_deleted": false,
+    "deleted_at": null,
+    "person": 66637,
+    "position": "Adminstrative Assistant of ITC",
+    "status": "ACTIVE",
+    "start_date": "2025-07-30",
+    "end_date": null
+  }
+}
+]

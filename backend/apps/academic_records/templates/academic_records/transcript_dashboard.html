@@ -1,0 +1,161 @@
+{% extends "web_interface/base/dashboard_base.html" %}
+{% load i18n %}
+
+{% block title %}Academic Records - Transcript Management{% endblock %}
+
+{% block dashboard_content %}
+<div class="max-w-7xl mx-auto px-4 py-6">
+  <!-- Header -->
+  <div class="bg-white shadow-sm rounded-lg mb-6">
+    <div class="px-6 py-4">
+      <div class="flex justify-between items-center">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">{% trans "Academic Records" %}</h1>
+          <p class="text-sm text-gray-500 mt-1">{% trans "Manage transcripts and academic records" %}</p>
+        </div>
+        <div class="flex space-x-2">
+          <button class="btn btn-secondary"
+                  hx-get="{% url 'academic_records:bulk_generate' %}"
+                  hx-target="#modal-content">
+            <i class="fas fa-file-export mr-2"></i>
+            {% trans "Bulk Generate" %}
+          </button>
+          <button class="btn btn-primary"
+                  onclick="openTranscriptWizard()">
+            <i class="fas fa-plus mr-2"></i>
+            {% trans "New Transcript Request" %}
+          </button>
+        </div>
+      </div>
+      
+      <!-- Quick Stats -->
+      <div class="mt-4 grid grid-cols-4 gap-4">
+        <div class="bg-yellow-50 rounded-lg p-3">
+          <div class="text-yellow-600 text-sm">{% trans "Pending Requests" %}</div>
+          <div class="text-2xl font-bold">{{ pending_count }}</div>
+        </div>
+        <div class="bg-green-50 rounded-lg p-3">
+          <div class="text-green-600 text-sm">{% trans "Generated Today" %}</div>
+          <div class="text-2xl font-bold">{{ today_count }}</div>
+        </div>
+        <div class="bg-blue-50 rounded-lg p-3">
+          <div class="text-blue-600 text-sm">{% trans "This Month" %}</div>
+          <div class="text-2xl font-bold">{{ month_count }}</div>
+        </div>
+        <div class="bg-purple-50 rounded-lg p-3">
+          <div class="text-purple-600 text-sm">{% trans "Average GPA" %}</div>
+          <div class="text-2xl font-bold">{{ avg_gpa|floatformat:2 }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="bg-white shadow-sm rounded-lg mb-6 p-4">
+    <div class="flex space-x-4">
+      <!-- Search -->
+      <div class="flex-1">
+        <input type="search"
+               placeholder="{% trans 'Search by student ID or name...' %}"
+               hx-get="{% url 'academic_records:transcript_dashboard' %}"
+               hx-trigger="keyup changed delay:500ms"
+               hx-target="#transcript-list"
+               name="q"
+               class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+      </div>
+      
+      <!-- Status Filter -->
+      <select hx-get="{% url 'academic_records:transcript_dashboard' %}"
+              hx-target="#transcript-list"
+              name="status"
+              class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+        <option value="all">{% trans "All Status" %}</option>
+        <option value="PENDING">{% trans "Pending" %}</option>
+        <option value="IN_PROGRESS">{% trans "In Progress" %}</option>
+        <option value="COMPLETED">{% trans "Completed" %}</option>
+        <option value="CANCELLED">{% trans "Cancelled" %}</option>
+      </select>
+      
+      <!-- Type Filter -->
+      <select name="type" class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+        <option value="all">{% trans "All Types" %}</option>
+        <option value="OFFICIAL">{% trans "Official" %}</option>
+        <option value="UNOFFICIAL">{% trans "Unofficial" %}</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Transcript List -->
+  <div class="bg-white shadow-sm rounded-lg overflow-hidden">
+    <table class="min-w-full">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            {% trans "Request ID" %}
+          </th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            {% trans "Student" %}
+          </th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            {% trans "Type" %}
+          </th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            {% trans "Status" %}
+          </th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            {% trans "Requested" %}
+          </th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            {% trans "Actions" %}
+          </th>
+        </tr>
+      </thead>
+      <tbody id="transcript-list" class="bg-white divide-y divide-gray-200">
+        {% include "academic_records/partials/transcript_list.html" %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Transcript Generation Wizard Modal -->
+<div id="transcript-wizard-modal" class="hidden fixed inset-0 z-50 overflow-y-auto">
+  <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:p-0">
+    <!-- Background overlay -->
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+         onclick="closeTranscriptWizard()"></div>
+    
+    <!-- Modal panel -->
+    <div class="relative inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+      <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-medium text-gray-900">{% trans "Create Transcript Request" %}</h3>
+          <button onclick="closeTranscriptWizard()" class="text-gray-400 hover:text-gray-600">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div id="transcript-wizard-content">
+          <!-- Wizard content loads here -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function openTranscriptWizard() {
+  htmx.ajax('GET', '{% url "academic_records:transcript_wizard" %}', '#transcript-wizard-content')
+    .then(() => {
+      document.getElementById('transcript-wizard-modal').classList.remove('hidden');
+    });
+}
+
+function closeTranscriptWizard() {
+  document.getElementById('transcript-wizard-modal').classList.add('hidden');
+}
+
+// Auto-refresh every 30 seconds
+setInterval(() => {
+  htmx.trigger('#transcript-list', 'refreshTranscripts');
+}, 30000);
+</script>
+{% endblock %}

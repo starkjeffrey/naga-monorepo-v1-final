@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+# Wait for Django to be ready
+sleep 10
+
+# Start Dramatiq worker with evaluation settings
+exec python manage.py rundramatiq \
+    --processes ${DRAMATIQ_PROCESSES:-2} \
+    --threads ${DRAMATIQ_THREADS:-4}

@@ -1145,23 +1145,24 @@ class PhoneNumber(AuditModel):
         return f"{self.number} ({'Preferred' if self.is_preferred else 'Secondary'})"
 
 
-class EmergencyContact(AuditModel):
-    """Emergency contact information for any person.
+class Contact(AuditModel):
+    """Contact information for any person.
 
-    This model stores emergency contact details with relationship tracking
-    and multiple contact methods. It ensures only one primary contact
-    per person through database constraints.
+    This model stores shared contact details that can serve multiple purposes.
+    Each person can have multiple contacts, and each contact can be designated
+    for emergency and/or general situations to avoid data duplication.
 
     Key features:
+    - Shared contact model (no duplication if same person serves both purposes)
+    - Boolean flags for emergency and general contact designation
     - Relationship type tracking
-    - Multiple phone number support
+    - Up to 2 phone numbers per contact
     - Email and address information
-    - Primary contact designation with uniqueness constraint
     - Validation for phone number consistency
     """
 
     class Relationship(models.TextChoices):
-        """Types of relationships for emergency contacts."""
+        """Types of relationships for contacts."""
 
         FATHER = "FATHER", "Father"
         MOTHER = "MOTHER", "Mother"
@@ -1175,7 +1176,7 @@ class EmergencyContact(AuditModel):
 
     person: ForeignKey = models.ForeignKey(
         Person,
-        related_name="emergency_contacts",
+        related_name="contacts",
         on_delete=models.CASCADE,
     )
     name: CharField = models.CharField(max_length=100)
@@ -1192,22 +1193,37 @@ class EmergencyContact(AuditModel):
     secondary_phone: CharField = models.CharField(max_length=100, blank=True)
     email: EmailField = models.EmailField(blank=True)
     address: TextField = models.TextField(blank=True)
-    is_primary: BooleanField = models.BooleanField(default=False)
+
+    # Purpose flags - a single contact can serve multiple purposes
+    is_emergency_contact: BooleanField = models.BooleanField(
+        default=False,
+        help_text=_("Call for medical emergencies, accidents")
+    )
+    is_general_contact: BooleanField = models.BooleanField(
+        default=False,
+        help_text=_("Call for misbehavior, absences, general issues")
+    )
 
     class Meta:
-        verbose_name = "Emergency Contact"
-        verbose_name_plural = "Emergency Contacts"
-        ordering = ["-is_primary", "name"]
+        verbose_name = "Contact"
+        verbose_name_plural = "Contacts"
+        ordering = ["name"]
         constraints = [
-            models.UniqueConstraint(
-                fields=["person", "is_primary"],
-                condition=models.Q(is_primary=True),
-                name="unique_primary_contact",
+            # Ensure at least one purpose is selected
+            models.CheckConstraint(
+                check=models.Q(is_emergency_contact=True) | models.Q(is_general_contact=True),
+                name="contact_must_have_purpose",
             ),
         ]
 
     def __str__(self) -> str:
-        return f"{self.name} - {self.get_relationship_display()}"  # type: ignore[attr-defined]
+        purposes = []
+        if self.is_emergency_contact:
+            purposes.append("Emergency")
+        if self.is_general_contact:
+            purposes.append("General")
+        purpose_str = "/".join(purposes)
+        return f"{self.name} - {self.get_relationship_display()} ({purpose_str})"  # type: ignore[attr-defined]
 
     def clean(self):
         """Validate that primary and secondary phone numbers are different."""
@@ -1215,11 +1231,10 @@ class EmergencyContact(AuditModel):
             msg = "Primary and secondary phone numbers must be different."
             raise ValidationError(msg)
 
-    def save(self, *args, **kwargs):
-        """Save emergency contact with database-enforced uniqueness."""
-        # Database constraint handles primary contact uniqueness
-        # Removed manual update() logic to prevent race conditions
-        super().save(*args, **kwargs)
+        # Ensure at least one purpose is selected
+        if not self.is_emergency_contact and not self.is_general_contact:
+            msg = "Contact must be designated for at least one purpose (emergency or general)."
+            raise ValidationError(msg)
 
 
 # TeacherLeaveRequest moved to scheduling.models

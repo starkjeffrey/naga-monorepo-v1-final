@@ -4,7 +4,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from .models import EmergencyContact, Gender, Person, StudentProfile
+from .models import Contact, Gender, Person, StudentProfile
 
 
 class PersonForm(forms.ModelForm):
@@ -224,11 +224,11 @@ class StudentStatusChangeForm(forms.Form):
             self.fields["new_status"].choices = choices
 
 
-class EmergencyContactForm(forms.ModelForm):
+class ContactForm(forms.ModelForm):
     """Form for emergency contacts."""
 
     class Meta:
-        model = EmergencyContact
+        model = Contact
         fields = [
             "name",
             "relationship",
@@ -236,12 +236,14 @@ class EmergencyContactForm(forms.ModelForm):
             "secondary_phone",
             "email",
             "address",
-            "is_primary",
+            "is_emergency_contact",
+            "is_general_contact",
         ]
         widgets = {
             "address": forms.Textarea(attrs={"rows": 3}),
         }
         help_texts = {
-            "is_primary": _("Check if this is the primary emergency contact"),
+            "is_emergency_contact": _("Check if this contact should be called for medical emergencies"),
+            "is_general_contact": _("Check if this contact should be called for misbehavior/absences"),
             "secondary_phone": _("Optional secondary phone number"),
         }

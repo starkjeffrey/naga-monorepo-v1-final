@@ -979,7 +979,7 @@ class ClassSchedulingService:
         # Fix classes with no sessions
         for class_header in validation_results["issues"]["no_sessions"]:
             if not dry_run:
-                created_count, sessions = class_header.ensure_sessions_exist()
+                created_count, _sessions = class_header.ensure_sessions_exist()
                 fix_results["fixes_applied"]["sessions_created"] += created_count
 
             fix_results["actions_taken"].append(

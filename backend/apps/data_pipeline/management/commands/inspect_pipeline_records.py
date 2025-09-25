@@ -71,7 +71,7 @@ class Command(BaseCommand):
                 self._export_to_csv(table_name, records_to_inspect, options)
 
         except Exception as e:
-            raise CommandError(f"Inspection failed: {e}")
+            raise CommandError(f"Inspection failed: {e}") from e
 
     def _get_stage_table_info(self, table_name: str) -> dict[str, dict]:
         """Get information about all stage tables for the given table"""

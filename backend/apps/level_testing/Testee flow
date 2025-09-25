@@ -1,0 +1,42 @@
+sequenceDiagram
+    autonumber
+    participant Testee as Testee / Applicant
+    participant FD as Front Desk (FD)
+    participant SIS as SIS / Intake System
+    participant PR as QR Printer
+    participant FIN as Finance
+    participant TG as Telegram Bot
+    participant APP as Level Test App
+    participant PROMO as PUC Promo Page
+
+    Note over Testee: 1) Arrives, gets basic info
+    Testee->>Testee: Decides to take a test
+
+    alt Wants to test
+        Note over Testee,FD: 2) Applicant fills slip (EN/KH name, DOB, gender, birthplace)
+        Testee->>FD: Submit slip
+        FD->>SIS: Enter applicant data (EN/KH name, DOB, gender, birthplace)
+        SIS-->>PR: Generate & print QR #1 (basic info)
+        PR-->>Testee: 3) QR #1 (basic info)
+
+        Note over Testee,FIN: 4) Take paper to Finance and pay
+        Testee->>FIN: Present QR #1 & pay
+        FIN->>FIN: Validate payment & stamp
+        FIN-->>Testee: 5) Issue QR #2 (Telegram link)
+
+        Testee->>TG: 6) Scan QR #2 → open Telegram
+        TG-->>Testee: Start bot; capture Telegram ID
+        TG->>SIS: Save Telegram ID (for promotion)
+        TG-->>APP: Install Level Test (speaking, writing, reading, listening)
+        APP-->>Testee: Deliver tests on phone
+
+        Note over FD,TG: 7) FD returns result by Telegram
+        FD->>TG: Send result to student
+        TG-->>Testee: Result delivered
+
+        Note over APP,PROMO: 8) After result, app becomes PUC promo page
+        APP-->>PROMO: Switch UI to events/newsfeed
+        PROMO-->>Testee: Show PUC events; language section disabled
+    else Declines test
+        FD-->>Testee: Provide general info; process ends
+    end

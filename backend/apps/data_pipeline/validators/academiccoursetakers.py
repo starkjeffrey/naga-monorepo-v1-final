@@ -6,7 +6,6 @@ Enforces business rules for student enrollments, grades, and academic performanc
 """
 
 import re
-from datetime import datetime
 
 from pydantic import BaseModel, Field, field_validator, model_validator
 
@@ -47,16 +46,19 @@ class AcademicCourseTakerValidator(BaseModel):
     parsed_term_id: str | None = Field(None, max_length=255, description="Parsed term ID from class_id")
     parsed_course_code: str | None = Field(None, max_length=255, description="Parsed course code")
 
+    # Legacy system identifier
+    legacy_id: int | None = Field(None, description="Legacy system auto-increment primary key (renamed from IPK)")
+
     # Timestamps
-    added_timestamp: datetime | None = Field(None, description="When enrollment was added")
-    last_updated: datetime | None = Field(None, description="Last update timestamp")
+    added_timestamp: str | None = Field(None, description="When enrollment was added (string representation)")
+    last_updated: str | None = Field(None, description="Last update timestamp (string representation)")
 
     class Config:
         """Pydantic configuration"""
 
         str_strip_whitespace = True
         validate_assignment = True
-        extra = "forbid"
+        extra = "ignore"  # Ignore extra fields like parsed columns and processing metadata
 
     @field_validator("student_id")
     @classmethod

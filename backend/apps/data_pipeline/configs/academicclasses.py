@@ -65,7 +65,7 @@ ACADEMICCLASSES_CONFIG = TableConfig(
             target_name="term",
             data_type="nvarchar(20)",
             nullable=True,
-            cleaning_rules=["trim", "standardize_term"],
+            cleaning_rules=["trim"],
             description="Academic term",
             examples=["Fall2023", "Spring2024"],
         ),

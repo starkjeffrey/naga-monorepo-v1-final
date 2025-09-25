@@ -217,11 +217,11 @@ class TestPricingDateConsistency:
         data = setup_test_data
 
         # When pricing for old term, should get old pricing
-        price, description = DefaultPricingService.get_price(data["cycle"], is_foreign=False, term=data["old_term"])
+        price, _description = DefaultPricingService.get_price(data["cycle"], is_foreign=False, term=data["old_term"])
         assert price == Decimal("100.00")
 
         # When pricing for current term, should get current pricing
-        price, description = DefaultPricingService.get_price(
+        price, _description = DefaultPricingService.get_price(
             data["cycle"], is_foreign=False, term=data["current_term"]
         )
         assert price == Decimal("110.00")
@@ -260,13 +260,13 @@ class TestPricingDateConsistency:
         )
 
         # When pricing for old term, should get old pricing
-        price, description = SeniorProjectPricingService.calculate_price(
+        price, _description = SeniorProjectPricingService.calculate_price(
             data["course"], data["student"], data["old_term"], is_foreign=False
         )
         assert price == Decimal("300.00")
 
         # When pricing for current term, should get current pricing
-        price, description = SeniorProjectPricingService.calculate_price(
+        price, _description = SeniorProjectPricingService.calculate_price(
             data["course"], data["student"], data["current_term"], is_foreign=False
         )
         assert price == Decimal("330.00")
@@ -292,7 +292,7 @@ class TestPricingDateConsistency:
         )
 
         # When pricing for old term, should get old pricing
-        price, description = ReadingClassPricingService.calculate_price(
+        price, _description = ReadingClassPricingService.calculate_price(
             class_header, data["student"], is_foreign=False, term=data["old_term"]
         )
         assert price == Decimal("400.00")
@@ -301,7 +301,7 @@ class TestPricingDateConsistency:
         class_header.term = data["current_term"]
         class_header.save()
 
-        price, description = ReadingClassPricingService.calculate_price(
+        price, _description = ReadingClassPricingService.calculate_price(
             class_header, data["student"], is_foreign=False, term=data["current_term"]
         )
         assert price == Decimal("440.00")

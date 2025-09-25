@@ -61,7 +61,7 @@ class Command(BaseCommand):
             if session_count == 0:
                 issues["no_sessions"].append(class_header)
                 if fix_mode:
-                    created, sessions = class_header.ensure_sessions_exist()
+                    created, _sessions = class_header.ensure_sessions_exist()
                     if created > 0:
                         issues["fixed"].append(f"Created {created} sessions for {class_header}")
 

@@ -13,7 +13,6 @@ CRITICAL BUSINESS RULES:
 
 import logging
 from datetime import datetime
-from decimal import Decimal
 
 from django.core.management.base import CommandError
 from django.db import connection, transaction
@@ -36,26 +35,13 @@ class Command(BaseMigrationCommand):
             "duplicate_student_id",
             "missing_required_data",
             "person_creation_failed",
-            "student_profile_creation_failed"
+            "student_profile_creation_failed",
         ]
 
     def add_arguments(self, parser):
-        parser.add_argument(
-            "--dry-run",
-            action="store_true",
-            help="Show what would be loaded without making changes"
-        )
-        parser.add_argument(
-            "--batch-size",
-            type=int,
-            default=500,
-            help="Batch size for processing (default: 500)"
-        )
-        parser.add_argument(
-            "--limit",
-            type=int,
-            help="Limit number of students to process (for testing)"
-        )
+        parser.add_argument("--dry-run", action="store_true", help="Show what would be loaded without making changes")
+        parser.add_argument("--batch-size", type=int, default=500, help="Batch size for processing (default: 500)")
+        parser.add_argument("--limit", type=int, help="Limit number of students to process (for testing)")
 
     def execute_migration(self, *args, **options):
         self.dry_run = options.get("dry_run", False)
@@ -78,8 +64,7 @@ class Command(BaseMigrationCommand):
             total_students = cursor.fetchone()[0]
 
         self.record_input_stats(
-            total_records=total_students,
-            source_file="students_stage3_cleaned (data pipeline stage3)"
+            total_records=total_students, source_file="students_stage3_cleaned (data pipeline stage3)"
         )
 
         self.stdout.write(f"📊 Processing {total_students:,} students from pipeline stage3")
@@ -142,34 +127,32 @@ class Command(BaseMigrationCommand):
         """Process a batch of student records"""
 
         for record in batch:
-            (student_id, name_english, name_khmer, email_personal,
-             mobile_phone, birth_date, gender, nationality) = record
+            (student_id, name_english, name_khmer, email_personal, mobile_phone, birth_date, gender, nationality) = (
+                record
+            )
 
             try:
                 self.process_single_student(
-                    student_id, name_english, name_khmer, email_personal,
-                    mobile_phone, birth_date, gender, nationality
+                    student_id, name_english, name_khmer, email_personal, mobile_phone, birth_date, gender, nationality
                 )
 
             except Exception as e:
                 self.record_rejection(
                     category="student_profile_creation_failed",
                     record_id=student_id,
-                    reason=f"Failed to process student: {str(e)}"
+                    reason=f"Failed to process student: {e!s}",
                 )
                 logger.error("Failed to process student %s: %s", student_id, e)
 
-    def process_single_student(self, student_id, name_english, name_khmer,
-                              email_personal, mobile_phone, birth_date,
-                              gender, nationality):
+    def process_single_student(
+        self, student_id, name_english, name_khmer, email_personal, mobile_phone, birth_date, gender, nationality
+    ):
         """Process a single student record"""
 
         # Validate student_id
         if not student_id or not str(student_id).strip():
             self.record_rejection(
-                category="missing_student_id",
-                record_id="unknown",
-                reason="Empty or null student_id"
+                category="missing_student_id", record_id="unknown", reason="Empty or null student_id"
             )
             return
 
@@ -179,16 +162,14 @@ class Command(BaseMigrationCommand):
             self.record_rejection(
                 category="invalid_student_id",
                 record_id=student_id,
-                reason=f"Cannot convert student_id to integer: {student_id}"
+                reason=f"Cannot convert student_id to integer: {student_id}",
             )
             return
 
         # Check for duplicate
         if not self.dry_run and StudentProfile.objects.filter(student_id=student_id_int).exists():
             self.record_rejection(
-                category="duplicate_student_id",
-                record_id=student_id,
-                reason=f"Student {student_id} already exists"
+                category="duplicate_student_id", record_id=student_id, reason=f"Student {student_id} already exists"
             )
             return
 
@@ -199,11 +180,18 @@ class Command(BaseMigrationCommand):
         if not self.dry_run:
             with transaction.atomic():
                 person = self.create_person_record(
-                    first_name, last_name, name_khmer, email_personal,
-                    mobile_phone, birth_date, gender, nationality, student_id
+                    first_name,
+                    last_name,
+                    name_khmer,
+                    email_personal,
+                    mobile_phone,
+                    birth_date,
+                    gender,
+                    nationality,
+                    student_id,
                 )
 
-                student = self.create_student_profile(student_id_int, person)
+                self.create_student_profile(student_id_int, person)
 
         self.record_success("student_created", 1)
 
@@ -215,13 +203,13 @@ class Command(BaseMigrationCommand):
         name_english = name_english.strip()
 
         # Handle "Last, First" format
-        if ',' in name_english:
-            parts = name_english.split(',', 1)
+        if "," in name_english:
+            parts = name_english.split(",", 1)
             last_name = parts[0].strip()
             first_name = parts[1].strip() if len(parts) > 1 else "Unknown"
         # Handle "First Last" format
-        elif ' ' in name_english:
-            parts = name_english.split(' ', 1)
+        elif " " in name_english:
+            parts = name_english.split(" ", 1)
             first_name = parts[0].strip()
             last_name = parts[1].strip() if len(parts) > 1 else "Unknown"
         # Single name - use as first name
@@ -281,41 +269,51 @@ class Command(BaseMigrationCommand):
         """Return actual email if valid, otherwise null (no synthetic generation)"""
 
         # Only use email_personal if it's a valid email format
-        if email_personal and '@' in str(email_personal) and len(str(email_personal)) > 5:
+        if email_personal and "@" in str(email_personal) and len(str(email_personal)) > 5:
             email_personal = str(email_personal).strip()
             # Check if it looks like an actual email (not phone numbers, 'Nurse', etc.)
-            if not any(invalid in email_personal for invalid in [' ', '(', ')', 'Nurse', '0', '012', '017', '090']):
+            if not any(invalid in email_personal for invalid in [" ", "(", ")", "Nurse", "0", "012", "017", "090"]):
                 # Additional check for basic email format
-                if email_personal.count('@') == 1 and '.' in email_personal.split('@')[1]:
+                if email_personal.count("@") == 1 and "." in email_personal.split("@")[1]:
                     return email_personal
 
         # Return None for null email (students before 2018 or bad data)
         return None
 
-    def create_person_record(self, first_name, last_name, name_khmer, email_personal,
-                           mobile_phone, birth_date, gender, nationality, student_id):
+    def create_person_record(
+        self,
+        first_name,
+        last_name,
+        name_khmer,
+        email_personal,
+        mobile_phone,
+        birth_date,
+        gender,
+        nationality,
+        student_id,
+    ):
         """Create Person record"""
 
         # Generate a unique email address
         school_email = self.generate_unique_email(email_personal, student_id)
 
         person_data = {
-            'family_name': last_name[:50] if last_name else "Unknown",  # Ensure fits in field
-            'personal_name': first_name[:50] if first_name else "Unknown",
+            "family_name": last_name[:50] if last_name else "Unknown",  # Ensure fits in field
+            "personal_name": first_name[:50] if first_name else "Unknown",
         }
 
         # Only add school_email if we have a valid one
         if school_email:
-            person_data['school_email'] = school_email
+            person_data["school_email"] = school_email
 
         # Add optional fields if available
         if gender:
-            person_data['preferred_gender'] = gender[:1].upper() if len(gender) > 0 else None
+            person_data["preferred_gender"] = gender[:1].upper() if len(gender) > 0 else None
 
         # Parse birth date with proper error handling
         parsed_birth_date = self.parse_birth_date(birth_date)
         if parsed_birth_date:
-            person_data['date_of_birth'] = parsed_birth_date
+            person_data["date_of_birth"] = parsed_birth_date
 
         person = Person.objects.create(**person_data)
 
@@ -325,10 +323,7 @@ class Command(BaseMigrationCommand):
     def create_student_profile(self, student_id_int, person):
         """Create StudentProfile record"""
 
-        student = StudentProfile.objects.create(
-            student_id=student_id_int,
-            person=person
-        )
+        student = StudentProfile.objects.create(student_id=student_id_int, person=person)
 
         self.record_success("student_profile_created", 1)
         return student
@@ -336,9 +331,9 @@ class Command(BaseMigrationCommand):
     def generate_final_report(self):
         """Generate final migration report"""
 
-        self.stdout.write("\n" + "="*60)
+        self.stdout.write("\n" + "=" * 60)
         self.stdout.write("🎯 PRODUCTION STUDENT LOADER RESULTS")
-        self.stdout.write("="*60)
+        self.stdout.write("=" * 60)
 
         # Get current statistics
         stats = {}
@@ -347,12 +342,12 @@ class Command(BaseMigrationCommand):
             created_students = StudentProfile.objects.count()
             created_persons = Person.objects.count()
 
-            self.stdout.write(f"📊 Processing Statistics:")
+            self.stdout.write("📊 Processing Statistics:")
             self.stdout.write(f"   Students created: {stats.get('student_created', 0):,}")
             self.stdout.write(f"   Persons created: {stats.get('person_created', 0):,}")
             self.stdout.write(f"   Student profiles created: {stats.get('student_profile_created', 0):,}")
 
-            self.stdout.write(f"\n📈 Final Counts:")
+            self.stdout.write("\n📈 Final Counts:")
             self.stdout.write(f"   Total StudentProfile records: {created_students:,}")
             self.stdout.write(f"   Total Person records: {created_persons:,}")
 

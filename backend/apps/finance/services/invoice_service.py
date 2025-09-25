@@ -352,7 +352,7 @@ class InvoiceService:
 
         # Record transaction
         FinancialTransactionService.record_transaction(
-            transaction_type=cast("_Any", FinancialTransaction.TransactionType).INVOICE_MODIFIED,
+            transaction_type=cast("Any", FinancialTransaction.TransactionType).INVOICE_MODIFIED,
             student=invoice.student,
             amount=price,
             currency=currency,

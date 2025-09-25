@@ -157,7 +157,7 @@ class AcademicStructureService:
         """
         with transaction.atomic():
             # Create or get division
-            division, created = Division.objects.get_or_create(
+            division, _created = Division.objects.get_or_create(
                 name=division_name,
                 defaults={
                     "short_name": division_name[:10].upper(),

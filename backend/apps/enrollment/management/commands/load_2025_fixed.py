@@ -12,17 +12,14 @@ Uses processed data from academiccoursetakers_stage3_cleaned with parsed course 
 """
 
 import logging
-from collections import defaultdict
-from datetime import datetime
 
-from django.core.management.base import CommandError
-from django.db import connection, transaction
+from django.db import connection
 
 from apps.common.management.base_migration import BaseMigrationCommand
 from apps.curriculum.models import Course, Term
 from apps.enrollment.models import ClassHeaderEnrollment
 from apps.people.models import StudentProfile
-from apps.scheduling.models import ClassHeader, ClassPart, ClassSession
+from apps.scheduling.models import ClassHeader, ClassPart
 
 logger = logging.getLogger(__name__)
 
@@ -39,26 +36,13 @@ class Command(BaseMigrationCommand):
             "missing_term",
             "invalid_data",
             "duplicate_enrollment",
-            "processing_error"
+            "processing_error",
         ]
 
     def add_arguments(self, parser):
-        parser.add_argument(
-            "--dry-run",
-            action="store_true",
-            help="Show what would be loaded without making changes"
-        )
-        parser.add_argument(
-            "--limit",
-            type=int,
-            help="Limit number of records to process"
-        )
-        parser.add_argument(
-            "--batch-size",
-            type=int,
-            default=100,
-            help="Batch size for processing"
-        )
+        parser.add_argument("--dry-run", action="store_true", help="Show what would be loaded without making changes")
+        parser.add_argument("--limit", type=int, help="Limit number of records to process")
+        parser.add_argument("--batch-size", type=int, default=100, help="Batch size for processing")
 
     def execute_migration(self, *args, **options):
         self.dry_run = options.get("dry_run", False)
@@ -81,8 +65,7 @@ class Command(BaseMigrationCommand):
             total_2025_records = cursor.fetchone()[0]
 
         self.record_input_stats(
-            total_records=total_2025_records,
-            source_file="academiccoursetakers_stage3_cleaned (2025 terms only)"
+            total_records=total_2025_records, source_file="academiccoursetakers_stage3_cleaned (2025 terms only)"
         )
 
         # Load reference data
@@ -112,12 +95,12 @@ class Command(BaseMigrationCommand):
 
         # Load existing students
         student_count = StudentProfile.objects.count()
-        for student in StudentProfile.objects.select_related('person'):
+        for student in StudentProfile.objects.select_related("person"):
             # Cache by both student_id and zero-padded formats
             self.student_cache[str(student.student_id)] = student
             self.student_cache[str(student.student_id).zfill(5)] = student
 
-        self.stdout.write(f"📋 Reference Data Loaded:")
+        self.stdout.write("📋 Reference Data Loaded:")
         self.stdout.write(f"   Courses: {course_count:,}")
         self.stdout.write(f"   Terms: {term_count:,}")
         self.stdout.write(f"   Students: {student_count:,}")
@@ -175,46 +158,69 @@ class Command(BaseMigrationCommand):
         """Process a batch of enrollment records"""
 
         for record in batch:
-            (student_id, class_id, parsed_course_code, parsed_term_id,
-             final_grade, credit_hours, grade_points, attendance_status,
-             is_passed, legacy_id) = record
+            (
+                student_id,
+                class_id,
+                parsed_course_code,
+                parsed_term_id,
+                final_grade,
+                credit_hours,
+                grade_points,
+                attendance_status,
+                is_passed,
+                legacy_id,
+            ) = record
 
             try:
                 self.process_single_enrollment(
-                    student_id, class_id, parsed_course_code, parsed_term_id,
-                    final_grade, credit_hours, grade_points, attendance_status,
-                    is_passed, legacy_id
+                    student_id,
+                    class_id,
+                    parsed_course_code,
+                    parsed_term_id,
+                    final_grade,
+                    credit_hours,
+                    grade_points,
+                    attendance_status,
+                    is_passed,
+                    legacy_id,
                 )
 
             except Exception as e:
                 self.record_rejection(
-                    category="processing_error",
-                    record_id=legacy_id,
-                    reason=f"Failed to process enrollment: {str(e)}"
+                    category="processing_error", record_id=legacy_id, reason=f"Failed to process enrollment: {e!s}"
                 )
                 logger.error("Failed to process enrollment %s: %s", legacy_id, e)
 
-    def process_single_enrollment(self, student_id, class_id, parsed_course_code,
-                                parsed_term_id, final_grade, credit_hours,
-                                grade_points, attendance_status, is_passed, legacy_id):
+    def process_single_enrollment(
+        self,
+        student_id,
+        class_id,
+        parsed_course_code,
+        parsed_term_id,
+        final_grade,
+        credit_hours,
+        grade_points,
+        attendance_status,
+        is_passed,
+        legacy_id,
+    ):
         """Process a single enrollment record"""
 
         # Validate required data exists in SIS
-        missing_deps = []
 
         if student_id not in self.student_cache:
             self.record_rejection(
-                category="missing_student",
-                record_id=legacy_id,
-                reason=f"Student {student_id} not found in SIS"
+                category="missing_student", record_id=legacy_id, reason=f"Student {student_id} not found in SIS"
             )
             return
 
-        if parsed_course_code not in self.course_cache:
+        # Apply normalization to check if course exists
+        normalized_course_code = self.normalize_course_code(parsed_course_code)
+        if normalized_course_code not in self.course_cache:
             self.record_rejection(
                 category="missing_course",
                 record_id=legacy_id,
-                reason=f"Course {parsed_course_code} not found in SIS Course table"
+                reason=f"Course {parsed_course_code} -> {normalized_course_code} not found in SIS Course table",
             )
             return
 
@@ -224,7 +230,7 @@ class Command(BaseMigrationCommand):
             self.record_rejection(
                 category="missing_term",
                 record_id=legacy_id,
-                reason=f"Term {base_term_code} not found in SIS Term table"
+                reason=f"Term {base_term_code} not found in SIS Term table",
             )
             return
 
@@ -234,40 +240,89 @@ class Command(BaseMigrationCommand):
         if not self.dry_run:
             # Create class structure and enrollment
             self.create_class_and_enrollment(
-                student_id, class_id, parsed_course_code, parsed_term_id,
-                final_grade, credit_hours, grade_points, attendance_status,
-                is_passed, legacy_id
+                student_id,
+                class_id,
+                parsed_course_code,
+                parsed_term_id,
+                final_grade,
+                credit_hours,
+                grade_points,
+                attendance_status,
+                is_passed,
+                legacy_id,
             )
 
-    def create_class_and_enrollment(self, student_id, class_id, parsed_course_code,
-                                   parsed_term_id, final_grade, credit_hours,
-                                   grade_points, attendance_status, is_passed, legacy_id):
+    def create_class_and_enrollment(
+        self,
+        student_id,
+        class_id,
+        parsed_course_code,
+        parsed_term_id,
+        final_grade,
+        credit_hours,
+        grade_points,
+        attendance_status,
+        is_passed,
+        legacy_id,
+    ):
         """Create class structure and enrollment based on course type"""
 
         student = self.student_cache[student_id]
-        course = self.course_cache[parsed_course_code]
+
+        # Apply normalization to get the correct course code
+        normalized_course_code = self.normalize_course_code(parsed_course_code)
+        course = self.course_cache[normalized_course_code]
+
         base_term_code = parsed_term_id[:6] if len(parsed_term_id) >= 6 else parsed_term_id
         term = self.term_cache[base_term_code]
 
         # Determine class structure based on course type
         if self.is_ieap_course(parsed_course_code):
             # IEAP: ClassHeader → ClassSession → ClassPart (2 parts)
-            class_header, class_session, class_part = self.create_ieap_class_structure(
-                course, term, class_id
-            )
+            class_header, _class_session, class_part = self.create_ieap_class_structure(course, term, class_id)
         else:
             # EHSS/GESL/WKEND: ClassHeader → ClassPart (no session)
-            class_header, class_part = self.create_standard_class_structure(
-                course, term, class_id
-            )
+            class_header, _class_part = self.create_standard_class_structure(course, term, class_id)
 
         # Create enrollment
-        enrollment = self.create_enrollment(
-            student, class_header, final_grade, credit_hours,
-            grade_points, attendance_status, is_passed
+        self.create_enrollment(
+            student, class_header, final_grade, credit_hours, grade_points, attendance_status, is_passed
         )
 
         self.record_success("enrollment_created", 1)
+
+    def normalize_course_code(self, parsed_code):
+        """Convert parsed course code to normalized course code (matches Course.code field)
+
+        This applies the normalization logic from yesterday's 4-hour parsing work.
+        Examples: EHSS-1A -> EHSS-01, GESL-2B -> GESL-02, IEAP-3C -> IEAP-03
+        """
+        import re
+
+        if not parsed_code:
+            return None
+
+        # EHSS patterns: EHSS-1A -> EHSS-01
+        ehss_match = re.match(r"^EHSS-(\d+)([ABCD]?)$", parsed_code, re.IGNORECASE)
+        if ehss_match:
+            level = ehss_match.group(1).zfill(2)
+            return f"EHSS-{level}"
+
+        # GESL patterns: GESL-1A -> GESL-01
+        gesl_match = re.match(r"^GESL-(\d+)([ABCD]?)$", parsed_code, re.IGNORECASE)
+        if gesl_match:
+            level = gesl_match.group(1).zfill(2)
+            return f"GESL-{level}"
+
+        # IEAP patterns: IEAP-1A -> IEAP-01
+        ieap_match = re.match(r"^IEAP-(\d+)([ABCD]?)$", parsed_code, re.IGNORECASE)
+        if ieap_match:
+            level = ieap_match.group(1).zfill(2)
+            return f"IEAP-{level}"
+
+        # For complex combinations or academic courses, return as-is
+        # These should match existing course codes directly
+        return parsed_code
 
     def is_ieap_course(self, course_code):
         """Check if this is an IEAP course that needs sessions"""
@@ -287,10 +342,7 @@ class Command(BaseMigrationCommand):
             course=course,
             term=term,
             section="A",  # Default section
-            defaults={
-                'max_enrollment': 25,
-                'current_enrollment': 0
-            }
+            defaults={"max_enrollment": 25, "current_enrollment": 0},
         )
 
         if created:
@@ -298,12 +350,7 @@ class Command(BaseMigrationCommand):
 
         # Create or get ClassPart
         class_part, created = ClassPart.objects.get_or_create(
-            class_header=class_header,
-            part_type="Main",
-            defaults={
-                'max_enrollment': 25,
-                'current_enrollment': 0
-            }
+            class_header=class_header, part_type="Main", defaults={"max_enrollment": 25, "current_enrollment": 0}
         )
 
         if created:
@@ -311,20 +358,21 @@ class Command(BaseMigrationCommand):
 
         return class_header, class_part
 
-    def create_enrollment(self, student, class_header, final_grade, credit_hours,
-                         grade_points, attendance_status, is_passed):
+    def create_enrollment(
+        self, student, class_header, final_grade, credit_hours, grade_points, attendance_status, is_passed
+    ):
         """Create enrollment record"""
 
-        enrollment, created = ClassHeaderEnrollment.objects.get_or_create(
+        enrollment, _created = ClassHeaderEnrollment.objects.get_or_create(
             student_profile=student,
             class_header=class_header,
             defaults={
-                'enrollment_status': 'enrolled',
-                'final_grade': final_grade,
-                'grade_points': grade_points,
-                'credits_earned': credit_hours if is_passed else 0,
-                'attendance_status': attendance_status,
-            }
+                "enrollment_status": "enrolled",
+                "final_grade": final_grade,
+                "grade_points": grade_points,
+                "credits_earned": credit_hours if is_passed else 0,
+                "attendance_status": attendance_status,
+            },
         )
 
         return enrollment
@@ -332,20 +380,20 @@ class Command(BaseMigrationCommand):
     def generate_final_report(self):
         """Generate final migration report"""
 
-        self.stdout.write("\n" + "="*60)
+        self.stdout.write("\n" + "=" * 60)
         self.stdout.write("🎯 FIXED 2025 LOADER RESULTS")
-        self.stdout.write("="*60)
+        self.stdout.write("=" * 60)
 
         # Get current statistics
         stats = self.get_migration_stats()
 
-        self.stdout.write(f"📊 Processing Statistics:")
+        self.stdout.write("📊 Processing Statistics:")
         self.stdout.write(f"   Validated enrollments: {stats.get('validated_enrollment', 0):,}")
         self.stdout.write(f"   Enrollments created: {stats.get('enrollment_created', 0):,}")
         self.stdout.write(f"   Class headers created: {stats.get('class_header_created', 0):,}")
         self.stdout.write(f"   Class parts created: {stats.get('class_part_created', 0):,}")
 
-        self.stdout.write(f"\n❌ Rejections by category:")
+        self.stdout.write("\n❌ Rejections by category:")
         rejection_stats = self.get_rejection_stats()
         for category, count in rejection_stats.items():
             self.stdout.write(f"   {category}: {count:,}")

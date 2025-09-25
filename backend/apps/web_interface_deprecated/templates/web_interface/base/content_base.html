@@ -1,0 +1,27 @@
+{% load static %}
+{% load i18n %}
+{% load web_interface_tags %}
+<!DOCTYPE html>
+<html lang="{% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% trans "Naga SIS" %}{% endblock %}</title>
+
+    <!-- Core Styles -->
+    <link rel="stylesheet" href="{% static 'web_interface/css/naga-unified.css' %}">
+
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.8.4"></script>
+
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="{% block body_class %}content-page{% endblock %}">
+    <!-- Content Container for HTMX target -->
+    <div class="content-container">
+        {% block content %}{% endblock %}
+    </div>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

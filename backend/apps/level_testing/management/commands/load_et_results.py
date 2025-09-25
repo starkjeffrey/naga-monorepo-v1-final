@@ -8,6 +8,8 @@ Usage:
         python manage.py load_et_results data/legacy/all_et_results_250802.csv
 """
 
+# ruff: noqa: E501
+
 from datetime import datetime
 
 import pandas as pd

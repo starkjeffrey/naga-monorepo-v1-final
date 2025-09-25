@@ -1196,12 +1196,10 @@ class Contact(AuditModel):
 
     # Purpose flags - a single contact can serve multiple purposes
     is_emergency_contact: BooleanField = models.BooleanField(
-        default=False,
-        help_text=_("Call for medical emergencies, accidents")
+        default=False, help_text=_("Call for medical emergencies, accidents")
     )
     is_general_contact: BooleanField = models.BooleanField(
-        default=False,
-        help_text=_("Call for misbehavior, absences, general issues")
+        default=False, help_text=_("Call for misbehavior, absences, general issues")
     )
 
     class Meta:

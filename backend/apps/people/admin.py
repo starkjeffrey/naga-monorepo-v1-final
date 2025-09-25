@@ -20,7 +20,7 @@ from django.utils.html import format_html
 from apps.common.utils import format_student_id
 
 from .models import (
-    EmergencyContact,
+    Contact,
     Person,
     PersonEventLog,
     PhoneNumber,
@@ -47,19 +47,19 @@ class PhoneNumberInline(admin.TabularInline):
     ordering = ["-is_preferred", "number"]
 
 
-class EmergencyContactInline(admin.TabularInline):
+class ContactInline(admin.TabularInline):
     """Inline for managing person's emergency contacts."""
 
-    model = EmergencyContact
+    model = Contact
     extra = 1
     fields = [
         "name",
         "relationship",
         "primary_phone",
         "email",
-        "is_primary",
+        "is_emergency_contact",
     ]
-    ordering = ["-is_primary", "name"]
+    ordering = ["-is_emergency_contact", "name"]
 
 
 class StudentPhotoInline(admin.TabularInline):
@@ -217,7 +217,7 @@ class PersonAdmin(admin.ModelAdmin):
         ),
     )
 
-    inlines = [PhoneNumberInline, EmergencyContactInline, StudentPhotoInline]
+    inlines = [PhoneNumberInline, ContactInline, StudentPhotoInline]
 
     def get_queryset(self, request):
         """Optimize queryset to prevent N+1 queries for phone count."""
@@ -262,10 +262,10 @@ class PersonAdmin(admin.ModelAdmin):
         return "No photo"
 
 
-class EmergencyContactInlineForStudent(admin.TabularInline):
+class ContactInlineForStudent(admin.TabularInline):
     """Inline for managing student's emergency contacts through their Person."""
 
-    model = EmergencyContact
+    model = Contact
     extra = 0
     fields = [
         "name",
@@ -273,9 +273,9 @@ class EmergencyContactInlineForStudent(admin.TabularInline):
         "primary_phone",
         "secondary_phone",
         "email",
-        "is_primary",
+        "is_emergency_contact",
     ]
-    ordering = ["-is_primary", "name"]
+    ordering = ["-is_emergency_contact", "name"]
     verbose_name = "Emergency Contact"
     verbose_name_plural = "Emergency Contacts"
 
@@ -338,7 +338,7 @@ class StudentProfileAdmin(admin.ModelAdmin):
     ]
     autocomplete_fields = ["person"]
     date_hierarchy = "last_enrollment_date"
-    # inlines = [EmergencyContactInlineForStudent]  # Emergency contacts are on Person, not StudentProfile
+    # inlines = [ContactInlineForStudent]  # Emergency contacts are on Person, not StudentProfile
 
     def get_queryset(self, request):
         """Optimize queryset to prevent N+1 queries for person access."""
@@ -818,8 +818,8 @@ class PhoneNumberAdmin(admin.ModelAdmin):
         return obj.person.full_name
 
 
-@admin.register(EmergencyContact)
-class EmergencyContactAdmin(admin.ModelAdmin):
+@admin.register(Contact)
+class ContactAdmin(admin.ModelAdmin):
     """Admin interface for emergency contacts."""
 
     list_display = [
@@ -828,12 +828,14 @@ class EmergencyContactAdmin(admin.ModelAdmin):
         "relationship",
         "primary_phone",
         "email",
-        "is_primary",
+        "is_emergency_contact",
+        "is_general_contact",
         "created_at",
     ]
     list_filter = [
         "relationship",
-        "is_primary",
+        "is_emergency_contact",
+        "is_general_contact",
         "created_at",
     ]
     search_fields = [
@@ -843,7 +845,7 @@ class EmergencyContactAdmin(admin.ModelAdmin):
         "primary_phone",
         "email",
     ]
-    ordering = ["person", "-is_primary", "name"]
+    ordering = ["person", "-is_emergency_contact", "name"]
     readonly_fields = ["created_at", "updated_at"]
     autocomplete_fields = ["person"]
 
@@ -866,7 +868,7 @@ class EmergencyContactAdmin(admin.ModelAdmin):
                 ),
             },
         ),
-        ("Configuration", {"fields": ("is_primary",)}),
+        ("Purpose", {"fields": ("is_emergency_contact", "is_general_contact")}),
         (
             "Audit Information",
             {

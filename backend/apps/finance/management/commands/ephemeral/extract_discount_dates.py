@@ -8,6 +8,7 @@ and populate Term.discount_end_date fields for automatic discount system.
 import re
 from collections import Counter, defaultdict
 from datetime import date, datetime, timedelta
+from typing import Any
 
 from django.core.management.base import BaseCommand
 from django.db import transaction

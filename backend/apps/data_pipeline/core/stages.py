@@ -298,6 +298,12 @@ class Stage3Clean:
             elif self.config.table_name == "receipt_headers":
                 df = self._clean_financial_records(df)
 
+            # Rename columns according to configuration mapping
+            df = self._apply_column_mapping(df)
+
+            # Fix data consistency issues
+            df = self._fix_data_consistency(df)
+
             # Create supplemental records if needed
             supplemental_records = self._create_supplemental_records(df)
 
@@ -362,7 +368,10 @@ class Stage3Clean:
 
         # Mark records that need special handling
         df["needs_class_session"] = df["parsed_program"].isin(["IEAP", "GEP"])
-        df["_has_multiple_components"] = df["parsed_component_name"].notna()
+        if "parsed_component_name" in df.columns:
+            df["_has_multiple_components"] = df["parsed_component_name"].notna()
+        else:
+            df["_has_multiple_components"] = False
 
         return df
 
@@ -375,7 +384,20 @@ class Stage3Clean:
             if pd.isna(classid) or not classid:
                 return {}
 
-            parts = str(classid).split("-")
+            # First split by the main delimiter pattern
+            if "!$" in str(classid):
+                # Modern format: TERM-PROGRAM_INFO with !$ delimiters
+                # e.g., 250426M-T2!$147!$W!$MED!$EDUC-565
+                term_part = str(classid).split("-")[0]  # e.g., 250426M
+                remaining = str(classid)[len(term_part) + 1 :]  # e.g., T2!$147!$W!$MED!$EDUC-565
+                parts_by_exclaim = remaining.split("!$")  # Split by !$
+
+                # Reconstruct parts array
+                parts = [term_part, *parts_by_exclaim]
+            else:
+                # Legacy format: split by dash only
+                parts = str(classid).split("-")
+
             if len(parts) < 4:
                 return {"parse_error": f"Invalid format: only {len(parts)} parts"}
 
@@ -404,7 +426,7 @@ class Stage3Clean:
             result["parsed_time_of_day"] = parts[2] if len(parts) > 2 else None
 
             # Determine if this is academic or language based on program
-            is_language_class = result["parsed_program"] in ["IEAP", "GEP"]
+            is_language_class = result["parsed_program"] in ["IEAP", "GEP", "Computer"]
 
             # Part 4: Complex parsing based on class type
             if len(parts) > 3:
@@ -414,8 +436,11 @@ class Stage3Clean:
                     # Language class: part4 contains course + section
                     parsed_part4 = self._parse_language_part4(part4, result["parsed_program"])
                     result.update(parsed_part4)
+                elif result["parsed_program"] in ["BA", "MA"]:
+                    # BA/MA classes: ignore part 4, use legacy_classid if needed for analysis
+                    pass
                 else:
-                    # Academic class: part4 is target audience indicator
+                    # Other academic classes: part4 is target audience indicator
                     result["parsed_target_audience"] = part4
 
             # Part 5: Course code (academic) or component name (language)
@@ -423,6 +448,7 @@ class Stage3Clean:
                 if is_language_class:
                     result["parsed_component_name"] = parts[4]  # e.g., "Grammar", "Speaking"
                 else:
+                    # For all academic classes (including BA/MA): part 5 is the course code
                     result["parsed_course_code"] = parts[4]
 
             # Build standardized course code
@@ -455,6 +481,29 @@ class Stage3Clean:
                         "parsed_section": m.group(2) if m.group(2) else "A",
                     },
                 ),
+                # IEAP Exception: BEGINNER/E, BEGINNER/M for program 582
+                (
+                    r"^BEGINNER/([EM])$",
+                    lambda m: {
+                        "parsed_course": "IEAP-BEG",  # IEAP-BEG is the course name
+                        "parsed_level": "01",  # Beginner level
+                        "parsed_section": "A",  # Default section
+                        "parsed_time": m.group(1),  # E=evening, M=morning
+                    }
+                    if program == "582"
+                    else None,  # Only apply for IEAP program
+                ),
+                # Computer Exception: FREE/COMPUTER for program 2076 (Computer)
+                (
+                    r"^FREE/COMPUTER$",
+                    lambda m: {
+                        "parsed_course": "IEAP-COMP",  # IEAP-COMP is the course name
+                        "parsed_level": "01",  # Free computer class level
+                        "parsed_section": "A",  # Default section
+                    }
+                    if program == "Computer"
+                    else None,  # Only apply for Computer program
+                ),
                 # Pattern: GESL-1B, GESL-1SPLIT (course-level-section with dash)
                 (
                     r"^([A-Z]+)-(\d+)([A-Z]+)$",
@@ -462,7 +511,7 @@ class Stage3Clean:
                         "parsed_course": m.group(1),
                         "parsed_level": f"{int(m.group(2)):02d}",
                         "parsed_section": m.group(3),  # Preserve full section name (A, B, C, D, SPLIT, etc.)
-                        "is_standard_section": m.group(3) in ['A', 'B', 'C', 'D'],
+                        "is_standard_section": m.group(3) in ["A", "B", "C", "D"],
                     },
                 ),
                 # Pattern: A1A, E1A (time-level-section format)
@@ -474,7 +523,9 @@ class Stage3Clean:
                         "parsed_level": f"{int(m.group(2)):02d}",  # 1 -> 01
                         "parsed_section": m.group(3),  # A, B, C, D
                         # Note: course code comes from program (IEAP, GESL, etc.)
-                    } if 1 <= int(m.group(2)) <= self._get_max_level_for_program(program) else None,
+                    }
+                    if 1 <= int(m.group(2)) <= self._get_max_level_for_program(program)
+                    else None,
                 ),
                 # Pattern: E-BEGINNER, M-INTERMEDIATE, A-ADVANCED
                 (
@@ -589,6 +640,7 @@ class Stage3Clean:
             """Validate course code against SIS curriculum table"""
             try:
                 from apps.curriculum.models import Course
+
                 return Course.objects.filter(course_code=course_code).exists()
             except Exception as e:
                 # Log warning but don't fail parsing
@@ -606,7 +658,7 @@ class Stage3Clean:
         # Add all parsed columns to dataframe
         for col in all_keys:
             if not col.startswith("parse_"):
-                df[col] = parsed_data.apply(lambda x: x.get(col))
+                df[col] = parsed_data.apply(lambda x, col=col: x.get(col))
 
         # Add parsing quality flags
         df["_parsing_complete"] = parsed_data.apply(lambda x: "parse_error" not in x and "parse_warning" not in x)
@@ -649,8 +701,8 @@ class Stage3Clean:
                 if row.get("_has_multiple_components"):
                     # Create a supplemental record for component tracking
                     supp_record = {
-                        "original_ipk": row.get("IPK"),
-                        "original_classid": row.get("ClassID"),
+                        "original_ipk": row.get("legacy_id"),
+                        "original_classid": row.get("class_id"),
                         "original_row_number": row.get("_row_number"),
                         "component_type": row.get("parsed_component_name"),
                         "parsed_course_code": row.get("standardized_course_code"),
@@ -662,6 +714,67 @@ class Stage3Clean:
                     supplemental.append(supp_record)
 
         return pd.DataFrame(supplemental)
+
+    def _apply_column_mapping(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Apply column renaming based on configuration mapping"""
+        if not self.config.column_mappings:
+            return df
+
+        # Build renaming dictionary from column mappings
+        rename_dict = {}
+        for mapping in self.config.column_mappings:
+            if mapping.source_name in df.columns and mapping.source_name != mapping.target_name:
+                rename_dict[mapping.source_name] = mapping.target_name
+
+        if rename_dict:
+            df = df.rename(columns=rename_dict)
+            self.logger.info(f"Renamed {len(rename_dict)} columns according to mapping")
+
+        return df
+
+    def _fix_data_consistency(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Fix common data consistency issues identified during validation"""
+
+        # Fix grade vs is_passed consistency for academiccoursetakers
+        if (
+            self.config.table_name == "academiccoursetakers"
+            and "final_grade" in df.columns
+            and "is_passed" in df.columns
+        ):
+            # Define passing grades
+            passing_grades = {"A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D-", "P"}
+            failing_grades = {"F", "NP"}
+            # Incomplete/withdrawn grades: "I", "W", "AU", "IP" - leave as-is
+
+            # Count fixes
+            fixes_made = 0
+
+            for idx, row in df.iterrows():
+                grade = row.get("final_grade")
+                is_passed = row.get("is_passed")
+
+                if grade and pd.notna(grade):
+                    grade = str(grade).strip().upper()
+
+                    # Normalize is_passed to boolean-like
+                    is_passed_str = str(is_passed).strip().lower()
+                    is_passed_truthy = is_passed_str in {"1", "true", "t", "yes", "y"}
+                    is_passed_falsy = is_passed_str in {"0", "false", "f", "no", "n"}
+
+                    # Fix passing grades marked as failed
+                    if grade in passing_grades and is_passed_falsy:
+                        df.at[idx, "is_passed"] = 1
+                        fixes_made += 1
+
+                    # Fix failing grades marked as passed
+                    elif grade in failing_grades and is_passed_truthy:
+                        df.at[idx, "is_passed"] = 0
+                        fixes_made += 1
+
+            if fixes_made > 0:
+                self.logger.info(f"Fixed {fixes_made} grade/is_passed consistency issues")
+
+        return df
 
     def _save_cleaned_data(self, df: pd.DataFrame, table_name: str):
         """Save cleaned data to database"""
@@ -771,9 +884,11 @@ class Stage4Validate:
         except Exception as e:
             if hasattr(e, "errors"):
                 for error in e.errors():
+                    loc = error.get("loc", ["unknown"])
+                    field_name = loc[0] if loc and len(loc) > 0 else "unknown"
                     errors.append(
                         {
-                            "field": error.get("loc", ["unknown"])[0],
+                            "field": field_name,
                             "error": error.get("msg", str(e)),
                             "type": error.get("type", "validation_error"),
                         }
@@ -788,8 +903,8 @@ class Stage4Validate:
         errors = []
 
         # Check required fields
-        if pd.isna(row.get("IPK")):
-            errors.append({"field": "IPK", "error": "Required field missing", "type": "required"})
+        if pd.isna(row.get("legacy_id")):
+            errors.append({"field": "legacy_id", "error": "Required field missing", "type": "required"})
 
         # Check parsed fields
         if pd.isna(row.get("parsed_program")):
@@ -1106,6 +1221,11 @@ class Stage6Split:
             return pd.DataFrame()
 
         # Group by unique session characteristics
+        # Ensure parsed_component_name column exists for grouping
+        if "parsed_component_name" not in language_df.columns:
+            language_df = language_df.copy()
+            language_df["parsed_component_name"] = None
+
         session_groups = language_df.groupby(
             [
                 "standardized_course_code",
@@ -1116,6 +1236,11 @@ class Stage6Split:
         )
 
         for group_key, group_df in session_groups:
+            # Ensure we have all expected group key elements
+            if len(group_key) < 4:
+                self.logger.warning(f"Group key has {len(group_key)} elements, expected 4: {group_key}")
+                continue
+
             # Link to header
             header_match = headers_df[
                 (headers_df["standardized_course_code"] == group_key[0])
@@ -1155,13 +1280,13 @@ class Stage6Split:
 
             # Base part record
             part = {
-                "class_part_id": f"CP_{row.get('IPK')}_{idx}",
+                "class_part_id": f"CP_{row.get('legacy_id')}_{idx}",
                 "class_header_id": header_match.iloc[0]["class_header_id"],
-                "original_ipk": row.get("IPK"),
+                "original_ipk": row.get("legacy_id"),
                 "student_id": row.get("student_id"),
                 "enrollment_date": row.get("enrollment_date_parsed"),
                 "status": row.get("status"),
-                "_original_classid": row.get("ClassID"),
+                "_original_classid": row.get("class_id"),
                 "_row_number": row.get("_row_number"),
                 "_import_id": row.get("_import_id"),
             }

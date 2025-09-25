@@ -7,6 +7,11 @@ for pipeline data quality assurance.
 
 from typing import Any, NotRequired, TypedDict, cast
 
+from django.core.management.base import BaseCommand, CommandError
+from django.db import connection
+
+from apps.data_pipeline.core.registry import get_registry
+
 
 class CheckResult(TypedDict, total=False):
     total: int
@@ -30,12 +35,6 @@ class ValidationResults(TypedDict):
     overall_success_rate: float
     critical_failures: list[CriticalFailure]
     warnings: list[str]
-
-
-from django.core.management.base import BaseCommand, CommandError
-from django.db import connection
-
-from apps.data_pipeline.core.registry import get_registry
 
 
 class Command(BaseCommand):
@@ -65,7 +64,7 @@ class Command(BaseCommand):
                 self._validate_single_table(table_name, options)
 
         except Exception as e:
-            raise CommandError(f"Business rules validation failed: {e}")
+            raise CommandError(f"Business rules validation failed: {e}") from e
 
     def _validate_all_tables(self, options: dict):
         """Validate business rules for all pipeline tables"""
@@ -96,7 +95,7 @@ class Command(BaseCommand):
         try:
             registry.get_config(table_name)
         except ValueError:
-            raise CommandError(f"Table '{table_name}' not found in pipeline registry")
+            raise CommandError(f"Table '{table_name}' not found in pipeline registry") from None
 
         if not summary_only:
             self.stdout.write(f"🔍 Business Rules Validation Report: {table_name}")
@@ -220,17 +219,28 @@ class Command(BaseCommand):
         }
 
         # Rule 2: Status indicator consistency
-        cursor.execute(f"""
+        cursor.execute(
+            f"""
             SELECT
                 COUNT(*) as total,
-                SUM(CASE WHEN (name LIKE '%$$%' AND is_frozen = true) OR
-                              (name NOT LIKE '%$$%' AND is_frozen = false) THEN 1 ELSE 0 END) as consistent_frozen,
-                SUM(CASE WHEN (name LIKE '%<%>%' AND is_sponsored = true) OR
-                              (name NOT LIKE '%<%>%' AND is_sponsored = false) THEN 1 ELSE 0 END) as consistent_sponsored,
-                SUM(CASE WHEN (name LIKE '%{{AF}}%' AND has_admin_fees = true) OR
-                              (name NOT LIKE '%{{AF}}%' AND has_admin_fees = false) THEN 1 ELSE 0 END) as consistent_admin_fees
+                SUM(
+                    CASE WHEN (name LIKE '%$$%' AND is_frozen = true)
+                              OR (name NOT LIKE '%$$%' AND is_frozen = false)
+                         THEN 1 ELSE 0 END
+                ) as consistent_frozen,
+                SUM(
+                    CASE WHEN (name LIKE '%<%>%' AND is_sponsored = true)
+                              OR (name NOT LIKE '%<%>%' AND is_sponsored = false)
+                         THEN 1 ELSE 0 END
+                ) as consistent_sponsored,
+                SUM(
+                    CASE WHEN (name LIKE '%{{AF}}%' AND has_admin_fees = true)
+                              OR (name NOT LIKE '%{{AF}}%' AND has_admin_fees = false)
+                         THEN 1 ELSE 0 END
+                ) as consistent_admin_fees
             FROM {stage_table}
-        """)
+        """
+        )
         row = cursor.fetchone()
         if row:
             total, consistent_frozen, consistent_sponsored, consistent_admin_fees = row
@@ -270,13 +280,19 @@ class Command(BaseCommand):
             }
 
         # Rule 4: Emergency contact parsing
-        cursor.execute(f"""
+        cursor.execute(
+            f"""
             SELECT
                 COUNT(*) as total,
-                SUM(CASE WHEN emg_contactperson IS NOT NULL AND emergency_contact_name IS NOT NULL THEN 1 ELSE 0 END) as parsed_contacts
+                SUM(
+                    CASE WHEN emg_contactperson IS NOT NULL AND emergency_contact_name IS NOT NULL
+                         THEN 1 ELSE 0
+                    END
+                ) as parsed_contacts
             FROM {stage_table}
             WHERE emg_contactperson IS NOT NULL AND emg_contactperson != ''
-        """)
+        """
+        )
         row = cursor.fetchone()
         if row:
             total, parsed_contacts = row[0], row[1]
@@ -480,12 +496,18 @@ class Command(BaseCommand):
         )
 
         if cursor.fetchone():
-            cursor.execute(f"""
+            cursor.execute(
+                f"""
                 SELECT
                     COUNT(*) as total,
-                    SUM(CASE WHEN _validation_errors IS NULL OR _validation_errors = '[]' THEN 1 ELSE 0 END) as no_errors
+                    SUM(
+                        CASE WHEN _validation_errors IS NULL OR _validation_errors = '[]'
+                             THEN 1 ELSE 0
+                        END
+                    ) as no_errors
                 FROM {stage_table}
-            """)
+            """
+            )
             row = cursor.fetchone()
             if row:
                 total, no_errors = row[0], row[1]

@@ -91,13 +91,46 @@ except Exception as e:
     logger = logging.getLogger(__name__)
     logger.error(f"Failed to load attendance API: {e}")
 
+# Add people API
+try:
+    from . import people
+
+    api.add_router("/people/", people.router)
+except Exception as e:
+    # Log but don't crash the entire API
+    import logging
+
+    logger = logging.getLogger(__name__)
+    logger.error(f"Failed to load people API: {e}")
+
+# Add enrollment API
+try:
+    from . import enrollment
+
+    api.add_router("/enrollment/", enrollment.router)
+except Exception as e:
+    # Log but don't crash the entire API
+    import logging
+
+    logger = logging.getLogger(__name__)
+    logger.error(f"Failed to load enrollment API: {e}")
+
+# Add curriculum API
+try:
+    from . import curriculum
+
+    api.add_router("/curriculum/", curriculum.router)
+except Exception as e:
+    # Log but don't crash the entire API
+    import logging
+
+    logger = logging.getLogger(__name__)
+    logger.error(f"Failed to load curriculum API: {e}")
+
 # TODO: Add remaining routers as they are migrated:
-# from . import academic_records, curriculum, mobile, enrollment, people
+# from . import academic_records, mobile
 # api.add_router("/academic-records/", academic_records.router)
-# api.add_router("/curriculum/", curriculum.router)
 # api.add_router("/mobile/", mobile.router)
-# api.add_router("/enrollment/", enrollment.router)
-# api.add_router("/people/", people.router)
 
 
 # Export the main API instance

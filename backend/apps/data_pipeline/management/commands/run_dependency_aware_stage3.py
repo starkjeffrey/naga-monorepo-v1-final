@@ -109,7 +109,7 @@ class Command(BaseCommand):
                 import traceback
 
                 logger.error(f"Full traceback:\n{traceback.format_exc()}")
-            raise CommandError(f"Stage 3 cleaning failed: {e}")
+            raise CommandError(f"Stage 3 cleaning failed: {e}") from e
 
     def setup_logging(self, verbose: bool):
         """Configure logging levels and formatting"""
@@ -177,7 +177,7 @@ class Command(BaseCommand):
                         logger.info(f"Raw table {config.raw_table_name} has {row_count} rows")
 
                 except Exception as e:
-                    raise CommandError(f"Error validating {config.raw_table_name}: {e}")
+                    raise CommandError(f"Error validating {config.raw_table_name}: {e}") from e
 
             # Validate configuration integrity
             for config in table_configs:

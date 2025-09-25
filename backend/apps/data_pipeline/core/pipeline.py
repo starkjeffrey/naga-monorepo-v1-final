@@ -65,10 +65,19 @@ class PipelineOrchestrator:
 
             result = PipelineResult(table_name=self.config.table_name, stage_completed=0, success=False)
 
-            with transaction.atomic():
-                # Track intermediate results between stages
-                stage_outputs = {}
+            # Track intermediate results between stages
+            stage_outputs = {}
 
+            # Only use atomic transaction for dry runs to enable rollback
+            if dry_run:
+                transaction_context = transaction.atomic()
+            else:
+                # Use a dummy context manager for normal runs
+                from contextlib import nullcontext
+
+                transaction_context = nullcontext()
+
+            with transaction_context:
                 # Stage 1: Import Raw Data
                 if start_stage <= 1 <= end_stage:
                     stage1 = Stage1Import(self.config, self.logger)

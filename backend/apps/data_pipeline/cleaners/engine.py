@@ -527,7 +527,11 @@ class CleaningEngine:
             cleaned = " ".join(cleaned.split())
 
             # Standardize separators - use dash as standard separator
-            # Replace various separators with dash
+            # Handle special !$ separator first (used in language class data)
+            if "!$" in cleaned:
+                cleaned = cleaned.replace("!$", "-")
+
+            # Replace other various separators with dash
             separators = [" - ", " _ ", "_", " / ", "/", ".", " "]
             for sep in separators:
                 if sep in cleaned and sep != "-":

@@ -412,7 +412,7 @@ class Stage3Clean:
 
                 if is_language_class:
                     # Language class: part4 contains course + section
-                    parsed_part4 = self._parse_language_part4(part4)
+                    parsed_part4 = self._parse_language_part4(part4, result["parsed_program"])
                     result.update(parsed_part4)
                 else:
                     # Academic class: part4 is target audience indicator
@@ -427,16 +427,56 @@ class Stage3Clean:
 
             # Build standardized course code
             if result.get("parsed_program") and result.get("parsed_level"):
-                result["standardized_course_code"] = f"{result['parsed_program']}-{result['parsed_level']}"
+                if result.get("parsed_course"):
+                    # For language classes with explicit course codes (e.g., GESL-01)
+                    result["standardized_course_code"] = f"{result['parsed_course']}-{result['parsed_level']}"
+                else:
+                    # For classes using program-based codes (e.g., IEAP-01 from A1A)
+                    result["standardized_course_code"] = f"{result['parsed_program']}-{result['parsed_level']}"
+
+                # Validate against SIS course catalog
+                if result.get("standardized_course_code"):
+                    result["course_code_valid"] = self._validate_course_code(result["standardized_course_code"])
 
             return result
 
-        def _parse_language_part4(self, part4):
+        def _parse_language_part4(self, part4, program=None):
             """Parse language class part4 into course and section"""
             result = {}
 
             # Common patterns in language class data
             patterns = [
+                # Exception: PRE-B1, PRE-B2 standalone course names
+                (
+                    r"^(PRE-B[12])(?:/([A-D]))?$",
+                    lambda m: {
+                        "parsed_course": m.group(1),  # PRE-B1 or PRE-B2 as complete course
+                        "parsed_level": "01",  # Default level
+                        "parsed_section": m.group(2) if m.group(2) else "A",
+                    },
+                ),
+                # Pattern: GESL-1B, GESL-1A (course-section with dash)
+                (
+                    r"^([A-Z]+)-(\d+)([A-Z])$",
+                    lambda m: {
+                        "parsed_course": m.group(1),
+                        "parsed_level": f"{int(m.group(2)):02d}",
+                        "parsed_section": m.group(3) if m.group(3) in ['A', 'B', 'C', 'D'] else "A",
+                        "time_confirmation": m.group(3) if m.group(3) not in ['A', 'B', 'C', 'D'] else None,
+                    },
+                ),
+                # Pattern: A1A, E1A (time-level-section format)
+                # First letter = time of day, digit = level, last letter = section
+                (
+                    r"^([A-Z])(\d+)([A-Z])$",
+                    lambda m: {
+                        "parsed_time": m.group(1),  # A=afternoon, E=evening, etc.
+                        "parsed_level": f"{int(m.group(2)):02d}",  # 1 -> 01
+                        "parsed_section": m.group(3),  # A, B, C, D
+                        # Note: course code comes from program (IEAP, GESL, etc.)
+                    } if (1 <= int(m.group(2)) <= self._get_max_level_for_program(program) and
+                          m.group(3) in ['A', 'B', 'C', 'D']) else None,
+                ),
                 # Pattern: E-BEGINNER, M-INTERMEDIATE, A-ADVANCED
                 (
                     r"^([EMA])-(\w+)$",
@@ -463,6 +503,23 @@ class Stage3Clean:
                         "parsed_section": m.group(2),
                     },
                 ),
+                # Pattern: BEGINNER-1M, INTERMEDIATE-2E (level with redundant time confirmation)
+                (
+                    r"^([A-Z-]+)-\d*([EMA])$",
+                    lambda m: {
+                        "parsed_level": self._shorten_level_name(m.group(1).strip().upper()),
+                        "parsed_section": "A",  # Default section for single class
+                        "redundant_time_confirmation": m.group(2),
+                    },
+                ),
+                # Pattern: BEGINNER/A, PRE-BEGINNING-B (level/section with delimiter)
+                (
+                    r"^([^/-]+)[/-]([A-D])$",
+                    lambda m: {
+                        "parsed_level": self._shorten_level_name(m.group(1).strip().upper()),
+                        "parsed_section": m.group(2),
+                    },
+                ),
                 # Pattern: BEGINNER, INTERMEDIATE (no time/section)
                 (
                     r"^(\w+)$",
@@ -476,8 +533,10 @@ class Stage3Clean:
             for pattern, parser in patterns:
                 match = re.match(pattern, part4, re.IGNORECASE)
                 if match:
-                    result.update(parser(match))
-                    break
+                    parsed_result = parser(match)
+                    if parsed_result is not None:  # Check for constraint violations
+                        result.update(parsed_result)
+                        break
             else:
                 # Couldn't parse - store as-is for manual review
                 result["parsed_level"] = part4
@@ -498,6 +557,44 @@ class Stage3Clean:
                 "PROFICIENCY": "07",
             }
             return level_map.get(level_text, level_text)
+
+        def _shorten_level_name(self, level_text):
+            """Shorten level names using convention (BEGINNER→BEG, PRE-BEGINNING→PRE)"""
+            # Handle hyphenated levels - take first part
+            if "-" in level_text:
+                level_text = level_text.split("-")[0]
+
+            # Apply shortening rules
+            shortening_map = {
+                "BEGINNER": "BEG",
+                "BEGINNING": "BEG",
+                "ELEMENTARY": "ELEM",
+                "INTERMEDIATE": "INT",
+                "ADVANCED": "ADV",
+                "PROFICIENCY": "PROF",
+                "PRE": "PRE",  # Already short
+            }
+            return shortening_map.get(level_text, level_text[:3])  # Fallback to first 3 chars
+
+        def _get_max_level_for_program(self, program):
+            """Get maximum valid level for each program"""
+            program_limits = {
+                "IEAP": 4,
+                "GESL": 12,
+                "EHSS": 12,
+                # Add other programs as needed
+            }
+            return program_limits.get(program, 12)  # Default to 12 if unknown
+
+        def _validate_course_code(self, course_code):
+            """Validate course code against SIS curriculum table"""
+            try:
+                from apps.curriculum.models import Course
+                return Course.objects.filter(course_code=course_code).exists()
+            except Exception as e:
+                # Log warning but don't fail parsing
+                self.logger.warning(f"Could not validate course code {course_code}: {e}")
+                return None  # Unknown validation status
 
         # Apply parsing to each row
         parsed_data = df.apply(lambda row: parse_single_classid(row.get("ClassID"), row), axis=1)

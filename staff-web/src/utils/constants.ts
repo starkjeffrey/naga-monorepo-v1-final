@@ -1,10 +1,10 @@
 /**
- * Constants for the Naga SIS Staff Portal
+ * Constants for the PUCSR Staff Portal
  */
 
 // API Configuration
 export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8001/api';
-export const APP_NAME = import.meta.env.VITE_APP_NAME || 'Naga SIS Staff Portal';
+export const APP_NAME = import.meta.env.VITE_APP_NAME || 'PUCSR Staff Portal';
 
 // Authentication endpoints
 export const AUTH_ENDPOINTS = {

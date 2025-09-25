@@ -43,7 +43,7 @@ export const DashboardPage: React.FC = () => {
                   </svg>
                 </div>
                 <div>
-                  <h1 className="text-xl font-bold text-gray-900">NAGA SIS</h1>
+                  <h1 className="text-xl font-bold text-gray-900">PUCSR SIS</h1>
                   <p className="text-sm text-gray-500">Student Information System</p>
                 </div>
               </div>
@@ -362,7 +362,7 @@ export const DashboardPage: React.FC = () => {
           <footer className="bg-white border-t border-gray-200 py-4 mt-8">
             <div className="px-8">
               <div className="flex items-center justify-between">
-                <p className="text-sm text-gray-600">© 2024 NAGA School. All rights reserved.</p>
+                <p className="text-sm text-gray-600">© 2024 PUCSR University. All rights reserved.</p>
                 <div className="flex items-center space-x-6 text-sm text-gray-600">
                   <span>System Status: <span className="text-green-600 font-medium">Operational</span></span>
                   <span>Last Updated: <span>{lastUpdated}</span></span>

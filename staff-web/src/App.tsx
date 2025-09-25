@@ -1,5 +1,5 @@
 /**
- * Main App component for the Naga SIS Staff Portal
+ * Main App component for the PUCSR Staff Portal
  */
 
 import { useEffect } from 'react';

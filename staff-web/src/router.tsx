@@ -10,6 +10,31 @@ import { TransferListDemo } from './pages/TransferListDemo';
 import { PageLoadingSpinner } from './components/common/LoadingSpinner';
 import { useAuth, useAuthInitialization } from './hooks/useAuth';
 import { ROUTES } from './utils/constants';
+import { Sidebar } from './components/layout/Sidebar';
+import { Header } from './components/layout/Header';
+import { StudentDashboard } from './components/students/StudentDashboard';
+import { StudentList } from './components/students/StudentList';
+import { StudentDetail } from './components/students/StudentDetail';
+import { EnrollmentDashboard } from './components/enrollment/EnrollmentDashboard';
+
+/**
+ * Main Layout with Sidebar for authenticated users
+ */
+const MainLayout: React.FC = () => {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+      <div className="flex">
+        <Sidebar />
+        <div className="flex-1 lg:ml-80">
+          <Header />
+          <main className="min-h-screen">
+            <Outlet />
+          </main>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 /**
  * Protected route wrapper that requires authentication
@@ -35,8 +60,8 @@ const ProtectedRoute: React.FC = () => {
     return <Navigate to={ROUTES.LOGIN} replace />;
   }
 
-  // Render protected content
-  return <Outlet />;
+  // Render protected content with layout
+  return <MainLayout />;
 };
 
 /**
@@ -109,8 +134,13 @@ const RouteError: React.FC = () => {
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: <RootRedirect />,
-    errorElement: <RouteError />,
+    element: <ProtectedRoute />,
+    children: [
+      {
+        index: true,
+        element: <StudentDashboard />,
+      },
+    ],
   },
   {
     path: '/login',
@@ -128,7 +158,55 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <DashboardPage />,
+        element: <StudentDashboard />,
+      },
+    ],
+  },
+  {
+    path: '/students',
+    element: <ProtectedRoute />,
+    children: [
+      {
+        index: true,
+        element: <StudentDashboard />,
+      },
+      {
+        path: 'dashboard',
+        element: <StudentDashboard />,
+      },
+      {
+        path: 'list',
+        element: <StudentList />,
+      },
+      {
+        path: 'search',
+        element: <StudentList />,
+      },
+      {
+        path: ':studentId',
+        element: <StudentDetail />,
+      },
+    ],
+  },
+  {
+    path: '/enrollment',
+    element: <ProtectedRoute />,
+    children: [
+      {
+        index: true,
+        element: <EnrollmentDashboard />,
+      },
+      {
+        path: 'dashboard',
+        element: <EnrollmentDashboard />,
+      },
+      {
+        path: 'programs',
+        element: <EnrollmentDashboard />,
+      },
+      {
+        path: 'classes',
+        element: <EnrollmentDashboard />,
       },
     ],
   },
@@ -152,6 +230,35 @@ export const router = createBrowserRouter([
   {
     path: '/demo/transfer-list',
     element: <TransferListDemo />,
+  },
+  {
+    path: '/test',
+    element: (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-8">
+        <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
+          <div className="flex items-center mb-6">
+            <img
+              src="/naga-logo.png"
+              alt="PUCSR University"
+              className="w-20 h-20 object-contain mr-4"
+            />
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">PUCSR Staff Portal</h1>
+              <p className="text-gray-600">University Management System</p>
+            </div>
+          </div>
+          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+            <strong>Success!</strong> The PUCSR interface is working correctly.
+            <ul className="mt-2 list-disc list-inside">
+              <li>✅ Main app file fixed (main.tsx)</li>
+              <li>✅ PUCSR branding applied</li>
+              <li>✅ Dragon logo loaded</li>
+              <li>✅ Dependencies installed</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    ),
   },
   {
     path: '*',

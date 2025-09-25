@@ -455,14 +455,14 @@ class Stage3Clean:
                         "parsed_section": m.group(2) if m.group(2) else "A",
                     },
                 ),
-                # Pattern: GESL-1B, GESL-1A (course-section with dash)
+                # Pattern: GESL-1B, GESL-1SPLIT (course-level-section with dash)
                 (
-                    r"^([A-Z]+)-(\d+)([A-Z])$",
+                    r"^([A-Z]+)-(\d+)([A-Z]+)$",
                     lambda m: {
                         "parsed_course": m.group(1),
                         "parsed_level": f"{int(m.group(2)):02d}",
-                        "parsed_section": m.group(3) if m.group(3) in ['A', 'B', 'C', 'D'] else "A",
-                        "time_confirmation": m.group(3) if m.group(3) not in ['A', 'B', 'C', 'D'] else None,
+                        "parsed_section": m.group(3),  # Preserve full section name (A, B, C, D, SPLIT, etc.)
+                        "is_standard_section": m.group(3) in ['A', 'B', 'C', 'D'],
                     },
                 ),
                 # Pattern: A1A, E1A (time-level-section format)
@@ -474,8 +474,7 @@ class Stage3Clean:
                         "parsed_level": f"{int(m.group(2)):02d}",  # 1 -> 01
                         "parsed_section": m.group(3),  # A, B, C, D
                         # Note: course code comes from program (IEAP, GESL, etc.)
-                    } if (1 <= int(m.group(2)) <= self._get_max_level_for_program(program) and
-                          m.group(3) in ['A', 'B', 'C', 'D']) else None,
+                    } if 1 <= int(m.group(2)) <= self._get_max_level_for_program(program) else None,
                 ),
                 # Pattern: E-BEGINNER, M-INTERMEDIATE, A-ADVANCED
                 (

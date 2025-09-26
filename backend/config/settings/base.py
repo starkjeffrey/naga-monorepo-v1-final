@@ -123,6 +123,7 @@ LOCAL_APPS = [
     "apps.enrollment",
     "apps.scheduling",
     "apps.attendance",
+    "apps.leave_management",  # Teacher leave and substitute management
     "apps.grading",
     "apps.finance",
     "apps.scholarships",

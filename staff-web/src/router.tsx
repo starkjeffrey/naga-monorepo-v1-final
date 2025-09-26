@@ -16,6 +16,7 @@ import { StudentDashboard } from './components/students/StudentDashboard';
 import { StudentList } from './components/students/StudentList';
 import { StudentDetail } from './components/students/StudentDetail';
 import { EnrollmentDashboard } from './components/enrollment/EnrollmentDashboard';
+import FinancePage from './pages/Finance';
 
 /**
  * Main Layout with Sidebar for authenticated users
@@ -207,6 +208,44 @@ export const router = createBrowserRouter([
       {
         path: 'classes',
         element: <EnrollmentDashboard />,
+      },
+    ],
+  },
+  {
+    path: '/finance',
+    element: <ProtectedRoute />,
+    children: [
+      {
+        index: true,
+        element: <FinancePage />,
+      },
+      {
+        path: 'dashboard',
+        element: <FinancePage />,
+      },
+      {
+        path: 'invoices',
+        element: <FinancePage />,
+      },
+      {
+        path: 'payments',
+        element: <FinancePage />,
+      },
+      {
+        path: 'pos',
+        element: <FinancePage />,
+      },
+      {
+        path: 'accounts',
+        element: <FinancePage />,
+      },
+      {
+        path: 'cashier',
+        element: <FinancePage />,
+      },
+      {
+        path: 'analytics',
+        element: <FinancePage />,
       },
     ],
   },

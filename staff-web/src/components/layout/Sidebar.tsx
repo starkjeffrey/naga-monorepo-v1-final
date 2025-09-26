@@ -105,6 +105,50 @@ const navigationItems: NavigationItem[] = [
     ]
   },
   {
+    id: 'finance',
+    label: 'Financial Management',
+    icon: DollarSign,
+    badge: 'Live',
+    children: [
+      {
+        id: 'finance-dashboard',
+        label: 'Finance Overview',
+        icon: LayoutDashboard,
+        path: '/finance/dashboard'
+      },
+      {
+        id: 'invoices',
+        label: 'Invoice Management',
+        icon: FileText,
+        path: '/finance/invoices'
+      },
+      {
+        id: 'pos-system',
+        label: 'POS System',
+        icon: CreditCard,
+        path: '/finance/pos'
+      },
+      {
+        id: 'student-accounts',
+        label: 'Student Accounts',
+        icon: Users,
+        path: '/finance/accounts'
+      },
+      {
+        id: 'cashier-operations',
+        label: 'Cashier Dashboard',
+        icon: Clock,
+        path: '/finance/cashier'
+      },
+      {
+        id: 'finance-analytics',
+        label: 'Financial Analytics',
+        icon: TrendingUp,
+        path: '/finance/analytics'
+      }
+    ]
+  },
+  {
     id: 'academic',
     label: 'Academic Records',
     icon: BookOpen,

@@ -93,19 +93,8 @@ export const StudentAnalytics: React.FC = () => {
     academicYear: new Date().getFullYear(),
   });
 
-  // Mock analytics data
-  const [analyticsData, setAnalyticsData] = useState({
-    totalStudents: 1245,
-    newEnrollments: 187,
-    atRiskStudents: 23,
-    successRate: 87.5,
-    retentionRate: 89.2,
-    graduationRate: 78.6,
-    activePrograms: 12,
-    averageGPA: 3.42,
-    totalRevenue: 1245000,
-    outstandingBalance: 45000,
-  });
+  // Real analytics data
+  const [analyticsData, setAnalyticsData] = useState<any>(null);
 
   // AI Predictions
   const [predictions, setPredictions] = useState<PredictionData[]>([
@@ -194,8 +183,8 @@ export const StudentAnalytics: React.FC = () => {
   const loadAnalyticsData = async () => {
     try {
       setLoading(true);
-      // TODO: Implement analytics API calls
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const data = await StudentService.getStudentAnalytics();
+      setAnalyticsData(data);
     } catch (error) {
       console.error('Failed to load analytics data:', error);
       message.error('Failed to load analytics data');
@@ -213,134 +202,76 @@ export const StudentAnalytics: React.FC = () => {
   };
 
   // Define metrics for the dashboard
-  const metrics: MetricCard[] = [
+  const metrics: MetricCard[] = analyticsData ? [
     {
       key: 'total_students',
       title: 'Total Students',
-      value: analyticsData.totalStudents.toLocaleString(),
+      value: analyticsData.overview.total_students.toLocaleString(),
       icon: <UserOutlined />,
-      trend: {
-        value: 8.2,
-        isPositive: true,
-        period: 'last month',
-      },
-      target: {
-        value: 1300,
-        label: 'Target for this year',
-      },
       color: '#1890ff',
     },
     {
-      key: 'new_enrollments',
-      title: 'New Enrollments',
-      value: analyticsData.newEnrollments,
+      key: 'active_students',
+      title: 'Active Students',
+      value: analyticsData.overview.active_students,
       icon: <TeamOutlined />,
-      trend: {
-        value: 12.5,
-        isPositive: true,
-        period: 'this month',
-      },
       color: '#52c41a',
     },
     {
-      key: 'at_risk',
-      title: 'At-Risk Students',
-      value: analyticsData.atRiskStudents,
-      icon: <WarningOutlined />,
-      trend: {
-        value: 3.2,
-        isPositive: false,
-        period: 'last week',
-      },
+      key: 'monk_students',
+      title: 'Monk Students',
+      value: analyticsData.overview.monk_students,
+      icon: <BookOutlined />,
       color: '#faad14',
-      onClick: () => message.info('View at-risk students details'),
     },
     {
-      key: 'success_rate',
-      title: 'Success Rate',
-      value: analyticsData.successRate,
-      suffix: '%',
-      precision: 1,
+      key: 'transfer_students',
+      title: 'Transfer Students',
+      value: analyticsData.overview.transfer_students,
       icon: <TrophyOutlined />,
-      trend: {
-        value: 2.1,
-        isPositive: true,
-        period: 'this semester',
-      },
-      target: {
-        value: 90,
-        label: 'Target success rate',
-      },
       color: '#722ed1',
     },
     {
-      key: 'retention_rate',
-      title: 'Retention Rate',
-      value: analyticsData.retentionRate,
-      suffix: '%',
+      key: 'average_age',
+      title: 'Average Age',
+      value: analyticsData.overview.average_age,
       precision: 1,
-      icon: <BookOutlined />,
-      trend: {
-        value: 1.8,
-        isPositive: true,
-        period: 'year over year',
-      },
-      color: '#13c2c2',
-    },
-    {
-      key: 'average_gpa',
-      title: 'Average GPA',
-      value: analyticsData.averageGPA,
-      precision: 2,
       icon: <TrendingUpOutlined />,
-      trend: {
-        value: 0.15,
-        isPositive: true,
-        period: 'this semester',
-      },
       color: '#eb2f96',
     },
-  ];
+  ] : [];
 
   // Define charts for the dashboard
-  const charts: ChartWidget[] = [
+  const charts: ChartWidget[] = analyticsData ? [
     {
-      key: 'enrollment_trends',
-      title: 'Enrollment Trends',
-      type: 'line',
-      data: [], // Mock data would go here
+      key: 'gender_distribution',
+      title: 'Gender Distribution',
+      type: 'pie',
+      data: analyticsData.demographics.gender_distribution,
       height: 300,
-      actions: [
-        {
-          key: 'export',
-          label: 'Export',
-          icon: <DownloadOutlined />,
-          onClick: () => message.info('Exporting chart data'),
-        },
-      ],
     },
     {
       key: 'program_distribution',
       title: 'Program Distribution',
       type: 'pie',
-      data: [], // Mock data would go here
+      data: analyticsData.academic.program_distribution,
       height: 300,
     },
     {
-      key: 'retention_analysis',
-      title: 'Retention Analysis by Cohort',
+      key: 'status_distribution',
+      title: 'Student Status Distribution',
       type: 'bar',
-      data: cohortData,
+      data: analyticsData.academic.status_distribution,
       height: 300,
     },
     {
-      key: 'success_predictions',
-      title: 'Success Rate Predictions',
-      type: 'area',
-      data: [], // Mock data would go here
+      key: 'age_groups',
+      title: 'Age Group Distribution',
+      type: 'bar',
+      data: analyticsData.demographics.age_groups,
       height: 300,
     },
-  ];
+  ] : [];
 
   // Define list widgets
   const listWidgets: ListWidget[] = [

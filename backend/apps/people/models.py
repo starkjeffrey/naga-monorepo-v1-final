@@ -113,6 +113,46 @@ class Person(AuditModel):
     full_name: CharField = models.CharField(_("Full Name"), max_length=255, blank=True)
     khmer_name: CharField = models.CharField(_("Khmer Name"), max_length=255, blank=True)
 
+    # Khmer name tracking fields
+    khmer_name_source: CharField = models.CharField(
+        _("Khmer Name Source"),
+        max_length=20,
+        choices=[
+            ('user', _('User Provided')),
+            ('approximated', _('System Approximated')),
+            ('legacy', _('Legacy Data')),
+            ('verified', _('Verified by User')),
+            ('import', _('Imported from External Source')),
+        ],
+        default='legacy',
+        help_text=_("Source of the Khmer name data"),
+    )
+    khmer_name_confidence: models.DecimalField = models.DecimalField(
+        _("Khmer Name Confidence"),
+        max_digits=3,
+        decimal_places=2,
+        default=0.00,
+        help_text=_("Confidence score (0.00-1.00) for approximated names"),
+    )
+    khmer_name_approximated_at: DateTimeField = models.DateTimeField(
+        _("Khmer Name Approximated At"),
+        null=True,
+        blank=True,
+        help_text=_("When the name was approximated"),
+    )
+    khmer_name_verified_at: DateTimeField = models.DateTimeField(
+        _("Khmer Name Verified At"),
+        null=True,
+        blank=True,
+        help_text=_("When user verified the name"),
+    )
+    khmer_name_components: models.JSONField = models.JSONField(
+        _("Khmer Name Components"),
+        null=True,
+        blank=True,
+        help_text=_("Decomposed name components for debugging"),
+    )
+
     # Gender information
     preferred_gender: CharField = models.CharField(
         _("Preferred Gender"),
@@ -1505,3 +1545,226 @@ class StudentPhoto(AuditModel):
             raise ValidationError(
                 {"photo_file": _("Photo file size must be less than 5MB.")},
             )
+
+
+class KhmerNamePattern(AuditModel):
+    """Stores patterns for Khmer name approximation.
+
+    This model tracks the relationship between English name components
+    and their LIMON/Unicode representations, including frequency data
+    for intelligent approximation.
+    """
+
+    english_component: CharField = models.CharField(
+        _("English Component"),
+        max_length=100,
+        db_index=True,
+        help_text=_("English name component (e.g., 'sovann', 'dara')"),
+    )
+    normalized_component: CharField = models.CharField(
+        _("Normalized Component"),
+        max_length=100,
+        db_index=True,
+        help_text=_("Lowercase, normalized version for matching"),
+    )
+    limon_pattern: CharField = models.CharField(
+        _("LIMON Pattern"),
+        max_length=255,
+        help_text=_("LIMON representation of the component"),
+    )
+    unicode_pattern: CharField = models.CharField(
+        _("Unicode Pattern"),
+        max_length=255,
+        help_text=_("Unicode Khmer representation"),
+    )
+    frequency: models.DecimalField = models.DecimalField(
+        _("Frequency"),
+        max_digits=3,
+        decimal_places=2,
+        help_text=_("Frequency of this pattern (0.00-1.00)"),
+    )
+    occurrence_count: PositiveIntegerField = models.PositiveIntegerField(
+        _("Occurrence Count"),
+        default=0,
+        help_text=_("Number of times this pattern was observed"),
+    )
+    confidence_score: models.DecimalField = models.DecimalField(
+        _("Confidence Score"),
+        max_digits=3,
+        decimal_places=2,
+        default=0.50,
+        help_text=_("Confidence in this pattern (0.00-1.00)"),
+    )
+    variants: models.JSONField = models.JSONField(
+        _("Variants"),
+        default=list,
+        help_text=_("Alternative spellings of the English component"),
+    )
+    is_verified: BooleanField = models.BooleanField(
+        _("Is Verified"),
+        default=False,
+        help_text=_("Whether this pattern has been verified by users"),
+    )
+
+    class Meta:
+        verbose_name = _("Khmer Name Pattern")
+        verbose_name_plural = _("Khmer Name Patterns")
+        unique_together = [['english_component', 'limon_pattern']]
+        ordering = ['-frequency', '-occurrence_count']
+        indexes: ClassVar[list[models.Index]] = [
+            models.Index(fields=['normalized_component']),
+            models.Index(fields=['frequency', 'confidence_score']),
+            models.Index(fields=['is_verified']),
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.english_component} → {self.unicode_pattern} ({self.frequency:.2f})"
+
+    def update_frequency(self) -> None:
+        """Recalculate frequency based on total occurrences for this component."""
+        total = KhmerNamePattern.objects.filter(
+            english_component=self.english_component
+        ).aggregate(total=models.Sum('occurrence_count'))['total'] or 1
+
+        self.frequency = self.occurrence_count / total
+        self.save(update_fields=['frequency'])
+
+    def add_occurrence(self) -> None:
+        """Increment occurrence count and update frequency."""
+        self.occurrence_count += 1
+        self.update_frequency()
+
+    def clean(self) -> None:
+        """Validate pattern data."""
+        super().clean()
+
+        # Normalize component for consistency
+        if self.english_component:
+            self.normalized_component = self.english_component.lower().strip()
+
+        # Validate frequency range
+        if not (0.0 <= self.frequency <= 1.0):
+            raise ValidationError(
+                {"frequency": _("Frequency must be between 0.00 and 1.00")},
+            )
+
+        # Validate confidence range
+        if not (0.0 <= self.confidence_score <= 1.0):
+            raise ValidationError(
+                {"confidence_score": _("Confidence score must be between 0.00 and 1.00")},
+            )
+
+
+class KhmerNameCorrection(AuditModel):
+    """Tracks user corrections to improve approximation accuracy.
+
+    This model stores corrections submitted by users, which are used
+    to learn new patterns and improve future approximations.
+    """
+
+    person: ForeignKey = models.ForeignKey(
+        Person,
+        on_delete=models.CASCADE,
+        verbose_name=_("Person"),
+        help_text=_("Person whose name was corrected"),
+    )
+    original_khmer_name: CharField = models.CharField(
+        _("Original Khmer Name"),
+        max_length=255,
+        blank=True,
+        help_text=_("Original Khmer name before correction"),
+    )
+    corrected_khmer_name: CharField = models.CharField(
+        _("Corrected Khmer Name"),
+        max_length=255,
+        help_text=_("User-provided correct Khmer name"),
+    )
+    original_english_name: CharField = models.CharField(
+        _("Original English Name"),
+        max_length=255,
+        blank=True,
+        help_text=_("English name at time of correction"),
+    )
+    correction_source: CharField = models.CharField(
+        _("Correction Source"),
+        max_length=50,
+        choices=[
+            ('mobile_app', _('Mobile App')),
+            ('web_interface', _('Web Interface')),
+            ('admin', _('Admin Interface')),
+            ('import', _('Data Import')),
+            ('api', _('API Submission')),
+        ],
+        help_text=_("Source of the correction"),
+    )
+    confidence_impact: models.DecimalField = models.DecimalField(
+        _("Confidence Impact"),
+        max_digits=3,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        help_text=_("Impact on pattern confidence scores"),
+    )
+    patterns_learned: models.JSONField = models.JSONField(
+        _("Patterns Learned"),
+        null=True,
+        blank=True,
+        help_text=_("New patterns extracted from this correction"),
+    )
+    verified_at: DateTimeField = models.DateTimeField(
+        _("Verified At"),
+        null=True,
+        blank=True,
+        help_text=_("When correction was verified"),
+    )
+    verified_by: ForeignKey = models.ForeignKey(
+        "users.User",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='verified_corrections',
+        verbose_name=_("Verified By"),
+        help_text=_("User who verified this correction"),
+    )
+
+    class Meta:
+        verbose_name = _("Khmer Name Correction")
+        verbose_name_plural = _("Khmer Name Corrections")
+        ordering = ['-created_at']
+        indexes: ClassVar[list[models.Index]] = [
+            models.Index(fields=['person', 'created_at']),
+            models.Index(fields=['correction_source']),
+            models.Index(fields=['verified_at']),
+        ]
+
+    def __str__(self) -> str:
+        return f"Correction for {self.person.full_name}: {self.corrected_khmer_name}"
+
+    def apply_correction(self) -> None:
+        """Apply correction to person and learn from it."""
+        from django.utils import timezone
+
+        # Update person's Khmer name
+        self.person.khmer_name = self.corrected_khmer_name
+        self.person.khmer_name_source = 'verified'
+        self.person.khmer_name_verified_at = timezone.now()
+        self.person.khmer_name_confidence = 1.00
+        self.person.save(update_fields=[
+            'khmer_name',
+            'khmer_name_source',
+            'khmer_name_verified_at',
+            'khmer_name_confidence',
+        ])
+
+        # Learn patterns from this correction
+        self.learn_patterns()
+
+    def learn_patterns(self) -> None:
+        """Extract patterns from correction to improve future approximations."""
+        from apps.people.services.pattern_learner import PatternLearner
+
+        learner = PatternLearner()
+        patterns_learned = learner.learn_from_correction(self)
+
+        self.patterns_learned = patterns_learned
+        self.save(update_fields=['patterns_learned'])

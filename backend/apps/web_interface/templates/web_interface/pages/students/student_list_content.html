@@ -21,6 +21,7 @@
           <tr>
             <th>{% trans "ID" %}</th>
             <th>{% trans "Name" %}</th>
+            <th>{% trans "Khmer Name" %}</th>
             <th>{% trans "Status" %}</th>
             <th>{% trans "Study Time" %}</th>
             <th>{% trans "Created" %}</th>
@@ -34,8 +35,22 @@
               <td>
                 <div class="student-info">
                   <div class="student-name">{{ student.person.full_name }}</div>
-                  {% if student.person.khmer_name %}<div class="student-khmer-name">{{ student.person.khmer_name }}</div>{% endif %}
                 </div>
+              </td>
+              <td class="khmer-name-cell">
+                {% if student.person.khmer_name %}
+                  <div class="khmer-name">
+                    {{ student.person.khmer_name }}
+                    {% if student.person.khmer_name_source == 'approximated' %}
+                      <span class="approximated-badge" title="{% trans 'System Approximated' %}">*</span>
+                    {% endif %}
+                  </div>
+                  {% if student.person.khmer_name_confidence %}
+                    <small class="confidence-score">{{ student.person.khmer_name_confidence|floatformat:2 }}</small>
+                  {% endif %}
+                {% else %}
+                  <span class="text-muted">—</span>
+                {% endif %}
               </td>
               <td>
                 <span class="badge {% status_badge student.current_status %}">{{ student.get_current_status_display }}</span>
@@ -64,7 +79,7 @@
             </tr>
           {% empty %}
             <tr>
-              <td colspan="6" class="text-center text-muted py-4">
+              <td colspan="7" class="text-center text-muted py-4">
                 <i class="fas fa-users fa-3x mb-3"></i>
                 <p>{% trans "No students found" %}</p>
               </td>
@@ -79,3 +94,31 @@
     {% endif %}
   </div>
 </div>
+
+<style>
+.khmer-name-cell {
+  min-width: 150px;
+}
+
+.khmer-name {
+  font-family: 'Khmer OS', serif;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.approximated-badge {
+  color: #007bff;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: help;
+}
+
+.confidence-score {
+  color: #6c757d;
+  font-size: 0.75rem;
+  display: block;
+  margin-top: 0.125rem;
+}
+</style>

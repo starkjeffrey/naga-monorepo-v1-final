@@ -23,6 +23,7 @@
                 <tr>
                     <th>{% trans "Student ID" %}</th>
                     <th>{% trans "Name" %}</th>
+                    <th>{% trans "Khmer Name" %}</th>
                     <th>{% trans "Email" %}</th>
                     <th>{% trans "Program" %}</th>
                     <th>{% trans "Status" %}</th>
@@ -35,10 +36,20 @@
                 {% for student in students %}
                 <tr>
                     <td><strong>{{ student.student_id }}</strong></td>
-                    <td>
-                        {{ student.person.full_name }}
+                    <td>{{ student.person.full_name }}</td>
+                    <td class="khmer-name-cell">
                         {% if student.person.khmer_name %}
-                            <br><small style="color: #718096;">{{ student.person.khmer_name }}</small>
+                            <div class="khmer-name">
+                                {{ student.person.khmer_name }}
+                                {% if student.person.khmer_name_source == 'approximated' %}
+                                    <span class="approximated-badge" title="{% trans 'System Approximated' %}">*</span>
+                                {% endif %}
+                            </div>
+                            {% if student.person.khmer_name_confidence %}
+                                <small class="confidence-score">{{ student.person.khmer_name_confidence|floatformat:2 }}</small>
+                            {% endif %}
+                        {% else %}
+                            <span style="color: #9ca3af;">—</span>
                         {% endif %}
                     </td>
                     <td>
@@ -146,3 +157,31 @@
     document.getElementById('resultCount').textContent = '0';
 </script>
 {% endif %}
+
+<style>
+.khmer-name-cell {
+    min-width: 150px;
+}
+
+.khmer-name {
+    font-family: 'Khmer OS', serif;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.approximated-badge {
+    color: #007bff;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: help;
+}
+
+.confidence-score {
+    color: #6c757d;
+    font-size: 0.75rem;
+    display: block;
+    margin-top: 0.125rem;
+}
+</style>

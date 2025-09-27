@@ -102,6 +102,8 @@ class QueryOptimizer:
                 "person__family_name",
                 "person__personal_name",
                 "person__khmer_name",
+                "person__khmer_name_source",
+                "person__khmer_name_confidence",
                 "person__school_email",
                 "person__personal_email",
                 "created_at",

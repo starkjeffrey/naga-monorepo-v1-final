@@ -12,7 +12,7 @@ from django.core.management.base import BaseCommand
 from django.db import models, transaction
 
 from apps.people.models import Person
-from apps.people.utils.name_parser import parse_student_name
+from apps.data_pipeline.cleaners.name_parser import parse_student_name
 
 User = get_user_model()
 

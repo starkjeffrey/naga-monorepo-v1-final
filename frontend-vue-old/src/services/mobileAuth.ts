@@ -8,7 +8,47 @@
  * - API request authentication
  */
 
-import * as SecureStore from 'expo-secure-store'
+// Web-compatible secure storage implementation
+class WebSecureStore {
+  private static encrypt(data: string): string {
+    // Simple base64 encoding for basic obfuscation
+    // In production, consider using crypto-js or Web Crypto API
+    return btoa(data)
+  }
+
+  private static decrypt(data: string): string {
+    try {
+      return atob(data)
+    } catch {
+      throw new Error('Failed to decrypt data')
+    }
+  }
+
+  static async setItemAsync(key: string, value: string): Promise<void> {
+    try {
+      const encrypted = this.encrypt(value)
+      localStorage.setItem(`secure_${key}`, encrypted)
+    } catch (error) {
+      throw new Error(`Failed to store secure item: ${error}`)
+    }
+  }
+
+  static async getItemAsync(key: string): Promise<string | null> {
+    try {
+      const encrypted = localStorage.getItem(`secure_${key}`)
+      return encrypted ? this.decrypt(encrypted) : null
+    } catch (error) {
+      console.error('Failed to retrieve secure item:', error)
+      return null
+    }
+  }
+
+  static async deleteItemAsync(key: string): Promise<void> {
+    localStorage.removeItem(`secure_${key}`)
+  }
+}
+
+const SecureStore = WebSecureStore
 
 // Types
 export interface GoogleAuthCredentials {
@@ -384,60 +424,62 @@ export class MobileAuthService {
 // Export singleton instance
 export const mobileAuth = MobileAuthService.getInstance()
 
-// Hook for React components
+// Composable for Vue components
+import { ref, onMounted, type Ref } from 'vue'
+
 export const useMobileAuth = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [authData, setAuthData] = useState<StoredAuthData | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const isAuthenticated: Ref<boolean> = ref(false)
+  const authData: Ref<StoredAuthData | null> = ref(null)
+  const isLoading: Ref<boolean> = ref(true)
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      setIsLoading(true)
-      try {
-        const authenticated = await mobileAuth.isAuthenticated()
-        setIsAuthenticated(authenticated)
+  const checkAuth = async () => {
+    isLoading.value = true
+    try {
+      const authenticated = await mobileAuth.isAuthenticated()
+      isAuthenticated.value = authenticated
 
-        if (authenticated) {
-          const data = await mobileAuth.getAuthData()
-          setAuthData(data)
-        }
-      } catch (error) {
-        console.error('Auth check failed:', error)
-        setIsAuthenticated(false)
-        setAuthData(null)
-      } finally {
-        setIsLoading(false)
+      if (authenticated) {
+        const data = await mobileAuth.getAuthData()
+        authData.value = data
       }
+    } catch (error) {
+      console.error('Auth check failed:', error)
+      isAuthenticated.value = false
+      authData.value = null
+    } finally {
+      isLoading.value = false
     }
+  }
 
+  onMounted(() => {
     checkAuth()
-  }, [])
+  })
 
   const login = async (credentials: GoogleAuthCredentials, deviceId: string) => {
-    setIsLoading(true)
+    isLoading.value = true
     try {
       const result = await mobileAuth.authenticateWithGoogle(credentials, deviceId)
 
       if (result.success) {
-        setIsAuthenticated(true)
+        isAuthenticated.value = true
         const data = await mobileAuth.getAuthData()
-        setAuthData(data)
+        authData.value = data
       }
 
       return result
     } finally {
-      setIsLoading(false)
+      isLoading.value = false
     }
   }
 
   const logout = async () => {
-    setIsLoading(true)
+    isLoading.value = true
     try {
       await mobileAuth.logout()
-      setIsAuthenticated(false)
-      setAuthData(null)
+      isAuthenticated.value = false
+      authData.value = null
     } finally {
-      setIsLoading(false)
+      isLoading.value = false
     }
   }
 
@@ -454,5 +496,3 @@ export const useMobileAuth = () => {
     makeAuthenticatedRequest,
   }
 }
-
-// This is a Vue project, not React

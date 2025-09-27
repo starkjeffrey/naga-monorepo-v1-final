@@ -36,7 +36,7 @@
 
                 <!-- Finance -->
                 <div class="space-y-1">
-                    <a href="{% url 'web_interface:finance-dashboard' %}" 
+                    <a href="{% url 'web_interface:billing' %}" 
                        class="nav-item group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50">
                         <i class="fas fa-money-bill-wave mr-3 w-5 h-5"></i>
                         {% trans "Finance" %}
@@ -170,7 +170,7 @@
 
             <!-- Main Content -->
             <div class="px-4 sm:px-6 lg:px-8 py-8">
-                {% block content %}
+                {% block main_content %}
                 <div class="text-center text-gray-500">
                     Content goes here
                 </div>

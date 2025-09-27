@@ -77,6 +77,14 @@
                 <div class="p-2 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
                      onclick="selectStudent({{ student.id }}, '{{ student.person.full_name }}')">
                   <div class="font-medium">{{ student.person.full_name }}</div>
+                  {% if student.person.khmer_name %}
+                  <div class="text-sm text-gray-600 font-khmer">
+                    {{ student.person.khmer_name }}
+                    {% if student.person.khmer_name_source == 'approximated' %}
+                      <span class="text-blue-500 font-bold" title="System Approximated">*</span>
+                    {% endif %}
+                  </div>
+                  {% endif %}
                   <div class="text-sm text-gray-500">ID: {{ student.student_id }}</div>
                 </div>
                 {% endfor %}
@@ -142,4 +150,10 @@ function prevStep() {
 document.getElementById('next-btn').addEventListener('click', nextStep);
 document.getElementById('prev-btn').addEventListener('click', prevStep);
 </script>
+
+<style>
+.font-khmer {
+  font-family: 'Khmer OS', serif;
+}
+</style>
 {% endblock %}

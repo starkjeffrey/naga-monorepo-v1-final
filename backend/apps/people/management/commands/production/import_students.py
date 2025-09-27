@@ -22,7 +22,7 @@ from apps.people.models import (
     PhoneNumber,
     StudentProfile,
 )
-from apps.people.utils.name_parser import parse_student_name
+from apps.data_pipeline.cleaners.name_parser import parse_student_name
 from apps.scholarships.models import Sponsor
 
 
@@ -264,7 +264,7 @@ class Command(BaseCommand):
                     birth_province=birth_place,
                     citizenship=citizenship,
                     preferred_gender=gender,
-                    personal_email=row.get("Email", "").strip() or None,
+                    personal_email=row.get("SchoolEmail", "").strip() or None,
                 )
             except Exception as e:
                 self.stats["errors"] += 1

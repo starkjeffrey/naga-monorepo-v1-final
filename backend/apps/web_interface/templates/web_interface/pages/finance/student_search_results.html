@@ -7,6 +7,14 @@
        data-student-name="{{ student.person.full_name }}">
     <div class="student-result-info">
       <div class="student-name">{{ student.person.full_name }}</div>
+      {% if student.person.khmer_name %}
+      <div class="student-khmer-name font-khmer">
+        {{ student.person.khmer_name }}
+        {% if student.person.khmer_name_source == 'approximated' %}
+          <span class="text-blue-500 font-bold" title="System Approximated">*</span>
+        {% endif %}
+      </div>
+      {% endif %}
       <div class="student-details">
         <span class="student-id">ID: {{ student.student_id }}</span>
         {% if student.outstanding_balance %}
@@ -26,3 +34,11 @@
     </p>
   </div>
 {% endfor %}
+
+<style>
+.font-khmer {
+  font-family: 'Khmer OS', serif;
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+</style>

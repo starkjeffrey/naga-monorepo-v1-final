@@ -580,6 +580,7 @@ class StudentSearchView(FinanceRequiredMixin, TemplateView):
             StudentProfile.objects.filter(
                 Q(person__full_name__icontains=search_query)
                 | Q(person__family_name__icontains=search_query)
+                | Q(person__khmer_name__icontains=search_query)
                 | Q(student_id__startswith=search_query)  # Optimized: students search by ID prefix
             )
             .select_related("person")

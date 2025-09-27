@@ -75,27 +75,34 @@ class StudentDetailView(StaffRequiredMixin, DetailView):
 
     def get_queryset(self):
         """Optimize queries with related data."""
-        return StudentProfile.objects.select_related("person").prefetch_related(
-            Prefetch(
-                "class_header_enrollments",
-                queryset=ClassHeaderEnrollment.objects.filter(is_deleted=False)
-                .select_related("class_header__course", "class_header__term")
-                .order_by("-class_header__term__start_date")[:10],
-            ),
-            Prefetch(
-                "program_enrollments",
-                queryset=ProgramEnrollment.objects.filter(is_deleted=False)
-                .select_related("program")
-                .order_by("-created_at")[:5],
-            ),
-        )
+        return StudentProfile.objects.select_related("person")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        # Get related objects with proper queries to avoid slice issues
+        recent_enrollments = (
+            ClassHeaderEnrollment.objects.filter(
+                student=self.object, is_deleted=False
+            )
+            .select_related("class_header__course", "class_header__term")
+            .order_by("-class_header__term__start_date")[:10]
+        )
+
+        recent_programs = (
+            ProgramEnrollment.objects.filter(
+                student=self.object, is_deleted=False
+            )
+            .select_related("program")
+            .order_by("-created_at")[:5]
+        )
+
         context.update(
             {
                 "page_title": f"Student: {self.object.person.full_name}",
                 "current_page": "students",
+                "recent_enrollments": recent_enrollments,
+                "recent_programs": recent_programs,
             }
         )
         return context

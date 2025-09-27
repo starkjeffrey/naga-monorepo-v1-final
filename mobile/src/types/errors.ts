@@ -2,18 +2,7 @@
  * Type definitions for authentication and error handling
  */
 
-export interface GoogleUserProfile {
-  id: string
-  email: string
-  verified_email: boolean
-  name: string
-  given_name: string
-  family_name: string
-  picture: string
-  locale: string
-}
-
-export interface GoogleAuthResponse {
+export interface AuthResponse {
   success: boolean
   jwt_token?: string
   student_id?: number

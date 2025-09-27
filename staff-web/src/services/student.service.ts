@@ -120,6 +120,31 @@ export class StudentService {
     return api.get<SelectOption[]>(`${this.BASE_URL}/people/emergency-contacts/relationships/`);
   }
 
+  /**
+   * Get student analytics and demographic data
+   */
+  static async getStudentAnalytics(): Promise<{
+    overview: {
+      total_students: number;
+      active_students: number;
+      monk_students: number;
+      transfer_students: number;
+      average_age: number;
+    };
+    demographics: {
+      gender_distribution: Array<{ category: string; count: number }>;
+      age_groups: Array<{ category: string; count: number }>;
+      province_distribution: Array<{ category: string; count: number }>;
+    };
+    academic: {
+      status_distribution: Array<{ category: string; count: number }>;
+      study_time_distribution: Array<{ category: string; count: number }>;
+      program_distribution: Array<{ category: string; count: number }>;
+    };
+  }> {
+    return api.get(`${this.BASE_URL}/people/students/analytics/`);
+  }
+
   // ===== ENROLLMENT API =====
 
   /**

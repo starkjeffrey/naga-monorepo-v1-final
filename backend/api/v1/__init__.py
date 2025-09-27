@@ -27,7 +27,7 @@ api = NinjaAPI(
     description="Student Information System API v1.0.0",
     docs_url="/docs/",
     openapi_url="/openapi.json",
-    urls_namespace="api_v1",  # Add unique namespace to avoid conflicts
+    urls_namespace="naga_api_v1",  # Add unique namespace to avoid conflicts
     auth=None,  # Authentication handled per endpoint
 )
 
@@ -126,6 +126,18 @@ except Exception as e:
 
     logger = logging.getLogger(__name__)
     logger.error(f"Failed to load curriculum API: {e}")
+
+# Add Khmer names API
+try:
+    from . import khmer_names
+
+    api.add_router("/khmer-names/", khmer_names.router)
+except Exception as e:
+    # Log but don't crash the entire API
+    import logging
+
+    logger = logging.getLogger(__name__)
+    logger.error(f"Failed to load khmer names API: {e}")
 
 # TODO: Add remaining routers as they are migrated:
 # from . import academic_records, mobile

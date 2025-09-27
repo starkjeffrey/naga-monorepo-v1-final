@@ -10,12 +10,10 @@ export const getApiConfig = () => ({
 // Authentication Configuration
 export const getAuthConfig = () => ({
   allowedEmailDomain: process.env.EXPO_PUBLIC_ALLOWED_EMAIL_DOMAIN || 'pucsr.edu.kh',
-  googleClientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID,
-  googleAndroidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID,
-  googleIosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
+  // Google Sign-In configuration removed - not currently implemented
 })
 
 // CDN Configuration
 export const getCdnConfig = () => ({
-  googleApisBaseUrl: 'https://www.googleapis.com/oauth2/v2',
+  // CDN URLs can be added here as needed
 })

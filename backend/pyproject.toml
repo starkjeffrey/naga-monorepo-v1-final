@@ -28,6 +28,9 @@ dependencies = [
     "django-cors-headers>=4.3.1,<5",
     "httpx>=0.28.1,<0.29",
     "pydantic[email]>=2.11.4,<3",
+    # === GraphQL ===
+    "strawberry-graphql[django]>=0.253.2",
+    "strawberry-graphql-django>=0.55.0",
     # === Forms & Templates ===
     "crispy-tailwind>=1.0.3,<2",
     "django-crispy-forms~=2.1",

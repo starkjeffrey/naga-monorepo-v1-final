@@ -285,7 +285,16 @@ def query_string(request, **kwargs):
     Returns:
         Updated query string
     """
-    query_dict = request.GET.copy()
+    # Defensive programming: handle case where request might be a string
+    if isinstance(request, str):
+        from django.http import QueryDict
+        query_dict = QueryDict(mutable=True)
+    elif hasattr(request, 'GET'):
+        query_dict = request.GET.copy()
+    else:
+        from django.http import QueryDict
+        query_dict = QueryDict(mutable=True)
+
     for key, value in kwargs.items():
         if value is not None:
             query_dict[key] = value

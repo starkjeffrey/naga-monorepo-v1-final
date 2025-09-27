@@ -5,8 +5,6 @@ from pathlib import Path
 
 from django.core.management.base import BaseCommand
 
-from config.api import api
-
 
 class Command(BaseCommand):
     help = "Generate OpenAPI schema JSON file from django-ninja API"
@@ -21,6 +19,9 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         output_file = options["file"]
+
+        # Import API only when command is actually run to avoid startup conflicts
+        from config.api import api
 
         # Get the OpenAPI schema from django-ninja
         schema = api.get_openapi_schema()

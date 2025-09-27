@@ -5,6 +5,7 @@
 import React from 'react';
 import { Button } from 'antd';
 import { LogoutOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 
 /**
@@ -71,49 +72,49 @@ export const DashboardPage: React.FC = () => {
         <aside className="w-64 bg-white shadow-sm border-r border-gray-200">
           <nav className="mt-6 px-4">
             <div className="space-y-2">
-              <a href="#" className="bg-blue-700 text-white px-3 py-2 rounded-lg flex items-center space-x-3 text-sm font-medium">
+              <Link to="/dashboard" className="bg-blue-700 text-white px-3 py-2 rounded-lg flex items-center space-x-3 text-sm font-medium hover:bg-blue-800 transition-colors">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
                 <span>Dashboard</span>
-              </a>
-              <a href="#" className="text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-lg flex items-center space-x-3 text-sm">
+              </Link>
+              <Link to="/students" className="text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-lg flex items-center space-x-3 text-sm hover:text-blue-700 transition-colors">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
                 </svg>
                 <span>Students</span>
-              </a>
-              <a href="#" className="text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-lg flex items-center space-x-3 text-sm">
+              </Link>
+              <Link to="/enrollment" className="text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-lg flex items-center space-x-3 text-sm hover:text-blue-700 transition-colors">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 0V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 0h8m-9 0H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5z" />
                 </svg>
-                <span>Schedule</span>
-              </a>
-              <a href="#" className="text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-lg flex items-center space-x-3 text-sm">
+                <span>Enrollment</span>
+              </Link>
+              <a href="#" className="text-gray-400 cursor-not-allowed px-3 py-2 rounded-lg flex items-center space-x-3 text-sm">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span>Testing</span>
+                <span>Testing (Coming Soon)</span>
               </a>
-              <a href="#" className="text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-lg flex items-center space-x-3 text-sm">
+              <a href="#" className="text-gray-400 cursor-not-allowed px-3 py-2 rounded-lg flex items-center space-x-3 text-sm">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
-                <span>Curriculum</span>
+                <span>Curriculum (Coming Soon)</span>
               </a>
-              <a href="#" className="text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-lg flex items-center space-x-3 text-sm">
+              <a href="#" className="text-gray-400 cursor-not-allowed px-3 py-2 rounded-lg flex items-center space-x-3 text-sm">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
-                <span>Reports</span>
+                <span>Reports (Coming Soon)</span>
               </a>
-              <a href="#" className="text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-lg flex items-center space-x-3 text-sm">
+              <Link to="/profile" className="text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-lg flex items-center space-x-3 text-sm hover:text-blue-700 transition-colors">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-                <span>Settings</span>
-              </a>
+                <span>Profile</span>
+              </Link>
             </div>
           </nav>
         </aside>
@@ -130,7 +131,7 @@ export const DashboardPage: React.FC = () => {
             {/* Key Metrics Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
               {/* Weekly Testing */}
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <Link to="/students" className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md hover:border-blue-300 transition-all cursor-pointer">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-gray-600">Testees This Week</p>
@@ -146,10 +147,10 @@ export const DashboardPage: React.FC = () => {
                   <span className="text-green-600 font-medium">↗ +23%</span>
                   <span className="text-gray-600 ml-2">vs last week</span>
                 </div>
-              </div>
+              </Link>
 
               {/* Total Active Students */}
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <Link to="/students" className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md hover:border-green-300 transition-all cursor-pointer">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-gray-600">Active Students</p>
@@ -165,10 +166,10 @@ export const DashboardPage: React.FC = () => {
                   <span className="text-green-600 font-medium">↗ +5.2%</span>
                   <span className="text-gray-600 ml-2">this term</span>
                 </div>
-              </div>
+              </Link>
 
               {/* Current Term Classes */}
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 opacity-75">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-gray-600">Active Classes</p>
@@ -186,7 +187,7 @@ export const DashboardPage: React.FC = () => {
               </div>
 
               {/* Pending Enrollments */}
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <Link to="/enrollment" className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md hover:border-purple-300 transition-all cursor-pointer">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-gray-600">Pending Enrollments</p>
@@ -201,7 +202,7 @@ export const DashboardPage: React.FC = () => {
                 <div className="mt-4 flex items-center text-sm">
                   <span className="text-purple-600 font-medium">requires review</span>
                 </div>
-              </div>
+              </Link>
             </div>
 
             {/* Two-Column Layout */}

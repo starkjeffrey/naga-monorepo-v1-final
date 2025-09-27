@@ -7,7 +7,7 @@ information.
 
 
 from django.core.paginator import Paginator
-from django.db.models import Prefetch, Q
+from django.db.models import Prefetch, Q, Count, Avg
 from django.shortcuts import get_object_or_404
 from ninja import Query, Router
 
@@ -445,3 +445,105 @@ def get_relationship_choices(request):
     """Get all available emergency contact relationship choices."""
 
     return [{"value": choice[0], "label": choice[1]} for choice in EmergencyContact.Relationship.choices]
+
+
+# Analytics endpoint
+@router.get("/students/analytics/", response=dict)
+def get_student_analytics(request):
+    """Get student demographic analytics and statistics."""
+
+    # Basic student counts
+    total_students = StudentProfile.objects.count()
+    active_students = StudentProfile.objects.filter(current_status="ACTIVE").count()
+
+    # Gender distribution
+    gender_distribution = (
+        Person.objects.filter(student_profile__isnull=False)
+        .values("preferred_gender")
+        .annotate(count=Count("id"))
+        .order_by("preferred_gender")
+    )
+
+    # Status distribution
+    status_distribution = (
+        StudentProfile.objects.values("current_status")
+        .annotate(count=Count("id"))
+        .order_by("current_status")
+    )
+
+    # Study time preference distribution
+    study_time_distribution = (
+        StudentProfile.objects.values("study_time_preference")
+        .annotate(count=Count("id"))
+        .order_by("study_time_preference")
+    )
+
+    # Program distribution (by major)
+    program_distribution = (
+        MajorDeclaration.objects.filter(is_active=True)
+        .values("major__name")
+        .annotate(count=Count("id"))
+        .order_by("-count")[:10]  # Top 10 programs
+    )
+
+    # Monk status
+    monk_count = StudentProfile.objects.filter(is_monk=True).count()
+    transfer_count = StudentProfile.objects.filter(is_transfer_student=True).count()
+
+    # Province distribution (birth province)
+    province_distribution = (
+        Person.objects.filter(student_profile__isnull=False, birth_province__isnull=False)
+        .values("birth_province")
+        .annotate(count=Count("id"))
+        .order_by("-count")[:10]  # Top 10 provinces
+    )
+
+    # Age distribution
+    age_stats = (
+        Person.objects.filter(student_profile__isnull=False, date_of_birth__isnull=False)
+        .aggregate(
+            avg_age=Avg("age"),
+            min_age=Count("id", filter=Q(age__lt=20)),
+            adult_age=Count("id", filter=Q(age__gte=20, age__lt=30)),
+            older_age=Count("id", filter=Q(age__gte=30))
+        )
+    )
+
+    return {
+        "overview": {
+            "total_students": total_students,
+            "active_students": active_students,
+            "monk_students": monk_count,
+            "transfer_students": transfer_count,
+            "average_age": round(age_stats["avg_age"] or 0, 1),
+        },
+        "demographics": {
+            "gender_distribution": [
+                {"category": item["preferred_gender"], "count": item["count"]}
+                for item in gender_distribution
+            ],
+            "age_groups": [
+                {"category": "Under 20", "count": age_stats["min_age"]},
+                {"category": "20-29", "count": age_stats["adult_age"]},
+                {"category": "30+", "count": age_stats["older_age"]},
+            ],
+            "province_distribution": [
+                {"category": item["birth_province"], "count": item["count"]}
+                for item in province_distribution
+            ],
+        },
+        "academic": {
+            "status_distribution": [
+                {"category": item["current_status"], "count": item["count"]}
+                for item in status_distribution
+            ],
+            "study_time_distribution": [
+                {"category": item["study_time_preference"], "count": item["count"]}
+                for item in study_time_distribution
+            ],
+            "program_distribution": [
+                {"category": item["major__name"], "count": item["count"]}
+                for item in program_distribution
+            ],
+        },
+    }

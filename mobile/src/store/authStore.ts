@@ -6,7 +6,14 @@ interface User {
   id: string;
   name: string;
   email: string;
-  role: 'student' | 'teacher' | 'admin';
+  role: 'student' | 'teacher' | 'admin' | 'ma_teacher'; // MA students who teach
+  studentId?: string;
+  teacherId?: string;
+  profilePhoto?: string;
+  department?: string;
+  currentAcademicYear?: string;
+  enrollmentStatus?: 'active' | 'inactive' | 'graduated';
+  permissions?: string[];
 }
 
 interface AuthStore {
@@ -14,12 +21,15 @@ interface AuthStore {
   token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  selectedRole?: 'student' | 'teacher'; // For MA students who can switch roles
 
   // Actions
   login: (user: User, token: string) => void;
   logout: () => void;
   setLoading: (loading: boolean) => void;
   updateUser: (user: Partial<User>) => void;
+  switchRole: (role: 'student' | 'teacher') => void;
+  hasPermission: (permission: string) => boolean;
 }
 
 export const useAuthStore = create<AuthStore>()(
@@ -29,13 +39,21 @@ export const useAuthStore = create<AuthStore>()(
       token: null,
       isAuthenticated: false,
       isLoading: false,
+      selectedRole: undefined,
 
       login: (user: User, token: string) => {
+        // Set default role for MA teachers
+        let defaultRole: 'student' | 'teacher' | undefined;
+        if (user.role === 'ma_teacher') {
+          defaultRole = 'student'; // Default to student view for MA teachers
+        }
+
         set({
           user,
           token,
           isAuthenticated: true,
           isLoading: false,
+          selectedRole: defaultRole,
         });
       },
 
@@ -45,6 +63,7 @@ export const useAuthStore = create<AuthStore>()(
           token: null,
           isAuthenticated: false,
           isLoading: false,
+          selectedRole: undefined,
         });
       },
 
@@ -59,6 +78,19 @@ export const useAuthStore = create<AuthStore>()(
             user: { ...currentUser, ...userData },
           });
         }
+      },
+
+      switchRole: (role: 'student' | 'teacher') => {
+        const currentUser = get().user;
+        // Only MA teachers can switch roles
+        if (currentUser?.role === 'ma_teacher') {
+          set({ selectedRole: role });
+        }
+      },
+
+      hasPermission: (permission: string) => {
+        const currentUser = get().user;
+        return currentUser?.permissions?.includes(permission) || false;
       },
     }),
     {

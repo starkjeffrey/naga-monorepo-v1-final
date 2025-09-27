@@ -1,0 +1,629 @@
+[project]
+name = 'naga_backend_v1'
+version = '1.0.0'
+description = 'Naga Student Information System Backend v1.0 - Clean Architecture'
+requires-python = ">=3.13.7"
+authors = [
+    {name = 'Jeffrey Stark', email = 'stark.jeffrey@pucsr.edu.kh'},
+]
+dependencies = [
+    # === Core Django & Web ===
+    "django>=5.2,<5.3",
+    "Pillow>=11.1.0,<12",
+    "argon2-cffi>=23.1.0,<24",
+    "psycopg>=3.2.7,<4",
+    "whitenoise[brotli]>=6.6.0,<7",
+    # === Core Libraries ===
+    "django-environ>=0.12.0,<0.13",
+    "django-model-utils>=5.0.0,<6",
+    "python-slugify>=8.0.4,<9",
+    "tzdata~=2025.2",
+    # === Auth & Permissions ===
+    "django-allauth[mfa]==65.7.0",
+    "fido2>=1.1.3,<2",
+    "PyJWT>=2.8.0,<3.0.0",
+    "google-auth>=2.23.0,<3.0.0",
+    # === API & Schema ===
+    "django-ninja>=1.4.0",
+    "django-cors-headers>=4.3.1,<5",
+    "httpx>=0.28.1,<0.29",
+    "pydantic[email]>=2.11.4,<3",
+    # === GraphQL ===
+    "strawberry-graphql[django]>=0.253.2",
+    "strawberry-graphql-django>=0.55.0",
+    # === Forms & Templates ===
+    "crispy-tailwind>=1.0.3,<2",
+    "django-crispy-forms~=2.1",
+    "django-htmx>=1.21.0,<2",
+    "django-compressor>=4.4,<5",
+    # === Dramatiq & Async ===
+    "dramatiq[redis,watch]>=1.17.0,<2",
+    "django-dramatiq>=0.11.0,<1",
+    "redis>=6.0.0,<7",
+    "django-redis>=4.6.0,<6",
+    "hiredis>=3.0.0,<4",
+    # === ASGI Server & WebSocket ===
+    "uvicorn[standard]>=0.34.0,<0.35",
+    "uvicorn-worker>=0.3.0,<0.4",
+    "channels>=4.0.0,<5",
+    "channels-redis>=4.0.0,<5",
+    # === Django Extensions ===
+    "django-countries>=7.5.1,<8",
+    "django-import-export>=4.0.10,<5",
+    "django-safedelete>=1.4.0,<2",
+    "django-simple-history>=3.7.0,<4",
+    "django-widget-tweaks>=1.5.0,<2",
+    "django-constance[redis]>=4.3.2",
+    "django-multiselectfield>=0.1.13",
+    # === Utilities ===
+    "geopy>=2.4.1,<3",
+    "jsonschema>=4.23.0,<5",
+    "email-validator>=2.2.0",
+    "openpyxl>=3.1.5",
+    "pandas>=2.2.3",
+    "sqlalchemy>=2.0.0,<3.0.0", # Database toolkit for pandas operations
+    "markdown>=3.8",
+    "reportlab>=4.4.1",
+    "beautifulsoup4>=4.13.4",
+    "weasyprint>=65.0",
+    # === Thermal Printing & QR Codes ===
+    "python-escpos>=3.1",
+    "qrcode[pil]>=8.0", # QR code generation with PIL support for logos
+    "factory-boy>=3.3.3",
+    "requests>=2.32.4",
+    "uuid7>=0.1.0",
+    "xlsxwriter>=3.2.5",
+    "daphne>=4.2.1",
+    "chardet>=5.0.0", # Character encoding detection for data pipeline
+]
+
+[project.urls]
+Homepage = "https://github.com/starkjeffrey/naga_backend_v1"
+Repository = "https://github.com/starkjeffrey/naga_backend_v1"
+Documentation = "https://starkjeffrey.github.io/naga_backend_v1"
+
+[project.optional-dependencies]
+# Production environment dependencies
+prod = [
+    "gunicorn>=23.0.0",
+    "sentry-sdk>=2.25.0",
+    "django-prometheus>=2.3.1,<3",
+    "django-anymail[mailgun]>=12.0",
+]
+
+# Test environment dependencies (as per TEST_PLAN.md)
+test = [
+    # Test Framework
+    "pytest>=8.3.4",
+    "pytest-django>=4.10.0",
+    "pytest-cov>=6.2.1",
+    "pytest-xdist>=3.6.0",          # Parallel execution
+    "pytest-timeout>=2.3.0",         # Test timeouts
+    "pytest-mock>=3.14.0",           # Mock helpers
+    "pytest-benchmark>=5.0.0",       # Performance testing
+    
+    # Test Data
+    "factory-boy>=3.3.3",
+    "faker>=33.0.0",
+    "pytest-factoryboy>=2.7.0",
+    
+    # Property Testing
+    "hypothesis>=6.100.0",
+    "hypothesis-django>=0.3.0",
+    
+    # Mocking
+    "respx>=0.21.0",                # httpx mocking
+    "fakeredis>=2.25.0",            # Redis mocking
+    "freezegun>=1.5.1",             # Time mocking
+    
+    # Coverage
+    "coverage[toml]>=7.5.3",
+    "django-coverage-plugin>=3.1.0",
+    
+    # API Testing
+    "httpx>=0.28.1",
+    "jsonschema>=4.23.0",
+]
+
+# Development environment tools
+dev = [
+    # === Debugging & Profiling ===
+    "django-debug-toolbar>=5.2.0",
+    "django-extensions>=3.2.3,<4",
+    "django-silk>=5.3.2,<6",
+    "ipdb==0.13.13",
+    "Werkzeug[watchdog]>=3.0.1,<4",
+    "django-browser-reload>=1.17.0,<2",
+    "debugpy>=1.8,<1.9",
+
+    # === Development Tools ===
+    "django-sql-explorer>=5.3",
+    "django-tailwind[reload]>=4.0.1,<5",
+    "django-sonar>=0.1.8",
+    "django-apscheduler>=0.6.2,<1",  # Alternative to celery beat
+    "django-mcp-server>=0.5.3",
+
+    # === Linting & Formatting & Static Analysis ===
+    "ruff>=0.9.2,<0.10",
+    "djlint==1.35.3",
+    "djhtml>=3.0.7,<4",
+    "mypy>=1.7.1,<2",
+    "django-stubs>=5.2.0",
+    "django-stubs[compatible-mypy]>=5.0.2,<6",
+    "django-stubs-ext>=5.0.2,<6",
+    "pre-commit>=4.1.0,<5",
+
+    # === Build & Dev Workflow ===
+    "watchfiles>=0.24.0,<1",
+    "pyupgrade>=3.15.1,<4",
+
+    # === Documentation Building ===
+    "sphinx>=7.2.6,<7.3",
+    "sphinx-autobuild==2024.4.16",
+]
+
+# Staging environment dependencies
+staging = [
+    "naga_backend_v1[prod]",
+    "debugpy>=1.8,<1.9",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["naga_backend_v1"]
+
+# ==== pytest ====
+[tool.pytest.ini_options]
+minversion = "6.0"
+DJANGO_SETTINGS_MODULE = "config.settings.test"
+python_files = ["test_*.py", "tests.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+testpaths = ["tests"]
+addopts = [
+    "--verbose",
+    "--strict-markers",
+    "--strict-config",
+    "--reuse-db",
+    "--nomigrations",
+    "--import-mode=importlib",
+    "--cov=apps",
+    "--cov-report=html",
+    "--cov-report=term-missing",
+    "--cov-report=xml",
+    "-p", "no:warnings",
+    "--tb=short",
+]
+markers = [
+    "unit: Unit tests that run in isolation",
+    "integration: Integration tests that test multiple components",
+    "api: API endpoint tests",
+    "e2e: End-to-end user journey tests",
+    "slow: Tests that take longer than 1 second (deselect with '-m \"not slow\"')",
+    "security: Security and permission tests",
+    "performance: Performance and load tests",
+    "smoke: Quick smoke tests for CI/CD",
+    "wip: Work in progress tests",
+    "financial_compliance: Tests for financial compliance and audit requirements",
+    "transaction_safety: Transaction safety and concurrency tests",
+]
+# Django specific settings
+django_find_project = false
+django_debug_mode = false
+# Test timeout (30 seconds default)
+timeout = 30
+# Test output and logging
+console_output_style = "progress"
+log_cli = true
+log_cli_level = "INFO"
+log_cli_format = "%(asctime)s [%(levelname)8s] %(message)s"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
+# Filter warnings
+filterwarnings = [
+    "ignore::DeprecationWarning:django.*",
+    "ignore::PendingDeprecationWarning",
+    "ignore::ResourceWarning",
+    "ignore::django.utils.deprecation.RemovedInDjango50Warning",
+    "ignore::django.utils.deprecation.RemovedInDjango60Warning",
+    "error::UserWarning:apps.*",
+]
+
+# ==== Coverage ====
+[tool.coverage.run]
+include = ["naga_backend_v1/**"]
+omit = [
+    "*/migrations/*",
+    "*/tests/*",
+    "*/venv/*",
+    "*/.venv/*",
+    "manage.py",
+    "*/settings/*",
+    "*/conftest.py",
+    "*/admin.py",              # Django admin registration is boilerplate
+    "*/apps.py",               # Django app configuration is boilerplate
+    "*/wsgi.py",               # WSGI config rarely needs testing
+    "*/asgi.py",               # ASGI config rarely needs testing
+    "*/management/commands/ephemeral/*",  # Temporary scripts
+    "scratchpad/*",            # Experimental code
+    "scripts/utilities/*",     # Utility scripts
+]
+plugins = ["django_coverage_plugin"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+# ==== mypy ====
+[tool.mypy]
+python_version = "3.13"
+# Django-specific plugin (must be first)
+plugins = [
+    "mypy_django_plugin.main",
+]
+
+# Type checking strictness - pragmatic for Django
+check_untyped_defs = false  # Too noisy for Django, disable initially
+disallow_incomplete_defs = false  # Too strict for Django patterns
+disallow_untyped_decorators = false  # Django decorators often untyped
+strict_optional = true
+disallow_any_generics = false  # Django models use generics extensively
+
+# Import and unused code warnings
+ignore_missing_imports = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unused_configs = true
+warn_return_any = false  # Too noisy with Django ORM
+
+# Package handling
+explicit_package_bases = true
+namespace_packages = true
+
+# Error reporting
+show_error_codes = true
+show_column_numbers = true
+
+# Per-module configuration for Django apps
+[[tool.mypy.overrides]]
+module = [
+    "apps.*.models",
+    "apps.*.managers", 
+    "apps.*.migrations.*",
+    "apps.*.validators",
+    "apps.*.forms",
+    "api.v1.*",
+]
+# Disable noisy Django-specific errors
+disable_error_code = [
+    "attr-defined",      # _ST attribute access in Django queries
+    "no-any-return",     # ORM methods return Any
+    "misc",              # ForeignKey nullable issues
+    "arg-type",          # Django model argument types
+    "assignment",        # Django ORM assignments
+    "return-value",      # Django ORM return values
+]
+
+[[tool.mypy.overrides]]
+module = "*.migrations.*"
+ignore_errors = true
+
+# Enable stricter checking for business logic
+[[tool.mypy.overrides]]
+module = [
+    "apps.*.services",
+    "apps.*.utils", 
+    "apps.common.policies",
+    "users.managers",
+]
+# Enable more strict type checking for pure Python business logic
+warn_return_any = true
+check_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = "*.tests.*"
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = "*.management.commands.ephemeral.*"
+ignore_errors = true
+
+# Strategic MyPy - Focus on business logic only
+[[tool.mypy.overrides]]
+module = "scratchpad.*"
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = "scripts.utilities.*"
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = "scripts.legacy_imports.*"
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = "scripts.management_reports.*"
+ignore_errors = true
+
+[tool.django-stubs]
+django_settings_module = "config.settings.test"
+# Improve Django type checking
+strict_settings = false  # Allow flexible settings until we're ready for stricter checking
+ignore_missing_model_attributes = false  # Catch missing model attributes
+
+# ==== djLint ====
+[tool.djlint]
+blank_line_after_tag = "load,extends"
+close_void_tags = true
+format_css = true
+format_js = true
+ignore = "H006,H030,H031,T002"
+include = "H017,H035"
+indent = 2
+max_line_length = 119
+profile = "django"
+
+[tool.djlint.css]
+indent_size = 2
+
+[tool.djlint.js]
+indent_size = 2
+
+# ==== Ruff Configuration ====
+[tool.black]
+line-length = 119
+target-version = ['py313']
+extend-exclude = '''
+(
+  /(
+      \.eggs
+    | \.git
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+    | migrations
+  )/
+)
+'''
+
+[tool.ruff]
+target-version = "py313"
+line-length = 119
+extend-exclude = [
+    "*/migrations/*.py",
+    "staticfiles/*",
+    ".venv/*",
+    "venv/*",
+    "env/*",
+    "node_modules/*",
+    "htmlcov/*",
+    "backups/*",
+    "tests_legacy/*",
+    "migrations_backup_*/*",
+    ".tox/*",
+    "dist/*",
+    "build/*",
+    "*.egg-info/*",
+    "manage.py",
+    # Exclude system Python installations to prevent permission errors
+    "/usr/local/Cellar/**",
+    "/usr/local/lib/**",
+    "/Library/Frameworks/Python.framework/**",
+    "*/Frameworks/Python.framework/**",
+    "*/site-packages/**",
+    # Exclude common system paths
+    "/usr/bin/**",
+    "/usr/lib/**",
+    "/System/**",
+]
+
+[tool.ruff.lint]
+# Comprehensive Django configuration - focused on essential code quality and security
+select = [
+    # Core essentials - these are non-negotiable
+    "F",     # Pyflakes (actual Python errors)
+    "E",     # pycodestyle errors (PEP 8 violations)
+    "W",     # pycodestyle warnings (formatting)
+    "I",     # isort (import organization)
+
+    # Django-specific best practices
+    "DJ",    # flake8-django (Django patterns)
+
+    # Security basics (with Django-aware ignores)
+    "S",     # flake8-bandit (security patterns)
+
+    # Code quality essentials
+    "B",     # flake8-bugbear (likely bugs)
+    "UP",    # pyupgrade (modern Python syntax)
+    "C90",   # mccabe (complexity - but with higher limits)
+
+    # Additional quality rules for Django
+    "C4",    # flake8-comprehensions (readable comprehensions)
+    "RUF",   # Ruff-specific rules (Ruff's own recommendations)
+    "T20",   # flake8-print (catch print statements in production code)
+    "PLE",   # Pylint errors (logic errors)
+    "PLW",   # Pylint warnings (potential issues)
+    "Q",     # flake8-quotes (consistent string quoting)
+    "TCH",   # flake8-type-checking (TYPE_CHECKING imports)
+]
+
+ignore = [
+    # === Django-specific patterns ===
+    "DJ001",  # null=True on string fields is Django convention
+    "DJ008",  # Model __str__ method flexibility
+    "DJ012",  # Order of model's inner classes is flexible in Django
+
+    # === Security false positives common in Django ===
+    "S101",   # assert statements in tests
+    "S106",   # hardcoded password false positives
+    "S308",   # mark_safe is legitimate in Django templates
+    "S311",   # random module is fine for non-crypto use
+    "S603",   # subprocess is often needed in management commands
+    "S607",   # partial path is common in Django
+    "S110",   # try-except-pass is sometimes needed
+    "S112",   # try-except-continue is valid pattern
+    "S104",   # hardcoded bind all interfaces (0.0.0.0 is normal in Docker)
+    "S105",   # hardcoded password string (often false positives)
+    "S108",   # hardcoded temp file paths
+    "S602",   # subprocess with shell is sometimes necessary
+    "S608",   # hardcoded SQL (Django raw queries are normal)
+
+    # === Django model patterns ===
+    "RUF012", # Mutable class attributes - Django models use this extensively
+    "PLW2901", # Redefined loop variable (common in Django templates and forms)
+
+    # === Code style - let developers decide ===
+    "C901",   # Complex structure - Django views/admin can be complex
+    "B008",   # Function call in default argument - needed for Django
+    "B017",   # assert raises exception - pytest style
+    "PLE1205", # Log format string - Django logging is flexible
+    "T201",   # Print statements - handled by per-file ignores
+    "Q000",   # Single quotes - let formatter handle
+    "Q001",   # Single quote docstrings - let formatter handle
+    "Q003",   # Multiline string quotes - let formatter handle
+    "TC002",  # TYPE_CHECKING import complexity in Django
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Tests can use assert statements and have different patterns
+"*/tests/*" = ["S101", "PLR2004", "S106", "TID252", "T201", "T203", "PLW2901"]
+"**/test_*.py" = ["S101", "PLR2004", "S106", "TID252", "T201", "T203", "PLW2901"]
+"conftest.py" = ["S101", "T201", "S107"]
+
+# Django settings files
+"*/settings/*" = ["F403", "F405", "T201"]  # Allow star imports and print statements in settings
+
+# Django migrations
+"*/migrations/*" = ["E501", "F401", "F403", "F405", "N806", "N816", "T201"]
+
+# Django management commands - allow debugging and flexible patterns
+"*/management/commands/*" = ["T201", "T203", "PLW2901", "S602", "S603", "S607", "RUF001"]  # Allow print, subprocess, flexible loops, and unicode symbols
+
+# Ephemeral management commands - relaxed quality standards
+"*/management/commands/ephemeral/*" = ["T201", "T203", "C901", "PLR", "B", "S", "E501", "F401", "F841", "UP", "PLE", "PLW", "Q"]
+
+# Standalone Django scripts that require django.setup() before Django imports
+"scratchpad/*" = ["E402", "T201", "T203", "PLW2901", "S602", "S603"]  # Module import order, print statements, subprocess
+"scripts/*" = ["E402", "T201", "T203", "PLW2901", "S602", "S603", "RUF001", "E501", "PLW0603"]     # Module import order, print statements, subprocess, emojis, line length, globals in dev scripts
+
+# Django models - allow specific patterns
+"*/models.py" = ["A003", "DJ001", "PLW2901", "TC002"]  # Allow builtins, null strings, loop vars, TYPE_CHECKING
+"models/*" = ["A003", "DJ001", "PLW2901", "TC002"]
+
+# Django admin files - allow complex patterns
+"*/admin.py" = ["T201", "C901", "PLW2901"]  # Allow print statements, complex admin classes, loop vars
+"admin/*" = ["T201", "C901", "PLW2901"]
+
+# Django views - allow flexibility
+"*/views.py" = ["C901", "PLW2901", "T201"]  # Complex views, loop vars, debugging prints
+"views/*" = ["C901", "PLW2901", "T201"]
+
+# Example/demo folders - relax undefined-name checks
+"*/examples/*" = ["F821"]
+
+# Specific module with intentional non-ASCII character mappings
+"apps/common/utils/limon_to_unicode.py" = ["RUF001"]
+
+[tool.ruff.lint.isort]
+force-single-line = false  # Allow multiple imports per line for better grouping
+known-first-party = ["naga_backend_v1", "config", "apps"]
+known-third-party = ["django"]  # Django is a third-party package
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+docstring-code-format = false
+
+[dependency-groups]
+dev = [
+    "bandit>=1.8.6",
+    "black>=25.1.0",
+    "django-apscheduler>=0.7.0",
+    "django-browser-reload>=1.18.0",
+    "django-debug-toolbar>=6.0.0",
+    "django-extensions>=3.2.3",
+    "django-mcp-server>=0.5.6",
+    "django-silk>=5.4.2",
+    "django-sonar>=0.1.8",
+    "django-sql-explorer>=5.3",
+    "django-stubs>=5.2.1",
+    "django-tailwind>=4.2.0",
+    "flake8>=7.3.0",
+    "mypy>=1.16.1",
+    "pathspec>=0.12.1",
+    "mypy-extensions>=1.1.0",
+    "pygments>=2.19.2",
+    "pyyaml>=6.0.2",
+    "types-beautifulsoup4>=4.12.0.20250516",
+    "types-openpyxl>=3.1.5.20250809",
+    "types-pillow>=10.2.0.20240822",
+    "types-python-slugify>=8.0.2.20240310",
+    "types-redis>=4.6.0.20241004",
+    "types-requests>=2.32.4.20250611",
+    "vulture>=2.14",
+]
+
+[tool.ruff.lint.pycodestyle]
+max-doc-length = 119
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+# === Django-specific Pylint rules ===
+[tool.ruff.lint.pylint]
+max-args = 8  # Django views/forms often need many args
+max-locals = 20  # Django views can have many local variables
+max-returns = 8  # Django views might have multiple return paths
+max-branches = 15  # Django views often have complex logic
+
+[tool.ruff.lint.flake8-pytest-style]
+fixture-parentheses = false
+mark-parentheses = false
+
+# ==== Bandit Security Configuration ====
+[tool.bandit]
+# Skip common Django false positives while catching real security issues
+skips = [
+    "B101",  # Assert statements (used in tests and validation)
+    "B601",  # Shell usage (needed in management commands)
+    "B602",  # Subprocess with shell (sometimes necessary)
+    "B603",  # Subprocess without shell check (subprocess is common)
+    "B607",  # Partial path (common in Django management commands)
+    "B104",  # Hardcoded bind all interfaces (0.0.0.0 normal in containers)
+    "B105",  # Hardcoded password string (many false positives)
+    "B108",  # Temporary file usage (common pattern)
+    "B110",  # Try-except-pass (valid pattern in some cases)
+    "B112",  # Try-except-continue (valid pattern)
+]
+exclude_dirs = [
+    "tests", 
+    "migrations", 
+    "staticfiles", 
+    "venv", 
+    ".venv", 
+    "scratchpad",
+    "management/commands/ephemeral"
+]
+
+[tool.bandit.format]
+line_length = 119

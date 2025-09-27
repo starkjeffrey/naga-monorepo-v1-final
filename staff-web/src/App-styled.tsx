@@ -20,7 +20,17 @@ import {
   LogOut,
   Menu,
   X,
-  Search
+  Search,
+  Database,
+  BarChart3,
+  TrendingUp,
+  Calculator,
+  PieChart,
+  Activity,
+  AlertTriangle,
+  Target,
+  Calendar,
+  Banknote
 } from 'lucide-react';
 
 const styles = {
@@ -349,56 +359,121 @@ interface NavigationItem {
 
 const navigationItems: NavigationItem[] = [
   {
-    id: 'dashboard',
-    label: 'Dashboard',
-    icon: LayoutDashboard,
-  },
-  {
-    id: 'students',
-    label: 'Student Management',
-    icon: Users,
-    badge: 'Hot',
-    children: [
-      { id: 'students-overview', label: 'Student Dashboard', icon: LayoutDashboard },
-      { id: 'students-list', label: 'All Students', icon: Users },
-      { id: 'students-search', label: 'Quick Search', icon: Users }
-    ]
-  },
-  {
-    id: 'enrollment',
-    label: 'Enrollment',
-    icon: UserCheck,
-    children: [
-      { id: 'enrollment-dashboard', label: 'Enrollment Dashboard', icon: LayoutDashboard },
-      { id: 'program-enrollments', label: 'Program Enrollments', icon: GraduationCap },
-      { id: 'class-enrollments', label: 'Class Enrollments', icon: BookOpen }
-    ]
-  },
-  {
-    id: 'academic',
-    label: 'Academic Records',
-    icon: BookOpen,
-    badge: 'New',
-    children: [
-      { id: 'transcripts', label: 'Transcripts', icon: FileText },
-      { id: 'grades', label: 'Grade Management', icon: Award },
-      { id: 'attendance', label: 'Attendance', icon: Clock }
-    ]
-  },
-  {
-    id: 'finance',
-    label: 'Financial',
+    id: 'financial-reports',
+    label: 'Financial Reports',
     icon: DollarSign,
     children: [
-      { id: 'billing', label: 'Billing & Invoices', icon: FileText },
-      { id: 'payments', label: 'Payment Tracking', icon: CreditCard },
-      { id: 'scholarships', label: 'Scholarships', icon: Award }
+      {
+        id: 'financial-dashboard',
+        label: 'Financial Dashboard',
+        icon: BarChart3
+      },
+      {
+        id: 'daily-cash-receipts',
+        label: 'Daily Cash Receipts',
+        icon: Banknote
+      },
+      {
+        id: 'daily-cashier-reconciliation',
+        label: 'Cashier Reconciliation',
+        icon: Calculator
+      },
+      {
+        id: 'daily-payment-summary',
+        label: 'Daily Payment Summary',
+        icon: PieChart
+      },
+      {
+        id: 'student-balances',
+        label: 'Student Balances',
+        icon: CreditCard
+      },
+      {
+        id: 'quickbooks-reports',
+        label: 'QuickBooks Reports',
+        icon: FileText
+      }
     ]
   },
+  {
+    id: 'student-analytics',
+    label: 'Student Analytics',
+    icon: Users,
+    children: [
+      {
+        id: 'student-demographics',
+        label: '📊 Student Demographics',
+        icon: BarChart3,
+        badge: 'New'
+      },
+      {
+        id: 'student-analytics-report',
+        label: 'Enhanced Student Analytics',
+        icon: TrendingUp
+      },
+      {
+        id: 'completion-rates',
+        label: 'Program Completion Rates',
+        icon: Target
+      },
+      {
+        id: 'dropout-analysis',
+        label: 'Dropout Pattern Analysis',
+        icon: AlertTriangle
+      },
+      {
+        id: 'student-journeys',
+        label: 'Student Journey Analysis',
+        icon: Activity
+      },
+      {
+        id: 'risk-factors',
+        label: 'Risk Factor Analysis',
+        icon: AlertTriangle
+      },
+      {
+        id: 'term-retention',
+        label: 'Term-by-Term Retention',
+        icon: Calendar
+      }
+    ]
+  },
+  {
+    id: 'system-reports',
+    label: 'System Reports',
+    icon: BarChart3,
+    children: [
+      {
+        id: 'database-integrity',
+        label: 'Database Integrity',
+        icon: Database
+      },
+      {
+        id: 'executive-summary',
+        label: 'Executive Summary',
+        icon: FileText
+      },
+      {
+        id: 'activity-logs',
+        label: 'System Activity Logs',
+        icon: Activity
+      },
+      {
+        id: 'modern-dashboard-demo',
+        label: '🚀 Modern Dashboard Demo',
+        icon: BarChart3
+      },
+      {
+        id: 'advanced-dashboard-demo',
+        label: '🎯 Advanced Data Grid',
+        icon: Database
+      }
+    ]
+  }
 ];
 
 const Sidebar = () => {
-  const [expandedItems, setExpandedItems] = useState<string[]>(['students', 'enrollment']);
+  const [expandedItems, setExpandedItems] = useState<string[]>(['financial-reports', 'student-analytics', 'system-reports']);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   const toggleExpanded = (itemId: string) => {
@@ -430,7 +505,48 @@ const Sidebar = () => {
       <div>
         <button
           style={itemStyle}
-          onClick={() => hasChildren && toggleExpanded(item.id)}
+          onClick={() => {
+            // Handle report clicks
+            if (item.id === 'database-integrity') {
+              window.open('/database-integrity.html', '_blank');
+            } else if (item.id === 'financial-dashboard') {
+              window.open('/financial-dashboard.html', '_blank');
+            } else if (item.id === 'daily-cash-receipts') {
+              window.open('/daily-cash-receipts.html', '_blank');
+            } else if (item.id === 'daily-cashier-reconciliation') {
+              window.open('/cashier-reconciliation.html', '_blank');
+            } else if (item.id === 'daily-payment-summary') {
+              window.open('/payment-summary.html', '_blank');
+            } else if (item.id === 'student-balances') {
+              window.open('/student-balances.html', '_blank');
+            } else if (item.id === 'quickbooks-reports') {
+              window.open('/quickbooks-reports.html', '_blank');
+            } else if (item.id === 'student-demographics') {
+              window.open('/reports/demographics', '_blank');
+            } else if (item.id === 'student-analytics-report') {
+              window.open('/student-analytics.html', '_blank');
+            } else if (item.id === 'completion-rates') {
+              window.open('/completion-rates.html', '_blank');
+            } else if (item.id === 'dropout-analysis') {
+              window.open('/dropout-analysis.html', '_blank');
+            } else if (item.id === 'student-journeys') {
+              window.open('/student-journeys.html', '_blank');
+            } else if (item.id === 'risk-factors') {
+              window.open('/risk-factors.html', '_blank');
+            } else if (item.id === 'term-retention') {
+              window.open('/term-retention.html', '_blank');
+            } else if (item.id === 'executive-summary') {
+              window.open('/executive-summary.html', '_blank');
+            } else if (item.id === 'activity-logs') {
+              window.open('/activity-logs.html', '_blank');
+            } else if (item.id === 'modern-dashboard-demo') {
+              window.open('/modern-dashboard.html', '_blank');
+            } else if (item.id === 'advanced-dashboard-demo') {
+              window.open('/advanced-dashboard.html', '_blank');
+            } else if (hasChildren) {
+              toggleExpanded(item.id);
+            }
+          }}
           onMouseEnter={() => setHoveredItem(item.id)}
           onMouseLeave={() => setHoveredItem(null)}
         >

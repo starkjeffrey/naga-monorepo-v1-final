@@ -25,6 +25,11 @@ import {
 } from './pages/Students';
 import { EnrollmentDashboard } from './components/enrollment/EnrollmentDashboard';
 import FinancePage from './pages/Finance';
+import { DatabaseIntegrityReport } from './pages/Reports/DatabaseIntegrityReport';
+import SimpleStudentDemographics from './components/reports/SimpleStudentDemographics';
+import TestDemographics from './components/reports/TestDemographics';
+import DebugDemographics from './components/reports/DebugDemographics';
+import DemoPage from './components/DemoPage';
 
 // Academic Management Components
 import { CollaborativeGradeEntry } from './pages/Academic/Grades/CollaborativeGradeEntry';
@@ -396,6 +401,22 @@ export const router = createBrowserRouter([
       {
         path: 'scheduled',
         element: <div>Scheduled Reports</div>,
+      },
+      {
+        path: 'database-integrity',
+        element: <DatabaseIntegrityReport />,
+      },
+      {
+        path: 'demographics',
+        element: <DebugDemographics />,
+      },
+      {
+        path: 'test-demographics',
+        element: <TestDemographics />,
+      },
+      {
+        path: 'demo',
+        element: <DemoPage />,
       },
     ],
   },

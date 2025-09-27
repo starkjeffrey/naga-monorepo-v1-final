@@ -1,0 +1,23 @@
+{
+  "name": "naga-backend",
+  "version": "1.0.0",
+  "description": "Naga SIS Backend - Django Application with Tailwind CSS",
+  "scripts": {
+    "build-css": "tailwindcss -i ./static/src/input.css -o ./static/web_interface/css/tailwind.css --watch",
+    "build-css-prod": "tailwindcss -i ./static/src/input.css -o ./static/web_interface/css/tailwind.css --minify"
+  },
+  "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
+    "@modelcontextprotocol/server-puppeteer": "^2025.5.12",
+    "@tanstack/react-table": "^8.21.3",
+    "playwright": "^1.55.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@tailwindcss/forms": "^0.5.7",
+    "@tailwindcss/typography": "^0.5.10",
+    "tailwindcss": "^3.4.0"
+  }
+}

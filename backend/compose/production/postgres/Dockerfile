@@ -1,5 +1,4 @@
-# Production-optimized PostgreSQL for Staff-Web V2
-FROM docker.io/postgres:16.0
+FROM docker.io/postgres:18
 
 # Install additional tools for production monitoring and maintenance
 RUN apt-get update && apt-get install -y \

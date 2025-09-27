@@ -1,5 +1,6 @@
 <!-- Student Locator Results Partial (loaded via HTMX) -->
 {% load i18n %}
+{% load web_interface_tags %}
 
 {% if students %}
 <div class="results-card">
@@ -40,7 +41,7 @@
                     <td class="khmer-name-cell">
                         {% if student.person.khmer_name %}
                             <div class="khmer-name">
-                                {{ student.person.khmer_name }}
+                                {{ student.person.khmer_name|clean_khmer_name }}
                                 {% if student.person.khmer_name_source == 'approximated' %}
                                     <span class="approximated-badge" title="{% trans 'System Approximated' %}">*</span>
                                 {% endif %}

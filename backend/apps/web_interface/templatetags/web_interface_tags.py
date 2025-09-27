@@ -505,3 +505,35 @@ def full_classes_count(classes):
             if enrolled >= capacity:
                 count += 1
     return count
+
+
+@register.filter
+def clean_khmer_name(khmer_name):
+    """
+    Clean Khmer name by removing suffixes like {AF}, (ST), <PLF>, etc.
+
+    Args:
+        khmer_name: Khmer name string
+
+    Returns:
+        Cleaned Khmer name
+    """
+    if not khmer_name:
+        return khmer_name
+
+    # Remove common suffixes and tags
+    import re
+
+    # Remove patterns like {AF}, (ST), <PLF>, <CRST>, <PEPY>, etc.
+    patterns_to_remove = [
+        r'\{[^}]*\}',  # {AF}, {FRIENDS}, etc.
+        r'\([^)]*\)',  # (ST), (PLF), etc.
+        r'<[^>]*>',    # <PLF>, <CRST>, <PEPY>, etc.
+        r'\$\$.*',     # $$ and everything after
+    ]
+
+    cleaned_name = khmer_name.strip()
+    for pattern in patterns_to_remove:
+        cleaned_name = re.sub(pattern, '', cleaned_name).strip()
+
+    return cleaned_name

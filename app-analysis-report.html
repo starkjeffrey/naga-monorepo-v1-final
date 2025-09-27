@@ -1,0 +1,1270 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NAGA Mobile Apps - Code Analysis</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            padding: 20px;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        h1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .app-summary {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+        .app-title {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .vue-color { color: #42b883; }
+        .react-color { color: #61dafb; }
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #333;
+        }
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        .tech-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+        }
+        .pages-table {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+        .table-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            font-size: 1.2em;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            background: #f8f9fa;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        tr:hover {
+            background: #f8f9fa;
+        }
+        .feature-pill {
+            display: inline-block;
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin: 2px;
+        }
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        .status-complete {
+            background: #c8e6c9;
+            color: #2e7d32;
+        }
+        .status-partial {
+            background: #fff3cd;
+            color: #f57c00;
+        }
+        .status-todo {
+            background: #ffcdd2;
+            color: #c62828;
+        }
+        .comparison-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+        .comparison-header {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .feature-comparison {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 20px;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .feature-name {
+            text-align: center;
+            font-weight: 600;
+            color: #666;
+        }
+        .implementation-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .implementation-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4caf50, #8bc34a);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📱 NAGA Mobile Apps - Code Analysis Report</h1>
+
+        <div class="summary-grid">
+            <div class="app-summary">
+                <h2 class="app-title vue-color">
+                    <span>⚡</span> Vue 3 Mobile App
+                </h2>
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value">23</div>
+                        <div class="stat-label">Total Pages</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">4,494</div>
+                        <div class="stat-label">Lines of Code</div>
+                    </div>
+                </div>
+                <div class="tech-stack">
+                    <span class="tech-badge">Vue 3</span><span class="tech-badge">Quasar Framework</span><span class="tech-badge">TypeScript</span><span class="tech-badge">Vite</span>
+                </div>
+            </div>
+
+            <div class="app-summary">
+                <h2 class="app-title react-color">
+                    <span>⚛️</span> React Native App
+                </h2>
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value">28</div>
+                        <div class="stat-label">Total Screens</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">4,854</div>
+                        <div class="stat-label">Lines of Code</div>
+                    </div>
+                </div>
+                <div class="tech-stack">
+                    <span class="tech-badge">React Native</span><span class="tech-badge">Expo</span><span class="tech-badge">React Native Paper</span><span class="tech-badge">TypeScript</span><span class="tech-badge">Zustand</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="comparison-section">
+            <h3 class="comparison-header">📊 Implementation Comparison</h3>
+            
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ❌ Missing
+        </div>
+        <div class="feature-name">Common: AttendanceScreen</div>
+        <div>
+            ✅ Implemented
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ❌ Missing
+        </div>
+        <div class="feature-name">Common: DashboardScreen</div>
+        <div>
+            ✅ Implemented
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ❌ Missing
+        </div>
+        <div class="feature-name">Common: GradesScreen</div>
+        <div>
+            ✅ Implemented
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ❌ Missing
+        </div>
+        <div class="feature-name">Common: LoginScreen</div>
+        <div>
+            ✅ Implemented
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ❌ Missing
+        </div>
+        <div class="feature-name">Common: ProfileScreen</div>
+        <div>
+            ✅ Implemented
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ❌ Missing
+        </div>
+        <div class="feature-name">Common: RegisterScreen</div>
+        <div>
+            ✅ Implemented
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ❌ Missing
+        </div>
+        <div class="feature-name">Common: RoleSwitcherScreen</div>
+        <div>
+            ✅ Implemented
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ✅ Implemented
+        </div>
+        <div class="feature-name">Student: AlertsPage</div>
+        <div>
+            ❌ Missing
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ✅ Implemented
+        </div>
+        <div class="feature-name">Student: AnnouncementsPage</div>
+        <div>
+            ❌ Missing
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ❌ Missing
+        </div>
+        <div class="feature-name">Student: AnnouncementsScreen</div>
+        <div>
+            ✅ Implemented
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ✅ Implemented
+        </div>
+        <div class="feature-name">Student: AttendancePage</div>
+        <div>
+            ❌ Missing
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ❌ Missing
+        </div>
+        <div class="feature-name">Student: AttendanceScreen</div>
+        <div>
+            ✅ Implemented
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ✅ Implemented
+        </div>
+        <div class="feature-name">Student: AuthCallback</div>
+        <div>
+            ❌ Missing
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ✅ Implemented
+        </div>
+        <div class="feature-name">Student: EnterCodePage</div>
+        <div>
+            ❌ Missing
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ✅ Implemented
+        </div>
+        <div class="feature-name">Student: ErrorNotFound</div>
+        <div>
+            ❌ Missing
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ✅ Implemented
+        </div>
+        <div class="feature-name">Student: FinancesPage</div>
+        <div>
+            ❌ Missing
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ❌ Missing
+        </div>
+        <div class="feature-name">Student: FinancesScreen</div>
+        <div>
+            ✅ Implemented
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ✅ Implemented
+        </div>
+        <div class="feature-name">Student: GradesPage</div>
+        <div>
+            ❌ Missing
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ❌ Missing
+        </div>
+        <div class="feature-name">Student: GradesScreen</div>
+        <div>
+            ✅ Implemented
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ✅ Implemented
+        </div>
+        <div class="feature-name">Student: IdCardPage</div>
+        <div>
+            ❌ Missing
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ❌ Missing
+        </div>
+        <div class="feature-name">Student: IDCardScreen</div>
+        <div>
+            ✅ Implemented
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ✅ Implemented
+        </div>
+        <div class="feature-name">Student: MessagesPage</div>
+        <div>
+            ❌ Missing
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ❌ Missing
+        </div>
+        <div class="feature-name">Student: MessagesScreen</div>
+        <div>
+            ✅ Implemented
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ✅ Implemented
+        </div>
+        <div class="feature-name">Student: PermissionPage</div>
+        <div>
+            ❌ Missing
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ❌ Missing
+        </div>
+        <div class="feature-name">Student: PermissionScreen</div>
+        <div>
+            ✅ Implemented
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ✅ Implemented
+        </div>
+        <div class="feature-name">Student: ProfilePage</div>
+        <div>
+            ❌ Missing
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ✅ Implemented
+        </div>
+        <div class="feature-name">Student: ProfilePhotoPage</div>
+        <div>
+            ❌ Missing
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ❌ Missing
+        </div>
+        <div class="feature-name">Student: ProfilePhotoScreen</div>
+        <div>
+            ✅ Implemented
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ❌ Missing
+        </div>
+        <div class="feature-name">Student: ProfileScreen</div>
+        <div>
+            ✅ Implemented
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ✅ Implemented
+        </div>
+        <div class="feature-name">Student: SchedulePage</div>
+        <div>
+            ❌ Missing
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ❌ Missing
+        </div>
+        <div class="feature-name">Student: ScheduleScreen</div>
+        <div>
+            ✅ Implemented
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ✅ Implemented
+        </div>
+        <div class="feature-name">Student: SigninPage</div>
+        <div>
+            ❌ Missing
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ✅ Implemented
+        </div>
+        <div class="feature-name">Student: StudentDashboard</div>
+        <div>
+            ❌ Missing
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ❌ Missing
+        </div>
+        <div class="feature-name">Student: StudentDashboardScreen</div>
+        <div>
+            ✅ Implemented
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ✅ Implemented
+        </div>
+        <div class="feature-name">Student: TeacherAttendancePage</div>
+        <div>
+            ❌ Missing
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ❌ Missing
+        </div>
+        <div class="feature-name">Teacher: CourseDetailsScreen</div>
+        <div>
+            ✅ Implemented
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ❌ Missing
+        </div>
+        <div class="feature-name">Teacher: GenerateCodeScreen</div>
+        <div>
+            ✅ Implemented
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ❌ Missing
+        </div>
+        <div class="feature-name">Teacher: GradeEntryScreen</div>
+        <div>
+            ✅ Implemented
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ❌ Missing
+        </div>
+        <div class="feature-name">Teacher: ManualAttendanceScreen</div>
+        <div>
+            ✅ Implemented
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ❌ Missing
+        </div>
+        <div class="feature-name">Teacher: StudentListScreen</div>
+        <div>
+            ✅ Implemented
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ✅ Implemented
+        </div>
+        <div class="feature-name">Teacher: TeacherAttendance</div>
+        <div>
+            ❌ Missing
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ❌ Missing
+        </div>
+        <div class="feature-name">Teacher: TeacherAttendanceScreen</div>
+        <div>
+            ✅ Implemented
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ✅ Implemented
+        </div>
+        <div class="feature-name">Teacher: TeacherCourses</div>
+        <div>
+            ❌ Missing
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ❌ Missing
+        </div>
+        <div class="feature-name">Teacher: TeacherCoursesScreen</div>
+        <div>
+            ✅ Implemented
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ✅ Implemented
+        </div>
+        <div class="feature-name">Teacher: TeacherDashboard</div>
+        <div>
+            ❌ Missing
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ❌ Missing
+        </div>
+        <div class="feature-name">Teacher: TeacherDashboardScreen</div>
+        <div>
+            ✅ Implemented
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ✅ Implemented
+        </div>
+        <div class="feature-name">Teacher: TeacherGenerateCode</div>
+        <div>
+            ❌ Missing
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ✅ Implemented
+        </div>
+        <div class="feature-name">Teacher: TeacherGrades</div>
+        <div>
+            ❌ Missing
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ❌ Missing
+        </div>
+        <div class="feature-name">Teacher: TeacherGradesScreen</div>
+        <div>
+            ✅ Implemented
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ✅ Implemented
+        </div>
+        <div class="feature-name">Teacher: TeacherManualAttendance</div>
+        <div>
+            ❌ Missing
+        </div>
+    </div>
+    
+    <div class="feature-comparison">
+        <div style="text-align: right">
+            ❌ Missing
+        </div>
+        <div class="feature-name">Teacher: TeacherProfileScreen</div>
+        <div>
+            ✅ Implemented
+        </div>
+    </div>
+    
+        </div>
+
+        <div class="pages-table">
+            <div class="table-header">Vue 3 Pages (23)</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Page Name</th>
+                        <th>Path</th>
+                        <th>Features</th>
+                        <th>Lines</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <tr>
+                        <td><strong>AlertsPage</strong></td>
+                        <td>AlertsPage.vue</td>
+                        <td><span class="feature-pill">Quasar Page</span><span class="feature-pill">Cards</span></td>
+                        <td>25</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>AnnouncementsPage</strong></td>
+                        <td>AnnouncementsPage.vue</td>
+                        <td><span class="feature-pill">Quasar Page</span><span class="feature-pill">Cards</span></td>
+                        <td>25</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>AttendancePage</strong></td>
+                        <td>AttendancePage.vue</td>
+                        <td><span class="feature-pill">Quasar Page</span><span class="feature-pill">Buttons</span><span class="feature-pill">Cards</span></td>
+                        <td>102</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>AuthCallback</strong></td>
+                        <td>AuthCallback.vue</td>
+                        <td><span class="feature-pill">Quasar Page</span></td>
+                        <td>51</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>EnterCodePage</strong></td>
+                        <td>EnterCodePage.vue</td>
+                        <td><span class="feature-pill">Quasar Page</span><span class="feature-pill">Buttons</span><span class="feature-pill">Forms</span><span class="feature-pill">Cards</span></td>
+                        <td>145</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>ErrorNotFound</strong></td>
+                        <td>ErrorNotFound.vue</td>
+                        <td><span class="feature-pill">Buttons</span></td>
+                        <td>34</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>FinancesPage</strong></td>
+                        <td>FinancesPage.vue</td>
+                        <td><span class="feature-pill">Quasar Page</span><span class="feature-pill">Cards</span></td>
+                        <td>25</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>GradesPage</strong></td>
+                        <td>GradesPage.vue</td>
+                        <td><span class="feature-pill">Quasar Page</span><span class="feature-pill">Cards</span></td>
+                        <td>25</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>IdCardPage</strong></td>
+                        <td>IdCardPage.vue</td>
+                        <td><span class="feature-pill">Quasar Page</span><span class="feature-pill">Buttons</span><span class="feature-pill">Cards</span><span class="feature-pill">Camera</span></td>
+                        <td>668</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>MessagesPage</strong></td>
+                        <td>MessagesPage.vue</td>
+                        <td><span class="feature-pill">Quasar Page</span><span class="feature-pill">Cards</span></td>
+                        <td>25</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>PermissionPage</strong></td>
+                        <td>PermissionPage.vue</td>
+                        <td><span class="feature-pill">Quasar Page</span><span class="feature-pill">Buttons</span><span class="feature-pill">Forms</span><span class="feature-pill">Cards</span></td>
+                        <td>345</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>ProfilePage</strong></td>
+                        <td>ProfilePage.vue</td>
+                        <td><span class="feature-pill">Quasar Page</span><span class="feature-pill">Buttons</span><span class="feature-pill">Cards</span></td>
+                        <td>219</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>ProfilePhotoPage</strong></td>
+                        <td>ProfilePhotoPage.vue</td>
+                        <td><span class="feature-pill">Quasar Page</span><span class="feature-pill">Buttons</span><span class="feature-pill">Cards</span><span class="feature-pill">Dialog</span><span class="feature-pill">Camera</span></td>
+                        <td>444</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>SchedulePage</strong></td>
+                        <td>SchedulePage.vue</td>
+                        <td><span class="feature-pill">Quasar Page</span><span class="feature-pill">Cards</span></td>
+                        <td>25</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>SigninPage</strong></td>
+                        <td>SigninPage.vue</td>
+                        <td><span class="feature-pill">Buttons</span><span class="feature-pill">Forms</span><span class="feature-pill">Google Auth</span></td>
+                        <td>380</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>StudentDashboard</strong></td>
+                        <td>StudentDashboard.vue</td>
+                        <td><span class="feature-pill">Quasar Page</span><span class="feature-pill">Cards</span><span class="feature-pill">Camera</span></td>
+                        <td>240</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>TeacherAttendancePage</strong></td>
+                        <td>TeacherAttendancePage.vue</td>
+                        <td><span class="feature-pill">Quasar Page</span><span class="feature-pill">Buttons</span><span class="feature-pill">Cards</span></td>
+                        <td>193</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>TeacherAttendance</strong></td>
+                        <td>teacher/TeacherAttendance.vue</td>
+                        <td><span class="feature-pill">Quasar Page</span><span class="feature-pill">Buttons</span><span class="feature-pill">Cards</span></td>
+                        <td>214</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>TeacherCourses</strong></td>
+                        <td>teacher/TeacherCourses.vue</td>
+                        <td><span class="feature-pill">Quasar Page</span><span class="feature-pill">Cards</span></td>
+                        <td>23</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>TeacherDashboard</strong></td>
+                        <td>teacher/TeacherDashboard.vue</td>
+                        <td><span class="feature-pill">Quasar Page</span><span class="feature-pill">Buttons</span><span class="feature-pill">Cards</span></td>
+                        <td>263</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>TeacherGenerateCode</strong></td>
+                        <td>teacher/TeacherGenerateCode.vue</td>
+                        <td><span class="feature-pill">Quasar Page</span><span class="feature-pill">Buttons</span><span class="feature-pill">Cards</span></td>
+                        <td>424</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>TeacherGrades</strong></td>
+                        <td>teacher/TeacherGrades.vue</td>
+                        <td><span class="feature-pill">Quasar Page</span><span class="feature-pill">Cards</span></td>
+                        <td>21</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>TeacherManualAttendance</strong></td>
+                        <td>teacher/TeacherManualAttendance.vue</td>
+                        <td><span class="feature-pill">Quasar Page</span><span class="feature-pill">Buttons</span><span class="feature-pill">Forms</span><span class="feature-pill">Cards</span><span class="feature-pill">Dialog</span></td>
+                        <td>578</td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pages-table">
+            <div class="table-header">React Native Screens (28)</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Screen Name</th>
+                        <th>Path</th>
+                        <th>Features</th>
+                        <th>Status</th>
+                        <th>Lines</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <tr>
+                        <td><strong>LoginScreen</strong></td>
+                        <td>auth/LoginScreen.tsx</td>
+                        <td><span class="feature-pill">Text Input</span><span class="feature-pill">Buttons</span><span class="feature-pill">Cards</span><span class="feature-pill">Scrollable</span><span class="feature-pill">Auth State</span><span class="feature-pill">Material Design</span></td>
+                        <td>
+                            <span class="status-badge status-complete">
+                                ✅ Implemented
+                            </span>
+                        </td>
+                        <td>164</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>RegisterScreen</strong></td>
+                        <td>auth/RegisterScreen.tsx</td>
+                        <td><span class="feature-pill">Text Input</span><span class="feature-pill">Buttons</span><span class="feature-pill">Cards</span><span class="feature-pill">Scrollable</span><span class="feature-pill">Material Design</span></td>
+                        <td>
+                            <span class="status-badge status-complete">
+                                ✅ Implemented
+                            </span>
+                        </td>
+                        <td>176</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>RoleSwitcherScreen</strong></td>
+                        <td>auth/RoleSwitcherScreen.tsx</td>
+                        <td><span class="feature-pill">Buttons</span><span class="feature-pill">Cards</span><span class="feature-pill">Scrollable</span><span class="feature-pill">Auth State</span><span class="feature-pill">Material Design</span></td>
+                        <td>
+                            <span class="status-badge status-complete">
+                                ✅ Implemented
+                            </span>
+                        </td>
+                        <td>231</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>AttendanceScreen</strong></td>
+                        <td>main/AttendanceScreen.tsx</td>
+                        <td><span class="feature-pill">Cards</span><span class="feature-pill">Scrollable</span><span class="feature-pill">Material Design</span></td>
+                        <td>
+                            <span class="status-badge status-complete">
+                                ✅ Implemented
+                            </span>
+                        </td>
+                        <td>60</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>DashboardScreen</strong></td>
+                        <td>main/DashboardScreen.tsx</td>
+                        <td><span class="feature-pill">Buttons</span><span class="feature-pill">Cards</span><span class="feature-pill">Scrollable</span><span class="feature-pill">Auth State</span><span class="feature-pill">Material Design</span></td>
+                        <td>
+                            <span class="status-badge status-complete">
+                                ✅ Implemented
+                            </span>
+                        </td>
+                        <td>180</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>GradesScreen</strong></td>
+                        <td>main/GradesScreen.tsx</td>
+                        <td><span class="feature-pill">Cards</span><span class="feature-pill">Scrollable</span><span class="feature-pill">Material Design</span></td>
+                        <td>
+                            <span class="status-badge status-complete">
+                                ✅ Implemented
+                            </span>
+                        </td>
+                        <td>86</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>ProfileScreen</strong></td>
+                        <td>main/ProfileScreen.tsx</td>
+                        <td><span class="feature-pill">Buttons</span><span class="feature-pill">Cards</span><span class="feature-pill">Scrollable</span><span class="feature-pill">Auth State</span><span class="feature-pill">Material Design</span></td>
+                        <td>
+                            <span class="status-badge status-complete">
+                                ✅ Implemented
+                            </span>
+                        </td>
+                        <td>118</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>AnnouncementsScreen</strong></td>
+                        <td>student/AnnouncementsScreen.tsx</td>
+                        <td><span class="feature-pill">Cards</span><span class="feature-pill">Scrollable</span><span class="feature-pill">Material Design</span></td>
+                        <td>
+                            <span class="status-badge status-complete">
+                                ✅ Implemented
+                            </span>
+                        </td>
+                        <td>134</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>AttendanceScreen</strong></td>
+                        <td>student/AttendanceScreen.tsx</td>
+                        <td><span class="feature-pill">Buttons</span><span class="feature-pill">Cards</span><span class="feature-pill">Scrollable</span><span class="feature-pill">Material Design</span></td>
+                        <td>
+                            <span class="status-badge status-complete">
+                                ✅ Implemented
+                            </span>
+                        </td>
+                        <td>541</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>FinancesScreen</strong></td>
+                        <td>student/FinancesScreen.tsx</td>
+                        <td><span class="feature-pill">Cards</span><span class="feature-pill">Scrollable</span><span class="feature-pill">Material Design</span></td>
+                        <td>
+                            <span class="status-badge status-complete">
+                                ✅ Implemented
+                            </span>
+                        </td>
+                        <td>136</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>GradesScreen</strong></td>
+                        <td>student/GradesScreen.tsx</td>
+                        <td><span class="feature-pill">Cards</span><span class="feature-pill">Scrollable</span><span class="feature-pill">Material Design</span></td>
+                        <td>
+                            <span class="status-badge status-complete">
+                                ✅ Implemented
+                            </span>
+                        </td>
+                        <td>202</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>IDCardScreen</strong></td>
+                        <td>student/IDCardScreen.tsx</td>
+                        <td><span class="feature-pill">Buttons</span><span class="feature-pill">Cards</span><span class="feature-pill">Scrollable</span><span class="feature-pill">QR Code</span><span class="feature-pill">Auth State</span><span class="feature-pill">Material Design</span></td>
+                        <td>
+                            <span class="status-badge status-complete">
+                                ✅ Implemented
+                            </span>
+                        </td>
+                        <td>417</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>MessagesScreen</strong></td>
+                        <td>student/MessagesScreen.tsx</td>
+                        <td><span class="feature-pill">Cards</span><span class="feature-pill">Scrollable</span><span class="feature-pill">Material Design</span></td>
+                        <td>
+                            <span class="status-badge status-complete">
+                                ✅ Implemented
+                            </span>
+                        </td>
+                        <td>113</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>PermissionScreen</strong></td>
+                        <td>student/PermissionScreen.tsx</td>
+                        <td><span class="feature-pill">Text Input</span><span class="feature-pill">Buttons</span><span class="feature-pill">Cards</span><span class="feature-pill">Scrollable</span><span class="feature-pill">Material Design</span></td>
+                        <td>
+                            <span class="status-badge status-complete">
+                                ✅ Implemented
+                            </span>
+                        </td>
+                        <td>75</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>ProfilePhotoScreen</strong></td>
+                        <td>student/ProfilePhotoScreen.tsx</td>
+                        <td><span class="feature-pill">Buttons</span><span class="feature-pill">Cards</span><span class="feature-pill">Scrollable</span><span class="feature-pill">Material Design</span></td>
+                        <td>
+                            <span class="status-badge status-complete">
+                                ✅ Implemented
+                            </span>
+                        </td>
+                        <td>72</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>ProfileScreen</strong></td>
+                        <td>student/ProfileScreen.tsx</td>
+                        <td><span class="feature-pill">Buttons</span><span class="feature-pill">Cards</span><span class="feature-pill">Scrollable</span><span class="feature-pill">Auth State</span><span class="feature-pill">Material Design</span></td>
+                        <td>
+                            <span class="status-badge status-complete">
+                                ✅ Implemented
+                            </span>
+                        </td>
+                        <td>145</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>ScheduleScreen</strong></td>
+                        <td>student/ScheduleScreen.tsx</td>
+                        <td><span class="feature-pill">Cards</span><span class="feature-pill">Scrollable</span><span class="feature-pill">Material Design</span></td>
+                        <td>
+                            <span class="status-badge status-complete">
+                                ✅ Implemented
+                            </span>
+                        </td>
+                        <td>91</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>StudentDashboardScreen</strong></td>
+                        <td>student/StudentDashboardScreen.tsx</td>
+                        <td><span class="feature-pill">Cards</span><span class="feature-pill">Scrollable</span><span class="feature-pill">Auth State</span><span class="feature-pill">Material Design</span></td>
+                        <td>
+                            <span class="status-badge status-complete">
+                                ✅ Implemented
+                            </span>
+                        </td>
+                        <td>431</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>CourseDetailsScreen</strong></td>
+                        <td>teacher/CourseDetailsScreen.tsx</td>
+                        <td><span class="feature-pill">Cards</span><span class="feature-pill">Scrollable</span><span class="feature-pill">Material Design</span></td>
+                        <td>
+                            <span class="status-badge status-complete">
+                                ✅ Implemented
+                            </span>
+                        </td>
+                        <td>39</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>GenerateCodeScreen</strong></td>
+                        <td>teacher/GenerateCodeScreen.tsx</td>
+                        <td><span class="feature-pill">Text Input</span><span class="feature-pill">Buttons</span><span class="feature-pill">Cards</span><span class="feature-pill">Scrollable</span><span class="feature-pill">QR Code</span><span class="feature-pill">Material Design</span></td>
+                        <td>
+                            <span class="status-badge status-complete">
+                                ✅ Implemented
+                            </span>
+                        </td>
+                        <td>493</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>GradeEntryScreen</strong></td>
+                        <td>teacher/GradeEntryScreen.tsx</td>
+                        <td><span class="feature-pill">Text Input</span><span class="feature-pill">Buttons</span><span class="feature-pill">Cards</span><span class="feature-pill">Scrollable</span><span class="feature-pill">Material Design</span></td>
+                        <td>
+                            <span class="status-badge status-complete">
+                                ✅ Implemented
+                            </span>
+                        </td>
+                        <td>52</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>ManualAttendanceScreen</strong></td>
+                        <td>teacher/ManualAttendanceScreen.tsx</td>
+                        <td><span class="feature-pill">Cards</span><span class="feature-pill">Scrollable</span><span class="feature-pill">Material Design</span></td>
+                        <td>
+                            <span class="status-badge status-complete">
+                                ✅ Implemented
+                            </span>
+                        </td>
+                        <td>75</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>StudentListScreen</strong></td>
+                        <td>teacher/StudentListScreen.tsx</td>
+                        <td><span class="feature-pill">Cards</span><span class="feature-pill">Scrollable</span><span class="feature-pill">Material Design</span></td>
+                        <td>
+                            <span class="status-badge status-complete">
+                                ✅ Implemented
+                            </span>
+                        </td>
+                        <td>41</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>TeacherAttendanceScreen</strong></td>
+                        <td>teacher/TeacherAttendanceScreen.tsx</td>
+                        <td><span class="feature-pill">Buttons</span><span class="feature-pill">Cards</span><span class="feature-pill">Scrollable</span><span class="feature-pill">Material Design</span></td>
+                        <td>
+                            <span class="status-badge status-complete">
+                                ✅ Implemented
+                            </span>
+                        </td>
+                        <td>66</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>TeacherCoursesScreen</strong></td>
+                        <td>teacher/TeacherCoursesScreen.tsx</td>
+                        <td><span class="feature-pill">Cards</span><span class="feature-pill">Scrollable</span><span class="feature-pill">Material Design</span></td>
+                        <td>
+                            <span class="status-badge status-complete">
+                                ✅ Implemented
+                            </span>
+                        </td>
+                        <td>67</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>TeacherDashboardScreen</strong></td>
+                        <td>teacher/TeacherDashboardScreen.tsx</td>
+                        <td><span class="feature-pill">Buttons</span><span class="feature-pill">Cards</span><span class="feature-pill">Scrollable</span><span class="feature-pill">Auth State</span><span class="feature-pill">Material Design</span></td>
+                        <td>
+                            <span class="status-badge status-complete">
+                                ✅ Implemented
+                            </span>
+                        </td>
+                        <td>516</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>TeacherGradesScreen</strong></td>
+                        <td>teacher/TeacherGradesScreen.tsx</td>
+                        <td><span class="feature-pill">Cards</span><span class="feature-pill">Scrollable</span><span class="feature-pill">Material Design</span></td>
+                        <td>
+                            <span class="status-badge status-complete">
+                                ✅ Implemented
+                            </span>
+                        </td>
+                        <td>59</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><strong>TeacherProfileScreen</strong></td>
+                        <td>teacher/TeacherProfileScreen.tsx</td>
+                        <td><span class="feature-pill">Buttons</span><span class="feature-pill">Cards</span><span class="feature-pill">Scrollable</span><span class="feature-pill">Auth State</span><span class="feature-pill">Material Design</span></td>
+                        <td>
+                            <span class="status-badge status-complete">
+                                ✅ Implemented
+                            </span>
+                        </td>
+                        <td>74</td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
+  

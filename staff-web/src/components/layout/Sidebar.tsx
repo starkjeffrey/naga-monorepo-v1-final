@@ -47,6 +47,217 @@ interface NavigationItem {
 }
 
 const navigationItems: NavigationItem[] = [
+  // 📊 DASHBOARD
+  {
+    id: 'dashboard',
+    label: 'Dashboard',
+    icon: LayoutDashboard,
+    children: [
+      {
+        id: 'executive-overview',
+        label: 'Executive Overview',
+        icon: TrendingUp,
+        path: '/dashboard/executive'
+      },
+      {
+        id: 'student-dashboard',
+        label: 'Student Dashboard',
+        icon: Users,
+        path: '/dashboard/student'
+      },
+      {
+        id: 'staff-dashboard',
+        label: 'Staff Dashboard',
+        icon: UserCheck,
+        path: '/dashboard/staff'
+      }
+    ]
+  },
+
+  // 👥 STUDENT MANAGEMENT
+  {
+    id: 'students',
+    label: 'Student Management',
+    icon: Users,
+    children: [
+      {
+        id: 'student-list',
+        label: 'Student List',
+        icon: Users,
+        path: '/students/list'
+      },
+      {
+        id: 'quick-search',
+        label: 'Quick Search',
+        icon: FileText,
+        path: '/students/search'
+      },
+      {
+        id: 'enrollment-wizard',
+        label: 'Enrollment Wizard',
+        icon: UserCheck,
+        path: '/students/enrollment-wizard'
+      },
+      {
+        id: 'student-analytics',
+        label: 'Student Analytics',
+        icon: BarChart3,
+        path: '/students/analytics'
+      },
+      {
+        id: 'bulk-operations',
+        label: 'Bulk Operations',
+        icon: ClipboardList,
+        path: '/students/bulk-operations'
+      }
+    ]
+  },
+
+  // 🎓 ACADEMIC MANAGEMENT
+  {
+    id: 'academic',
+    label: 'Academic Management',
+    icon: GraduationCap,
+    children: [
+      {
+        id: 'grade-entry',
+        label: 'Grade Entry',
+        icon: Award,
+        path: '/academic/grade-entry'
+      },
+      {
+        id: 'schedule-builder',
+        label: 'Schedule Builder',
+        icon: Calendar,
+        path: '/academic/schedule-builder'
+      },
+      {
+        id: 'transcripts',
+        label: 'Transcripts',
+        icon: FileText,
+        path: '/academic/transcripts'
+      },
+      {
+        id: 'course-catalog',
+        label: 'Course Catalog',
+        icon: BookOpen,
+        path: '/academic/course-catalog'
+      },
+      {
+        id: 'attendance-hub',
+        label: 'Attendance Hub',
+        icon: Clock,
+        path: '/academic/attendance'
+      }
+    ]
+  },
+
+  // 💰 FINANCIAL MANAGEMENT
+  {
+    id: 'finance',
+    label: 'Financial Management',
+    icon: DollarSign,
+    children: [
+      {
+        id: 'invoice-dashboard',
+        label: 'Invoice Dashboard',
+        icon: FileText,
+        path: '/finance/invoices'
+      },
+      {
+        id: 'payment-processing',
+        label: 'Payment Processing',
+        icon: CreditCard,
+        path: '/finance/payments'
+      },
+      {
+        id: 'student-accounts',
+        label: 'Student Accounts',
+        icon: Users,
+        path: '/finance/accounts'
+      },
+      {
+        id: 'financial-reports',
+        label: 'Financial Reports',
+        icon: BarChart3,
+        path: '/finance/reports'
+      },
+      {
+        id: 'scholarship-hub',
+        label: 'Scholarship Hub',
+        icon: Award,
+        path: '/finance/scholarships'
+      }
+    ]
+  },
+
+  // 📋 REPORTS & ANALYTICS
+  {
+    id: 'reports',
+    label: 'Reports & Analytics',
+    icon: BarChart3,
+    children: [
+      {
+        id: 'report-builder',
+        label: 'Report Builder',
+        icon: ClipboardList,
+        path: '/reports/builder'
+      },
+      {
+        id: 'realtime-analytics',
+        label: 'Real-time Analytics',
+        icon: TrendingUp,
+        path: '/reports/analytics'
+      },
+      {
+        id: 'data-export',
+        label: 'Data Export Hub',
+        icon: FileText,
+        path: '/reports/export'
+      },
+      {
+        id: 'custom-queries',
+        label: 'Custom Queries',
+        icon: Settings,
+        path: '/reports/queries'
+      }
+    ]
+  },
+
+  // ⚙️ SYSTEM & INNOVATION
+  {
+    id: 'system',
+    label: 'System & Innovation',
+    icon: Settings,
+    children: [
+      {
+        id: 'communication-center',
+        label: 'Communication Center',
+        icon: Bell,
+        path: '/system/communication'
+      },
+      {
+        id: 'document-intelligence',
+        label: 'Document Intelligence',
+        icon: FileText,
+        path: '/system/documents'
+      },
+      {
+        id: 'automation-hub',
+        label: 'Automation Hub',
+        icon: Settings,
+        path: '/system/automation'
+      },
+      {
+        id: 'system-settings',
+        label: 'System Settings',
+        icon: Settings,
+        path: '/system/settings'
+      }
+    ]
+  },
+
+  // Legacy items for compatibility
   {
     id: 'dashboard',
     label: 'Dashboard',

@@ -69,7 +69,7 @@
               <div class="text-xs text-gray-500">{{ enrollment.student.person.khmer_name }}</div>
               {% endif %}
             </td>
-            <td class="text-sm">{{ enrollment.student.person.email|default:"—" }}</td>
+            <td class="text-sm">{{ enrollment.student.person.school_email|default:"—" }}</td>
             <td class="text-sm">{{ enrollment.created_at|date:"M d, Y" }}</td>
             <td>
               <span class="badge badge-success">

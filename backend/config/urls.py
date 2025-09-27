@@ -8,6 +8,7 @@ from django.views import defaults as default_views
 
 # Direct import to avoid config.api re-export issues
 from api.v1 import api
+from api.v2 import api as api_v2
 
 from .legacy_urls import legacy_urlpatterns
 
@@ -25,9 +26,9 @@ urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
     # Django Silk for performance profiling
     path("silk/", include("silk.urls", namespace="silk")),
-    # API endpoints - temporarily disabled to fix startup issue
-    # path("api/", api.urls),
-    # path("api/v2/", api_v2.urls),
+    # API endpoints
+    path("api/v1/", api.urls),
+    path("api/v2/", api_v2.urls),
     # GraphQL endpoint - temporarily disabled due to circular import
     # path("graphql/", include("config.graphql_urls")),
     # Legacy system backup

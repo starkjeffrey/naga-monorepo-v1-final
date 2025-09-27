@@ -1,0 +1,217 @@
+{% load i18n %}
+
+<div class="filter-bar">
+  <form method="get" action="{{ target_url|default:'' }}" class="filter-form" data-target="{{ target_element|default:'#content' }}">
+
+    <!-- Search Input -->
+    <div class="filter-group">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text"
+               name="search"
+               class="form-control"
+               placeholder="{% trans 'Search...' %}"
+               value="{{ request.GET.search }}"
+               autocomplete="off">
+      </div>
+    </div>
+
+    <!-- Status Filter -->
+    {% if show_status_filter %}
+    <div class="filter-group">
+      <select name="status" class="form-select">
+        <option value="">{% trans "All Status" %}</option>
+        <option value="active" {% if request.GET.status == 'active' %}selected{% endif %}>{% trans "Active" %}</option>
+        <option value="inactive" {% if request.GET.status == 'inactive' %}selected{% endif %}>{% trans "Inactive" %}</option>
+        <option value="suspended" {% if request.GET.status == 'suspended' %}selected{% endif %}>{% trans "Suspended" %}</option>
+        <option value="graduated" {% if request.GET.status == 'graduated' %}selected{% endif %}>{% trans "Graduated" %}</option>
+      </select>
+    </div>
+    {% endif %}
+
+    <!-- Study Time Filter -->
+    {% if show_study_time_filter %}
+    <div class="filter-group">
+      <select name="study_time" class="form-select">
+        <option value="">{% trans "All Study Times" %}</option>
+        <option value="morning" {% if request.GET.study_time == 'morning' %}selected{% endif %}>{% trans "Morning" %}</option>
+        <option value="afternoon" {% if request.GET.study_time == 'afternoon' %}selected{% endif %}>{% trans "Afternoon" %}</option>
+        <option value="evening" {% if request.GET.study_time == 'evening' %}selected{% endif %}>{% trans "Evening" %}</option>
+      </select>
+    </div>
+    {% endif %}
+
+    <!-- Date Range Filter -->
+    {% if show_date_filter %}
+    <div class="filter-group">
+      <input type="date"
+             name="date_from"
+             class="form-control"
+             placeholder="{% trans 'From Date' %}"
+             value="{{ request.GET.date_from }}">
+    </div>
+    <div class="filter-group">
+      <input type="date"
+             name="date_to"
+             class="form-control"
+             placeholder="{% trans 'To Date' %}"
+             value="{{ request.GET.date_to }}">
+    </div>
+    {% endif %}
+
+    <!-- Filter Actions -->
+    <div class="filter-actions">
+      <button type="submit" class="btn btn-primary">
+        <i class="fas fa-filter"></i>
+        {% trans "Apply Filters" %}
+      </button>
+      <a href="{{ target_url|default:'' }}" class="btn btn-outline-secondary">
+        <i class="fas fa-times"></i>
+        {% trans "Clear" %}
+      </a>
+    </div>
+  </form>
+</div>
+
+<style>
+.filter-bar {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 1.5rem;
+}
+
+.filter-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.filter-group {
+  flex: 1 1 200px;
+  min-width: 200px;
+}
+
+.search-box {
+  position: relative;
+}
+
+.search-box i {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6b7280;
+}
+
+.search-box input {
+  padding-left: 2.5rem;
+}
+
+.form-control,
+.form-select {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  transition: border-color 0.15s ease-in-out;
+}
+
+.form-control:focus,
+.form-select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.filter-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.15s ease-in-out;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+
+.btn-primary {
+  background-color: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.btn-primary:hover {
+  background-color: #2563eb;
+  border-color: #2563eb;
+}
+
+.btn-outline-secondary {
+  background-color: transparent;
+  color: #6b7280;
+  border-color: #d1d5db;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #f3f4f6;
+  color: #4b5563;
+}
+
+@media (max-width: 768px) {
+  .filter-form {
+    flex-direction: column;
+  }
+
+  .filter-group,
+  .filter-actions {
+    width: 100%;
+  }
+
+  .filter-actions {
+    justify-content: stretch;
+  }
+
+  .filter-actions .btn {
+    flex: 1;
+    justify-content: center;
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const filterForm = document.querySelector('.filter-form');
+  if (filterForm) {
+    // Auto-submit on select change
+    const selects = filterForm.querySelectorAll('select');
+    selects.forEach(select => {
+      select.addEventListener('change', function() {
+        filterForm.submit();
+      });
+    });
+
+    // Submit on Enter key in search box
+    const searchInput = filterForm.querySelector('input[name="search"]');
+    if (searchInput) {
+      searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          filterForm.submit();
+        }
+      });
+    }
+  }
+});
+</script>

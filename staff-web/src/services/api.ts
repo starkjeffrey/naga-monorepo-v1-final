@@ -1,223 +1,338 @@
 /**
- * API client configuration with authentication interceptors
+ * API Integration Services
+ * Centralized API client with error handling and retry logic
  */
 
-import axios, { AxiosError } from 'axios';
-import type { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
-import { API_BASE_URL, API_TIMEOUT, DEFAULT_HEADERS, AUTH_ENDPOINTS, ERROR_MESSAGES } from '../utils/constants';
-import { TokenStorage } from '../utils/tokenStorage';
-import type { ApiError, RefreshTokenResponse } from '../types/auth.types';
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 
-/**
- * Create axios instance with default configuration
- */
-const apiClient: AxiosInstance = axios.create({
-  baseURL: API_BASE_URL,
-  timeout: API_TIMEOUT,
-  headers: DEFAULT_HEADERS,
-});
+// API Configuration
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api';
+const API_TIMEOUT = 10000; // 10 seconds
+const MAX_RETRIES = 3;
 
-/**
- * Flag to prevent multiple refresh token requests
- */
-let isRefreshing = false;
-let failedQueue: Array<{
-  resolve: (token: string) => void;
-  reject: (error: any) => void;
-}> = [];
+// Request/Response Types
+interface ApiResponse<T = any> {
+  data: T;
+  message?: string;
+  status: 'success' | 'error';
+  pagination?: {
+    page: number;
+    pageSize: number;
+    total: number;
+    totalPages: number;
+  };
+}
 
-/**
- * Process queued requests after token refresh
- */
-const processQueue = (error: any, token: string | null = null) => {
-  failedQueue.forEach(({ resolve, reject }) => {
-    if (error) {
-      reject(error);
-    } else {
-      resolve(token!);
-    }
-  });
+interface ApiError {
+  message: string;
+  code?: string;
+  details?: Record<string, any>;
+  status?: number;
+}
 
-  failedQueue = [];
+// Retry configuration
+interface RetryConfig {
+  retries: number;
+  retryDelay: number;
+  retryCondition: (error: any) => boolean;
+}
+
+const defaultRetryConfig: RetryConfig = {
+  retries: MAX_RETRIES,
+  retryDelay: 1000,
+  retryCondition: (error) => {
+    return !error.response || error.response.status >= 500;
+  },
 };
 
-/**
- * Request interceptor to add authentication token
- */
-apiClient.interceptors.request.use(
-  (config: InternalAxiosRequestConfig) => {
-    const token = TokenStorage.getAccessToken();
+// Create axios instance
+const createApiClient = (): AxiosInstance => {
+  const client = axios.create({
+    baseURL: API_BASE_URL,
+    timeout: API_TIMEOUT,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
 
-    if (token && !TokenStorage.isTokenExpired(token)) {
-      config.headers.Authorization = `Bearer ${token}`;
+  // Request interceptor
+  client.interceptors.request.use(
+    (config) => {
+      // Add auth token if available
+      const token = localStorage.getItem('authToken');
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+
+      // Add request timestamp
+      config.metadata = { startTime: new Date() };
+
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
     }
+  );
 
-    return config;
-  },
-  (error: AxiosError) => {
-    return Promise.reject(error);
-  }
-);
+  // Response interceptor
+  client.interceptors.response.use(
+    (response: AxiosResponse) => {
+      // Log request duration
+      const endTime = new Date();
+      const duration = endTime.getTime() - response.config.metadata?.startTime?.getTime();
+      console.log(`API Request: ${response.config.method?.toUpperCase()} ${response.config.url} - ${duration}ms`);
 
-/**
- * Response interceptor to handle token refresh and errors
- */
-apiClient.interceptors.response.use(
-  (response: AxiosResponse) => {
-    return response;
-  },
-  async (error: AxiosError) => {
-    const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
+      return response;
+    },
+    async (error) => {
+      const originalRequest = error.config;
 
-    // Handle 401 Unauthorized errors
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      const refreshToken = TokenStorage.getRefreshToken();
-
-      if (!refreshToken) {
-        // No refresh token available, redirect to login
-        TokenStorage.clearAuthData();
-        if (window.location.pathname !== '/login') {
-          window.location.href = '/login';
-        }
+      // Handle auth errors
+      if (error.response?.status === 401) {
+        localStorage.removeItem('authToken');
+        window.location.href = '/login';
         return Promise.reject(error);
       }
 
-      if (isRefreshing) {
-        // Token refresh is already in progress, queue this request
-        return new Promise((resolve, reject) => {
-          failedQueue.push({ resolve, reject });
-        })
-          .then((token) => {
-            if (originalRequest.headers) {
-              originalRequest.headers.Authorization = `Bearer ${token}`;
-            }
-            return apiClient(originalRequest);
-          })
-          .catch((err) => {
-            return Promise.reject(err);
-          });
+      // Retry logic
+      if (!originalRequest._retry && defaultRetryConfig.retryCondition(error)) {
+        originalRequest._retry = true;
+        originalRequest._retryCount = (originalRequest._retryCount || 0) + 1;
+
+        if (originalRequest._retryCount <= defaultRetryConfig.retries) {
+          await new Promise(resolve =>
+            setTimeout(resolve, defaultRetryConfig.retryDelay * originalRequest._retryCount)
+          );
+          return client(originalRequest);
+        }
       }
 
-      originalRequest._retry = true;
-      isRefreshing = true;
-
-      try {
-        // Attempt to refresh the token
-        const response = await axios.post<RefreshTokenResponse>(
-          `${API_BASE_URL}${AUTH_ENDPOINTS.REFRESH}`,
-          { refresh_token: refreshToken },
-          { headers: DEFAULT_HEADERS }
-        );
-
-        const { access_token, refresh_token: newRefreshToken, user } = response.data;
-
-        // Store the new tokens
-        TokenStorage.setAccessToken(access_token);
-        TokenStorage.setRefreshToken(newRefreshToken);
-        TokenStorage.setUserData(user);
-
-        // Process the queued requests
-        processQueue(null, access_token);
-
-        // Retry the original request with new token
-        if (originalRequest.headers) {
-          originalRequest.headers.Authorization = `Bearer ${access_token}`;
-        }
-
-        return apiClient(originalRequest);
-      } catch (refreshError) {
-        // Refresh failed, clear auth data and redirect to login
-        processQueue(refreshError, null);
-        TokenStorage.clearAuthData();
-
-        if (window.location.pathname !== '/login') {
-          window.location.href = '/login';
-        }
-
-        return Promise.reject(refreshError);
-      } finally {
-        isRefreshing = false;
-      }
+      return Promise.reject(error);
     }
+  );
 
-    // Handle other errors
-    return Promise.reject(formatApiError(error));
-  }
-);
-
-/**
- * Format API errors into a consistent structure
- */
-const formatApiError = (error: AxiosError): ApiError => {
-  if (!error.response) {
-    // Network error
-    return {
-      message: ERROR_MESSAGES.NETWORK_ERROR,
-      status: 0,
-    };
-  }
-
-  const { status, data } = error.response;
-  let message: string;
-
-  switch (status) {
-    case 400:
-      message = (data as any)?.detail || (data as any)?.message || 'Bad request';
-      break;
-    case 401:
-      message = ERROR_MESSAGES.INVALID_CREDENTIALS;
-      break;
-    case 403:
-      message = ERROR_MESSAGES.UNAUTHORIZED;
-      break;
-    case 404:
-      message = 'Resource not found';
-      break;
-    case 500:
-      message = ERROR_MESSAGES.SERVER_ERROR;
-      break;
-    default:
-      message = ERROR_MESSAGES.UNKNOWN_ERROR;
-  }
-
-  return {
-    message,
-    status,
-    detail: (data as any)?.detail || (data as any)?.message,
-  };
+  return client;
 };
 
-/**
- * Generic API request wrapper with error handling
- */
-export const apiRequest = async <T>(
-  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH',
-  url: string,
-  data?: any,
-  config?: any
-): Promise<T> => {
-  try {
-    const response = await apiClient.request<T>({
-      method,
-      url,
-      data,
-      ...config,
-    });
-    return response.data;
-  } catch (error) {
-    throw error;
+// API Client instance
+export const apiClient = createApiClient();
+
+// Generic API methods
+export class ApiService {
+  private client: AxiosInstance;
+
+  constructor(client?: AxiosInstance) {
+    this.client = client || apiClient;
   }
-};
 
-/**
- * Convenience methods for common HTTP operations
- */
-export const api = {
-  get: <T>(url: string, config?: any) => apiRequest<T>('GET', url, undefined, config),
-  post: <T>(url: string, data?: any, config?: any) => apiRequest<T>('POST', url, data, config),
-  put: <T>(url: string, data?: any, config?: any) => apiRequest<T>('PUT', url, data, config),
-  patch: <T>(url: string, data?: any, config?: any) => apiRequest<T>('PATCH', url, data, config),
-  delete: <T>(url: string, config?: any) => apiRequest<T>('DELETE', url, undefined, config),
-};
+  async get<T>(url: string, config?: AxiosRequestConfig): Promise<ApiResponse<T>> {
+    try {
+      const response = await this.client.get<ApiResponse<T>>(url, config);
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
 
-export default apiClient;
+  async post<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<ApiResponse<T>> {
+    try {
+      const response = await this.client.post<ApiResponse<T>>(url, data, config);
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  async put<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<ApiResponse<T>> {
+    try {
+      const response = await this.client.put<ApiResponse<T>>(url, data, config);
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  async patch<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<ApiResponse<T>> {
+    try {
+      const response = await this.client.patch<ApiResponse<T>>(url, data, config);
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  async delete<T>(url: string, config?: AxiosRequestConfig): Promise<ApiResponse<T>> {
+    try {
+      const response = await this.client.delete<ApiResponse<T>>(url, config);
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  private handleError(error: any): ApiError {
+    if (error.response) {
+      // Server responded with error status
+      return {
+        message: error.response.data?.message || 'Server error occurred',
+        code: error.response.data?.code,
+        details: error.response.data?.details,
+        status: error.response.status,
+      };
+    } else if (error.request) {
+      // Request was made but no response
+      return {
+        message: 'Network error - unable to reach server',
+        code: 'NETWORK_ERROR',
+      };
+    } else {
+      // Something else happened
+      return {
+        message: error.message || 'An unexpected error occurred',
+        code: 'UNKNOWN_ERROR',
+      };
+    }
+  }
+}
+
+// Default API service instance
+export const api = new ApiService();
+
+// Specialized service classes
+export class StudentService extends ApiService {
+  async getStudents(params?: {
+    page?: number;
+    pageSize?: number;
+    search?: string;
+    status?: string;
+  }) {
+    return this.get('/students', { params });
+  }
+
+  async getStudent(id: string) {
+    return this.get(`/students/${id}`);
+  }
+
+  async createStudent(data: any) {
+    return this.post('/students', data);
+  }
+
+  async updateStudent(id: string, data: any) {
+    return this.put(`/students/${id}`, data);
+  }
+
+  async deleteStudent(id: string) {
+    return this.delete(`/students/${id}`);
+  }
+
+  async getStudentEnrollments(id: string) {
+    return this.get(`/students/${id}/enrollments`);
+  }
+}
+
+export class CourseService extends ApiService {
+  async getCourses(params?: {
+    page?: number;
+    pageSize?: number;
+    search?: string;
+    department?: string;
+  }) {
+    return this.get('/courses', { params });
+  }
+
+  async getCourse(id: string) {
+    return this.get(`/courses/${id}`);
+  }
+
+  async createCourse(data: any) {
+    return this.post('/courses', data);
+  }
+
+  async updateCourse(id: string, data: any) {
+    return this.put(`/courses/${id}`, data);
+  }
+
+  async deleteCourse(id: string) {
+    return this.delete(`/courses/${id}`);
+  }
+}
+
+export class EnrollmentService extends ApiService {
+  async getEnrollments(params?: {
+    page?: number;
+    pageSize?: number;
+    studentId?: string;
+    courseId?: string;
+    term?: string;
+  }) {
+    return this.get('/enrollments', { params });
+  }
+
+  async createEnrollment(data: any) {
+    return this.post('/enrollments', data);
+  }
+
+  async updateEnrollment(id: string, data: any) {
+    return this.put(`/enrollments/${id}`, data);
+  }
+
+  async deleteEnrollment(id: string) {
+    return this.delete(`/enrollments/${id}`);
+  }
+}
+
+export class FinanceService extends ApiService {
+  async getInvoices(params?: {
+    page?: number;
+    pageSize?: number;
+    studentId?: string;
+    status?: string;
+  }) {
+    return this.get('/finance/invoices', { params });
+  }
+
+  async getPayments(params?: {
+    page?: number;
+    pageSize?: number;
+    studentId?: string;
+    dateFrom?: string;
+    dateTo?: string;
+  }) {
+    return this.get('/finance/payments', { params });
+  }
+
+  async createPayment(data: any) {
+    return this.post('/finance/payments', data);
+  }
+
+  async getFinancialReports(type: string, params?: any) {
+    return this.get(`/finance/reports/${type}`, { params });
+  }
+}
+
+export class DashboardService extends ApiService {
+  async getDashboardMetrics() {
+    return this.get('/dashboard/metrics');
+  }
+
+  async getStudentMetrics() {
+    return this.get('/dashboard/students');
+  }
+
+  async getFinanceMetrics() {
+    return this.get('/dashboard/finance');
+  }
+
+  async getAcademicMetrics() {
+    return this.get('/dashboard/academic');
+  }
+}
+
+// Service instances
+export const studentService = new StudentService();
+export const courseService = new CourseService();
+export const enrollmentService = new EnrollmentService();
+export const financeService = new FinanceService();
+export const dashboardService = new DashboardService();
+
+export default api;

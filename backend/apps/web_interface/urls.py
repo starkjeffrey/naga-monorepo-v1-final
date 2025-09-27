@@ -86,6 +86,7 @@ urlpatterns = [
                 path("accounts/<int:student_id>/", finance_views.StudentAccountView.as_view(), name="student-account"),
                 path("cashier/", finance_views.CashierSessionView.as_view(), name="cashier"),
                 path("reports/", reports_views.ReportsDashboardView.as_view(), name="reports-dashboard"),
+                path("reports/analytics/", reports_views.enhanced_student_analytics, name="student-analytics"),
             ]
         ),
     ),

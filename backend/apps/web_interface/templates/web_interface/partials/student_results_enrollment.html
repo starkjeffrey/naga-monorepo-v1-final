@@ -1,25 +1,26 @@
 <!-- templates/web_interface/partials/student_results_enrollment.html -->
 <!-- INSTRUCTION FOR SONNET: Student search results for enrollment modal -->
+{% load web_interface_tags %}
 
 {% if students %}
 <div class="max-h-60 overflow-y-auto bg-white border border-gray-300 rounded-md shadow-lg">
   {% for student in students %}
   <div class="px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
-       onclick="selectStudent('{{ student.id }}', '{{ student.person.full_name|escapejs }}', '{{ student.person.email|default:""|escapejs }}')">
+       onclick="selectStudent('{{ student.id }}', '{{ student.person.full_name|escapejs }}', '{{ student.person.school_email|default:""|escapejs }}')">
     <div class="flex justify-between items-start">
       <div class="flex-1">
         <div class="font-medium text-gray-900">{{ student.person.full_name }}</div>
         {% if student.person.khmer_name %}
         <div class="text-sm text-gray-600 font-khmer">
-          {{ student.person.khmer_name }}
+          {{ student.person.khmer_name|clean_khmer_name }}
           {% if student.person.khmer_name_source == 'approximated' %}
             <span class="text-blue-500 font-bold" title="System Approximated">*</span>
           {% endif %}
         </div>
         {% endif %}
         <div class="text-sm text-gray-500">ID: {{ student.student_id }}</div>
-        {% if student.person.email %}
-        <div class="text-sm text-gray-500">{{ student.person.email }}</div>
+        {% if student.person.school_email %}
+        <div class="text-sm text-gray-500">{{ student.person.school_email }}</div>
         {% endif %}
       </div>
       <div class="ml-4 flex-shrink-0">

@@ -1,0 +1,79 @@
+# Django Production Environment Configuration
+# Copy this file to .django and customize with your production values
+
+# Django Core Settings
+DJANGO_SECRET_KEY=your-super-secret-django-key-here-make-it-long-and-random-50-chars-minimum
+DJANGO_SETTINGS_MODULE=config.settings.production
+DJANGO_DEBUG=False
+DJANGO_ALLOWED_HOSTS=yourdomain.com,api.yourdomain.com,staff.yourdomain.com
+
+# Database Configuration
+DATABASE_URL=postgres://username:password@postgres:5432/naga_production
+USE_DOCKER=yes
+
+# Redis Configuration
+REDIS_URL=redis://redis:6379/0
+CELERY_BROKER_URL=redis://redis:6379/0
+
+# Static and Media Files
+DJANGO_STATIC_ROOT=/app/staticfiles
+DJANGO_MEDIA_ROOT=/app/mediafiles
+
+# Security Settings
+DJANGO_SECURE_SSL_REDIRECT=True
+DJANGO_SECURE_HSTS_SECONDS=31536000
+DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS=True
+DJANGO_SECURE_HSTS_PRELOAD=True
+DJANGO_SECURE_CONTENT_TYPE_NOSNIFF=True
+DJANGO_SECURE_BROWSER_XSS_FILTER=True
+DJANGO_SESSION_COOKIE_SECURE=True
+DJANGO_CSRF_COOKIE_SECURE=True
+
+# CORS Configuration
+DJANGO_CORS_ALLOWED_ORIGINS=https://yourdomain.com,https://staff.yourdomain.com
+DJANGO_CORS_ALLOW_CREDENTIALS=True
+DJANGO_CORS_ALLOWED_HEADERS=accept,accept-encoding,authorization,content-type,dnt,origin,user-agent,x-csrftoken,x-requested-with
+
+# Email Configuration (if needed)
+EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+EMAIL_HOST=smtp.your-email-provider.com
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_HOST_USER=your-email@yourdomain.com
+EMAIL_HOST_PASSWORD=your-email-password
+
+# Logging Configuration
+DJANGO_LOG_LEVEL=INFO
+DJANGO_DB_LOG_LEVEL=WARNING
+
+# API Configuration
+API_RATE_LIMIT_PER_HOUR=1000
+API_PAGINATION_PAGE_SIZE=50
+API_MAX_PAGE_SIZE=200
+
+# File Upload Limits
+DJANGO_FILE_UPLOAD_MAX_MEMORY_SIZE=10485760  # 10MB
+DJANGO_DATA_UPLOAD_MAX_MEMORY_SIZE=10485760  # 10MB
+
+# Session Configuration
+SESSION_COOKIE_AGE=86400  # 24 hours
+SESSION_SAVE_EVERY_REQUEST=False
+SESSION_EXPIRE_AT_BROWSER_CLOSE=False
+
+# Cache Configuration
+CACHE_TIMEOUT=3600  # 1 hour default
+CACHE_KEY_PREFIX=naga_staff_web_v2
+
+# Feature Flags
+ENABLE_DEBUG_TOOLBAR=False
+ENABLE_API_DOCUMENTATION=False
+ENABLE_ADMIN_INTERFACE=True
+
+# Monitoring and Analytics
+SENTRY_DSN=https://your-sentry-dsn@sentry.io/project-id
+SENTRY_ENVIRONMENT=production
+SENTRY_TRACES_SAMPLE_RATE=0.1
+
+# Backup Configuration
+BACKUP_ENABLED=True
+BACKUP_RETENTION_DAYS=30

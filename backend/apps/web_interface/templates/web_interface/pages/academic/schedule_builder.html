@@ -909,7 +909,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 {% for teacher in teachers %}
                     <div class="resource-item" data-type="teacher" data-id="{{ teacher.id }}">
                         <div class="font-medium">{{ teacher.person.full_name }}</div>
-                        <div class="text-xs text-gray-600">{{ teacher.person.email }}</div>
+                        <div class="text-xs text-gray-600">{{ teacher.person.school_email }}</div>
                     </div>
                 {% endfor %}
             </div>

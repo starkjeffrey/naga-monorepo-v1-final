@@ -184,14 +184,21 @@ AUTH_PASSWORD_VALIDATORS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    # Enhanced Security Middleware for Staff-Web V2
+    "apps.common.middleware.security.BlockedIPMiddleware",
+    "apps.common.middleware.security.RateLimitMiddleware",
+    "apps.common.middleware.security.SecurityHeadersMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
+    "apps.common.middleware.security.CSRFEnhancementMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "apps.common.middleware.security.APISecurityMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
+    "apps.common.middleware.security.AuditLogMiddleware",
     # Custom middleware for performance - TEMPORARILY DISABLED during troubleshooting
     # "apps.common.middleware.current_term.CurrentTermMiddleware",
     # "apps.web_interface.performance.PerformanceMiddleware",

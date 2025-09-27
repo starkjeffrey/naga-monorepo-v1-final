@@ -1,0 +1,87 @@
+# Fail2Ban Configuration for Staff-Web V2 Production Security
+# This file should be placed at /etc/fail2ban/jail.local
+
+[DEFAULT]
+# Ban IP address for 24 hours after 5 failures within 10 minutes
+bantime = 86400
+findtime = 600
+maxretry = 5
+
+# Ignore local networks
+ignoreip = 127.0.0.1/8 ::1 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16
+
+# Email notifications (configure as needed)
+# destemail = admin@yourdomain.com
+# sender = fail2ban@yourdomain.com
+# mta = sendmail
+
+# Action to take when IP is banned
+action = %(action_)s
+
+[nginx-http-auth]
+enabled = true
+port = http,https
+logpath = /var/log/nginx/error.log
+
+[nginx-noscript]
+enabled = true
+port = http,https
+logpath = /var/log/nginx/access.log
+maxretry = 6
+
+[nginx-badbots]
+enabled = true
+port = http,https
+logpath = /var/log/nginx/access.log
+maxretry = 2
+
+[nginx-noproxy]
+enabled = true
+port = http,https
+logpath = /var/log/nginx/access.log
+maxretry = 2
+
+# Custom filter for Django auth failures
+[django-auth]
+enabled = true
+port = http,https
+logpath = /var/log/django/django.log
+maxretry = 5
+findtime = 300
+bantime = 3600
+
+# API rate limiting protection
+[nginx-req-limit]
+enabled = true
+filter = nginx-req-limit
+action = %(action_)s
+logpath = /var/log/nginx/error.log
+findtime = 600
+bantime = 7200
+maxretry = 10
+
+# SSH protection (if SSH is exposed)
+[sshd]
+enabled = true
+port = ssh
+logpath = /var/log/auth.log
+maxretry = 3
+bantime = 3600
+
+# PostgreSQL protection
+[postgresql]
+enabled = true
+port = 5432
+logpath = /var/log/postgresql/postgresql-*.log
+maxretry = 3
+bantime = 3600
+
+# Docker-specific configuration
+[nginx-docker]
+enabled = true
+filter = nginx-docker
+action = %(action_)s
+logpath = /var/log/nginx/access.log
+maxretry = 5
+findtime = 600
+bantime = 86400

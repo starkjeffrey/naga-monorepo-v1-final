@@ -1,0 +1,258 @@
+{% extends "web_interface/base/admin_base.html" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="content-header">
+        <h1 class="content-title">📊 {{ page_title }}</h1>
+        <p class="content-subtitle">Real-time analytics from your actual student data</p>
+    </div>
+
+    <!-- Quick Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="stats-card bg-primary">
+                <h3>{{ total_students }}</h3>
+                <p>Total Students</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card bg-success">
+                <h3>{{ active_students }}</h3>
+                <p>Active Students</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card bg-info">
+                <h3>{{ program_enrollments|length }}</h3>
+                <p>Program Enrollments</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card bg-warning">
+                <h3>{{ recent_enrollments|length }}</h3>
+                <p>Recent Enrollments</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student Status Breakdown -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>👥 Students by Status</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Count</th>
+                                <th>Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for status in students_by_status %}
+                            <tr>
+                                <td><span class="badge badge-secondary">{{ status.status|default:"Unknown" }}</span></td>
+                                <td>{{ status.count }}</td>
+                                <td>
+                                    {% if total_students > 0 %}
+                                        {{ status.count|floatformat:0 }}%
+                                    {% else %}
+                                        0%
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center text-muted">No status data available</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>🚻 Gender Distribution</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Gender</th>
+                                <th>Count</th>
+                                <th>Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for gender in students_by_gender %}
+                            <tr>
+                                <td>{{ gender.person__gender|default:"Not Specified" }}</td>
+                                <td>{{ gender.count }}</td>
+                                <td>
+                                    {% if total_students > 0 %}
+                                        {% widthratio gender.count total_students 100 %}%
+                                    {% else %}
+                                        0%
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center text-muted">No gender data available</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Program Enrollments -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>🎓 Active Program Enrollments</h5>
+                </div>
+                <div class="card-body">
+                    {% if program_enrollments %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Program</th>
+                                    <th>Status</th>
+                                    <th>Start Date</th>
+                                    <th>Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for enrollment in program_enrollments %}
+                                <tr>
+                                    <td>{{ enrollment.student.person.full_name|default:enrollment.student.student_id }}</td>
+                                    <td>{{ enrollment.program.title|default:enrollment.program.code }}</td>
+                                    <td><span class="badge badge-success">{{ enrollment.status }}</span></td>
+                                    <td>{{ enrollment.start_date|date:"M d, Y" }}</td>
+                                    <td>{{ enrollment.get_enrollment_type_display }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-center text-muted">No active program enrollments found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Enrollments -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>📈 Recent Class Enrollments</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_enrollments %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Course</th>
+                                    <th>Status</th>
+                                    <th>Enrolled</th>
+                                    <th>Grade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for enrollment in recent_enrollments %}
+                                <tr>
+                                    <td>{{ enrollment.student.person.full_name|default:enrollment.student.student_id }}</td>
+                                    <td>{{ enrollment.class_header.course.code }} - {{ enrollment.class_header.course.title }}</td>
+                                    <td><span class="badge badge-info">{{ enrollment.status }}</span></td>
+                                    <td>{{ enrollment.enrollment_date|date:"M d, Y H:i" }}</td>
+                                    <td>{{ enrollment.final_grade|default:"-" }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-center text-muted">No recent enrollments found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.stats-card {
+    padding: 20px;
+    border-radius: 8px;
+    color: white;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.stats-card h3 {
+    font-size: 2.5rem;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.stats-card p {
+    margin: 0;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.bg-primary { background-color: #007bff !important; }
+.bg-success { background-color: #28a745 !important; }
+.bg-info { background-color: #17a2b8 !important; }
+.bg-warning { background-color: #ffc107 !important; color: #212529 !important; }
+
+.card {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: none;
+    margin-bottom: 20px;
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.badge {
+    font-size: 0.8rem;
+}
+
+.content-header {
+    margin-bottom: 30px;
+}
+
+.content-title {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.content-subtitle {
+    color: #666;
+    font-size: 1.1rem;
+}
+</style>
+{% endblock %}

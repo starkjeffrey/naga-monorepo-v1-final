@@ -1,0 +1,190 @@
+{% extends "web_interface/base/admin_base.html" %}
+{% load i18n %}
+{% load web_interface_tags %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <h2 class="content-title">{{ page_title }}</h2>
+    <div class="header-actions">
+        <a href="{% url 'web_interface:student-detail' object.pk %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i>
+            {% trans "Back to Student" %}
+        </a>
+    </div>
+</div>
+
+<div class="page-content">
+    <div class="form-container">
+        <form method="post" class="form">
+            {% csrf_token %}
+
+            <div class="form-section">
+                <h3 class="section-title">{% trans "Personal Information" %}</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        {{ form.person.full_name.label_tag }}
+                        {{ form.person.full_name }}
+                        {% if form.person.full_name.errors %}
+                            <div class="field-error">{{ form.person.full_name.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.person.family_name.label_tag }}
+                        {{ form.person.family_name }}
+                        {% if form.person.family_name.errors %}
+                            <div class="field-error">{{ form.person.family_name.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.person.personal_name.label_tag }}
+                        {{ form.person.personal_name }}
+                        {% if form.person.personal_name.errors %}
+                            <div class="field-error">{{ form.person.personal_name.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.person.khmer_name.label_tag }}
+                        {{ form.person.khmer_name }}
+                        {% if form.person.khmer_name.errors %}
+                            <div class="field-error">{{ form.person.khmer_name.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="section-title">{% trans "Contact Information" %}</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        {{ form.person.school_email.label_tag }}
+                        {{ form.person.school_email }}
+                        {% if form.person.school_email.errors %}
+                            <div class="field-error">{{ form.person.school_email.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.person.personal_email.label_tag }}
+                        {{ form.person.personal_email }}
+                        {% if form.person.personal_email.errors %}
+                            <div class="field-error">{{ form.person.personal_email.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="section-title">{% trans "Student Information" %}</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        {{ form.student_id.label_tag }}
+                        {{ form.student_id }}
+                        {% if form.student_id.errors %}
+                            <div class="field-error">{{ form.student_id.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.current_status.label_tag }}
+                        {{ form.current_status }}
+                        {% if form.current_status.errors %}
+                            <div class="field-error">{{ form.current_status.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.study_time_preference.label_tag }}
+                        {{ form.study_time_preference }}
+                        {% if form.study_time_preference.errors %}
+                            <div class="field-error">{{ form.study_time_preference.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i>
+                    {% trans "Save Changes" %}
+                </button>
+                <a href="{% url 'web_interface:student-detail' object.pk %}" class="btn btn-secondary">
+                    {% trans "Cancel" %}
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+.form-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-section {
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 0.25rem;
+}
+
+.form-group input, .form-group select {
+    padding: 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 0.875rem;
+}
+
+.form-group input:focus, .form-group select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.field-error {
+    color: #ef4444;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
+}
+</style>
+{% endblock %}

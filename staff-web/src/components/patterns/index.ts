@@ -2,19 +2,67 @@
  * Standardized Component Patterns Index
  *
  * This file exports all standardized component patterns used throughout
- * the student management system for consistent UI/UX.
+ * the staff management system for consistent UI/UX.
  */
 
-// Enhanced DataGrid Pattern
+// Pattern 1: Enhanced DataGrid Pattern
 export {
-  EnhancedDataGrid,
+  default as DataGrid,
+  DataGridToolbar,
+  DataGridHeader,
+  DataGridBody,
+  DataGridPagination,
+  useDataGrid,
+  createColumn,
+  createAction,
+  createBulkAction,
+  formatters,
+  columnPresets,
   type DataGridColumn,
   type DataGridAction,
-  type DataGridFilters,
+  type DataGridBulkAction,
   type DataGridProps,
-} from './EnhancedDataGrid';
+  type DataGridRef,
+  type DataGridState,
+} from './DataGrid';
 
-// Detail Modal Pattern
+// Pattern 2: Enhanced TransferList Pattern
+export {
+  default as TransferList,
+  TransferListPanel,
+  TransferControls,
+  useTransferList,
+  createTransferItem,
+  createTransferCategory,
+  createTransferFilter,
+  createValidationRule,
+  validationRules,
+  commonFilters,
+  presets,
+  transferListUtils,
+  type TransferItem,
+  type TransferListProps,
+  type TransferListRef,
+  type TransferCategory,
+  type TransferOperation,
+} from './TransferList';
+
+// Pattern 3: Analytics Dashboard Pattern
+export {
+  default as Dashboard,
+  type DashboardProps,
+  type DashboardMetric,
+  type DashboardWidget,
+} from './Dashboard';
+
+// Pattern 4: Multi-Step Workflow Wizard Pattern
+export {
+  default as Wizard,
+  type WizardStep,
+  type WizardProps,
+} from './Wizard';
+
+// Legacy exports for backward compatibility
 export {
   DetailModal,
   InfoTab,
@@ -27,27 +75,3 @@ export {
   type TimelineTabProps,
   type DocumentsTabProps,
 } from './DetailModal';
-
-// Wizard Pattern
-export {
-  Wizard,
-  type WizardStep,
-  type WizardProps,
-} from './Wizard';
-
-// Dashboard Pattern
-export {
-  Dashboard,
-  type MetricCard,
-  type ChartWidget,
-  type ListWidget,
-  type Filter,
-  type DashboardProps,
-} from './Dashboard';
-
-// Re-export TransferList from existing components (already implemented)
-export {
-  TransferList,
-  type TransferItem,
-  type TransferListProps,
-} from '../TransferList';

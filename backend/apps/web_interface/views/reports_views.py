@@ -268,6 +268,28 @@ def student_balances_report(request: HttpRequest) -> HttpResponse:
 
 @login_required
 @require_http_methods(["GET"])
+def enhanced_student_analytics(request: HttpRequest) -> HttpResponse:
+    """Enhanced student analytics report with AI insights."""
+    from apps.people.models import StudentProfile
+    from apps.enrollment.models import ProgramEnrollment, ClassHeaderEnrollment
+
+    # Get actual data from your database
+    context = {
+        'page_title': 'Enhanced Student Analytics Report',
+        'total_students': StudentProfile.objects.count(),
+        'active_students': StudentProfile.objects.filter(status='ACTIVE').count(),
+        'students_by_status': list(StudentProfile.objects.values('status').annotate(count=models.Count('id'))),
+        'students_by_gender': list(StudentProfile.objects.values('person__gender').annotate(count=models.Count('id'))),
+        'program_enrollments': ProgramEnrollment.objects.select_related('program', 'student__person').filter(status='ACTIVE')[:20],
+        'recent_enrollments': ClassHeaderEnrollment.objects.select_related('student__person', 'class_header__course').order_by('-enrollment_date')[:15],
+        'enrollment_trends': ClassHeaderEnrollment.objects.extra({'date': "DATE(enrollment_date)"}).values('date').annotate(count=models.Count('id')).order_by('-date')[:30],
+    }
+
+    return render(request, "web_interface/pages/reports/student_analytics.html", context)
+
+
+@login_required
+@require_http_methods(["GET"])
 def export_report(request: HttpRequest, report_type: str) -> HttpResponse:
     """Export reports to PDF or Excel."""
     # Future enhancement: Implement report export functionality

@@ -9,7 +9,7 @@
       <div class="student-name">{{ student.person.full_name }}</div>
       {% if student.person.khmer_name %}
       <div class="student-khmer-name font-khmer">
-        {{ student.person.khmer_name }}
+        {{ student.person.khmer_name|clean_khmer_name }}
         {% if student.person.khmer_name_source == 'approximated' %}
           <span class="text-blue-500 font-bold" title="System Approximated">*</span>
         {% endif %}

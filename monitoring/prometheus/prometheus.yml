@@ -52,17 +52,31 @@ scrape_configs:
   # Django backend application metrics
   - job_name: 'django-backend'
     static_configs:
-      - targets: ['backend:8000']
+      - targets: ['django:8000']
     scrape_interval: 15s
     metrics_path: /metrics
     scrape_timeout: 10s
     honor_labels: true
 
-  # Nginx frontend metrics (if enabled)
-  - job_name: 'nginx-frontend'
+  # Staff-Web V2 React frontend metrics
+  - job_name: 'staff-web-frontend'
     static_configs:
-      - targets: ['frontend:8080']
+      - targets: ['staff-web:80']
     scrape_interval: 30s
+    metrics_path: /metrics
+
+  # Celery worker metrics
+  - job_name: 'celery-worker'
+    static_configs:
+      - targets: ['celery-worker:9540']
+    scrape_interval: 30s
+    metrics_path: /metrics
+
+  # Celery beat scheduler metrics
+  - job_name: 'celery-beat'
+    static_configs:
+      - targets: ['celery-beat:9540']
+    scrape_interval: 60s
     metrics_path: /metrics
 
   # Traefik reverse proxy metrics

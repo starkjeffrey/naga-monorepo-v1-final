@@ -1,0 +1,243 @@
+{% extends "web_interface/base/dashboard_base.html" %}
+
+{% load i18n %}
+{% load static %}
+{% load web_interface_tags %}
+
+{% block title %}
+  {{ student.person.full_name }} - {% trans "Student Details" %} - {{ block.super }}
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="page-content">
+  <!-- Header -->
+  <div class="page-header">
+    <h1>{% trans "Student Details" %}</h1>
+    <div class="breadcrumb">
+      <a href="{% url 'web_interface:student-list' %}">{% trans "Students" %}</a>
+      <span class="separator">/</span>
+      <span>{{ student.person.full_name }}</span>
+    </div>
+  </div>
+
+  <!-- Student Information Card -->
+  <div class="card">
+    <div class="card-header">
+      <h3>{% trans "Personal Information" %}</h3>
+      <div class="action-buttons">
+        <a href="{% url 'web_interface:student-update' pk=student.pk %}"
+           class="btn btn-outline-primary">
+          <i class="fas fa-edit"></i>
+          {% trans "Edit" %}
+        </a>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="info-group">
+            <label>{% trans "Student ID" %}</label>
+            <p>{{ student.student_id }}</p>
+          </div>
+          <div class="info-group">
+            <label>{% trans "English Name" %}</label>
+            <p>{{ student.person.full_name }}</p>
+          </div>
+          {% if student.person.khmer_name %}
+          <div class="info-group">
+            <label>{% trans "Khmer Name" %}</label>
+            <p class="khmer-name">
+              {{ student.person.khmer_name }}
+              {% if student.person.khmer_name_source == 'approximated' %}
+                <span class="badge badge-info" title="{% trans 'System Approximated' %}">
+                  <i class="fas fa-robot"></i> {% trans "Approximated" %}
+                </span>
+              {% endif %}
+            </p>
+            {% if student.person.khmer_name_confidence %}
+            <small class="text-muted">
+              {% trans "Confidence:" %} {{ student.person.khmer_name_confidence|floatformat:2 }}
+            </small>
+            {% endif %}
+          </div>
+          {% endif %}
+          <div class="info-group">
+            <label>{% trans "Status" %}</label>
+            <p>
+              <span class="badge {% status_badge student.current_status %}">
+                {{ student.get_current_status_display }}
+              </span>
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="info-group">
+            <label>{% trans "Email" %}</label>
+            <p>{{ student.person.school_email|default:student.person.personal_email|default:"—" }}</p>
+          </div>
+          <div class="info-group">
+            <label>{% trans "Phone" %}</label>
+            <p>{{ student.person.phone_primary|default:"—" }}</p>
+          </div>
+          <div class="info-group">
+            <label>{% trans "Study Time" %}</label>
+            <p>{{ student.get_study_time_preference_display }}</p>
+          </div>
+          <div class="info-group">
+            <label>{% trans "Registered" %}</label>
+            <p>{{ student.created_at|date:"F d, Y" }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Enrollments -->
+  {% if recent_enrollments %}
+  <div class="card">
+    <div class="card-header">
+      <h3>{% trans "Recent Class Enrollments" %}</h3>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>{% trans "Course" %}</th>
+              <th>{% trans "Term" %}</th>
+              <th>{% trans "Status" %}</th>
+              <th>{% trans "Enrolled" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for enrollment in recent_enrollments %}
+            <tr>
+              <td>{{ enrollment.class_header.course.name }}</td>
+              <td>{{ enrollment.class_header.term.name }}</td>
+              <td>
+                <span class="badge {% status_badge enrollment.status %}">
+                  {{ enrollment.get_status_display }}
+                </span>
+              </td>
+              <td>{{ enrollment.created_at|date:"M d, Y" }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Recent Program Enrollments -->
+  {% if recent_programs %}
+  <div class="card">
+    <div class="card-header">
+      <h3>{% trans "Program Enrollments" %}</h3>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>{% trans "Program" %}</th>
+              <th>{% trans "Status" %}</th>
+              <th>{% trans "Enrolled" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for enrollment in recent_programs %}
+            <tr>
+              <td>{{ enrollment.program.name }}</td>
+              <td>
+                <span class="badge {% status_badge enrollment.status %}">
+                  {{ enrollment.get_status_display }}
+                </span>
+              </td>
+              <td>{{ enrollment.created_at|date:"M d, Y" }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+
+<style>
+.info-group {
+  margin-bottom: 1rem;
+}
+
+.info-group label {
+  font-weight: 600;
+  color: #6c757d;
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+.info-group p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.khmer-name {
+  font-family: 'Khmer OS', serif;
+  font-size: 1.125rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.badge {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.badge-info {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.card {
+  margin-bottom: 1.5rem;
+  border: 1px solid #dee2e6;
+  border-radius: 0.375rem;
+}
+
+.card-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+.page-header {
+  margin-bottom: 2rem;
+}
+
+.breadcrumb {
+  color: #6c757d;
+  font-size: 0.875rem;
+}
+
+.breadcrumb a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.breadcrumb .separator {
+  margin: 0 0.5rem;
+  color: #6c757d;
+}
+</style>
+{% endblock %}
